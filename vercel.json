@@ -18,15 +18,15 @@
   "rewrites": [
     {
       "source": "/k/:token",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/org",
-      "destination": "/console.html"
+      "destination": "/console"
     },
     {
       "source": "/org/:path*",
-      "destination": "/console.html"
+      "destination": "/console"
     }
   ],
   "headers": [
