@@ -22,7 +22,7 @@ function apiFile(pathname) {
 
 function rewrite(pathname) {
   if (/^\/org(\/.*)?$/.test(pathname)) return '/console.html';
-  if (pathname === '/') return '/index.html';
+  if (pathname === '/') return '/console.html';
   return pathname;
 }
 

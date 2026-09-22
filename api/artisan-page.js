@@ -5,7 +5,7 @@
 // the link and landed on the facilitator sign-in instead of the artisan's profile.
 import { readFile } from 'node:fs/promises';
 
-const shell = await readFile(new URL('../public/index.html', import.meta.url), 'utf8');
+const shell = await readFile(new URL('../public/artisan.html', import.meta.url), 'utf8');
 
 export async function GET(req) {
   const t = new URL(req.url).searchParams.get('t') || '';
