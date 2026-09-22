@@ -61,17 +61,22 @@
       <span style="font-family:{{ displayFont }};font-weight:600;font-size:19px;letter-spacing:-.01em">Karigar</span>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
+      <sc-if value="{{ showSides }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex;background:#F2EDE4;border-radius:999px;padding:3px">
         <sc-for list="{{ sides }}" as="x" hint-placeholder-count="2">
           <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
         </sc-for>
       </div>
+      </sc-if>
       <sc-if value="{{ isOrg }}" hint-placeholder-val="{{ true }}">
         <select class="k-field" data-role="uilang" value="{{ uiLang }}" onChange="{{ setUiLang }}" style="width:auto;padding:8px 10px;font-size:13.5px;border-radius:999px;min-height:40px">
           <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7">
             <option value="{{ l.code }}">{{ l.label }}</option>
           </sc-for>
         </select>
+      </sc-if>
+      <sc-if value="{{ canSignOut }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ signOut }}" class="k-press" style="border:0;background:transparent;color:#8C8499;font-size:13px;font-weight:600;cursor:pointer;min-height:40px;padding:8px 6px">Sign out</button>
       </sc-if>
     </div>
   </header>
@@ -887,17 +892,6 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:880},&quot;appOrigin&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://karigar.vercel.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Deployment&quot;},&quot;model&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;claude-sonnet-4-5&quot;,&quot;claude-haiku-4-5&quot;],&quot;default&quot;:&quot;claude-sonnet-4-5&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Agent&quot;}}">
 const STORE = 'karigar-platform-v4';
 
-const CLUSTERS = [
-  { craft: 'Bandhani', region: 'Bhuj, Kutch', sessions: 41, complete: 34, handed: 28, approved: 24, active: 17, risk: 'Watch' },
-  { craft: 'Ajrakh block printing', region: 'Ajrakhpur, Kutch', sessions: 26, complete: 21, handed: 19, approved: 18, active: 12, risk: 'Watch' },
-  { craft: 'Rogan painting', region: 'Nirona, Kutch', sessions: 9, complete: 9, handed: 7, approved: 7, active: 6, risk: 'Critical' },
-  { craft: 'Kharad weaving', region: 'Bhuj, Kutch', sessions: 5, complete: 3, handed: 3, approved: 2, active: 1, risk: 'Critical' },
-  { craft: 'Sujani embroidery', region: 'Bhusra, Bihar', sessions: 30, complete: 17, handed: 21, approved: 14, active: 9, risk: 'Stable' },
-  { craft: 'Dhokra casting', region: 'Bastar, Chhattisgarh', sessions: 22, complete: 11, handed: 12, approved: 8, active: 4, risk: 'Watch' },
-  { craft: 'Longpi pottery', region: 'Ukhrul, Manipur', sessions: 14, complete: 12, handed: 9, approved: 9, active: 7, risk: 'Watch' },
-  { craft: 'Pattachitra', region: 'Raghurajpur, Odisha', sessions: 34, complete: 28, handed: 25, approved: 22, active: 15, risk: 'Stable' }
-];
-
 // Plain BMP glyphs rather than emoji — consistent across the Android devices artisans use.
 const SEG_META = {
   brand: { icon: '₹', tint: '#FDF0DE', ink: '#8A5D05' },
@@ -1053,19 +1047,51 @@ class Component extends DCLogic {
     const [data, i18n] = await Promise.all([import('./karigar-data.js'), import('./karigar-i18n.js')]);
     this.DATA = data; this.I18N = i18n;
     this.CARDS = this.buildCards(data);
-    let saved = null;
-    try { saved = JSON.parse(localStorage.getItem(STORE) || 'null'); } catch (e) { saved = null; }
-    if (saved && Array.isArray(saved.profiles) && saved.profiles.length) {
-      this.setState({ ready: true, profiles: saved.profiles, activeId: saved.activeId || saved.profiles[0].id, uiLang: saved.uiLang || 'en', history: saved.history || {} });
-    } else {
-      const profiles = data.SAMPLES.map(s => ({
-        id: s.id, record: { ...s.record }, lang: s.lang, analysis: null, checked: {},
-        approved: s.approved, openedDaysAgo: s.openedDaysAgo, rooms: s.rooms || {},
-        cluster: s.cluster, revoked: false, linkVersion: 1
-      }));
-      this.setState({ ready: true, profiles, activeId: profiles[0].id, uiLang: 'en' });
+    const boot = this.props.boot;
+    const store = this.props.store;
+    if (boot && boot.mode === 'artisan') {
+      // The artisan's own phone: one profile, loaded by its handover token. Practice history
+      // is kept on this device only.
+      const p = { checked: {}, sources: {}, approved: true, revoked: false, ...boot.profile };
+      const seenInstall = store.local.get('karigar-install-seen');
+      this.setState({
+        ready: true, side: 'artisan', profiles: [p], activeId: p.id,
+        history: store.local.get(`karigar-history:${boot.token}`) || {},
+        appView: boot.standalone || seenInstall ? 'home' : 'install'
+      });
+      store.local.set('karigar-install-seen', true);
+      return;
+    }
+    if (boot && boot.mode === 'console') {
+      // Profiles live in the organisation's database. Console language and practice-preview
+      // history are this device's preferences only.
+      const local = store.local.get(STORE) || {};
+      let profiles = boot.profiles;
+      // One-time move of profiles made in the prototype (browser storage) into the database.
+      // The built-in sample artisans are demo data and are never imported.
+      const legacy = (Array.isArray(local.profiles) ? local.profiles : []).filter(p => p && p.id && !/^p-/.test(p.id));
+      if (!profiles.length && legacy.length && confirm(`Move ${legacy.length} profile(s) saved in this browser into your organisation's account?`)) {
+        profiles = legacy.map(p => ({ ...p, revoked: false, linkVersion: 1, token: null, openedDaysAgo: null, rooms: {} }));
+      }
+      const activeId = profiles.some(p => p.id === local.activeId) ? local.activeId : (profiles[0] ? profiles[0].id : null);
+      this.setState({ ready: true, profiles, activeId, uiLang: local.uiLang || 'en', history: local.history || {} });
+      if (profiles !== boot.profiles) setTimeout(() => this.persist({ profiles }), 0);
+      return;
     }
   }
+
+  // A fresh copy from the server after a save or a link change. Only server-owned fields are
+  // taken, so an edit typed while the save was in flight is never overwritten.
+  mergeServerProfile(sp) {
+    if (!sp) return;
+    this.setState(s => ({
+      profiles: s.profiles.map(p => p.id === sp.id
+        ? { ...p, token: sp.token, linkVersion: sp.linkVersion, revoked: sp.revoked, openedDaysAgo: sp.openedDaysAgo, practicedDaysAgo: sp.practicedDaysAgo, rooms: sp.rooms }
+        : p)
+    }));
+  }
+
+  newId() { return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 
   // One flat, ordered list of every card on the board, tagged with its ring or hub group.
   buildCards(D) {
@@ -1100,7 +1126,14 @@ class Component extends DCLogic {
   persist(patch) {
     const s = this.state;
     const next = { profiles: s.profiles, activeId: s.activeId, uiLang: s.uiLang, history: s.history, ...patch };
-    try { localStorage.setItem(STORE, JSON.stringify(next)); } catch (e) { /* quota */ }
+    const store = this.props.store;
+    if (!store) return;
+    if (store.mode === 'artisan') { store.local.set(`karigar-history:${store.token}`, next.history); return; }
+    // Profiles go to the server; only this device's preferences stay in browser storage.
+    store.sync(next.profiles);
+    const prev = store.local.get(STORE) || {};
+    // Any prototype-era profiles are left in place as a backup; they are only ever read for the import.
+    store.local.set(STORE, { ...prev, activeId: next.activeId, uiLang: next.uiLang, history: next.history });
   }
 
   patchActive(fn) { this.patchProfile(this.state.activeId, fn); }
@@ -1125,9 +1158,9 @@ class Component extends DCLogic {
   origin() { return (this.props.appOrigin || 'https://karigar.vercel.app').replace(/\/+$/, ''); }
 
   shareUrl(profile) {
-    const a = profile || this.active(); if (!a) return '';
-    const slug = (a.record.craft_name_local || 'craft').toLowerCase().replace(/[^a-z]/g, '').slice(0, 6) || 'craft';
-    return `${this.origin()}/k/${a.id.slice(-6)}-${slug}${a.linkVersion > 1 ? '-' + a.linkVersion : ''}`;
+    // The token is opaque and issued by the server when the profile is first saved.
+    const a = profile || this.active(); if (!a || !a.token) return '';
+    return `${this.origin()}/k/${a.token}`;
   }
 
   componentDidUpdate() {
@@ -1148,7 +1181,7 @@ class Component extends DCLogic {
     if (!link || this.state.qrFor === link) return;
     this.setState({ qrFor: link, qr: null });
     try {
-      const mod = await import('https://esm.sh/qrcode-generator@1.4.4');
+      const mod = await import('/vendor/qrcode.mjs');
       const qrcode = mod.default || mod;
       const q = qrcode(0, 'M'); q.addData(link); q.make();
       const n = q.getModuleCount(), pad = 1;
@@ -1232,7 +1265,7 @@ Reply with a single JSON object and nothing else.`,
         record[k] = String(val).trim();
         if (v && v.quote) sources[k] = String(v.quote).trim();
       });
-      const id = 'p' + Date.now();
+      const id = this.newId();
       const profile = { id, record, lang: this.state.newLang, analysis: null, checked: {}, sources, sessionNote: out.session_note || '', origin: this.state.fileName || 'pasted transcript', approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 };
       const profiles = [...this.state.profiles, profile];
       this.setState({ profiles, activeId: id, orgView: 'board', boardTab: 'board', extracting: false, transcript: '', fileName: '', showQuotes: true, selectedKey: null });
@@ -1298,6 +1331,12 @@ Reply with plain conversational text only.`;
 
   openSegment = async (id) => {
     this.setState({ appView: 'chat', segId: id, messages: [], coach: null, draft: '', chatBusy: true });
+    // Counts only: which audience was opened. The conversation itself stays on this phone.
+    if (this.props.store && this.props.store.mode === 'artisan') {
+      const seg = id || 'custom';
+      this.props.store.practice(seg);
+      this.patchActive(p => ({ ...p, rooms: { ...(p.rooms || {}), [seg]: ((p.rooms || {})[seg] || 0) + 1 } }));
+    }
     try {
       const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: [{ role: 'user', content: '[The artisan has just opened the conversation. Say your opening line, in character.]' }] });
       this.setState({ messages: [{ role: 'assistant', content: (reply || '').trim() }], chatBusy: false });
@@ -1437,6 +1476,23 @@ Reply with plain conversational text only.`;
       { value: returning, of: fmt(t.ofUsers, openedCount || N), label: t.mReturned, why: t.mReturnedWhy, color: '#F0B23C', pct: Math.round(returning / (openedCount || N) * 100) + '%' }
     ];
 
+    // Facilitation quality by cluster, aggregated from this organisation's own profiles.
+    // handed = the artisan has opened their link; in weekly use = practised in the last 7 days.
+    const clusterMap = {};
+    comp.forEach(({ p, c }) => {
+      const parts = (p.cluster || '').split(' · ');
+      const craft = (p.cluster ? parts[0] : p.record.craft_name_local) || '—';
+      const region = (p.cluster ? parts.slice(1).join(' · ') : p.record.craft_region) || '';
+      const key = (craft + '|' + region).toLowerCase();
+      const row = clusterMap[key] || (clusterMap[key] = { craft, region, sessions: 0, complete: 0, handed: 0, approved: 0, active: 0, risk: '' });
+      row.sessions++;
+      if (c.complete) row.complete++;
+      if (p.openedDaysAgo !== null && p.openedDaysAgo !== undefined) row.handed++;
+      if (p.approved) row.approved++;
+      if (p.practicedDaysAgo !== null && p.practicedDaysAgo !== undefined && p.practicedDaysAgo <= 7) row.active++;
+    });
+    const clusters = Object.values(clusterMap).sort((x, y) => y.sessions - x.sessions);
+
     const attention = [];
     comp.forEach(({ p, c }) => {
       const go = (view, tab) => () => this.setState({ activeId: p.id, orgView: view, boardTab: tab || 'board', selectedKey: null });
@@ -1534,6 +1590,9 @@ Reply with plain conversational text only.`;
       setUiLang: e => { const v = e.target.value; this.setState({ uiLang: v }); this.persist({ uiLang: v }); },
       appLang: aLang,
       setAppLang: e => { const v = e.target.value; this.patchActive(p => ({ ...p, lang: v })); },
+      showSides: !(this.props.boot && this.props.boot.mode === 'artisan'),
+      canSignOut: !!(this.props.store && this.props.store.signOut) && s.side === 'org',
+      signOut: () => this.props.store.signOut(),
       sides: [{ id: 'org', label: t.org }, { id: 'artisan', label: t.artisanApp }].map(x => ({
         label: x.label,
         go: () => this.setState({ side: x.id }),
@@ -1561,11 +1620,11 @@ Reply with plain conversational text only.`;
         const st = this.segText(k);
         return { label: st ? (st.label[s.uiLang] || st.label.en) : k, count: roomTotals[k], pct: Math.round(roomTotals[k] / maxRoom * 100) + '%' };
       }),
-      clusters: CLUSTERS.map(c => ({
-        craft: c.craft, region: c.region, risk: c.risk, riskStyle: riskStyle(c.risk),
+      clusters: clusters.map(c => ({
+        craft: c.craft, region: c.region, risk: c.risk, riskStyle: c.risk ? riskStyle(c.risk) : 'display:none',
         cells: [
           { value: `${c.complete}/${c.sessions}`, label: t.colComplete },
-          { value: `${c.approved}/${c.handed}`, label: t.colApproved },
+          { value: `${c.approved}/${c.sessions}`, label: t.colApproved },
           { value: `${c.active}/${c.handed}`, label: t.colActive }
         ]
       })),
@@ -1650,11 +1709,11 @@ Reply with plain conversational text only.`;
             { label: t.lastOpened, value: (p.openedDaysAgo === null || p.openedDaysAgo === undefined) ? t.never : p.openedDaysAgo + 'd', color: '#241F2E' }
           ],
           fixes: [
-            { label: p.revoked ? t.fixRestore : t.fixRevoke, run: () => this.patchProfile(p.id, x => ({ ...x, revoked: !x.revoked })) },
-            { label: t.fixNewLink, run: () => this.patchProfile(p.id, x => ({ ...x, linkVersion: (x.linkVersion || 1) + 1, revoked: false })) },
+            { label: p.revoked ? t.fixRestore : t.fixRevoke, run: () => this.props.store.action(p.id, p.revoked ? 'restore' : 'revoke') },
+            { label: t.fixNewLink, run: () => this.props.store.action(p.id, 'new-link') },
             { label: p.approved ? t.fixUnapprove : t.fixApprove, run: () => this.patchProfile(p.id, x => ({ ...x, approved: !x.approved })) },
             { label: t.fixRerun, run: () => { this.patchProfile(p.id, x => ({ ...x, analysis: null })); this.setState({ activeId: p.id, orgView: 'board', boardTab: 'analysis' }); setTimeout(this.analyse, 80); } },
-            { label: t.fixResetPractice, run: () => this.patchProfile(p.id, x => ({ ...x, rooms: {} })) }
+            { label: t.fixResetPractice, run: () => this.props.store.action(p.id, 'reset-practice') }
           ],
           confirming: s.confirmId === p.id, notConfirming: s.confirmId !== p.id,
           askDelete: () => this.setState({ confirmId: p.id }),
@@ -1684,7 +1743,7 @@ Reply with plain conversational text only.`;
       extract: this.extract, extracting: s.extracting, extractError: s.extractError,
       newLang: s.newLang, setNewLang: e => this.setState({ newLang: e.target.value }),
       newProfile: () => {
-        const id = 'p' + Date.now();
+        const id = this.newId();
         const profiles = [...s.profiles, { id, record: blank(), lang: s.newLang, analysis: null, checked: {}, approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 }];
         this.setState({ profiles, activeId: id, orgView: 'board', boardTab: 'board', selectedKey: null });
         this.persist({ profiles, activeId: id });

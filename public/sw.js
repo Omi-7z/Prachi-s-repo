@@ -1,8 +1,9 @@
 // Karigar service worker.
 // App shell is precached so the artisan app opens offline; model calls always hit the network.
-const VERSION = 'karigar-v1';
+const VERSION = 'karigar-v2';
 const SHELL = [
-  '/', '/index.html', '/manifest.webmanifest',
+  '/', '/manifest.webmanifest',
+  '/runtime.js', '/vendor/preact.mjs', '/karigar.dc', '/karigar-data.js', '/karigar-i18n.js',
   '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'
 ];
 
@@ -26,14 +27,19 @@ self.addEventListener('fetch', event => {
   // never cache the model proxy or profile reads
   if (url.pathname.startsWith('/api/')) return;
 
+  // the facilitator console is online-only and must never become the artisan's offline shell
+  if (url.pathname === '/org' || url.pathname.startsWith('/org/') || url.pathname.startsWith('/console')) return;
+
   // navigations: network first so a new profile is picked up, shell as the offline fallback
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(VERSION).then(c => c.put('/index.html', copy));
+        if (res.ok) {
+          const copy = res.clone();
+          caches.open(VERSION).then(c => c.put('/', copy));
+        }
         return res;
-      }).catch(() => caches.match('/index.html'))
+      }).catch(() => caches.match('/'))
     );
     return;
   }
