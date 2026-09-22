@@ -3,11 +3,12 @@ import { eq } from 'drizzle-orm';
 import { getDb, schema } from '../lib/db.js';
 import { currentFacilitator, verifyPassword, sessionCookie, clearCookie } from '../lib/auth.js';
 import { json, readJson, route } from '../lib/http.js';
+import { publicOrigin } from '../lib/origin.js';
 
 export const GET = route(async req => {
   const fac = await currentFacilitator(req);
   if (!fac) return json({ error: 'signed out' }, 401);
-  return json({ facilitator: { name: fac.name, email: fac.email, role: fac.role }, org: { id: fac.orgId, name: fac.orgName } });
+  return json({ facilitator: { name: fac.name, email: fac.email, role: fac.role }, org: { id: fac.orgId, name: fac.orgName }, appOrigin: publicOrigin(req) });
 });
 
 export const POST = route(async req => {

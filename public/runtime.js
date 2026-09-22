@@ -397,7 +397,10 @@ async function main() {
   let instance;
   const onServerProfile = p => instance.mergeServerProfile(p);
   const store = boot.mode === 'console' ? consoleStore(boot.profiles, onServerProfile) : artisanStore(boot.token);
-  instance = new comp.Component({ appOrigin: location.origin, model: 'claude-sonnet-4-5', boot, store });
+  // Handover links use the public production address from the server, never this tab's own
+  // address, which may be a login-protected per-deployment URL.
+  const appOrigin = (boot.session && boot.session.appOrigin) || location.origin;
+  instance = new comp.Component({ appOrigin, model: 'claude-sonnet-4-5', boot, store });
   instance._template = comp.template;
   mount.innerHTML = '';
   instance._render();
