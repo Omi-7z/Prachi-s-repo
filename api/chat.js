@@ -38,6 +38,37 @@ async function allowed(req) {
   return !!(await currentFacilitator(req));
 }
 
+// Self-check for facilitators: open /api/chat?test=1 while signed in. It makes one tiny call
+// to the configured provider and reports what came back, so a broken key or retired model
+// shows up as a readable message instead of a silent practice screen.
+export const GET = route(async req => {
+  if (!(await currentFacilitator(req))) return json({ error: 'sign in at /org first, then reopen this page' }, 401);
+  const status = {
+    provider: PROVIDER,
+    paused: process.env.KARIGAR_PAUSED === '1',
+    keySet: {
+      gemini: !!process.env.GEMINI_API_KEY, groq: !!process.env.GROQ_API_KEY,
+      openrouter: !!process.env.OPENROUTER_API_KEY, anthropic: !!process.env.ANTHROPIC_API_KEY
+    }
+  };
+  if (new URL(req.url).searchParams.get('test') !== '1') return json(status);
+  const started = Date.now();
+  try {
+    const messages = [{ role: 'user', content: 'Reply with the single word: namaste' }];
+    let text;
+    switch (PROVIDER) {
+      case 'gemini': text = await gemini('', messages, 50); break;
+      case 'anthropic': text = await anthropic('', messages, 50); break;
+      case 'groq': case 'openrouter':
+        return json({ ...status, test: 'skipped — send a practice message instead' });
+      default: text = demo('', messages);
+    }
+    return json({ ...status, test: 'ok', reply: text, ms: Date.now() - started });
+  } catch (err) {
+    return json({ ...status, test: 'failed', detail: String(err && err.message || err) }, 502);
+  }
+});
+
 export const POST = route(async req => {
   if (process.env.KARIGAR_PAUSED === '1') return json({ error: 'paused' }, 503);
   if (!(await allowed(req))) return json({ error: 'unauthorised' }, 401);
@@ -45,8 +76,9 @@ export const POST = route(async req => {
   let body;
   try { body = await req.json(); } catch { return json({ error: 'Bad JSON' }, 400); }
 
-  const { system = '', messages } = body || {};
-  if (!Array.isArray(messages) || !messages.length) return json({ error: 'messages required' }, 400);
+  const { system = '' } = body || {};
+  if (!Array.isArray(body?.messages) || !body.messages.length) return json({ error: 'messages required' }, 400);
+  const messages = normaliseTurns(body.messages);
 
   const maxTokens = Math.min(Number(body.max_tokens) || 1200, MAX_OUTPUT_TOKENS);
   const inputChars = String(system).length + messages.reduce((n, m) => n + String(m.content || '').length, 0);
@@ -77,6 +109,23 @@ export const POST = route(async req => {
   }
 });
 
+// Practice conversations open with the character's line, so the history the app sends starts
+// with an assistant turn. Gemini and Anthropic both reject a conversation that does not start
+// with the user, and neither accepts two turns in a row from the same side.
+const OPENING = '[The artisan has just opened the conversation.]';
+function normaliseTurns(raw) {
+  const out = [];
+  for (const m of raw) {
+    const role = m && m.role === 'assistant' ? 'assistant' : 'user';
+    const content = String((m && m.content) || '');
+    const last = out[out.length - 1];
+    if (last && last.role === role) last.content += '\n\n' + content;
+    else out.push({ role, content });
+  }
+  if (out.length && out[0].role !== 'user') out.unshift({ role: 'user', content: OPENING });
+  return out;
+}
+
 // ── Google AI Studio (free tier) ────────────────────────────────────────────────
 // Free tier is metered by requests per minute and per day, not by money.
 // Get a key at aistudio.google.com/apikey — no billing account required.
@@ -84,6 +133,7 @@ export const POST = route(async req => {
 // (gemini-2.0-flash shut down June 2026, gemini-2.5-flash is due October 2026), and a
 // retired model makes every call fail. Pin GEMINI_MODEL only if you need a fixed version.
 const GEMINI_FALLBACK = 'gemini-3.5-flash';
+const GEMINI_THINKING_HEADROOM = 4096;
 
 async function gemini(system, messages, maxTokens) {
   const key = process.env.GEMINI_API_KEY;
@@ -111,7 +161,10 @@ async function geminiCall(model, key, system, messages, maxTokens) {
           role: m.role === 'assistant' ? 'model' : 'user',
           parts: [{ text: String(m.content || '') }]
         })),
-        generationConfig: { maxOutputTokens: maxTokens, temperature: 0.8 }
+        // Newer Flash models think before answering, and that thinking counts against
+        // maxOutputTokens. A practice reply asks for 400 tokens; with no headroom the model
+        // can spend all of it thinking and return no text at all.
+        generationConfig: { maxOutputTokens: maxTokens + GEMINI_THINKING_HEADROOM, temperature: 0.8 }
       })
     }
   );
@@ -121,7 +174,8 @@ async function geminiCall(model, key, system, messages, maxTokens) {
     throw err;
   }
   const data = await res.json();
-  const text = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+  // skip thought-summary parts if a model ever returns them; only the answer is wanted
+  const text = (data.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('').trim();
   if (!text) throw new Error('gemini returned no text (finishReason ' + (data.candidates?.[0]?.finishReason || 'none') + ')');
   return text;
 }
