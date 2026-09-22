@@ -19,6 +19,8 @@ Vercel tells you immediately if a name is taken; you can rename later under Sett
 
 A real domain is better long term — `karigar.in` or similar. Vercel → Settings → Domains → Add, then point the two DNS records it shows you. Handover links read cleaner and the PWA install prompt looks less like a test build.
 
+**Handover links always use the production address**, never the address the console is open on. Vercel gives every deployment its own long URL (`karigar-toolkit-<hash>-<team>.vercel.app`) that includes the team name and requires a Vercel login, so an artisan could not open it. Links use, in order: `APP_ORIGIN` if you set it (e.g. `https://karigar.in` once you add a domain), otherwise the project's production domain, which Vercel supplies automatically. To make the production address shorter or different, add another free `*.vercel.app` name under Settings → Domains and set it as the primary domain.
+
 ## 2. Import the repo
 
 Vercel → Add New → Project → import `Prachi-s-repo` → set the project name from step 1. Leave the framework preset as **Other**; `vercel.json` already sets the build command and the `public` output folder.
