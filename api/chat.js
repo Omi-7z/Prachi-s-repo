@@ -38,7 +38,8 @@ async function allowed(req) {
   return !!(await currentFacilitator(req));
 }
 
-// Self-check for facilitators: open /api/chat?test=1 while signed in. It makes one tiny call
+// Self-check for facilitators: open /api/chat?test=1 (one call) or ?test=2 (a practice-shaped
+// two-turn exchange) while signed in. It makes one tiny call
 // to the configured provider and reports what came back, so a broken key or retired model
 // shows up as a readable message instead of a silent practice screen.
 export const GET = route(async req => {
@@ -51,13 +52,17 @@ export const GET = route(async req => {
       openrouter: !!process.env.OPENROUTER_API_KEY, anthropic: !!process.env.ANTHROPIC_API_KEY
     }
   };
-  if (new URL(req.url).searchParams.get('test') !== '1') return json(status);
+  if (!['1', '2'].includes(new URL(req.url).searchParams.get('test'))) return json(status);
   const started = Date.now();
   try {
-    const messages = [{ role: 'user', content: 'Reply with the single word: namaste' }];
+    // test=2 mirrors a real practice turn: the character spoke first, the artisan replied.
+    const two = new URL(req.url).searchParams.get('test') === '2';
+    const messages = two
+      ? normaliseTurns([{ role: 'assistant', content: 'Namaste! What do you make?' }, { role: 'user', content: 'I make bandhani.' }])
+      : [{ role: 'user', content: 'Reply with the single word: namaste' }];
     let text;
     switch (PROVIDER) {
-      case 'gemini': text = await gemini('', messages, 50); break;
+      case 'gemini': text = await gemini(two ? 'You are a textile buyer. Reply in one short sentence.' : '', messages, two ? 400 : 50); break;
       case 'anthropic': text = await anthropic('', messages, 50); break;
       case 'groq': case 'openrouter':
         return json({ ...status, test: 'skipped — send a practice message instead' });
@@ -65,7 +70,7 @@ export const GET = route(async req => {
     }
     return json({ ...status, test: 'ok', reply: text, ms: Date.now() - started });
   } catch (err) {
-    return json({ ...status, test: 'failed', detail: String(err && err.message || err) }, 502);
+    return json({ ...status, test: 'failed', reason: (err && err.reason) || 'upstream', detail: String(err && err.message || err) }, 502);
   }
 });
 
@@ -105,9 +110,19 @@ export const POST = route(async req => {
   } catch (err) {
     // A free tier that is rate-limited should degrade, not break the field tool.
     console.error('chat upstream', PROVIDER, err);
-    return json({ error: 'upstream', provider: PROVIDER, detail: String(err && err.message || err) }, 502);
+    const reason = (err && err.reason) || 'upstream';
+    return json({ error: 'upstream', reason, provider: PROVIDER, detail: String(err && err.message || err) }, reason === 'quota' ? 429 : 502);
   }
 });
+
+// Why a call failed, in terms the app can act on: 'quota' (free-tier limit reached), 'key'
+// (missing or rejected key), 'config', 'empty' (model answered nothing), 'upstream' (other).
+function reasonFor(status) {
+  if (status === 429) return 'quota';
+  if (status === 401 || status === 403) return 'key';
+  return 'upstream';
+}
+function withReason(err, reason) { err.reason = reason; return err; }
 
 // Practice conversations open with the character's line, so the history the app sends starts
 // with an assistant turn. Gemini and Anthropic both reject a conversation that does not start
@@ -131,21 +146,35 @@ function normaliseTurns(raw) {
 // Get a key at aistudio.google.com/apikey — no billing account required.
 // Default is Google's "latest Flash" alias: fixed versions are retired on a schedule
 // (gemini-2.0-flash shut down June 2026, gemini-2.5-flash is due October 2026), and a
-// retired model makes every call fail. Pin GEMINI_MODEL only if you need a fixed version.
-const GEMINI_FALLBACK = 'gemini-3.5-flash';
+// retired model makes every call fail. GEMINI_MODEL sets the first model tried.
+const GEMINI_FALLBACKS = ['gemini-flash-lite-latest', 'gemini-3.5-flash', 'gemini-3.5-flash-lite'];
 const GEMINI_THINKING_HEADROOM = 4096;
 
 async function gemini(system, messages, maxTokens) {
   const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new Error('GEMINI_API_KEY not set');
-  const pinned = process.env.GEMINI_MODEL;
-  try {
-    return await geminiCall(pinned || 'gemini-flash-latest', key, system, messages, maxTokens);
-  } catch (err) {
-    // Only when the alias itself is unknown; a pinned model's errors are reported as they are.
-    if (pinned || err.status !== 404) throw err;
-    return geminiCall(GEMINI_FALLBACK, key, system, messages, maxTokens);
+  if (!key) throw withReason(new Error('GEMINI_API_KEY not set'), 'config');
+  // Each Gemini model has its own free-tier quota, and some allow only a few dozen requests a
+  // day. When one is used up (429), unknown (404), overloaded (5xx) or returns nothing, the
+  // next one is tried, so a practice session keeps going instead of stopping mid-conversation.
+  const chain = [...new Set([process.env.GEMINI_MODEL || 'gemini-flash-latest', ...GEMINI_FALLBACKS])];
+  let last;
+  for (const model of chain) {
+    try {
+      return await geminiCall(model, key, system, messages, maxTokens);
+    } catch (err) {
+      last = err;
+      if (!(err.status === 429 || err.status === 404 || err.status >= 500 || err.reason === 'empty')) throw err;
+    }
   }
+  // Optional last resort on a different provider's free tier.
+  if (process.env.GROQ_API_KEY) {
+    return openaiShaped(system, messages, maxTokens, {
+      url: 'https://api.groq.com/openai/v1/chat/completions',
+      key: process.env.GROQ_API_KEY,
+      model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile'
+    });
+  }
+  throw last;
 }
 
 async function geminiCall(model, key, system, messages, maxTokens) {
@@ -169,14 +198,19 @@ async function geminiCall(model, key, system, messages, maxTokens) {
     }
   );
   if (!res.ok) {
-    const err = new Error('gemini ' + model + ' ' + res.status + ' ' + (await res.text()).slice(0, 300));
+    const body = (await res.text()).slice(0, 400);
+    const err = new Error('gemini ' + model + ' ' + res.status + ' ' + body);
     err.status = res.status;
-    throw err;
+    // Gemini reports a wrong key as a 400, not a 401
+    throw withReason(err, /API_KEY_INVALID|API key not valid/i.test(body) ? 'key' : reasonFor(res.status));
   }
   const data = await res.json();
   // skip thought-summary parts if a model ever returns them; only the answer is wanted
   const text = (data.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join('').trim();
-  if (!text) throw new Error('gemini returned no text (finishReason ' + (data.candidates?.[0]?.finishReason || 'none') + ')');
+  if (!text) {
+    const why = data.candidates?.[0]?.finishReason || data.promptFeedback?.blockReason || 'none';
+    throw withReason(new Error('gemini ' + model + ' returned no text (' + why + ')'), 'empty');
+  }
   return text;
 }
 
@@ -193,7 +227,11 @@ async function openaiShaped(system, messages, maxTokens, cfg) {
       messages: [...(system ? [{ role: 'system', content: system }] : []), ...messages]
     })
   });
-  if (!res.ok) throw new Error(cfg.url + ' ' + res.status + ' ' + (await res.text()).slice(0, 300));
+  if (!res.ok) {
+    const err = new Error(cfg.url + ' ' + res.status + ' ' + (await res.text()).slice(0, 300));
+    err.status = res.status;
+    throw withReason(err, reasonFor(res.status));
+  }
   const data = await res.json();
   return (data.choices?.[0]?.message?.content || '').trim();
 }
@@ -213,7 +251,11 @@ async function anthropic(system, messages, maxTokens, model) {
     },
     body: JSON.stringify({ model: chosen, max_tokens: maxTokens, system, messages })
   });
-  if (!res.ok) throw new Error('anthropic ' + res.status + ' ' + (await res.text()).slice(0, 300));
+  if (!res.ok) {
+    const err = new Error('anthropic ' + res.status + ' ' + (await res.text()).slice(0, 300));
+    err.status = res.status;
+    throw withReason(err, reasonFor(res.status));
+  }
   const data = await res.json();
   return (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
 }

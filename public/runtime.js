@@ -158,6 +158,8 @@ async function api(path, { method = 'GET', body, headers = {} } = {}) {
   if (!res.ok) {
     const err = new Error((data && data.error) || res.statusText);
     err.status = res.status;
+    err.reason = data && data.reason;
+    err.detail = data && data.detail;
     throw err;
   }
   return data;

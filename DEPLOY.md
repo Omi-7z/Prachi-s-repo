@@ -47,7 +47,9 @@ Then **Deployments → ⋯ → Redeploy** so the build picks them up and creates
 
 The Gemini free tier is limited by requests per minute and per day. When the limit is hit, calls fail until it resets; nothing is billed.
 
-**Check the AI is working:** sign in at `/org`, then open `/api/chat?test=1`. It makes one tiny call and shows `"test":"ok"` with a reply, or `"failed"` with the provider's own error message (wrong key, retired model, quota reached).
+**Check the AI is working:** sign in at `/org`, then open `/api/chat?test=1` (one call) or `/api/chat?test=2` (a two-turn practice exchange). It shows `"test":"ok"` with a reply, or `"failed"` with a `reason` (`quota`, `key`, `upstream`) and the provider's own message. Previewing the artisan app from the console also shows that message under any chat error; artisans only see a plain sentence in their language.
+
+When a Gemini model's free quota runs out, the proxy moves on to the next (`gemini-flash-lite-latest`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`), since each has its own quota. Adding a free `GROQ_API_KEY` from console.groq.com gives one more fallback after those — weaker in Indic languages, but it keeps a session going.
 
 ### Before real artisans' sessions go through the free tier
 

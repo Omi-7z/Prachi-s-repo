@@ -122,7 +122,9 @@ const en = {
   works: "Works without internet for reading your board",
   // NEEDS REVIEW — added after the reviewed copy
   chatError: "They could not answer just now. Check the internet and try again.",
-  tryAgain: "Try again"
+  tryAgain: "Try again",
+  chatLimit: "The practice partner has reached today's limit. Please try again later.",
+  chatUnavailable: "The practice partner is not available right now. Please try again in a little while."
 };
 
 const hi = {
@@ -235,7 +237,9 @@ const hi = {
   works: "अपना बोर्ड पढ़ने के लिए इंटरनेट की ज़रूरत नहीं",
   // NEEDS REVIEW — added after the reviewed copy
   chatError: "अभी जवाब नहीं आ पाया। इंटरनेट देखिए और फिर से कोशिश कीजिए।",
-  tryAgain: "फिर से कोशिश करें"
+  tryAgain: "फिर से कोशिश करें",
+  chatLimit: "आज के लिए अभ्यास की सीमा पूरी हो गई है। बाद में फिर कोशिश कीजिए।",
+  chatUnavailable: "अभी अभ्यास साथी उपलब्ध नहीं है। थोड़ी देर बाद फिर कोशिश कीजिए।"
 };
 
 const gu = {
@@ -348,7 +352,9 @@ const gu = {
   works: "તમારું બોર્ડ વાંચવા ઇન્ટરનેટની જરૂર નથી",
   // NEEDS REVIEW — added after the reviewed copy
   chatError: "હમણાં જવાબ ન આવ્યો. ઇન્ટરનેટ તપાસો અને ફરી પ્રયત્ન કરો.",
-  tryAgain: "ફરી પ્રયત્ન કરો"
+  tryAgain: "ફરી પ્રયત્ન કરો",
+  chatLimit: "આજ માટે અભ્યાસની મર્યાદા પૂરી થઈ ગઈ છે. પછીથી ફરી પ્રયત્ન કરો.",
+  chatUnavailable: "અત્યારે અભ્યાસ સાથી ઉપલબ્ધ નથી. થોડી વાર પછી ફરી પ્રયત્ન કરો."
 };
 
 const mr = {
@@ -461,7 +467,9 @@ const mr = {
   works: "तुमचं बोर्ड वाचायला इंटरनेट लागत नाही",
   // NEEDS REVIEW — added after the reviewed copy
   chatError: "आत्ता उत्तर आलं नाही. इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.",
-  tryAgain: "पुन्हा प्रयत्न करा"
+  tryAgain: "पुन्हा प्रयत्न करा",
+  chatLimit: "आजची सरावाची मर्यादा पूर्ण झाली आहे. नंतर पुन्हा प्रयत्न करा.",
+  chatUnavailable: "सराव साथी आत्ता उपलब्ध नाही. थोड्या वेळाने पुन्हा प्रयत्न करा."
 };
 
 export const TABLES = { en, hi, gu, mr };
