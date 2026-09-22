@@ -940,6 +940,12 @@
               <sc-if value="{{ chatBusy }}" hint-placeholder-val="{{ false }}">
                 <div style="align-self:flex-start;background:#fff;border-radius:18px;padding:11px 15px;font-size:14px;color:#A79FB4;animation:k-pulse 1.3s ease-in-out infinite;font-family:{{ recordFont }}">{{ t.typing }}</div>
               </sc-if>
+              <sc-if value="{{ chatError }}" hint-placeholder-val="{{ false }}">
+                <div role="alert" style="align-self:stretch;background:#FBEAE8;color:#7A1319;border-radius:18px;padding:12px 15px;font-size:14.5px;line-height:1.55;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-family:{{ recordFont }}">
+                  <span style="flex:1 1 180px">{{ t.chatError }}</span>
+                  <button type="button" onClick="{{ retryChat }}" class="k-press" style="border:0;background:#A81C24;color:#fff;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;min-height:42px;font-family:{{ recordFont }}">{{ t.tryAgain }}</button>
+                </div>
+              </sc-if>
               <sc-if value="{{ coachOpen }}" hint-placeholder-val="{{ false }}">
                 <div style="background:#F1E9FA;border-radius:20px;padding:17px;margin-top:6px">
                   <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#52307C;font-weight:600;margin-bottom:11px;font-family:{{ recordFont }}">{{ t.feedbackBtn }}</div>
@@ -1101,7 +1107,9 @@ const EN = {
   installNow: "Install",
   installSkip: "Not now, open it here",
   installedTitle: "Done — you can open Karigar any time",
-  works: "Works without internet for reading your board"
+  works: "Works without internet for reading your board",
+  chatError: "They could not answer just now. Check the internet and try again.",
+  tryAgain: "Try again"
 };
 
 // Indic names carry matras on the first letter — take whole grapheme clusters, not UTF-16 units.
@@ -1436,7 +1444,7 @@ Reply with plain conversational text only.`;
   }
 
   openSegment = async (id) => {
-    this.setState({ appView: 'chat', segId: id, messages: [], coach: null, draft: '', chatBusy: true });
+    this.setState({ appView: 'chat', segId: id, messages: [], coach: null, draft: '', chatBusy: true, chatError: false });
     // Counts only: which audience was opened. The conversation itself stays on this phone.
     if (this.props.store && this.props.store.mode === 'artisan') {
       const seg = id || 'custom';
@@ -1446,18 +1454,29 @@ Reply with plain conversational text only.`;
     try {
       const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: [{ role: 'user', content: '[The artisan has just opened the conversation. Say your opening line, in character.]' }] });
       this.setState({ messages: [{ role: 'assistant', content: (reply || '').trim() }], chatBusy: false });
-    } catch (e) { this.setState({ chatBusy: false }); }
+    } catch (e) { this.chatFailed(e, () => this.openSegment(id)); }
   };
+
+  // A failed model call used to leave the practice screen silent. Say so, and offer a retry.
+  chatFailed(e, retry) {
+    if (typeof console !== 'undefined') console.error('practice partner failed:', e);
+    this._retry = retry;
+    this.setState({ chatBusy: false, chatError: true });
+  }
 
   send = async () => {
     const text = (this.state.draft || '').trim();
     if (!text || this.state.chatBusy) return;
     const messages = [...this.state.messages, { role: 'user', content: text }];
-    this.setState({ messages, draft: '', chatBusy: true, coach: null });
+    this.setState({ messages, draft: '', chatBusy: true, coach: null, chatError: false });
     try {
       const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: messages.map(m => ({ role: m.role, content: m.content })) });
       this.setState({ messages: [...messages, { role: 'assistant', content: (reply || '').trim() }], chatBusy: false });
-    } catch (e) { this.setState({ chatBusy: false }); }
+    } catch (e) {
+      // put their words back in the box so nothing they said is lost
+      this.setState({ messages: this.state.messages.slice(0, -1), draft: text });
+      this.chatFailed(e, () => this.send());
+    }
   };
 
   endAndCoach = async () => {
@@ -1467,7 +1486,7 @@ Reply with plain conversational text only.`;
     const seg = this.segText(this.state.segId);
     const label = seg ? seg.label.en : this.state.customSegment;
     const transcript = this.state.messages.map(m => `${m.role === 'user' ? 'ARTISAN' : 'CHARACTER'}: ${m.content}`).join('\n');
-    this.setState({ chatBusy: true });
+    this.setState({ chatBusy: true, chatError: false });
     try {
       const raw = await window.claude.complete({
         model: this.props.model || 'claude-sonnet-4-5', max_tokens: 900,
@@ -1480,7 +1499,7 @@ Reply with plain conversational text only.`;
       history[key] = (history[key] || 0) + 1;
       this.setState({ coach, chatBusy: false, history });
       this.persist({ history });
-    } catch (e) { this.setState({ chatBusy: false }); }
+    } catch (e) { this.chatFailed(e, () => this.endAndCoach()); }
   };
 
   renderVals() {
@@ -1905,7 +1924,9 @@ Reply with plain conversational text only.`;
       setDraft: e => this.setState({ draft: e.target.value }),
       draftKey: e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); } },
       send: this.send, endAndCoach: this.endAndCoach,
-      coachOpen: !!(s.coach && s.coach.items), coachItems: (s.coach && s.coach.items) || []
+      coachOpen: !!(s.coach && s.coach.items), coachItems: (s.coach && s.coach.items) || [],
+      chatError: !!s.chatError && !s.chatBusy,
+      retryChat: () => { const r = this._retry; this._retry = null; this.setState({ chatError: false }); if (r) r(); }
     };
   }
 }

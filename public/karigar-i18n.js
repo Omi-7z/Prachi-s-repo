@@ -119,7 +119,10 @@ const en = {
   installNow: "Install",
   installSkip: "Not now, open it here",
   installedTitle: "Done — you can open Karigar any time",
-  works: "Works without internet for reading your board"
+  works: "Works without internet for reading your board",
+  // NEEDS REVIEW — added after the reviewed copy
+  chatError: "They could not answer just now. Check the internet and try again.",
+  tryAgain: "Try again"
 };
 
 const hi = {
@@ -229,7 +232,10 @@ const hi = {
   installNow: "इंस्टॉल करें",
   installSkip: "अभी नहीं, यहीं खोलिए",
   installedTitle: "हो गया — करीगर कभी भी खोल सकते हैं",
-  works: "अपना बोर्ड पढ़ने के लिए इंटरनेट की ज़रूरत नहीं"
+  works: "अपना बोर्ड पढ़ने के लिए इंटरनेट की ज़रूरत नहीं",
+  // NEEDS REVIEW — added after the reviewed copy
+  chatError: "अभी जवाब नहीं आ पाया। इंटरनेट देखिए और फिर से कोशिश कीजिए।",
+  tryAgain: "फिर से कोशिश करें"
 };
 
 const gu = {
@@ -339,7 +345,10 @@ const gu = {
   installNow: "ઇન્સ્ટોલ કરો",
   installSkip: "હમણાં નહીં, અહીં જ ખોલો",
   installedTitle: "થઈ ગયું — કારીગર ગમે ત્યારે ખોલી શકો",
-  works: "તમારું બોર્ડ વાંચવા ઇન્ટરનેટની જરૂર નથી"
+  works: "તમારું બોર્ડ વાંચવા ઇન્ટરનેટની જરૂર નથી",
+  // NEEDS REVIEW — added after the reviewed copy
+  chatError: "હમણાં જવાબ ન આવ્યો. ઇન્ટરનેટ તપાસો અને ફરી પ્રયત્ન કરો.",
+  tryAgain: "ફરી પ્રયત્ન કરો"
 };
 
 const mr = {
@@ -449,7 +458,10 @@ const mr = {
   installNow: "इन्स्टॉल करा",
   installSkip: "आत्ता नको, इथेच उघडा",
   installedTitle: "झालं — कारागीर कधीही उघडता येईल",
-  works: "तुमचं बोर्ड वाचायला इंटरनेट लागत नाही"
+  works: "तुमचं बोर्ड वाचायला इंटरनेट लागत नाही",
+  // NEEDS REVIEW — added after the reviewed copy
+  chatError: "आत्ता उत्तर आलं नाही. इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.",
+  tryAgain: "पुन्हा प्रयत्न करा"
 };
 
 export const TABLES = { en, hi, gu, mr };

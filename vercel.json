@@ -13,12 +13,15 @@
     },
     "api/manifest.js": {
       "includeFiles": "public/manifest.webmanifest"
+    },
+    "api/artisan-page.js": {
+      "includeFiles": "public/index.html"
     }
   },
   "rewrites": [
     {
       "source": "/k/:token",
-      "destination": "/"
+      "destination": "/api/artisan-page?t=:token"
     },
     {
       "source": "/org",

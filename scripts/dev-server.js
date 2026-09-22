@@ -21,7 +21,6 @@ function apiFile(pathname) {
 }
 
 function rewrite(pathname) {
-  if (/^\/k\/[^/]+\/?$/.test(pathname)) return '/index.html';
   if (/^\/org(\/.*)?$/.test(pathname)) return '/console.html';
   if (pathname === '/') return '/index.html';
   return pathname;
@@ -60,6 +59,9 @@ async function serveStatic(res, url) {
 
 createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
+  // mirrors the vercel.json rewrite: /k/<token> is rendered by a function
+  const k = url.pathname.match(/^\/k\/([^/]+)\/?$/);
+  if (k) { url.pathname = '/api/artisan-page'; url.searchParams.set('t', k[1]); }
   try {
     if (url.pathname.startsWith('/api/')) await serveApi(req, res, url);
     else await serveStatic(res, url);

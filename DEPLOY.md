@@ -47,6 +47,8 @@ Then **Deployments → ⋯ → Redeploy** so the build picks them up and creates
 
 The Gemini free tier is limited by requests per minute and per day. When the limit is hit, calls fail until it resets; nothing is billed.
 
+**Check the AI is working:** sign in at `/org`, then open `/api/chat?test=1`. It makes one tiny call and shows `"test":"ok"` with a reply, or `"failed"` with the provider's own error message (wrong key, retired model, quota reached).
+
 ### Before real artisans' sessions go through the free tier
 
 Google's terms for the unpaid Gemini API allow it to use what is sent — prompts and responses — to improve its products, and human reviewers may read it (detached from your account first). Here, what is sent is a transcript of an artisan's board session, their name, their answers about what may leave their community, and their practice conversations.
@@ -82,6 +84,8 @@ If someone built profiles in the prototype, open `/org` **in that same browser**
 2. The artisan app opens with the install screen first.
 3. **Android/Chrome:** tap Install, or ⋮ → Install app. **iPhone/Safari:** Share → Add to Home Screen (iOS fires no install event, which is why the screen spells out the steps).
 4. Launch from the home-screen icon. It should open full-screen with no browser chrome and the mandala icon, straight onto that artisan's profile.
+
+An icon added before this was fixed opens the sign-in page. Delete it from the home screen, scan the QR again and re-add it.
 
 If it opens in a browser tab instead, check that `/manifest.webmanifest`, `/api/manifest?t=…` and `/sw.js` return 200.
 
