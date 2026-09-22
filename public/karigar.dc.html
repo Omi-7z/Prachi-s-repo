@@ -40,6 +40,8 @@
     .k-editor { position: static !important; }
     .k-sheet { position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important; z-index: 60; max-height: 78vh; overflow: auto; border-radius: 24px 24px 0 0 !important; box-shadow: 0 -12px 40px rgba(36,31,46,.18) !important; animation: k-sheet .28s cubic-bezier(.22,1,.36,1) both; }
     .k-hidemob { display: none !important; }
+    /* on phones the card sheet covers the board, so it only appears once a card is picked */
+    .k-sheet-idle { display: none !important; }
   }
   @media (max-width: 700px) {
     .k-phone { height: auto !important; max-height: none !important; max-width: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; min-height: calc(100vh - 56px) !important; }
@@ -270,7 +272,7 @@
                   </div>
                 </div>
 
-                <div class="k-editor k-sheet" style="position:sticky;top:76px;background:#fff;border-radius:22px;padding:20px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 10px 30px rgba(36,31,46,.07)">
+                <div class="k-editor k-sheet {{ sheetState }}" style="position:sticky;top:76px;background:#fff;border-radius:22px;padding:20px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 10px 30px rgba(36,31,46,.07)">
                   <sc-if value="{{ hasSelected }}" hint-placeholder-val="{{ true }}">
                     <div>
                       <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
@@ -558,13 +560,105 @@
             <h1 style="margin:0 0 6px;font-family:{{ displayFont }};font-weight:600;font-size:29px;letter-spacing:-.015em">{{ t.newTitle }}</h1>
             <p style="margin:0 0 22px;max-width:62ch;font-size:14.5px;line-height:1.65;color:#6F6880">{{ t.newSub }}</p>
 
+            <div style="display:flex;gap:6px;background:#F2EDE4;border-radius:999px;padding:4px;margin-bottom:18px;flex-wrap:wrap;width:fit-content;max-width:100%">
+              <sc-for list="{{ intakeTabs }}" as="x" hint-placeholder-count="3">
+                <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ intakeManual }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;background:#fff;border-radius:18px;padding:12px 16px;margin-bottom:18px;box-shadow:0 1px 3px rgba(36,31,46,.05)">
+                <p style="margin:0;flex:1 1 260px;font-size:13.5px;line-height:1.55;color:#6F6880">{{ t.manualHint }}</p>
+                <label style="display:flex;align-items:center;gap:8px">
+                  <span style="font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#A79FB4">{{ t.sessionLang }}</span>
+                  <select class="k-field" value="{{ newLang }}" onChange="{{ setNewLang }}" style="width:auto;font-size:14px;padding:8px 10px;border-radius:999px;min-height:40px">
+                    <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7"><option value="{{ l.code }}">{{ l.label }}</option></sc-for>
+                  </select>
+                </label>
+                <sc-if value="{{ manualStarted }}" hint-placeholder-val="{{ false }}">
+                  <button type="button" onClick="{{ openManual }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:42px">{{ t.openProfile }} →</button>
+                </sc-if>
+              </div>
+              <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:26px;align-items:start">
+                <div>
+                  <div style="position:relative;width:100%;max-width:600px;aspect-ratio:1;margin:0 auto">
+                    <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+                      <sc-for list="{{ ringArcs }}" as="g" hint-placeholder-count="6">
+                        <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6" opacity="{{ g.opacity }}"></circle>
+                      </sc-for>
+                      <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+                      <circle cx="60" cy="60" r="17.4" fill="none" stroke="#EBE3D6" stroke-width="0.7"></circle>
+                      <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+                      <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ progressDash }}" transform="rotate(-90 60 60)"></circle>
+                    </svg>
+
+                    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:24%">
+                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:clamp(22px,4.4vw,34px);line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ filledCount }}</div>
+                      <div style="font-size:clamp(9px,1.5vw,11.5px);color:#8C8499;margin-top:3px">{{ t.boardOf }} {{ totalCount }}</div>
+                    </div>
+
+                    <sc-for list="{{ ringLabels }}" as="l" hint-placeholder-count="6">
+                      <div style="{{ l.style }}">{{ l.label }}</div>
+                    </sc-for>
+
+                    <sc-for list="{{ boardDots }}" as="d" hint-placeholder-count="30">
+                      <button type="button" onClick="{{ d.pick }}" class="k-dot" title="{{ d.title }}" style="{{ d.style }}"></button>
+                    </sc-for>
+                  </div>
+
+                  <div style="display:flex;flex-direction:column;gap:12px;margin-top:22px">
+                    <sc-for list="{{ hubGroups }}" as="h" hint-placeholder-count="2">
+                      <div>
+                        <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8C8499;margin-bottom:8px">{{ h.label }}</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap">
+                          <sc-for list="{{ h.cards }}" as="c" hint-placeholder-count="4">
+                            <button type="button" onClick="{{ c.pick }}" class="k-press" style="{{ c.style }}">
+                              <span style="font-weight:700;font-size:11px;opacity:.7">{{ c.token }}</span>
+                              <span>{{ c.label }}</span>
+                            </button>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div class="k-editor k-sheet {{ sheetState }}" style="position:sticky;top:76px;background:#fff;border-radius:22px;padding:20px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 10px 30px rgba(36,31,46,.07)">
+                  <sc-if value="{{ hasSelected }}" hint-placeholder-val="{{ true }}">
+                    <div>
+                      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
+                        <span style="{{ sel.chipStyle }}">{{ sel.ringLabel }}</span>
+                        <span style="font-size:11.5px;color:#A79FB4;font-variant-numeric:tabular-nums">{{ sel.code }}</span>
+                        <button type="button" onClick="{{ clearSelected }}" class="k-press" style="margin-left:auto;background:#F2EDE4;border:0;border-radius:999px;width:34px;height:34px;font-size:16px;cursor:pointer;color:#6F6880">×</button>
+                      </div>
+                      <h3 style="margin:0 0 4px;font-family:{{ displayFont }};font-weight:600;font-size:19px;line-height:1.25">{{ sel.label }}</h3>
+                      <p style="margin:0 0 14px;font-size:12.5px;line-height:1.55;color:#8C8499">{{ sel.ask }}</p>
+                      <textarea class="k-field" rows="9" placeholder="{{ sel.hint }}" value="{{ sel.value }}" onChange="{{ sel.onChange }}" style="resize:vertical;min-height:170px;font-family:{{ recordFont }}"></textarea>
+                      <sc-if value="{{ sel.hasQuote }}" hint-collapse-val="{{ false }}" hint-placeholder-val="{{ false }}">
+                        <div style="margin-top:11px;background:#FBF7F0;border-radius:12px;padding:10px 12px">
+                          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#A79FB4;margin-bottom:3px">{{ t.sourceLine }}</div>
+                          <div style="font-size:12.5px;line-height:1.5;color:#6F6880;font-style:italic">{{ sel.quote }}</div>
+                        </div>
+                      </sc-if>
+                      <div style="display:flex;gap:8px;margin-top:14px">
+                        <button type="button" onClick="{{ prevCard }}" class="k-press" style="flex:1;background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px">←</button>
+                        <button type="button" onClick="{{ nextCard }}" class="k-press" style="flex:3;background:#241F2E;color:#fff;border:0;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px">{{ t.next }} →</button>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ noSelected }}" hint-placeholder-val="{{ false }}">
+                    <div style="text-align:center;padding:26px 8px">
+                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:18px;margin-bottom:6px">{{ t.boardPick }}</div>
+                      <p style="margin:0;font-size:13px;line-height:1.55;color:#8C8499">{{ t.boardPickSub }}</p>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ notManual }}" hint-placeholder-val="{{ true }}">
             <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start">
               <div>
-                <div style="display:flex;gap:6px;background:#F2EDE4;border-radius:999px;padding:4px;margin-bottom:18px;flex-wrap:wrap">
-                  <sc-for list="{{ intakeTabs }}" as="x" hint-placeholder-count="3">
-                    <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
-                  </sc-for>
-                </div>
 
                 <sc-if value="{{ intakeUpload }}" hint-placeholder-val="{{ true }}">
                   <label style="display:block;background:#fff;border:2px dashed #DDD4C6;border-radius:22px;padding:40px 22px;text-align:center;cursor:pointer">
@@ -579,10 +673,6 @@
 
                 <sc-if value="{{ intakePaste }}" hint-placeholder-val="{{ false }}">
                   <textarea class="k-field" rows="14" placeholder="{{ pasteHint }}" value="{{ transcript }}" onChange="{{ setTranscript }}" style="min-height:300px;resize:vertical;font-size:14px;font-family:{{ recordFont }}"></textarea>
-                </sc-if>
-
-                <sc-if value="{{ intakeManual }}" hint-placeholder-val="{{ false }}">
-                  <button type="button" onClick="{{ newProfile }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;min-height:50px">{{ t.emptyProfile }}</button>
                 </sc-if>
 
                 <sc-if value="{{ canExtract }}" hint-placeholder-val="{{ false }}">
@@ -618,6 +708,7 @@
                 </label>
               </div>
             </div>
+            </sc-if>
           </section>
         </sc-if>
 
@@ -965,6 +1056,7 @@ const EN = {
   readSession: 'Read the session into the cards', reading: 'Reading…',
   readingSub: 'Nothing is invented. Anything the session did not cover is left empty for you.',
   emptyProfile: 'Create an empty profile', sessionLang: 'Session language',
+  manualHint: 'Tap any dot on the board to open that card and write the answer in their words. The profile is created with the first answer and saves as you go.',
   agentDoes: 'What the agent does with it',
   ag1: 'Matches every answer to the card it belongs to.',
   ag2: 'Keeps the artisan\u2019s own words rather than paraphrasing.',
@@ -1147,6 +1239,20 @@ class Component extends DCLogic {
   }
 
   setField(key, v) { this.patchActive(p => ({ ...p, record: { ...p.record, [key]: v } })); }
+
+  setManualField(key, v) {
+    const id = this.state.manualId;
+    if (id && this.state.profiles.some(p => p.id === id)) {
+      this.patchProfile(id, p => ({ ...p, record: { ...p.record, [key]: v } }));
+      return;
+    }
+    if (!String(v).trim()) return;
+    const nid = this.newId();
+    const profile = { id: nid, record: { ...blank(), [key]: v }, lang: this.state.newLang, analysis: null, checked: {}, sources: {}, origin: 'mandala board', approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 };
+    const profiles = [...this.state.profiles, profile];
+    this.setState({ profiles, manualId: nid, activeId: nid });
+    this.persist({ profiles, activeId: nid });
+  }
 
   completeness(p) {
     const D = this.DATA; if (!D) return { theme: 0, reflection: 0, story: 0, complete: false };
@@ -1382,10 +1488,14 @@ Reply with plain conversational text only.`;
     const a = this.active();
     const appLangCode = (a && a.lang) || 'en';
     const t = this.t(s.side === 'artisan' ? appLangCode : s.uiLang);
-    const rec = (a && a.record) || {};
-    const srcs = (a && a.sources) || {};
+    // New → "Type it myself" fills the board directly. It works on its own profile, created
+    // with the first answer, so opening the tab and leaving does not leave an empty profile.
+    const manual = s.side === 'org' && s.orgView === 'new' && s.intake === 'manual';
+    const mp = manual && s.manualId ? s.profiles.find(p => p.id === s.manualId) || null : null;
+    const rec = manual ? ((mp && mp.record) || {}) : ((a && a.record) || {});
+    const srcs = manual ? ((mp && mp.sources) || {}) : ((a && a.sources) || {});
     const uiL = this.langOf(s.side === 'artisan' ? appLangCode : s.uiLang);
-    const recL = this.langOf((a && a.lang) || 'en');
+    const recL = this.langOf(manual ? (mp ? mp.lang : s.newLang) : ((a && a.lang) || 'en'));
     const cards = this.CARDS || [];
     const rings = D ? D.RINGS : [];
     const filled = cards.filter(c => (rec[c.key] || '').trim()).length;
@@ -1612,7 +1722,7 @@ Reply with plain conversational text only.`;
       }),
 
       vOverview: s.orgView === 'overview', vBoard: s.orgView === 'board' && !!a, vArtisans: s.orgView === 'artisans', vNew: s.orgView === 'new',
-      goNew: () => this.setState({ orgView: 'new', intake: 'upload', transcript: '', fileName: '', audioPending: false, extractError: '' }),
+      goNew: () => this.setState({ orgView: 'new', intake: 'upload', transcript: '', fileName: '', audioPending: false, extractError: '', manualId: null, selectedKey: null }),
       goHandover: () => this.setState({ boardTab: 'handover' }),
 
       metrics, attention, hasAttention: attention.length > 0, noAttention: attention.length === 0,
@@ -1634,7 +1744,7 @@ Reply with plain conversational text only.`;
       boardTabs, tabBoard: s.boardTab === 'board', tabList: s.boardTab === 'list', tabAnalysis: s.boardTab === 'analysis', tabHandover: s.boardTab === 'handover',
       ringArcs, ringLabels, boardDots, hubGroups,
       progressDash: `${(circ * pctDone).toFixed(2)} ${circ.toFixed(2)}`,
-      hasSelected: !!selCard, noSelected: !selCard,
+      hasSelected: !!selCard, noSelected: !selCard, sheetState: selCard ? 'k-sheet-open' : 'k-sheet-idle',
       clearSelected: () => this.setState({ selectedKey: null }),
       prevCard: () => step(-1), nextCard: () => step(1),
       sel: selCard ? {
@@ -1645,7 +1755,7 @@ Reply with plain conversational text only.`;
         value: rec[selCard.key] || '',
         readValue: (rec[selCard.key] || '').trim() || t.emptyCard,
         quote: srcs[selCard.key] ? '“' + srcs[selCard.key] + '”' : '', hasQuote: !!srcs[selCard.key],
-        onChange: e => this.setField(selCard.key, e.target.value)
+        onChange: e => manual ? this.setManualField(selCard.key, e.target.value) : this.setField(selCard.key, e.target.value)
       } : { chipStyle: '', label: '', ask: '', hint: '', value: '', readValue: '', quote: '', hasQuote: false, code: '', ringLabel: '' },
 
       groups, hasAutofill: !!(a && a.sources && Object.keys(a.sources).length),
@@ -1728,10 +1838,12 @@ Reply with plain conversational text only.`;
       }),
 
       intakeTabs: [{ id: 'upload', label: t.tabUpload }, { id: 'paste', label: t.tabPaste }, { id: 'manual', label: t.tabManual }].map(x => ({
-        label: x.label, go: () => this.setState({ intake: x.id }),
+        label: x.label, go: () => this.setState({ intake: x.id, selectedKey: null }),
         style: `border:0;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:40px;background:${s.intake === x.id ? '#fff' : 'transparent'};color:${s.intake === x.id ? '#241F2E' : '#8C8499'};box-shadow:${s.intake === x.id ? '0 1px 3px rgba(36,31,46,.1)' : 'none'};font-family:${uiL.font}`
       })),
-      intakeUpload: s.intake === 'upload', intakePaste: s.intake === 'paste', intakeManual: s.intake === 'manual',
+      intakeUpload: s.intake === 'upload', intakePaste: s.intake === 'paste', intakeManual: s.intake === 'manual', notManual: s.intake !== 'manual',
+      manualStarted: !!mp,
+      openManual: () => { if (mp) this.setState({ activeId: mp.id, orgView: 'board', boardTab: 'board', selectedKey: null, manualId: null, intake: 'upload' }); },
       onFile: this.readFile, fileLabel: s.fileName || t.chooseFile,
       fileHelp: s.fileName ? (s.audioPending ? '—' : `${(s.transcript || '').length.toLocaleString()} chars`) : t.fileHelp,
       audioPending: s.audioPending,
@@ -1741,7 +1853,8 @@ Reply with plain conversational text only.`;
       transcriptMeta: s.fileName || `${(s.transcript || '').trim().split(/\s+/).filter(Boolean).length} words`,
       canExtract: !s.extracting && (s.transcript || '').trim().length > 40 && s.intake !== 'manual',
       extract: this.extract, extracting: s.extracting, extractError: s.extractError,
-      newLang: s.newLang, setNewLang: e => this.setState({ newLang: e.target.value }),
+      newLang: s.newLang,
+      setNewLang: e => { const v = e.target.value; this.setState({ newLang: v }); if (mp) this.patchProfile(mp.id, p => ({ ...p, lang: v })); },
       newProfile: () => {
         const id = this.newId();
         const profiles = [...s.profiles, { id, record: blank(), lang: s.newLang, analysis: null, checked: {}, approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 }];
