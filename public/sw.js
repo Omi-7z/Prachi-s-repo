@@ -1,8 +1,14 @@
 // Karigar service worker.
-// App shell is precached so the artisan app opens offline; model calls always hit the network.
-const VERSION = 'karigar-v2';
+//
+// It serves the artisan app only (/k/<token>): the shell is precached so an artisan's board
+// opens without internet. The facilitator platform at / and /org is online-only and is never
+// intercepted, so it can never be replaced by a cached artisan page. Model calls and every
+// other /api request always go to the network.
+const VERSION = 'karigar-v3';
+// /k/shell is the artisan page with no valid token: the plain app shell, used offline
+const SHELL_PAGE = '/k/shell';
 const SHELL = [
-  '/', '/manifest.webmanifest',
+  SHELL_PAGE, '/manifest.webmanifest',
   '/runtime.js', '/vendor/preact.mjs', '/karigar.dc', '/karigar-data.js', '/karigar-i18n.js',
   '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'
 ];
@@ -12,6 +18,7 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
+  // drops the v1/v2 caches, which stored an artisan page under "/"
   event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
@@ -24,22 +31,21 @@ self.addEventListener('fetch', event => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  // never cache the model proxy or profile reads
   if (url.pathname.startsWith('/api/')) return;
 
-  // the facilitator console is online-only and must never become the artisan's offline shell
-  if (url.pathname === '/org' || url.pathname.startsWith('/org/') || url.pathname.startsWith('/console')) return;
-
-  // navigations: network first so a new profile is picked up, shell as the offline fallback
   if (req.mode === 'navigate') {
+    // only the artisan app works offline; every other page goes straight to the network
+    if (!url.pathname.startsWith('/k/')) return;
+    // network first so a fresh profile is picked up; this artisan's last copy, then the plain
+    // shell, as the offline fallback
     event.respondWith(
       fetch(req).then(res => {
         if (res.ok) {
           const copy = res.clone();
-          caches.open(VERSION).then(c => c.put('/', copy));
+          caches.open(VERSION).then(c => c.put(req, copy));
         }
         return res;
-      }).catch(() => caches.match('/'))
+      }).catch(() => caches.match(req).then(hit => hit || caches.match(SHELL_PAGE)))
     );
     return;
   }

@@ -15,10 +15,14 @@
       "includeFiles": "public/manifest.webmanifest"
     },
     "api/artisan-page.js": {
-      "includeFiles": "public/index.html"
+      "includeFiles": "public/artisan.html"
     }
   },
   "rewrites": [
+    {
+      "source": "/",
+      "destination": "/console"
+    },
     {
       "source": "/k/:token",
       "destination": "/api/artisan-page?t=:token"

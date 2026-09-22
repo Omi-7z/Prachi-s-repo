@@ -277,7 +277,7 @@ function consoleStore(initial, onServerProfile) {
       }
     },
     practice() { /* the facilitator's preview of the artisan app is not practice */ },
-    signOut: async () => { await api('/api/session', { method: 'DELETE' }); location.href = '/org'; },
+    signOut: async () => { await api('/api/session', { method: 'DELETE' }); location.href = '/'; },
     local: safeStore
   };
 }
@@ -358,11 +358,7 @@ async function bootArtisan() {
   const m = location.pathname.match(/^\/k\/([A-Za-z0-9_-]+)/);
   let token = m && m[1];
   if (!token) {
-    // Opened from a home-screen icon installed before per-artisan manifests, or typed in.
-    const remembered = safeStore.get('karigar-token');
-    if (remembered) { location.replace(`/k/${remembered}`); return null; }
-    // No artisan link: this is a facilitator arriving at the home page.
-    location.replace('/org');
+    message('Karigar', 'Open the link your facilitator gave you.');
     return null;
   }
   // Android installs from the manifest's start_url, so it must carry this artisan's link.
@@ -375,7 +371,6 @@ async function bootArtisan() {
   try {
     ({ profile } = await api(`/api/profile?token=${encodeURIComponent(token)}`));
     safeStore.set(cacheKey, profile);
-    safeStore.set('karigar-token', token);
   } catch (e) {
     if (e.status === 410 || e.status === 404) {
       try { localStorage.removeItem(cacheKey); } catch { /* ignore */ }

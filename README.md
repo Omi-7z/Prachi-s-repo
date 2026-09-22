@@ -32,8 +32,8 @@ scripts/                 migrate, create-facilitator, local dev server
 public/
 ├── karigar.dc.html      The prototype: template + component (now reads/writes the server)
 ├── runtime.js           Renders the prototype and bridges it to the API
-├── index.html           Artisan app shell (/k/:token)
-├── console.html         Facilitator console shell (/org), with sign-in
+├── artisan.html         Artisan app shell (/k/:token, served by api/artisan-page.js)
+├── console.html         Facilitator platform (/ and /org), with sign-in
 ├── karigar-data.js      Card schema, rings, samples (unchanged)
 ├── karigar-i18n.js      UI dictionaries and personas (unchanged)
 ├── manifest.webmanifest, sw.js, icons/, vendor/
