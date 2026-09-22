@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&family=Noto+Sans+Tamil:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600&display=swap">
+<style>
+  html, body { height: 100%; }
+  body { margin: 0; background: #FBF7F0; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+  * { box-sizing: border-box; }
+  a { color: #6B3FA0; }
+  a:hover { color: #52307C; }
+  input, textarea, select, button { font-family: inherit; color: inherit; }
+  .k-field { width: 100%; background: #fff; border: 1.5px solid #EBE3D6; border-radius: 14px; font-size: 15px; line-height: 1.6; padding: 12px 14px; outline: none; transition: border-color .15s, box-shadow .15s; }
+  .k-field:focus { border-color: #6B3FA0; box-shadow: 0 0 0 4px #F1E9FA; }
+  .k-field::placeholder { color: #A79FB4; }
+  .k-scroll::-webkit-scrollbar { width: 7px; height: 7px; }
+  .k-scroll::-webkit-scrollbar-thumb { background: #DDD4C6; border-radius: 4px; }
+  .k-tabbar { display: none; }
+  .k-dot { transition: transform .16s cubic-bezier(.34,1.56,.64,1), background .16s, border-color .16s; }
+  .k-dot:hover { transform: translate(-50%,-50%) scale(1.22); }
+  .k-press { transition: transform .12s ease, box-shadow .15s ease, background .15s ease; }
+  .k-press:active { transform: scale(.97); }
+  @keyframes k-pulse { 0%,100% { opacity:.3 } 50% { opacity:1 } }
+  @keyframes k-rise { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform:none } }
+  @keyframes k-sheet { from { transform: translateY(100%) } to { transform: none } }
+  .k-rise { animation: k-rise .3s cubic-bezier(.22,1,.36,1) both; }
+  @media (max-width: 880px) {
+    .k-shell { grid-template-columns: minmax(0,1fr) !important; }
+    .k-rail { display: none !important; }
+    .k-tabbar { display: grid !important; }
+    .k-main { padding: 18px 16px 96px !important; }
+    .k-split { grid-template-columns: minmax(0,1fr) !important; }
+    .k-editor { position: static !important; }
+    .k-sheet { position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important; z-index: 60; max-height: 78vh; overflow: auto; border-radius: 24px 24px 0 0 !important; box-shadow: 0 -12px 40px rgba(36,31,46,.18) !important; animation: k-sheet .28s cubic-bezier(.22,1,.36,1) both; }
+    .k-hidemob { display: none !important; }
+  }
+  @media (max-width: 700px) {
+    .k-phone { height: auto !important; max-height: none !important; max-width: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; min-height: calc(100vh - 56px) !important; }
+    .k-stage { padding: 0 !important; }
+  }
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#FBF7F0;color:#241F2E;font-family:{{ bodyFont }};font-size:15px">
+
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(251,247,240,.92);backdrop-filter:blur(10px);border-bottom:1px solid #EBE3D6;position:sticky;top:0;z-index:50">
+    <div style="display:flex;align-items:center;gap:10px;min-width:0">
+      <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink:0;display:block">
+        <circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle>
+        <circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle>
+        <circle cx="12" cy="12" r="4.6" fill="none" stroke="#A81C24" stroke-width="2.2"></circle>
+        <circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle>
+      </svg>
+      <span style="font-family:{{ displayFont }};font-weight:600;font-size:19px;letter-spacing:-.01em">Karigar</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;background:#F2EDE4;border-radius:999px;padding:3px">
+        <sc-for list="{{ sides }}" as="x" hint-placeholder-count="2">
+          <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ isOrg }}" hint-placeholder-val="{{ true }}">
+        <select class="k-field" data-role="uilang" value="{{ uiLang }}" onChange="{{ setUiLang }}" style="width:auto;padding:8px 10px;font-size:13.5px;border-radius:999px;min-height:40px">
+          <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7">
+            <option value="{{ l.code }}">{{ l.label }}</option>
+          </sc-for>
+        </select>
+      </sc-if>
+    </div>
+  </header>
+
+  <sc-if value="{{ isOrg }}" hint-placeholder-val="{{ true }}">
+    <div class="k-shell" style="flex:1;display:grid;grid-template-columns:236px minmax(0,1fr)">
+
+      <aside class="k-rail k-scroll" style="border-right:1px solid #EBE3D6;padding:18px 14px;display:flex;flex-direction:column;gap:18px;position:sticky;top:57px;height:calc(100vh - 57px);overflow:auto">
+        <nav style="display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+            <button type="button" onClick="{{ n.go }}" class="k-press" style="{{ n.railStyle }}">
+              <span style="width:20px;display:grid;place-items:center;flex-shrink:0">{{ n.icon }}</span>
+              <span>{{ n.label }}</span>
+              <sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}">
+                <span style="margin-left:auto;background:#6B3FA0;color:#fff;font-size:11px;font-weight:600;border-radius:999px;padding:1px 7px;font-variant-numeric:tabular-nums">{{ n.badge }}</span>
+              </sc-if>
+            </button>
+          </sc-for>
+        </nav>
+
+        <div style="height:1px;background:#EBE3D6"></div>
+
+        <div>
+          <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8C8499;margin-bottom:8px;padding-left:4px">{{ t.navArtisans }}</div>
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <sc-for list="{{ roster }}" as="p" hint-placeholder-count="4">
+              <button type="button" onClick="{{ p.open }}" class="k-press" style="{{ p.style }}">
+                <span style="width:9px;height:9px;border-radius:50%;background:{{ p.dot }};flex-shrink:0"></span>
+                <span style="min-width:0;text-align:left">
+                  <span style="display:block;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.name }}</span>
+                  <span style="display:block;font-size:11.5px;color:#8C8499;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.craft }}</span>
+                </span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </aside>
+
+      <main class="k-main k-scroll" style="padding:26px 30px 70px;max-width:1240px;min-width:0">
+
+        <sc-if value="{{ vOverview }}" hint-placeholder-val="{{ true }}">
+          <section class="k-rise">
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap">
+              <div>
+                <h1 style="margin:0 0 5px;font-family:{{ displayFont }};font-weight:600;font-size:30px;letter-spacing:-.015em;line-height:1.15">{{ t.overviewTitle }}</h1>
+                <p style="margin:0;max-width:56ch;font-size:14.5px;line-height:1.6;color:#6F6880">{{ t.overviewSub }}</p>
+              </div>
+              <button type="button" onClick="{{ goNew }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:12px 20px;font-size:14.5px;font-weight:600;cursor:pointer;min-height:46px;box-shadow:0 4px 14px rgba(107,63,160,.24)">+ {{ t.newProfile }}</button>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin:26px 0 30px">
+              <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
+                <div style="background:#fff;border-radius:20px;padding:18px 18px 16px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                  <div style="display:flex;align-items:baseline;gap:7px">
+                    <span style="font-family:{{ displayFont }};font-weight:600;font-size:36px;line-height:1;font-variant-numeric:tabular-nums;color:{{ m.color }}">{{ m.value }}</span>
+                    <span style="font-size:13px;color:#8C8499;font-variant-numeric:tabular-nums">{{ m.of }}</span>
+                  </div>
+                  <div style="height:5px;border-radius:99px;background:#F2EDE4;margin:12px 0 11px;overflow:hidden">
+                    <div style="height:100%;width:{{ m.pct }};background:{{ m.color }};border-radius:99px"></div>
+                  </div>
+                  <div style="font-weight:600;font-size:14.5px;line-height:1.3">{{ m.label }}</div>
+                  <div style="font-size:12.5px;line-height:1.5;margin-top:4px;color:#8C8499">{{ m.why }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:22px;align-items:start">
+              <div style="background:#fff;border-radius:22px;padding:20px 22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                <h3 style="margin:0 0 3px;font-family:{{ displayFont }};font-weight:600;font-size:19px">{{ t.attention }}</h3>
+                <p style="margin:0 0 14px;font-size:12.5px;color:#8C8499">{{ t.attentionSub }}</p>
+                <sc-if value="{{ hasAttention }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;flex-direction:column;gap:9px">
+                    <sc-for list="{{ attention }}" as="x" hint-placeholder-count="3">
+                      <div style="display:flex;gap:12px;align-items:center;background:#FBF7F0;border-radius:16px;padding:13px 14px">
+                        <span style="width:8px;height:8px;border-radius:50%;background:{{ x.dot }};flex-shrink:0"></span>
+                        <div style="flex:1;min-width:0">
+                          <div style="font-weight:600;font-size:14.5px">{{ x.who }}</div>
+                          <div style="font-size:12.5px;line-height:1.45;color:#6F6880;margin-top:1px">{{ x.issue }}</div>
+                        </div>
+                        <button type="button" onClick="{{ x.act }}" class="k-press" style="background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0;min-height:38px">{{ x.cta }}</button>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ noAttention }}" hint-placeholder-val="{{ false }}">
+                  <p style="margin:0;font-size:14px;color:#8C8499">{{ t.attentionNone }}</p>
+                </sc-if>
+              </div>
+
+              <div style="background:#fff;border-radius:22px;padding:20px 22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                <h3 style="margin:0 0 3px;font-family:{{ displayFont }};font-weight:600;font-size:19px">{{ t.practiceTitle }}</h3>
+                <p style="margin:0 0 16px;font-size:12.5px;line-height:1.5;color:#8C8499">{{ t.practiceSub }}</p>
+                <div style="display:flex;flex-direction:column;gap:13px">
+                  <sc-for list="{{ roomBars }}" as="r" hint-placeholder-count="4">
+                    <div>
+                      <div style="display:flex;justify-content:space-between;gap:10px;font-size:13.5px;margin-bottom:5px">
+                        <span style="font-weight:500">{{ r.label }}</span>
+                        <span style="font-variant-numeric:tabular-nums;color:#8C8499">{{ r.count }}</span>
+                      </div>
+                      <div style="height:6px;border-radius:99px;background:#F2EDE4;overflow:hidden">
+                        <div style="height:100%;width:{{ r.pct }};background:#6B3FA0;border-radius:99px"></div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#fff;border-radius:22px;padding:20px 22px;margin-top:22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+              <h3 style="margin:0 0 3px;font-family:{{ displayFont }};font-weight:600;font-size:19px">{{ t.clusterTitle }}</h3>
+              <p style="margin:0 0 16px;font-size:12.5px;color:#8C8499">{{ t.clusterSub }}</p>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ clusters }}" as="c" hint-placeholder-count="8">
+                  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:11px 0;border-bottom:1px solid #F2EDE4">
+                    <div style="min-width:175px;flex:1">
+                      <div style="font-weight:600;font-size:14.5px">{{ c.craft }}</div>
+                      <div style="font-size:12px;color:#8C8499">{{ c.region }}</div>
+                    </div>
+                    <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+                      <sc-for list="{{ c.cells }}" as="cell" hint-placeholder-count="3">
+                        <div style="min-width:74px">
+                          <div style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">{{ cell.value }}</div>
+                          <div style="font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#A79FB4;margin-top:1px">{{ cell.label }}</div>
+                        </div>
+                      </sc-for>
+                      <span style="{{ c.riskStyle }}">{{ c.risk }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ vBoard }}" hint-placeholder-val="{{ false }}">
+          <section class="k-rise">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+              <div style="min-width:0">
+                <h1 style="margin:0 0 3px;font-family:{{ displayFont }};font-weight:600;font-size:27px;letter-spacing:-.015em">{{ activeName }}</h1>
+                <p style="margin:0;font-size:13.5px;color:#6F6880">{{ activeSub }}</p>
+              </div>
+              <div style="display:flex;gap:6px;background:#F2EDE4;border-radius:999px;padding:4px;flex-wrap:wrap">
+                <sc-for list="{{ boardTabs }}" as="x" hint-placeholder-count="4">
+                  <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+
+            <sc-if value="{{ tabBoard }}" hint-placeholder-val="{{ true }}">
+              <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:26px;align-items:start">
+                <div>
+                  <div style="position:relative;width:100%;max-width:600px;aspect-ratio:1;margin:0 auto">
+                    <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+                      <sc-for list="{{ ringArcs }}" as="g" hint-placeholder-count="6">
+                        <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6" opacity="{{ g.opacity }}"></circle>
+                      </sc-for>
+                      <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+                      <circle cx="60" cy="60" r="17.4" fill="none" stroke="#EBE3D6" stroke-width="0.7"></circle>
+                      <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+                      <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ progressDash }}" transform="rotate(-90 60 60)"></circle>
+                    </svg>
+
+                    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:24%">
+                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:clamp(22px,4.4vw,34px);line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ filledCount }}</div>
+                      <div style="font-size:clamp(9px,1.5vw,11.5px);color:#8C8499;margin-top:3px">{{ t.boardOf }} {{ totalCount }}</div>
+                    </div>
+
+                    <sc-for list="{{ ringLabels }}" as="l" hint-placeholder-count="6">
+                      <div style="{{ l.style }}">{{ l.label }}</div>
+                    </sc-for>
+
+                    <sc-for list="{{ boardDots }}" as="d" hint-placeholder-count="30">
+                      <button type="button" onClick="{{ d.pick }}" class="k-dot" title="{{ d.title }}" style="{{ d.style }}"></button>
+                    </sc-for>
+                  </div>
+
+                  <div style="display:flex;flex-direction:column;gap:12px;margin-top:22px">
+                    <sc-for list="{{ hubGroups }}" as="h" hint-placeholder-count="2">
+                      <div>
+                        <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8C8499;margin-bottom:8px">{{ h.label }}</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap">
+                          <sc-for list="{{ h.cards }}" as="c" hint-placeholder-count="4">
+                            <button type="button" onClick="{{ c.pick }}" class="k-press" style="{{ c.style }}">
+                              <span style="font-weight:700;font-size:11px;opacity:.7">{{ c.token }}</span>
+                              <span>{{ c.label }}</span>
+                            </button>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div class="k-editor k-sheet" style="position:sticky;top:76px;background:#fff;border-radius:22px;padding:20px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 10px 30px rgba(36,31,46,.07)">
+                  <sc-if value="{{ hasSelected }}" hint-placeholder-val="{{ true }}">
+                    <div>
+                      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
+                        <span style="{{ sel.chipStyle }}">{{ sel.ringLabel }}</span>
+                        <span style="font-size:11.5px;color:#A79FB4;font-variant-numeric:tabular-nums">{{ sel.code }}</span>
+                        <button type="button" onClick="{{ clearSelected }}" class="k-press" style="margin-left:auto;background:#F2EDE4;border:0;border-radius:999px;width:34px;height:34px;font-size:16px;cursor:pointer;color:#6F6880">×</button>
+                      </div>
+                      <h3 style="margin:0 0 4px;font-family:{{ displayFont }};font-weight:600;font-size:19px;line-height:1.25">{{ sel.label }}</h3>
+                      <p style="margin:0 0 14px;font-size:12.5px;line-height:1.55;color:#8C8499">{{ sel.ask }}</p>
+                      <textarea class="k-field" rows="9" placeholder="{{ sel.hint }}" value="{{ sel.value }}" onChange="{{ sel.onChange }}" style="resize:vertical;min-height:170px;font-family:{{ recordFont }}"></textarea>
+                      <sc-if value="{{ sel.hasQuote }}" hint-collapse-val="{{ false }}" hint-placeholder-val="{{ false }}">
+                        <div style="margin-top:11px;background:#FBF7F0;border-radius:12px;padding:10px 12px">
+                          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#A79FB4;margin-bottom:3px">{{ t.sourceLine }}</div>
+                          <div style="font-size:12.5px;line-height:1.5;color:#6F6880;font-style:italic">{{ sel.quote }}</div>
+                        </div>
+                      </sc-if>
+                      <div style="display:flex;gap:8px;margin-top:14px">
+                        <button type="button" onClick="{{ prevCard }}" class="k-press" style="flex:1;background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px">←</button>
+                        <button type="button" onClick="{{ nextCard }}" class="k-press" style="flex:3;background:#241F2E;color:#fff;border:0;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px">{{ t.next }} →</button>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ noSelected }}" hint-placeholder-val="{{ false }}">
+                    <div style="text-align:center;padding:26px 8px">
+                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:18px;margin-bottom:6px">{{ t.boardPick }}</div>
+                      <p style="margin:0;font-size:13px;line-height:1.55;color:#8C8499">{{ t.boardPickSub }}</p>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ tabList }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <sc-if value="{{ hasAutofill }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#F1E9FA;border-radius:18px;padding:14px 16px;margin-bottom:18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+                    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#52307C;font-weight:600">{{ t.autofilled }}</div>
+                    <div style="flex:1;min-width:220px;font-size:13.5px;line-height:1.5">{{ autofillNote }}</div>
+                    <button type="button" onClick="{{ toggleQuotes }}" class="k-press" style="background:#fff;border:0;border-radius:999px;padding:9px 14px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:40px">{{ quotesLabel }}</button>
+                  </div>
+                </sc-if>
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px;align-items:start">
+                  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+                    <div style="background:#fff;border-radius:20px;padding:18px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04);border-top:4px solid {{ g.color }}">
+                      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                        <div style="font-weight:600;font-size:16px">{{ g.title }}</div>
+                        <div style="font-size:11px;color:#A79FB4;font-variant-numeric:tabular-nums">{{ g.code }}</div>
+                      </div>
+                      <p style="margin:3px 0 14px;font-size:12px;line-height:1.5;color:#8C8499">{{ g.ask }}</p>
+                      <div style="display:flex;flex-direction:column;gap:12px">
+                        <sc-for list="{{ g.fields }}" as="f" hint-placeholder-count="3">
+                          <div>
+                            <div style="font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#A79FB4;margin-bottom:4px">{{ f.label }}</div>
+                            <textarea class="k-field" rows="{{ f.rows }}" placeholder="{{ f.hint }}" value="{{ f.value }}" onChange="{{ f.onChange }}" style="font-size:14px;padding:9px 11px;font-family:{{ recordFont }}"></textarea>
+                            <sc-if value="{{ f.showQuote }}" hint-placeholder-val="{{ false }}">
+                              <div style="font-size:11.5px;line-height:1.45;color:#A79FB4;font-style:italic;margin-top:5px;padding-left:9px;border-left:2px solid #EBE3D6">{{ f.quote }}</div>
+                            </sc-if>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ tabAnalysis }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <sc-if value="{{ busy }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:70px 0;text-align:center">
+                    <div style="font-family:{{ displayFont }};font-weight:600;font-size:21px;animation:k-pulse 1.5s ease-in-out infinite">{{ t.analysing }}</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ errorMsg }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#FDECEC;border-radius:18px;padding:16px;font-size:13.5px;color:#7A1319">{{ errorMsg }}</div>
+                </sc-if>
+                <sc-if value="{{ hasAnalysis }}" hint-placeholder-val="{{ false }}">
+                  <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:26px;align-items:start">
+                    <div style="display:flex;flex-direction:column;gap:20px">
+                      <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                        <h3 style="margin:0 0 8px;font-family:{{ displayFont }};font-weight:600;font-size:19px">{{ t.analysisTitle }}</h3>
+                        <p style="margin:0;font-size:15px;line-height:1.7">{{ analysis.communication_profile }}</p>
+                      </div>
+                      <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                        <h3 style="margin:0 0 14px;font-family:{{ displayFont }};font-weight:600;font-size:19px">{{ t.strengths }}</h3>
+                        <div style="display:flex;flex-direction:column;gap:13px">
+                          <sc-for list="{{ strengths }}" as="x" hint-placeholder-count="3">
+                            <div style="padding-left:13px;border-left:3px solid #6FC9B8">
+                              <div style="font-weight:600;font-size:15px">{{ x.title }}</div>
+                              <div style="font-size:13.5px;line-height:1.6;color:#6F6880;margin-top:2px">{{ x.detail }}</div>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                      <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                        <h3 style="margin:0 0 14px;font-family:{{ displayFont }};font-weight:600;font-size:19px">{{ t.gaps }}</h3>
+                        <div style="display:flex;flex-direction:column;gap:13px">
+                          <sc-for list="{{ gaps }}" as="x" hint-placeholder-count="3">
+                            <div style="padding-left:13px;border-left:3px solid #F0B23C">
+                              <div style="font-weight:600;font-size:15px">{{ x.title }}</div>
+                              <div style="font-size:13.5px;line-height:1.6;color:#6F6880;margin-top:2px">{{ x.detail }}</div>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                      <div>
+                        <h3 style="margin:0 0 12px;font-family:{{ displayFont }};font-weight:600;font-size:19px">{{ t.rooms }}</h3>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px">
+                          <sc-for list="{{ recommended }}" as="r" hint-placeholder-count="3">
+                            <div style="background:#fff;border-radius:18px;padding:15px;box-shadow:0 1px 3px rgba(36,31,46,.05)">
+                              <div style="font-weight:600;font-size:15px">{{ r.label }}</div>
+                              <div style="font-size:12.5px;line-height:1.5;color:#8C8499;margin-top:4px">{{ r.why }}</div>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </div>
+                    <aside style="display:flex;flex-direction:column;gap:18px">
+                      <div style="background:#F1E9FA;border-radius:22px;padding:18px">
+                        <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#52307C;font-weight:600;margin-bottom:8px">{{ t.artisanSees }}</div>
+                        <p style="margin:0 0 9px;font-size:14.5px;line-height:1.75;font-family:{{ recordFont }}">{{ analysis.artisan_summary_local }}</p>
+                        <p style="margin:0;font-size:12px;line-height:1.6;color:#6F6880;font-style:italic">{{ analysis.artisan_summary_en }}</p>
+                      </div>
+                      <div>
+                        <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#8C8499;margin-bottom:9px">{{ t.ownWords }}</div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap">
+                          <sc-for list="{{ vocab }}" as="v" hint-placeholder-count="5">
+                            <span style="background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:5px 11px;font-size:12.5px;font-family:{{ recordFont }}">{{ v }}</span>
+                          </sc-for>
+                        </div>
+                      </div>
+                      <div>
+                        <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#8C8499;margin-bottom:9px">{{ t.care }}</div>
+                        <ul style="margin:0;padding-left:16px;display:flex;flex-direction:column;gap:7px;font-size:13px;line-height:1.5;color:#6F6880">
+                          <sc-for list="{{ careNotes }}" as="x" hint-placeholder-count="2"><li>{{ x }}</li></sc-for>
+                        </ul>
+                      </div>
+                      <button type="button" onClick="{{ goHandover }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:13px;font-size:14.5px;font-weight:600;cursor:pointer;min-height:46px">{{ t.handoverTitle }} →</button>
+                    </aside>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ noAnalysis }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#fff;border-radius:22px;padding:40px 26px;text-align:center;max-width:520px;margin:0 auto;box-shadow:0 1px 3px rgba(36,31,46,.05)">
+                    <h3 style="margin:0 0 7px;font-family:{{ displayFont }};font-weight:600;font-size:21px">{{ t.notAnalysed }}</h3>
+                    <p style="margin:0 0 20px;font-size:14.5px;line-height:1.6;color:#6F6880">{{ t.notAnalysedSub }}</p>
+                    <button type="button" onClick="{{ analyse }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:13px 24px;font-size:15px;font-weight:600;cursor:pointer;min-height:48px">{{ analyseLabel }}</button>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ tabHandover }}" hint-placeholder-val="{{ false }}">
+              <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:26px;align-items:start;max-width:900px">
+                <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                  <h3 style="margin:0 0 7px;font-family:{{ displayFont }};font-weight:600;font-size:20px">{{ t.handoverTitle }}</h3>
+                  <p style="margin:0 0 18px;font-size:14px;line-height:1.65;color:#6F6880">{{ t.handoverSub }}</p>
+                  <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:#FBF7F0;border-radius:18px;padding:16px">
+                    <div style="flex:1;min-width:170px">
+                      <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#A79FB4;margin-bottom:5px">{{ t.accessLink }}</div>
+                      <div style="font-weight:600;font-size:14.5px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums">{{ shareLink }}</div>
+                    </div>
+                    <sc-if value="{{ hasQr }}" hint-placeholder-val="{{ false }}">
+                      <svg viewBox="{{ qrViewBox }}" width="132" height="132" shape-rendering="crispEdges" style="display:block;background:#fff;border-radius:14px;padding:8px;flex-shrink:0">
+                        <path d="{{ qrPath }}" fill="#241F2E"></path>
+                      </svg>
+                    </sc-if>
+                    <sc-if value="{{ qrPending }}" hint-placeholder-val="{{ true }}">
+                      <div style="width:148px;height:148px;border-radius:14px;background:#fff;display:grid;place-items:center;font-size:12px;color:#A79FB4;flex-shrink:0">···</div>
+                    </sc-if>
+                  </div>
+                  <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:16px">
+                    <button type="button" onClick="{{ copyLink }}" class="k-press" style="background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:46px">{{ copyLabel }}</button>
+                    <button type="button" onClick="{{ openAsArtisan }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:46px">{{ t.openApp }} →</button>
+                  </div>
+                </div>
+                <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                  <h3 style="margin:0 0 14px;font-family:{{ displayFont }};font-weight:600;font-size:18px">{{ t.checklist }}</h3>
+                  <div style="display:flex;flex-direction:column;gap:12px">
+                    <sc-for list="{{ checklist }}" as="c" hint-placeholder-count="5">
+                      <label style="display:flex;gap:11px;align-items:flex-start;cursor:pointer;font-size:14px;line-height:1.55">
+                        <input type="checkbox" checked="{{ c.done }}" onChange="{{ c.toggle }}" style="margin-top:2px;width:19px;height:19px;accent-color:#6B3FA0;flex-shrink:0">
+                        <span>{{ c.label }}</span>
+                      </label>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ vArtisans }}" hint-placeholder-val="{{ false }}">
+          <section class="k-rise">
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+              <h1 style="margin:0;font-family:{{ displayFont }};font-weight:600;font-size:29px;letter-spacing:-.015em">{{ t.manageTitle }}</h1>
+              <button type="button" onClick="{{ goNew }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:12px 20px;font-size:14.5px;font-weight:600;cursor:pointer;min-height:46px">+ {{ t.newProfile }}</button>
+            </div>
+            <input class="k-field" placeholder="{{ t.filter }}" value="{{ manageQuery }}" onChange="{{ setManageQuery }}" style="margin:18px 0;max-width:420px;min-height:46px">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ manageRows }}" as="m" hint-placeholder-count="4">
+                <div style="background:#fff;border-radius:22px;padding:18px 20px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                  <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start">
+                    <div style="flex:1;min-width:210px">
+                      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+                        <span style="font-family:{{ displayFont }};font-weight:600;font-size:19px">{{ m.name }}</span>
+                        <span style="{{ m.statusStyle }}">{{ m.status }}</span>
+                      </div>
+                      <div style="font-size:13px;color:#8C8499;margin-top:2px">{{ m.sub }}</div>
+                      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:12px">
+                        <sc-for list="{{ m.metrics }}" as="k" hint-placeholder-count="4">
+                          <div>
+                            <div style="font-weight:600;font-size:16px;font-variant-numeric:tabular-nums">{{ k.value }}</div>
+                            <div style="font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#A79FB4;margin-top:1px">{{ k.label }}</div>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <div style="display:flex;gap:7px;flex-wrap:wrap">
+                      <button type="button" onClick="{{ m.open }}" class="k-press" style="background:#241F2E;color:#fff;border:0;border-radius:999px;padding:10px 15px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:42px">{{ t.openProfile }}</button>
+                      <button type="button" onClick="{{ m.copy }}" class="k-press" style="background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:10px 15px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:42px">{{ m.copyLabel }}</button>
+                      <button type="button" onClick="{{ m.trouble }}" class="k-press" style="background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:10px 15px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:42px">{{ m.troubleLabel }}</button>
+                    </div>
+                  </div>
+
+                  <sc-if value="{{ m.troubleOpen }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:18px;padding-top:16px;border-top:1px solid #F2EDE4;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px">
+                      <div>
+                        <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#8C8499;margin-bottom:10px">{{ t.editRecord }}</div>
+                        <div style="display:flex;flex-direction:column;gap:10px">
+                          <sc-for list="{{ m.editFields }}" as="e" hint-placeholder-count="3">
+                            <label style="display:block">
+                              <span style="display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#A79FB4;margin-bottom:3px">{{ e.label }}</span>
+                              <input class="k-field" value="{{ e.value }}" onChange="{{ e.onChange }}" style="font-size:14px;padding:9px 11px;font-family:{{ recordFont }}">
+                            </label>
+                          </sc-for>
+                          <label style="display:block">
+                            <span style="display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#A79FB4;margin-bottom:3px">{{ t.appLang }}</span>
+                            <select class="k-field" value="{{ m.lang }}" onChange="{{ m.setLang }}" style="font-size:14px;padding:9px 11px">
+                              <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7"><option value="{{ l.code }}">{{ l.label }}</option></sc-for>
+                            </select>
+                          </label>
+                        </div>
+                      </div>
+                      <div>
+                        <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#8C8499;margin-bottom:10px">{{ t.diagnostics }}</div>
+                        <div style="display:flex;flex-direction:column;gap:7px">
+                          <sc-for list="{{ m.diagnostics }}" as="d" hint-placeholder-count="5">
+                            <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;line-height:1.45;padding-bottom:6px;border-bottom:1px solid #F2EDE4">
+                              <span style="color:#8C8499">{{ d.label }}</span>
+                              <span style="text-align:right;font-weight:500;color:{{ d.color }}">{{ d.value }}</span>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                      <div>
+                        <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#8C8499;margin-bottom:10px">{{ t.fixes }}</div>
+                        <div style="display:flex;flex-direction:column;gap:7px">
+                          <sc-for list="{{ m.fixes }}" as="fx" hint-placeholder-count="5">
+                            <button type="button" onClick="{{ fx.run }}" class="k-press" style="text-align:left;background:#FBF7F0;border:0;border-radius:12px;padding:11px 13px;font-size:12.5px;font-weight:500;cursor:pointer;min-height:42px">{{ fx.label }}</button>
+                          </sc-for>
+                        </div>
+                        <sc-if value="{{ m.confirming }}" hint-placeholder-val="{{ false }}">
+                          <div style="margin-top:14px;background:#FDECEC;border-radius:14px;padding:13px">
+                            <p style="margin:0 0 10px;font-size:12.5px;line-height:1.5;color:#7A1319">{{ t.deleteConfirm }}</p>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                              <button type="button" onClick="{{ m.confirmDelete }}" class="k-press" style="background:#A81C24;color:#fff;border:0;border-radius:999px;padding:9px 15px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:40px">{{ t.deleteYes }}</button>
+                              <button type="button" onClick="{{ m.cancelDelete }}" class="k-press" style="background:transparent;border:0;padding:9px 12px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:40px">{{ t.deleteNo }}</button>
+                            </div>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ m.notConfirming }}" hint-placeholder-val="{{ true }}">
+                          <button type="button" onClick="{{ m.askDelete }}" class="k-press" style="margin-top:12px;background:transparent;border:0;padding:8px 0;font-size:12.5px;color:#A81C24;font-weight:600;cursor:pointer;text-align:left">{{ t.deleteAsk }}</button>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ vNew }}" hint-placeholder-val="{{ false }}">
+          <section class="k-rise" style="max-width:940px">
+            <h1 style="margin:0 0 6px;font-family:{{ displayFont }};font-weight:600;font-size:29px;letter-spacing:-.015em">{{ t.newTitle }}</h1>
+            <p style="margin:0 0 22px;max-width:62ch;font-size:14.5px;line-height:1.65;color:#6F6880">{{ t.newSub }}</p>
+
+            <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start">
+              <div>
+                <div style="display:flex;gap:6px;background:#F2EDE4;border-radius:999px;padding:4px;margin-bottom:18px;flex-wrap:wrap">
+                  <sc-for list="{{ intakeTabs }}" as="x" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ intakeUpload }}" hint-placeholder-val="{{ true }}">
+                  <label style="display:block;background:#fff;border:2px dashed #DDD4C6;border-radius:22px;padding:40px 22px;text-align:center;cursor:pointer">
+                    <input type="file" accept=".txt,.md,.vtt,.srt,.json,audio/*,video/*" onChange="{{ onFile }}" style="display:none">
+                    <div style="font-family:{{ displayFont }};font-weight:600;font-size:18px">{{ fileLabel }}</div>
+                    <div style="font-size:13px;line-height:1.55;margin-top:6px;color:#8C8499">{{ fileHelp }}</div>
+                  </label>
+                  <sc-if value="{{ audioPending }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:14px;background:#FFF6E3;border-radius:16px;padding:14px;font-size:13px;line-height:1.6;color:#8A5D05">{{ audioNote }}</div>
+                  </sc-if>
+                </sc-if>
+
+                <sc-if value="{{ intakePaste }}" hint-placeholder-val="{{ false }}">
+                  <textarea class="k-field" rows="14" placeholder="{{ pasteHint }}" value="{{ transcript }}" onChange="{{ setTranscript }}" style="min-height:300px;resize:vertical;font-size:14px;font-family:{{ recordFont }}"></textarea>
+                </sc-if>
+
+                <sc-if value="{{ intakeManual }}" hint-placeholder-val="{{ false }}">
+                  <button type="button" onClick="{{ newProfile }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;min-height:50px">{{ t.emptyProfile }}</button>
+                </sc-if>
+
+                <sc-if value="{{ canExtract }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px">
+                    <button type="button" onClick="{{ extract }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:14px 22px;font-size:15px;font-weight:600;cursor:pointer;min-height:50px">{{ t.readSession }}</button>
+                    <span style="font-size:12.5px;color:#8C8499">{{ transcriptMeta }}</span>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ extracting }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:44px 0;text-align:center">
+                    <div style="font-family:{{ displayFont }};font-weight:600;font-size:19px;animation:k-pulse 1.5s ease-in-out infinite">{{ t.reading }}</div>
+                    <p style="margin:8px 0 0;font-size:13px;color:#8C8499">{{ t.readingSub }}</p>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ extractError }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:16px;background:#FDECEC;border-radius:16px;padding:14px;font-size:13px;color:#7A1319">{{ extractError }}</div>
+                </sc-if>
+              </div>
+
+              <div style="background:#fff;border-radius:22px;padding:20px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#8C8499;margin-bottom:10px">{{ t.agentDoes }}</div>
+                <ol style="margin:0;padding-left:17px;display:flex;flex-direction:column;gap:9px;font-size:13px;line-height:1.55;color:#6F6880">
+                  <li>{{ t.ag1 }}</li><li>{{ t.ag2 }}</li><li>{{ t.ag3 }}</li><li>{{ t.ag4 }}</li>
+                </ol>
+                <div style="height:1px;background:#F2EDE4;margin:16px 0"></div>
+                <label style="display:block">
+                  <span style="display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#A79FB4;margin-bottom:4px">{{ t.sessionLang }}</span>
+                  <select class="k-field" value="{{ newLang }}" onChange="{{ setNewLang }}" style="font-size:14px;padding:10px 11px">
+                    <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7"><option value="{{ l.code }}">{{ l.label }}</option></sc-for>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+
+      </main>
+
+      <nav class="k-tabbar" style="position:fixed;left:0;right:0;bottom:0;z-index:55;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid #EBE3D6;padding:6px 6px calc(6px + env(safe-area-inset-bottom))">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+          <button type="button" onClick="{{ n.go }}" style="{{ n.tabStyle }}">
+            <span style="font-size:19px;line-height:1">{{ n.icon }}</span>
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:.01em">{{ n.label }}</span>
+          </button>
+        </sc-for>
+      </nav>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isArtisan }}" hint-placeholder-val="{{ false }}">
+    <div class="k-stage" style="flex:1;display:flex;justify-content:center;padding:22px 16px 30px">
+      <div class="k-phone" style="width:100%;max-width:412px;background:#FBF7F0;border:1px solid #EBE3D6;border-radius:30px;box-shadow:0 18px 50px rgba(36,31,46,.13);overflow:hidden;display:flex;flex-direction:column;height:min(820px,calc(100vh - 104px));min-height:380px">
+
+        <sc-if value="{{ aInstall }}" hint-placeholder-val="{{ false }}">
+          <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:26px 22px 28px;display:flex;flex-direction:column">
+            <svg width="62" height="62" viewBox="0 0 24 24" style="display:block;margin-bottom:16px">
+              <circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle>
+              <circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle>
+              <circle cx="12" cy="12" r="4.6" fill="none" stroke="#A81C24" stroke-width="2.2"></circle>
+              <circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle>
+            </svg>
+            <h2 style="margin:0 0 6px;font-family:{{ recordDisplay }};font-weight:600;font-size:25px;line-height:1.2">{{ t.installTitle }}</h2>
+            <p style="margin:0 0 20px;font-size:14.5px;line-height:1.6;color:#6F6880;font-family:{{ recordFont }}">{{ t.installSub }}</p>
+
+            <div style="display:flex;gap:6px;background:#F2EDE4;border-radius:999px;padding:4px;margin-bottom:16px">
+              <sc-for list="{{ platformTabs }}" as="p" hint-placeholder-count="2">
+                <button type="button" onClick="{{ p.go }}" class="k-press" style="{{ p.style }}">{{ p.label }}</button>
+              </sc-for>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ installSteps }}" as="i" hint-placeholder-count="3">
+                <div style="display:flex;gap:13px;align-items:flex-start;background:#fff;border-radius:18px;padding:14px 15px;box-shadow:0 1px 3px rgba(36,31,46,.04)">
+                  <span style="width:28px;height:28px;border-radius:9px;background:#F1E9FA;color:#52307C;display:grid;place-items:center;flex-shrink:0;font-weight:700;font-size:13px">{{ i.n }}</span>
+                  <span style="font-size:14.5px;line-height:1.55;font-family:{{ recordFont }}">{{ i.text }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:9px;margin-top:16px;font-size:12.5px;color:#8C8499;font-family:{{ recordFont }}">
+              <span style="width:7px;height:7px;border-radius:50%;background:#6FC9B8;flex-shrink:0"></span>
+              <span>{{ t.works }}</span>
+            </div>
+
+            <div style="margin-top:auto;padding-top:22px;display:flex;flex-direction:column;gap:9px">
+              <sc-if value="{{ canPromptInstall }}" hint-placeholder-val="{{ false }}">
+                <button type="button" onClick="{{ promptInstall }}" class="k-press" style="width:100%;background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;min-height:54px;font-family:{{ recordFont }}">{{ t.installNow }}</button>
+              </sc-if>
+              <button type="button" onClick="{{ dismissInstall }}" class="k-press" style="width:100%;background:transparent;border:1.5px solid #EBE3D6;border-radius:999px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;min-height:52px;font-family:{{ recordFont }}">{{ t.installSkip }}</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ aHome }}" hint-placeholder-val="{{ true }}">
+          <div class="k-scroll" style="flex:1;overflow:auto;min-height:0">
+
+            <div style="background:linear-gradient(170deg,#F1E9FA 0%,#FBF7F0 78%);padding:24px 20px 22px">
+              <div style="display:flex;align-items:center;gap:14px">
+                <div style="width:56px;height:56px;border-radius:20px;background:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:0 2px 8px rgba(36,31,46,.08)">
+                  <span style="font-family:{{ recordDisplay }};font-weight:600;font-size:22px;color:#6B3FA0">{{ initials }}</span>
+                </div>
+                <div style="min-width:0;flex:1">
+                  <div style="font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#6B3FA0;font-weight:600;font-family:{{ recordFont }}">{{ t.greeting }}</div>
+                  <h2 style="margin:3px 0 1px;font-family:{{ recordDisplay }};font-weight:600;font-size:24px;line-height:1.2">{{ activeName }}</h2>
+                  <p style="margin:0;font-size:13.5px;color:#6F6880;font-family:{{ recordFont }}">{{ activeSub }}</p>
+                </div>
+                <select class="k-field" data-role="applang" value="{{ appLang }}" onChange="{{ setAppLang }}" style="width:auto;padding:8px 9px;font-size:13px;border-radius:999px;min-height:42px;flex-shrink:0;background:rgba(255,255,255,.8);border-color:transparent;font-family:{{ recordFont }}">
+                  <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7">
+                    <option value="{{ l.code }}">{{ l.label }}</option>
+                  </sc-for>
+                </select>
+              </div>
+
+              <div style="display:flex;gap:8px;margin-top:18px">
+                <sc-for list="{{ homeStats }}" as="k" hint-placeholder-count="3">
+                  <div style="flex:1;background:rgba(255,255,255,.75);border-radius:16px;padding:11px 12px;text-align:center">
+                    <div style="font-family:{{ recordDisplay }};font-weight:600;font-size:20px;line-height:1;color:#52307C;font-variant-numeric:tabular-nums">{{ k.value }}</div>
+                    <div style="font-size:10.5px;line-height:1.3;margin-top:4px;color:#6F6880;font-family:{{ recordFont }}">{{ k.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="padding:20px 20px 26px;display:flex;flex-direction:column;gap:22px">
+
+              <div style="background:#fff;border-radius:22px;padding:18px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 22px rgba(36,31,46,.05)">
+                <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#A79FB4;margin-bottom:9px;font-family:{{ recordFont }}">{{ t.yourBoard }}</div>
+                <p style="margin:0;font-size:16px;line-height:1.75;font-family:{{ recordFont }}">{{ artisanSummary }}</p>
+                <sc-if value="{{ hasVocab }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:13px">
+                    <sc-for list="{{ vocab }}" as="v" hint-placeholder-count="4">
+                      <span style="background:#F1E9FA;color:#52307C;border-radius:999px;padding:5px 11px;font-size:13px;font-family:{{ recordFont }}">{{ v }}</span>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <button type="button" onClick="{{ goMyBoard }}" class="k-press" style="margin-top:14px;width:100%;background:#FBF7F0;border:0;border-radius:14px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;min-height:46px;font-family:{{ recordFont }}">{{ t.seeMyBoard }} →</button>
+              </div>
+
+              <div>
+                <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#A79FB4;margin-bottom:4px;font-family:{{ recordFont }}">{{ t.howItWorks }}</div>
+                <p style="margin:0 0 14px;font-size:13.5px;line-height:1.6;color:#6F6880;font-family:{{ recordFont }}">{{ t.howItWorksSub }}</p>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ guideSteps }}" as="g" hint-placeholder-count="4">
+                    <div style="display:flex;gap:13px;align-items:flex-start;background:#fff;border-radius:18px;padding:14px 15px;box-shadow:0 1px 3px rgba(36,31,46,.04)">
+                      <span style="width:30px;height:30px;border-radius:10px;background:{{ g.tint }};color:{{ g.ink }};display:grid;place-items:center;flex-shrink:0;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums">{{ g.n }}</span>
+                      <span style="min-width:0">
+                        <span style="display:block;font-weight:600;font-size:15px;line-height:1.35;font-family:{{ recordFont }}">{{ g.title }}</span>
+                        <span style="display:block;font-size:13px;line-height:1.55;color:#6F6880;margin-top:2px;font-family:{{ recordFont }}">{{ g.body }}</span>
+                      </span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <button type="button" onClick="{{ goPractice }}" class="k-press" style="width:100%;background:#6B3FA0;color:#fff;border:0;border-radius:24px;padding:22px 20px;cursor:pointer;text-align:left;box-shadow:0 8px 26px rgba(107,63,160,.3)">
+                <span style="display:flex;align-items:center;gap:14px">
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font-family:{{ recordDisplay }};font-weight:600;font-size:22px;line-height:1.2">{{ t.ctaTitle }}</span>
+                    <span style="display:block;font-size:14px;line-height:1.5;margin-top:5px;opacity:.86;font-family:{{ recordFont }}">{{ t.ctaSub }}</span>
+                  </span>
+                  <span style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:20px;flex-shrink:0">→</span>
+                </span>
+              </button>
+
+              <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#A79FB4;margin-bottom:9px;font-family:{{ recordFont }}">{{ t.past }}</div>
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <sc-for list="{{ history }}" as="h" hint-placeholder-count="2">
+                      <div style="display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:10px 0;border-bottom:1px solid #EBE3D6;font-family:{{ recordFont }}">
+                        <span>{{ h.label }}</span>
+                        <span style="font-variant-numeric:tabular-nums;color:#6B3FA0;font-weight:600">{{ h.turns }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ aPractice }}" hint-placeholder-val="{{ false }}">
+          <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:22px 20px 26px">
+            <button type="button" onClick="{{ backHome }}" class="k-press" style="border:0;background:#F2EDE4;border-radius:999px;width:42px;height:42px;font-size:19px;cursor:pointer;margin-bottom:14px">←</button>
+            <h2 style="margin:0 0 4px;font-family:{{ recordDisplay }};font-weight:600;font-size:25px;line-height:1.2">{{ t.practiceWith }}</h2>
+            <p style="margin:0 0 18px;font-size:13.5px;line-height:1.6;color:#6F6880;font-family:{{ recordFont }}">{{ t.practiceHelp }}</p>
+
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ segments }}" as="s" hint-placeholder-count="5">
+                <button type="button" onClick="{{ s.open }}" class="k-press" style="{{ s.style }}">
+                  <span style="display:flex;align-items:center;gap:13px">
+                    <span style="width:44px;height:44px;border-radius:15px;background:{{ s.tint }};color:{{ s.ink }};display:grid;place-items:center;font-size:20px;font-weight:700;flex-shrink:0">{{ s.icon }}</span>
+                    <span style="flex:1;min-width:0;text-align:left">
+                      <span style="display:block;font-weight:600;font-size:16px;line-height:1.3;font-family:{{ recordFont }}">{{ s.label }}</span>
+                      <span style="display:block;font-size:12.5px;line-height:1.4;color:#8C8499;margin-top:2px;font-family:{{ recordFont }}">{{ s.blurb }}</span>
+                    </span>
+                    <span style="color:#C4BCD1;flex-shrink:0">›</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+
+            <div style="margin-top:22px">
+              <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#A79FB4;margin-bottom:9px;font-family:{{ recordFont }}">{{ t.someoneElse }}</div>
+              <input class="k-field" placeholder="{{ t.customHint }}" value="{{ customSegment }}" onChange="{{ setCustomSegment }}" onKeyDown="{{ customKey }}" style="font-family:{{ recordFont }};min-height:50px;font-size:16px">
+              <button type="button" onClick="{{ startCustom }}" class="k-press" style="margin-top:9px;width:100%;background:#241F2E;color:#fff;border:0;border-radius:999px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;min-height:52px;font-family:{{ recordFont }}">{{ t.start }}</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ aBoard }}" hint-placeholder-val="{{ false }}">
+          <div class="k-scroll" style="flex:1;overflow:auto;padding:24px 20px 26px">
+            <h2 style="margin:0 0 3px;font-family:{{ recordDisplay }};font-weight:600;font-size:24px">{{ t.navMyBoard }}</h2>
+            <p style="margin:0 0 18px;font-size:13.5px;line-height:1.6;color:#6F6880;font-family:{{ recordFont }}">{{ t.boardSub }}</p>
+            <div style="position:relative;width:100%;aspect-ratio:1;margin-bottom:20px">
+              <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+                <sc-for list="{{ ringArcs }}" as="g" hint-placeholder-count="6">
+                  <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6" opacity="{{ g.opacity }}"></circle>
+                </sc-for>
+                <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+                <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+                <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ progressDash }}" transform="rotate(-90 60 60)"></circle>
+              </svg>
+              <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center">
+                <div style="font-family:{{ recordDisplay }};font-weight:600;font-size:30px;line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ filledCount }}</div>
+                <div style="font-size:10.5px;color:#8C8499;font-family:{{ recordFont }}">{{ t.boardOf }} {{ totalCount }}</div>
+              </div>
+              <sc-for list="{{ boardDots }}" as="d" hint-placeholder-count="30">
+                <button type="button" onClick="{{ d.pick }}" class="k-dot" style="{{ d.style }}"></button>
+              </sc-for>
+            </div>
+            <sc-if value="{{ hasSelected }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#fff;border-radius:20px;padding:18px;box-shadow:0 1px 3px rgba(36,31,46,.05)">
+                <span style="{{ sel.chipStyle }}">{{ sel.ringLabel }}</span>
+                <h3 style="margin:10px 0 6px;font-family:{{ recordDisplay }};font-weight:600;font-size:18px;line-height:1.3">{{ sel.label }}</h3>
+                <p style="margin:0;font-size:15.5px;line-height:1.75;font-family:{{ recordFont }};white-space:pre-wrap">{{ sel.readValue }}</p>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noSelected }}" hint-placeholder-val="{{ true }}">
+              <p style="margin:0;font-size:14px;color:#8C8499;text-align:center;font-family:{{ recordFont }}">{{ t.boardPick }}</p>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ aChat }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;flex:1;min-height:0;background:#fff">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #EBE3D6;flex-shrink:0">
+              <button type="button" onClick="{{ backHome }}" class="k-press" style="border:0;background:#F2EDE4;border-radius:999px;width:42px;height:42px;font-size:19px;cursor:pointer;color:#241F2E;flex-shrink:0">←</button>
+              <div style="min-width:0;flex:1">
+                <div style="font-weight:600;font-size:16px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ chatTitle }}</div>
+                <div style="font-size:11.5px;color:#8C8499;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ chatSub }}</div>
+              </div>
+              <button type="button" onClick="{{ endAndCoach }}" disabled="{{ chatBusy }}" class="k-press" style="border:1.5px solid #EBE3D6;background:#fff;border-radius:999px;padding:9px 13px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:42px;flex-shrink:0;font-family:{{ recordFont }}">{{ t.feedbackBtn }}</button>
+            </div>
+
+            <div class="k-scroll" style="flex:1;overflow:auto;padding:16px 14px;display:flex;flex-direction:column;gap:11px;min-height:0;background:#FBF7F0">
+              <sc-for list="{{ messages }}" as="m" hint-placeholder-count="3">
+                <div class="k-rise" style="{{ m.wrapStyle }}">
+                  <div style="{{ m.bubbleStyle }}">{{ m.text }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ chatBusy }}" hint-placeholder-val="{{ false }}">
+                <div style="align-self:flex-start;background:#fff;border-radius:18px;padding:11px 15px;font-size:14px;color:#A79FB4;animation:k-pulse 1.3s ease-in-out infinite;font-family:{{ recordFont }}">{{ t.typing }}</div>
+              </sc-if>
+              <sc-if value="{{ coachOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#F1E9FA;border-radius:20px;padding:17px;margin-top:6px">
+                  <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#52307C;font-weight:600;margin-bottom:11px;font-family:{{ recordFont }}">{{ t.feedbackBtn }}</div>
+                  <div style="display:flex;flex-direction:column;gap:13px">
+                    <sc-for list="{{ coachItems }}" as="c" hint-placeholder-count="3">
+                      <div>
+                        <div style="font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#6B3FA0;font-weight:600">{{ c.kind }}</div>
+                        <div style="font-size:15px;line-height:1.65;margin-top:3px;font-family:{{ recordFont }}">{{ c.text }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <button type="button" onClick="{{ backHome }}" class="k-press" style="margin-top:15px;width:100%;background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;min-height:48px;font-family:{{ recordFont }}">{{ t.done }}</button>
+                </div>
+              </sc-if>
+            </div>
+
+            <div style="border-top:1px solid #EBE3D6;padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:#fff">
+              <textarea class="k-field" rows="1" placeholder="{{ t.sayHint }}" value="{{ draft }}" onChange="{{ setDraft }}" onKeyDown="{{ draftKey }}" style="resize:none;max-height:120px;font-family:{{ recordFont }};font-size:16px;border-radius:22px"></textarea>
+              <button type="button" onClick="{{ send }}" disabled="{{ chatBusy }}" class="k-press" style="border:0;background:#6B3FA0;color:#fff;border-radius:999px;width:50px;height:50px;font-size:19px;cursor:pointer;flex-shrink:0">↑</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showArtisanNav }}" hint-placeholder-val="{{ true }}">
+          <nav style="display:grid;grid-template-columns:1fr 1fr;background:#fff;border-top:1px solid #EBE3D6;padding:6px 6px calc(6px + env(safe-area-inset-bottom));flex-shrink:0">
+            <sc-for list="{{ artisanNav }}" as="n" hint-placeholder-count="2">
+              <button type="button" onClick="{{ n.go }}" style="{{ n.style }}">
+                <span style="font-size:19px;line-height:1">{{ n.icon }}</span>
+                <span style="font-size:11px;font-weight:600;font-family:{{ recordFont }}">{{ n.label }}</span>
+              </button>
+            </sc-for>
+          </nav>
+        </sc-if>
+
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:880},&quot;appOrigin&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://karigar.vercel.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Deployment&quot;},&quot;model&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;claude-sonnet-4-5&quot;,&quot;claude-haiku-4-5&quot;],&quot;default&quot;:&quot;claude-sonnet-4-5&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Agent&quot;}}">
+const STORE = 'karigar-platform-v4';
+
+const CLUSTERS = [
+  { craft: 'Bandhani', region: 'Bhuj, Kutch', sessions: 41, complete: 34, handed: 28, approved: 24, active: 17, risk: 'Watch' },
+  { craft: 'Ajrakh block printing', region: 'Ajrakhpur, Kutch', sessions: 26, complete: 21, handed: 19, approved: 18, active: 12, risk: 'Watch' },
+  { craft: 'Rogan painting', region: 'Nirona, Kutch', sessions: 9, complete: 9, handed: 7, approved: 7, active: 6, risk: 'Critical' },
+  { craft: 'Kharad weaving', region: 'Bhuj, Kutch', sessions: 5, complete: 3, handed: 3, approved: 2, active: 1, risk: 'Critical' },
+  { craft: 'Sujani embroidery', region: 'Bhusra, Bihar', sessions: 30, complete: 17, handed: 21, approved: 14, active: 9, risk: 'Stable' },
+  { craft: 'Dhokra casting', region: 'Bastar, Chhattisgarh', sessions: 22, complete: 11, handed: 12, approved: 8, active: 4, risk: 'Watch' },
+  { craft: 'Longpi pottery', region: 'Ukhrul, Manipur', sessions: 14, complete: 12, handed: 9, approved: 9, active: 7, risk: 'Watch' },
+  { craft: 'Pattachitra', region: 'Raghurajpur, Odisha', sessions: 34, complete: 28, handed: 25, approved: 22, active: 15, risk: 'Stable' }
+];
+
+// Plain BMP glyphs rather than emoji — consistent across the Android devices artisans use.
+const SEG_META = {
+  brand: { icon: '₹', tint: '#FDF0DE', ink: '#8A5D05' },
+  genz: { icon: '@', tint: '#EAF2FA', ink: '#2C5476' },
+  social: { icon: '✦', tint: '#F1E9FA', ink: '#52307C' },
+  ngo: { icon: '◎', tint: '#E6F6F2', ink: '#1F5F54' },
+  exhibition: { icon: '◐', tint: '#FBEAE8', ink: '#7C3A32' }
+};
+const SEG_ORDER = ['brand', 'genz', 'social', 'ngo', 'exhibition'];
+
+const EN = {
+  org: 'Organisation', artisanApp: 'Artisan app',
+  navOverview: 'Overview', navBoard: 'Mandala board', navArtisans: 'Artisans', navNew: 'New',
+  overviewTitle: 'Is the toolkit working?',
+  overviewSub: 'Four measures worth acting on, and who needs something next.',
+  newProfile: 'New artisan profile',
+  mComplete: 'Reached all three decks', mCompleteWhy: 'Theme cards alone give you a craft. The reflection and story cards give you a person.',
+  mApproved: 'Read back and agreed', mApprovedWhy: 'The artisan heard their own profile and said it was right.',
+  mOpened: 'Opened by the artisan', mOpenedWhy: 'A link that was never opened is a handover that did not happen.',
+  mReturned: 'Came back to practise', mReturnedWhy: 'One visit is curiosity. A second is evidence the app is useful.',
+  ofSessions: 'of {n} sessions', ofProfiles: 'of {n} profiles', ofApps: 'of {n} apps', ofUsers: 'of {n} users',
+  attention: 'Needs your attention', attentionSub: 'Named artisan, specific next step.',
+  attentionNone: 'Nothing outstanding. Every profile is reviewed and every app has been opened.',
+  practiceTitle: 'What artisans choose to practise',
+  practiceSub: 'Which conversation they open on their own. Counts only — what was said stays on their phone.',
+  clusterTitle: 'Facilitation quality by cluster',
+  clusterSub: 'A session counts as complete only when it reached all three decks.',
+  colCraft: 'Craft', colRegion: 'Region', colComplete: 'Complete', colApproved: 'Approved', colActive: 'In weekly use', colRisk: 'Risk',
+  actOpenSession: 'Open session', actAnalyse: 'Analyse', actHandover: 'Handover', actTrouble: 'Troubleshoot',
+  issueIncomplete: 'Session did not reach all three decks.',
+  issueNoReflection: 'Stopped before the reflection cards — no boundaries or future recorded.',
+  issueNoAnalysis: 'Complete session, never analysed. Their app has nothing to show them.',
+  issueNoApproval: 'Profile written but the artisan has not agreed to it.',
+  issueNeverOpened: 'App link has never been opened.',
+  issueStale: 'Has not opened the app in {n} days.',
+  boardTitle: 'Mandala board', boardSub: 'The session, laid back onto the board it came from. Tap any card to read or fill it.',
+  boardPick: 'Pick a card', boardPickSub: 'Every dot is one card from the board. Filled cards are solid.',
+  boardCaptured: 'captured', boardOf: 'of',
+  reflection: 'Reflection', stories: 'Stories',
+  tabBoard: 'Board', tabList: 'List', tabAnalysis: 'Analysis', tabHandover: 'Handover',
+  save: 'Save', prev: 'Previous card', next: 'Next card', close: 'Close',
+  emptyCard: 'Not captured in the session yet.',
+  sourceLine: 'From the transcript',
+  analysisTitle: 'Communication profile', analyseRun: 'Analyse this session', analyseAgain: 'Re-run the analysis', analysing: 'Analysing…',
+  strengths: 'What they can already say well', gaps: 'Where they go quiet', rooms: 'Practice rooms to open first',
+  ownWords: 'Their own words to keep', care: 'Handle with care', artisanSees: 'What the artisan will see',
+  notAnalysed: 'Not analysed yet', notAnalysedSub: 'Turn the session into a communication profile and the artisan\u2019s app comes alive.',
+  handoverTitle: 'Handover', handoverSub: 'The artisan gets a link, not an install. Scan it from their phone and add it to the home screen.',
+  accessLink: 'Access link', copyLink: 'Copy link', copied: 'Copied', openApp: 'Open the artisan app',
+  checklist: 'Before you hand over',
+  chk1: 'Read the profile back to them in their language and change what they disagree with',
+  chk2: 'Confirm what they are happy for the organisation to share publicly',
+  chk3: 'Open the link on their phone and add it to the home screen together',
+  chk4: 'Do one practice conversation with them before leaving',
+  chk5: 'Agree who they call if something in the app feels wrong',
+  manageTitle: 'Artisans', filter: 'Filter by name, craft or region',
+  cardsCaptured: 'Cards captured', appLang: 'App language', practiceRuns: 'Practice runs', lastOpened: 'Last opened', never: 'Never',
+  openProfile: 'Open profile', manageTrouble: 'Manage & troubleshoot',
+  editRecord: 'Edit the record', diagnostics: 'Diagnostics', fixes: 'Fixes',
+  name: 'Name', craft: 'Craft', region: 'Region',
+  stLive: 'Live', stIncomplete: 'Session incomplete', stNoAnalysis: 'Awaiting analysis', stNoApproval: 'Awaiting approval', stRevoked: 'Access revoked',
+  fixRevoke: 'Revoke access', fixRestore: 'Restore access', fixNewLink: 'App not opening — issue a new link',
+  fixApprove: 'Mark as read back and agreed', fixUnapprove: 'Withdraw approval',
+  fixRerun: 'Summary is wrong — clear and re-run', fixResetPractice: 'Reset their practice history',
+  deleteAsk: 'Delete this profile…', deleteConfirm: 'Delete this profile and the whole session? The link stops working immediately.',
+  deleteYes: 'Yes, delete', deleteNo: 'Keep it',
+  newTitle: 'Bring the board session in',
+  newSub: 'Hand over a recording or transcript and the agent places each answer on the card it belongs to. Typing it yourself works the same.',
+  tabUpload: 'Upload a file', tabPaste: 'Paste transcript', tabManual: 'Type it myself',
+  chooseFile: 'Choose a session file', fileHelp: 'Transcript as .txt, .md, .vtt or .srt — or the raw recording',
+  readSession: 'Read the session into the cards', reading: 'Reading…',
+  readingSub: 'Nothing is invented. Anything the session did not cover is left empty for you.',
+  emptyProfile: 'Create an empty profile', sessionLang: 'Session language',
+  agentDoes: 'What the agent does with it',
+  ag1: 'Matches every answer to the card it belongs to.',
+  ag2: 'Keeps the artisan\u2019s own words rather than paraphrasing.',
+  ag3: 'Attaches the line it came from so you can check it.',
+  ag4: 'Leaves a card empty when the session did not reach it.',
+  autofilled: 'Auto-filled from the session', showSources: 'Show source lines', hideSources: 'Hide source lines',
+  greeting: 'Your work, your words', yourBoard: 'From your mandala board',
+  practiceWith: 'Practise talking to', practiceHelp: 'Choose who you want to get better at talking to. They will talk back. Nothing here is sent to anyone.',
+  someoneElse: 'Someone else?', customHint: 'e.g. a shop owner in Ahmedabad', start: 'Start',
+  past: 'Earlier practice', feedbackBtn: 'How did I do?', typing: 'typing…', sayHint: 'Say something…', send: 'Send', done: 'Done',
+  notReady: 'Your facilitator has not finished your profile yet. When they do, what the board showed about your work will appear here.',
+  navHome: 'Home', navPractice: 'Practice', navMyBoard: 'My board',
+  hubStrength: "Strength",
+  hubConcern: "Concern",
+  hubSharing: "Sharing & boundaries",
+  hubFuture: "Future",
+  hubTaught: "A moment that taught me",
+  hubStayed: "A moment that stayed",
+  hubUnderstand: "What outsiders should get",
+  seeMyBoard: "See my whole board",
+  howItWorks: "How this app helps",
+  howItWorksSub: "It is a private place to practise. Nobody sees what you say here.",
+  g1t: "Your board is already here",
+  g1b: "Everything you answered on the mandala board is saved. Your words, not anyone else’s.",
+  g2t: "Choose who you want to talk to",
+  g2b: "A buyer, a young customer online, someone from an organisation — or anyone you name yourself.",
+  g3t: "They talk back, like the real thing",
+  g3b: "They will ask, bargain, doubt you. Say whatever you would really say. Nothing is being judged.",
+  g4t: "Ask how you did",
+  g4b: "You get one thing you did well, one sentence to try next time, and one thing from your board you forgot to use.",
+  ctaTitle: "Start a practice conversation",
+  ctaSub: "Pick who you want to get better at talking to",
+  roomsShort: "Practice rooms",
+  installTitle: "Add Karigar to your phone",
+  installSub: "So it opens like an app, with its own icon — no store, no account.",
+  iosStep1: "Tap the Share button at the bottom of the screen",
+  iosStep2: "Scroll down and tap “Add to Home Screen”",
+  iosStep3: "Tap Add. Karigar appears with your other apps.",
+  andStep1: "Tap the ⋮ menu at the top right",
+  andStep2: "Tap “Install app” or “Add to Home screen”",
+  andStep3: "Confirm. Karigar appears with your other apps.",
+  installNow: "Install",
+  installSkip: "Not now, open it here",
+  installedTitle: "Done — you can open Karigar any time",
+  works: "Works without internet for reading your board"
+};
+
+// Indic names carry matras on the first letter — take whole grapheme clusters, not UTF-16 units.
+function firstGraphemes(name) {
+  const words = String(name || '').trim().split(/\s+/).slice(0, 2);
+  const seg = typeof Intl !== 'undefined' && Intl.Segmenter ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
+  return words.map(w => {
+    if (!w) return '';
+    if (seg) { for (const g of seg.segment(w)) return g.segment; return ''; }
+    const m = w.match(/^.[\u0300-\u036F\u0900-\u0903\u093A-\u094F\u0951-\u0957\u0A81-\u0A83\u0ABE-\u0ACD]*/u);
+    return m ? m[0] : w[0];
+  }).join('');
+}
+
+const blank = () => ({ artisan_name: '', craft_name_local: '', craft_region: '' });
+
+class Component extends DCLogic {
+  state = {
+    ready: false, side: 'org', uiLang: 'en', orgView: 'overview', boardTab: 'board',
+    profiles: [], activeId: null, selectedKey: null,
+    intake: 'upload', transcript: '', fileName: '', audioPending: false, newLang: 'hi',
+    extracting: false, extractError: '', showQuotes: true,
+    manageQuery: '', troubleId: null, confirmId: null, copiedId: null, copied: false,
+    qr: null, qrFor: '',
+    busy: false, errorMsg: '',
+    appView: 'home', platform: 'android', installPrompt: null, segId: null, customSegment: '', messages: [], draft: '',
+    chatBusy: false, coach: null, history: {}
+  };
+
+  async componentDidMount() {
+    if (typeof window !== 'undefined') {
+      this._bip = e => { e.preventDefault(); this.setState({ installPrompt: e }); };
+      window.addEventListener('beforeinstallprompt', this._bip);
+    }
+    const [data, i18n] = await Promise.all([import('./karigar-data.js'), import('./karigar-i18n.js')]);
+    this.DATA = data; this.I18N = i18n;
+    this.CARDS = this.buildCards(data);
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORE) || 'null'); } catch (e) { saved = null; }
+    if (saved && Array.isArray(saved.profiles) && saved.profiles.length) {
+      this.setState({ ready: true, profiles: saved.profiles, activeId: saved.activeId || saved.profiles[0].id, uiLang: saved.uiLang || 'en', history: saved.history || {} });
+    } else {
+      const profiles = data.SAMPLES.map(s => ({
+        id: s.id, record: { ...s.record }, lang: s.lang, analysis: null, checked: {},
+        approved: s.approved, openedDaysAgo: s.openedDaysAgo, rooms: s.rooms || {},
+        cluster: s.cluster, revoked: false, linkVersion: 1
+      }));
+      this.setState({ ready: true, profiles, activeId: profiles[0].id, uiLang: 'en' });
+    }
+  }
+
+  // One flat, ordered list of every card on the board, tagged with its ring or hub group.
+  buildCards(D) {
+    const byCode = {};
+    D.RINGS.forEach(r => { byCode[r.code] = r; });
+    const out = [];
+    D.SCHEMA.forEach(g => {
+      const ring = byCode[g.code];
+      const hub = D.HUB.find(h => h.code === g.code);
+      g.fields.forEach(f => out.push({
+        key: f.key, label: f.label, hint: f.hint, rows: f.rows,
+        ask: g.ask, code: g.code, groupTitle: g.title,
+        ringId: ring ? ring.id : null, color: ring ? ring.color : (hub ? hub.color : '#6B3FA0'),
+        ink: ring ? ring.ink : (hub ? hub.color : '#52307C'),
+        hub: hub ? { token: hub.token, label: hub.label, kind: g.deck } : null
+      }));
+    });
+    return out;
+  }
+
+  t(code) {
+    const tab = this.I18N && this.I18N.TABLES[code || this.state.uiLang];
+    return tab ? Object.assign({}, EN, tab) : EN;
+  }
+  langOf(code) { const L = this.I18N ? this.I18N.LANGS : []; return L.find(l => l.code === code) || L[0] || { font: 'sans-serif', display: 'sans-serif', name: 'English' }; }
+  active() { return this.state.profiles.find(p => p.id === this.state.activeId) || null; }
+
+  componentWillUnmount() {
+    if (this._bip) window.removeEventListener('beforeinstallprompt', this._bip);
+  }
+
+  persist(patch) {
+    const s = this.state;
+    const next = { profiles: s.profiles, activeId: s.activeId, uiLang: s.uiLang, history: s.history, ...patch };
+    try { localStorage.setItem(STORE, JSON.stringify(next)); } catch (e) { /* quota */ }
+  }
+
+  patchActive(fn) { this.patchProfile(this.state.activeId, fn); }
+
+  patchProfile(id, fn) {
+    this.setState(s => {
+      const profiles = s.profiles.map(p => p.id === id ? fn(p) : p);
+      setTimeout(() => this.persist({ profiles }), 0);
+      return { profiles };
+    });
+  }
+
+  setField(key, v) { this.patchActive(p => ({ ...p, record: { ...p.record, [key]: v } })); }
+
+  completeness(p) {
+    const D = this.DATA; if (!D) return { theme: 0, reflection: 0, story: 0, complete: false };
+    const count = deck => D.SCHEMA.filter(g => g.deck === deck).reduce((n, g) => n + g.fields.filter(f => (p.record[f.key] || '').trim()).length, 0);
+    const theme = count('theme'), reflection = count('reflection'), story = count('story');
+    return { theme, reflection, story, complete: theme >= 8 && reflection >= 4 && story >= 2 };
+  }
+
+  origin() { return (this.props.appOrigin || 'https://karigar.vercel.app').replace(/\/+$/, ''); }
+
+  shareUrl(profile) {
+    const a = profile || this.active(); if (!a) return '';
+    const slug = (a.record.craft_name_local || 'craft').toLowerCase().replace(/[^a-z]/g, '').slice(0, 6) || 'craft';
+    return `${this.origin()}/k/${a.id.slice(-6)}-${slug}${a.linkVersion > 1 ? '-' + a.linkVersion : ''}`;
+  }
+
+  componentDidUpdate() {
+    this.ensureQr();
+    // Selects whose options stream in after the value is bound need the value re-applied.
+    if (typeof document !== 'undefined') {
+      const el = document.querySelector('select[data-role="uilang"]');
+      if (el && el.value !== this.state.uiLang) el.value = this.state.uiLang;
+      const ap = document.querySelector('select[data-role="applang"]');
+      const cur = this.active();
+      if (ap && cur && ap.value !== cur.lang) ap.value = cur.lang;
+    }
+  }
+
+  async ensureQr() {
+    if (this.state.side !== 'org' || this.state.orgView !== 'board' || this.state.boardTab !== 'handover') return;
+    const link = this.shareUrl();
+    if (!link || this.state.qrFor === link) return;
+    this.setState({ qrFor: link, qr: null });
+    try {
+      const mod = await import('https://esm.sh/qrcode-generator@1.4.4');
+      const qrcode = mod.default || mod;
+      const q = qrcode(0, 'M'); q.addData(link); q.make();
+      const n = q.getModuleCount(), pad = 1;
+      let d = '';
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) d += `M${c + pad} ${r + pad}h1v1h-1z`;
+      this.setState({ qr: { size: n + pad * 2, path: d } });
+    } catch (e) { this.setState({ qr: 'error' }); }
+  }
+
+  recordText() {
+    const a = this.active(); if (!a || !this.DATA) return '';
+    const r = a.record;
+    return this.DATA.SCHEMA.map(g => {
+      const lines = g.fields.filter(f => (r[f.key] || '').trim()).map(f => `  - ${f.label}: ${r[f.key].trim()}`);
+      return lines.length ? `[${g.code}] ${g.title} — ${g.layer}\n${lines.join('\n')}` : '';
+    }).filter(Boolean).join('\n\n');
+  }
+
+  parse(txt) {
+    let t = (txt || '').trim();
+    if (t.startsWith('```')) t = t.replace(/^```[a-z]*\s*/i, '').replace(/```\s*$/, '').trim();
+    const a = t.indexOf('{'), b = t.lastIndexOf('}');
+    if (a > 0 || b < t.length - 1) t = t.slice(a, b + 1);
+    return JSON.parse(t);
+  }
+
+  groundRules() {
+    return `GROUND RULES, always in force.
+- The artisan is an author with judgment and opinions, not a heritage symbol or a case study.
+- Carry their own words, local craft terms and framings through. Never upgrade their vocabulary into institutional or marketing register.
+- Never romanticise poverty, struggle, rural life, slowness or tradition. Banned: timeless, ancient, forgotten, dying, hidden gem, soulful, labour of love, "each piece tells a story", "keeping the tradition alive".
+- Report concern and loss plainly; never aestheticise them.
+- Forward-looking framing must come from the artisan's own stated desired change and continuity.
+- Invent nothing. Every claim traces to a card answer.`;
+  }
+
+  readFile = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const isMedia = /^(audio|video)\//.test(file.type) || /\.(mp3|m4a|wav|ogg|aac|mp4|mov)$/i.test(file.name);
+    if (isMedia) { this.setState({ fileName: file.name, audioPending: true, transcript: '', extractError: '' }); return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      let text = String(reader.result || '');
+      text = text.split('\n').filter(l => !/^\d+$/.test(l.trim()) && !/-->/.test(l) && l.trim() !== 'WEBVTT').join('\n').trim();
+      this.setState({ transcript: text, fileName: file.name, audioPending: false, extractError: '' });
+    };
+    reader.readAsText(file);
+  };
+
+  extract = async () => {
+    const D = this.DATA; if (!D || this.state.extracting) return;
+    const text = (this.state.transcript || '').trim(); if (!text) return;
+    this.setState({ extracting: true, extractError: '' });
+    const fieldList = D.SCHEMA.map(g => g.fields.map(f => `  ${f.key} — [${g.code} / ${g.title}] ${f.label}.`).join('\n')).join('\n');
+    try {
+      const raw = await window.claude.complete({
+        model: this.props.model || 'claude-sonnet-4-5', max_tokens: 6000,
+        system: `You process recordings of a mandala card board session between a facilitator and a craft artisan. The facilitator reads a card aloud; the artisan answers; there are asides, corrections, other people in the room, and often two languages at once.
+
+Place each answer against the card it belongs to. You are a transcriber-organiser, not a writer.
+
+RULES
+- Use the artisan's own words. Lightly clean filler; never paraphrase into better language, never translate, never improve their vocabulary.
+- One answer can serve several fields; put it where it fits best.
+- If the session did not cover a card, that field is absent from your output. Never infer or fill a gap.
+- Do not record the facilitator's commentary as the artisan's answer unless it translates what they just said.
+- Keep local craft terms exactly as spoken.
+
+Reply with a single JSON object and nothing else.`,
+        messages: [{ role: 'user', content: `FIELDS AVAILABLE\n${fieldList}\n\nSESSION TRANSCRIPT\n${text.slice(0, 60000)}\n\nReturn exactly:\n{\n  "fields": { "<field_key>": { "value": "the answer in their words", "quote": "the line you took it from" } },\n  "session_note": "1-2 sentences to the facilitator: what this session covered well and what to go back for"\n}\n\nOnly include a key if the session genuinely answers it.` }]
+      });
+      const out = this.parse(raw);
+      const fields = out.fields || {};
+      const record = { ...blank() }; const sources = {};
+      Object.keys(fields).forEach(k => {
+        if (!D.FIELD_INDEX[k]) return;
+        const v = fields[k];
+        const val = typeof v === 'string' ? v : (v && v.value);
+        if (!val || !String(val).trim()) return;
+        record[k] = String(val).trim();
+        if (v && v.quote) sources[k] = String(v.quote).trim();
+      });
+      const id = 'p' + Date.now();
+      const profile = { id, record, lang: this.state.newLang, analysis: null, checked: {}, sources, sessionNote: out.session_note || '', origin: this.state.fileName || 'pasted transcript', approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 };
+      const profiles = [...this.state.profiles, profile];
+      this.setState({ profiles, activeId: id, orgView: 'board', boardTab: 'board', extracting: false, transcript: '', fileName: '', showQuotes: true, selectedKey: null });
+      this.persist({ profiles, activeId: id });
+    } catch (e) {
+      this.setState({ extracting: false, extractError: (e && e.message) || 'The model did not return usable JSON. Try a shorter section.' });
+    }
+  };
+
+  analyse = async () => {
+    const a = this.active(); if (!a || this.state.busy) return;
+    if (!this.recordText().trim()) { this.setState({ orgView: 'board', boardTab: 'analysis', errorMsg: 'This session is empty.' }); return; }
+    const L = this.langOf(a.lang || 'en');
+    this.setState({ orgView: 'board', boardTab: 'analysis', busy: true, errorMsg: '' });
+    try {
+      const raw = await window.claude.complete({
+        model: this.props.model || 'claude-sonnet-4-5', max_tokens: 3500,
+        system: `You work for a social-innovation lab that runs a mandala card board with craft artisans. A facilitator has entered one artisan's full session. Your job is NOT marketing copy. Build a communication profile: what this artisan can already say well about their own work, where they go quiet, and which audiences they should practise with in a private app that plays those audiences back at them.
+
+${this.groundRules()}
+
+The point of the toolkit is pride. Artisans lose confidence against new-market demands; the board surfaces what they are actually expert in. Make that expertise legible to the artisan themselves.
+
+Reply with a single JSON object and nothing else.`,
+        messages: [{ role: 'user', content: `MANDALA BOARD SESSION\n${this.recordText()}\n\nThe artisan's language is ${L.name}.\n\nReturn exactly:\n{\n  "communication_profile": "3-4 sentences to the facilitator on how this person talks about their work",\n  "strengths": [ { "title": "short", "detail": "anchored in a specific card answer" } ],\n  "gaps": [ { "title": "short", "detail": "what they cannot yet put into words for outsiders, no deficit language" } ],\n  "recommended_segments": [ { "id": "one of: brand, genz, social, ngo, exhibition", "label": "short label", "why": "one sentence tied to this artisan" } ],\n  "vocabulary": ["5-8 of their own words or local craft terms"],\n  "care_notes": ["what a facilitator or brand should handle carefully"],\n  "artisan_summary_local": "4-5 short sentences IN ${L.name}, addressed to the artisan as 'you', telling them what the board showed about their own expertise. Warm, plain, no flattery, no marketing words.",\n  "artisan_summary_en": "the same in English"\n}\n\n3-4 strengths, 3 gaps, 3-4 recommended segments.` }]
+      });
+      const analysis = this.parse(raw);
+      this.patchActive(p => ({ ...p, analysis }));
+      this.setState({ busy: false });
+    } catch (e) {
+      this.setState({ busy: false, errorMsg: (e && e.message) || 'The model did not return usable JSON.' });
+    }
+  };
+
+  segText(id) { return this.I18N ? this.I18N.SEGMENT_TEXT[id] : null; }
+
+  chatSystem() {
+    const a = this.active(); const L = this.langOf((a && a.lang) || 'en');
+    const seg = this.segText(this.state.segId);
+    const who = seg ? seg.persona : `A person the artisan described as: "${this.state.customSegment}". Infer a realistic, specific individual of that kind and play them consistently.`;
+    const ana = a && a.analysis;
+    return `You are a practice partner inside an artisan's own phone app. They have completed a mandala card board with a facilitator. You PLAY a character so they can practise talking about their work.
+
+CHARACTER YOU PLAY
+${who}
+
+ABOUT THE ARTISAN, from their board session
+${this.recordText().slice(0, 6000)}
+${ana ? `\nFacilitator's read: ${ana.communication_profile}\nThey go quiet around: ${(ana.gaps || []).map(g => g.title).join('; ')}` : ''}
+
+HOW TO PLAY
+- Speak ONLY in ${L.name}. Every reply in ${L.name}. Keep their craft terms in their own form.
+- Stay in character. Never break role, never mention being an AI or an exercise.
+- Short turns: two to four sentences, one question at a time.
+- Be realistic, including realistic pressure: negotiate, be sceptical, ask the awkward question. Never cruel.
+- When they undersell themselves, do what your character would really do — ask again, or lose a little interest.
+- ${seg && this.state.segId === 'social' ? 'You are a coach, not a customer: begin by asking what they want from posting.' : 'Open with one natural, in-character line.'}
+
+${this.groundRules()}
+
+Reply with plain conversational text only.`;
+  }
+
+  openSegment = async (id) => {
+    this.setState({ appView: 'chat', segId: id, messages: [], coach: null, draft: '', chatBusy: true });
+    try {
+      const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: [{ role: 'user', content: '[The artisan has just opened the conversation. Say your opening line, in character.]' }] });
+      this.setState({ messages: [{ role: 'assistant', content: (reply || '').trim() }], chatBusy: false });
+    } catch (e) { this.setState({ chatBusy: false }); }
+  };
+
+  send = async () => {
+    const text = (this.state.draft || '').trim();
+    if (!text || this.state.chatBusy) return;
+    const messages = [...this.state.messages, { role: 'user', content: text }];
+    this.setState({ messages, draft: '', chatBusy: true, coach: null });
+    try {
+      const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: messages.map(m => ({ role: m.role, content: m.content })) });
+      this.setState({ messages: [...messages, { role: 'assistant', content: (reply || '').trim() }], chatBusy: false });
+    } catch (e) { this.setState({ chatBusy: false }); }
+  };
+
+  endAndCoach = async () => {
+    if (this.state.chatBusy) return;
+    if (!this.state.messages.some(m => m.role === 'user')) return;
+    const a = this.active(); const L = this.langOf((a && a.lang) || 'en');
+    const seg = this.segText(this.state.segId);
+    const label = seg ? seg.label.en : this.state.customSegment;
+    const transcript = this.state.messages.map(m => `${m.role === 'user' ? 'ARTISAN' : 'CHARACTER'}: ${m.content}`).join('\n');
+    this.setState({ chatBusy: true });
+    try {
+      const raw = await window.claude.complete({
+        model: this.props.model || 'claude-sonnet-4-5', max_tokens: 900,
+        system: `You coach artisans on talking about their own work. Warm, specific, never condescending. You never tell them their craft knowledge is lacking — only that an outsider could not hear it yet. ${this.groundRules()}\nReply with a single JSON object.`,
+        messages: [{ role: 'user', content: `They practised talking to: ${label}.\n\nTHEIR BOARD SESSION, abridged\n${this.recordText().slice(0, 4000)}\n\nTRANSCRIPT\n${transcript}\n\nReturn exactly:\n{ "items": [\n  { "kind": "STRONG", "text": "one thing they did well, quoting their own words" },\n  { "kind": "TRY THIS", "text": "one concrete sentence to use next time" },\n  { "kind": "YOU KNOW MORE", "text": "one thing from their board they did not use" }\n] }\n\nWrite every "text" in ${L.name}, short plain sentences. Keep "kind" in English.` }]
+      });
+      const coach = this.parse(raw);
+      const history = { ...this.state.history };
+      const key = this.state.segId || ('custom:' + this.state.customSegment);
+      history[key] = (history[key] || 0) + 1;
+      this.setState({ coach, chatBusy: false, history });
+      this.persist({ history });
+    } catch (e) { this.setState({ chatBusy: false }); }
+  };
+
+  renderVals() {
+    const s = this.state, D = this.DATA, I = this.I18N;
+    const a = this.active();
+    const appLangCode = (a && a.lang) || 'en';
+    const t = this.t(s.side === 'artisan' ? appLangCode : s.uiLang);
+    const rec = (a && a.record) || {};
+    const srcs = (a && a.sources) || {};
+    const uiL = this.langOf(s.side === 'artisan' ? appLangCode : s.uiLang);
+    const recL = this.langOf((a && a.lang) || 'en');
+    const cards = this.CARDS || [];
+    const rings = D ? D.RINGS : [];
+    const filled = cards.filter(c => (rec[c.key] || '').trim()).length;
+    const nameOf = p => (p.record.artisan_name || 'Untitled').split('(')[0].trim();
+    const ringName = id => (I && I.RING_NAMES[id] && (I.RING_NAMES[id][s.side === 'artisan' ? appLangCode : s.uiLang] || I.RING_NAMES[id].en)) || id;
+    const hubTitle = code => { const k = I && I.HUB_TITLE_KEY[code]; return (k && t[k]) || code; };
+    // Card deck text follows the console language; falls back to the printed English deck.
+    const sideLang = s.side === 'artisan' ? appLangCode : s.uiLang;
+    const CT = (I && I.CARD_TEXT && I.CARD_TEXT[sideLang]) || null;
+    const gTitle = (code, fb) => (CT && CT.g[code] && CT.g[code].title) || fb;
+    const gAsk = (code, fb) => (CT && CT.g[code] && CT.g[code].ask) || fb;
+    const fLabel = (key, fb) => (CT && CT.f[key]) || fb;
+    const fmt = (str, n) => String(str || '').replace('{n}', n);
+
+    // ── board geometry ──────────────────────────────────────────────
+    const ringArcs = rings.map(r => ({ r: r.r, color: r.color, opacity: s.selectedKey && (cards.find(c => c.key === s.selectedKey) || {}).ringId && (cards.find(c => c.key === s.selectedKey) || {}).ringId !== r.id ? 0.42 : 1 }));
+    const ringLabels = rings.map(r => {
+      const top = 50 - (r.r / 120) * 100;
+      return { label: ringName(r.id), style: `position:absolute;left:50%;top:${top}%;transform:translate(-50%,-50%);background:rgba(255,255,255,.93);color:${r.ink};border-radius:999px;padding:2px 9px;font-size:clamp(8.5px,1.55vw,11.5px);font-weight:700;letter-spacing:.01em;white-space:nowrap;pointer-events:none;font-family:${uiL.font}` };
+    });
+
+    const boardDots = [];
+    rings.forEach(r => {
+      const mine = cards.filter(c => c.ringId === r.id);
+      const rp = (r.r / 120) * 100;
+      const span = 292, from = -58;
+      mine.forEach((c, i) => {
+        const deg = from + (i + 0.5) * (span / mine.length);
+        const rad = deg * Math.PI / 180;
+        const left = 50 + rp * Math.cos(rad), top = 50 + rp * Math.sin(rad);
+        const has = !!(rec[c.key] || '').trim();
+        const on = s.selectedKey === c.key;
+        const size = on ? 21 : 15;
+        const bg = on ? '#241F2E' : has ? '#FFFFFF' : 'rgba(255,255,255,.42)';
+        const bd = on ? '3px solid #fff' : has ? `3px solid ${r.ink}` : '2px solid rgba(255,255,255,.9)';
+        boardDots.push({
+          title: fLabel(c.key, c.label),
+          pick: () => this.setState({ selectedKey: c.key }),
+          style: `position:absolute;left:${left}%;top:${top}%;transform:translate(-50%,-50%);width:${size}px;height:${size}px;border-radius:50%;background:${bg};border:${bd};padding:0;cursor:pointer;box-shadow:${on ? '0 0 0 5px rgba(36,31,46,.16)' : '0 1px 3px rgba(0,0,0,.18)'}`
+        });
+      });
+    });
+
+    const hubCards = cards.filter(c => c.hub);
+    // Several story cards share a generic field label ("The moment") — fall back to the card
+    // title wherever a label would otherwise appear twice in the hub row.
+    const hubSeen = {};
+    hubCards.forEach(c => { const l = fLabel(c.key, c.label); hubSeen[l] = (hubSeen[l] || 0) + 1; });
+    const hubLabel = c => { const l = fLabel(c.key, c.label); return hubSeen[l] > 1 ? hubTitle(c.code) : l; };
+    const hubGroups = [
+      { label: t.reflection, cards: hubCards.filter(c => c.hub.kind === 'reflection') },
+      { label: t.stories, cards: hubCards.filter(c => c.hub.kind === 'story') }
+    ].map(g => ({
+      label: g.label,
+      cards: g.cards.map(c => {
+        const has = !!(rec[c.key] || '').trim();
+        const on = s.selectedKey === c.key;
+        return {
+          token: c.hub.token, label: hubLabel(c),
+          pick: () => this.setState({ selectedKey: c.key }),
+          style: `display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer;min-height:42px;border:1.5px solid ${on ? c.color : has ? c.color : '#EBE3D6'};background:${on ? c.color : has ? '#fff' : '#FBF7F0'};color:${on ? '#fff' : has ? c.ink : '#8C8499'};font-family:${uiL.font}`
+        };
+      })
+    }));
+
+    const selCard = cards.find(c => c.key === s.selectedKey) || null;
+    const selRing = selCard && selCard.ringId ? rings.find(r => r.id === selCard.ringId) : null;
+    const selIndex = selCard ? cards.findIndex(c => c.key === selCard.key) : -1;
+    const step = d => { const n = cards[(selIndex + d + cards.length) % cards.length]; if (n) this.setState({ selectedKey: n.key }); };
+
+    const circ = 2 * Math.PI * 15;
+    const pctDone = cards.length ? filled / cards.length : 0;
+
+    // ── overview ────────────────────────────────────────────────────
+    const N = s.profiles.length || 1;
+    const comp = s.profiles.map(p => ({ p, c: this.completeness(p) }));
+    const completeSessions = comp.filter(x => x.c.complete).length;
+    const approvedCount = s.profiles.filter(p => p.approved).length;
+    const openedCount = s.profiles.filter(p => p.openedDaysAgo !== null && p.openedDaysAgo !== undefined).length;
+    const returning = s.profiles.filter(p => Object.values(p.rooms || {}).reduce((n, v) => n + v, 0) > 1).length;
+    const roomTotals = s.profiles.reduce((acc, p) => { Object.keys(p.rooms || {}).forEach(k => { acc[k] = (acc[k] || 0) + p.rooms[k]; }); return acc; }, {});
+    const maxRoom = Math.max(1, ...Object.values(roomTotals));
+
+    const metrics = [
+      { value: completeSessions, of: fmt(t.ofSessions, N), label: t.mComplete, why: t.mCompleteWhy, color: '#6FC9B8', pct: Math.round(completeSessions / N * 100) + '%' },
+      { value: approvedCount, of: fmt(t.ofProfiles, N), label: t.mApproved, why: t.mApprovedWhy, color: '#6B3FA0', pct: Math.round(approvedCount / N * 100) + '%' },
+      { value: openedCount, of: fmt(t.ofApps, N), label: t.mOpened, why: t.mOpenedWhy, color: '#6D9DC5', pct: Math.round(openedCount / N * 100) + '%' },
+      { value: returning, of: fmt(t.ofUsers, openedCount || N), label: t.mReturned, why: t.mReturnedWhy, color: '#F0B23C', pct: Math.round(returning / (openedCount || N) * 100) + '%' }
+    ];
+
+    const attention = [];
+    comp.forEach(({ p, c }) => {
+      const go = (view, tab) => () => this.setState({ activeId: p.id, orgView: view, boardTab: tab || 'board', selectedKey: null });
+      if (!c.complete) attention.push({ who: nameOf(p), issue: c.reflection < 4 ? t.issueNoReflection : t.issueIncomplete, dot: '#A81C24', cta: t.actOpenSession, act: go('board', 'board') });
+      else if (!p.analysis) attention.push({ who: nameOf(p), issue: t.issueNoAnalysis, dot: '#F0B23C', cta: t.actAnalyse, act: () => { this.setState({ activeId: p.id, orgView: 'board' }); setTimeout(this.analyse, 60); } });
+      else if (!p.approved) attention.push({ who: nameOf(p), issue: t.issueNoApproval, dot: '#F0B23C', cta: t.actHandover, act: go('board', 'handover') });
+      else if (p.openedDaysAgo === null || p.openedDaysAgo === undefined) attention.push({ who: nameOf(p), issue: t.issueNeverOpened, dot: '#8C8499', cta: t.actTrouble, act: () => this.setState({ orgView: 'artisans', troubleId: p.id }) });
+      else if (p.openedDaysAgo > 21) attention.push({ who: nameOf(p), issue: fmt(t.issueStale, p.openedDaysAgo), dot: '#8C8499', cta: t.actTrouble, act: () => this.setState({ orgView: 'artisans', troubleId: p.id }) });
+    });
+
+    const riskStyle = risk => {
+      const c = risk === 'Critical' ? ['#FBEAE8', '#A81C24'] : risk === 'Watch' ? ['#FFF6E3', '#8A5D05'] : ['#E6F6F2', '#1F5F54'];
+      return `background:${c[0]};color:${c[1]};border-radius:999px;padding:4px 11px;font-size:11.5px;font-weight:600`;
+    };
+
+    // ── nav ─────────────────────────────────────────────────────────
+    const navDef = [
+      { id: 'overview', label: t.navOverview, icon: '◉' },
+      { id: 'board', label: t.navBoard, icon: '❋' },
+      { id: 'artisans', label: t.navArtisans, icon: '☰' },
+      { id: 'new', label: t.navNew, icon: '＋' }
+    ];
+    const navItems = navDef.map(n => {
+      const on = s.orgView === n.id;
+      return {
+        label: n.label, icon: n.icon, badge: n.id === 'overview' && attention.length ? attention.length : 0,
+        go: () => this.setState({ orgView: n.id }),
+        railStyle: `display:flex;align-items:center;gap:11px;width:100%;text-align:left;border:0;border-radius:14px;padding:11px 12px;cursor:pointer;font-size:14.5px;font-weight:${on ? '600' : '500'};min-height:44px;background:${on ? '#F1E9FA' : 'transparent'};color:${on ? '#52307C' : '#241F2E'};font-family:${uiL.font}`,
+        tabStyle: `display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:transparent;cursor:pointer;padding:7px 2px;min-height:52px;border-radius:12px;color:${on ? '#6B3FA0' : '#8C8499'};font-family:${uiL.font}`
+      };
+    });
+
+    const boardTabs = [
+      { id: 'board', label: t.tabBoard }, { id: 'list', label: t.tabList },
+      { id: 'analysis', label: t.tabAnalysis }, { id: 'handover', label: t.tabHandover }
+    ].map(x => ({
+      label: x.label, go: () => this.setState({ boardTab: x.id }),
+      style: `border:0;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:40px;background:${s.boardTab === x.id ? '#fff' : 'transparent'};color:${s.boardTab === x.id ? '#241F2E' : '#8C8499'};box-shadow:${s.boardTab === x.id ? '0 1px 3px rgba(36,31,46,.1)' : 'none'};font-family:${uiL.font}`
+    }));
+
+    const groups = (D ? D.SCHEMA : []).map(g => {
+      const ring = rings.find(r => r.code === g.code);
+      return {
+        code: g.code, title: gTitle(g.code, g.title), ask: gAsk(g.code, g.ask), color: ring ? ring.color : '#6B3FA0',
+        fields: g.fields.map(f => ({
+          label: fLabel(f.key, f.label), rows: f.rows, hint: f.hint, value: rec[f.key] || '',
+          quote: srcs[f.key] ? '“' + srcs[f.key] + '”' : '',
+          showQuote: !!(s.showQuotes && srcs[f.key] && (rec[f.key] || '').trim()),
+          onChange: e => this.setField(f.key, e.target.value)
+        }))
+      };
+    });
+
+    // ── manage ──────────────────────────────────────────────────────
+    const query = (s.manageQuery || '').toLowerCase().trim();
+    const filtered = s.profiles.filter(p => !query || [p.record.artisan_name, p.record.craft_name_local, p.record.craft_region, p.cluster].join(' ').toLowerCase().includes(query));
+    const statusStyle = kind => {
+      const c = kind === 'live' ? ['#E6F6F2', '#1F5F54'] : kind === 'bad' ? ['#FBEAE8', '#A81C24'] : ['#FFF6E3', '#8A5D05'];
+      return `background:${c[0]};color:${c[1]};border-radius:999px;padding:3px 10px;font-size:11px;font-weight:600`;
+    };
+
+    // ── artisan app ─────────────────────────────────────────────────
+    const ana = (a && a.analysis) || null;
+    const recSegs = (ana && Array.isArray(ana.recommended_segments) ? ana.recommended_segments.map(r => r.id) : []).filter(id => SEG_META[id]);
+    const segOrder = recSegs.concat(SEG_ORDER.filter(id => !recSegs.includes(id)));
+    const aLang = (a && a.lang) || 'en';
+    const segments = segOrder.map(id => {
+      const st = this.segText(id); if (!st) return null;
+      return {
+        label: st.label[aLang] || st.label.en, blurb: st.blurb[aLang] || st.blurb.en,
+        icon: SEG_META[id].icon, tint: SEG_META[id].tint, ink: SEG_META[id].ink,
+        open: () => this.openSegment(id),
+        style: 'width:100%;background:#fff;border:0;border-radius:20px;padding:13px 14px;cursor:pointer;box-shadow:0 1px 3px rgba(36,31,46,.05),0 6px 18px rgba(36,31,46,.04);min-height:68px'
+      };
+    }).filter(Boolean);
+
+    const seg = this.segText(s.segId);
+    const historyRows = Object.keys(s.history || {}).map(k => {
+      const st = this.segText(k);
+      return { label: st ? (st.label[aLang] || st.label.en) : k.replace('custom:', ''), turns: s.history[k] };
+    });
+
+    const artisanNav = [
+      { id: 'home', label: t.navHome, icon: '⌂' },
+      { id: 'board', label: t.navMyBoard, icon: '❋' }
+    ].map(n => ({
+      label: n.label, icon: n.icon, go: () => this.setState({ appView: n.id }),
+      style: `display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:transparent;cursor:pointer;padding:8px 2px;min-height:54px;color:${s.appView === n.id ? '#6B3FA0' : '#8C8499'}`
+    }));
+
+    return {
+      t, bodyFont: uiL.font, displayFont: uiL.display, recordFont: recL.font, recordDisplay: recL.display,
+      langOptions: I ? I.LANGS : [],
+      uiLang: s.uiLang,
+      setUiLang: e => { const v = e.target.value; this.setState({ uiLang: v }); this.persist({ uiLang: v }); },
+      appLang: aLang,
+      setAppLang: e => { const v = e.target.value; this.patchActive(p => ({ ...p, lang: v })); },
+      sides: [{ id: 'org', label: t.org }, { id: 'artisan', label: t.artisanApp }].map(x => ({
+        label: x.label,
+        go: () => this.setState({ side: x.id }),
+        style: `border:0;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px;background:${s.side === x.id ? '#fff' : 'transparent'};color:${s.side === x.id ? '#241F2E' : '#8C8499'};box-shadow:${s.side === x.id ? '0 1px 3px rgba(36,31,46,.12)' : 'none'};font-family:${uiL.font}`
+      })),
+      isOrg: s.side === 'org', isArtisan: s.side === 'artisan',
+
+      navItems,
+      roster: s.profiles.map(p => {
+        const c = this.completeness(p);
+        return {
+          name: nameOf(p), craft: p.record.craft_name_local || p.cluster || '—',
+          dot: !c.complete ? '#A81C24' : !p.analysis ? '#F0B23C' : p.approved ? '#6FC9B8' : '#6D9DC5',
+          open: () => this.setState({ activeId: p.id, orgView: 'board', boardTab: 'board', selectedKey: null }),
+          style: `display:flex;align-items:center;gap:9px;width:100%;border:0;border-radius:12px;padding:9px 10px;cursor:pointer;min-height:44px;background:${s.activeId === p.id ? '#F2EDE4' : 'transparent'};font-family:${uiL.font}`
+        };
+      }),
+
+      vOverview: s.orgView === 'overview', vBoard: s.orgView === 'board' && !!a, vArtisans: s.orgView === 'artisans', vNew: s.orgView === 'new',
+      goNew: () => this.setState({ orgView: 'new', intake: 'upload', transcript: '', fileName: '', audioPending: false, extractError: '' }),
+      goHandover: () => this.setState({ boardTab: 'handover' }),
+
+      metrics, attention, hasAttention: attention.length > 0, noAttention: attention.length === 0,
+      roomBars: Object.keys(roomTotals).sort((x, y) => roomTotals[y] - roomTotals[x]).map(k => {
+        const st = this.segText(k);
+        return { label: st ? (st.label[s.uiLang] || st.label.en) : k, count: roomTotals[k], pct: Math.round(roomTotals[k] / maxRoom * 100) + '%' };
+      }),
+      clusters: CLUSTERS.map(c => ({
+        craft: c.craft, region: c.region, risk: c.risk, riskStyle: riskStyle(c.risk),
+        cells: [
+          { value: `${c.complete}/${c.sessions}`, label: t.colComplete },
+          { value: `${c.approved}/${c.handed}`, label: t.colApproved },
+          { value: `${c.active}/${c.handed}`, label: t.colActive }
+        ]
+      })),
+
+      activeName: a ? nameOf(a) : '', activeSub: a ? ([rec.craft_name_local, rec.craft_region].filter(Boolean).join(' · ') || a.cluster || '') : '',
+      filledCount: filled, totalCount: cards.length,
+      boardTabs, tabBoard: s.boardTab === 'board', tabList: s.boardTab === 'list', tabAnalysis: s.boardTab === 'analysis', tabHandover: s.boardTab === 'handover',
+      ringArcs, ringLabels, boardDots, hubGroups,
+      progressDash: `${(circ * pctDone).toFixed(2)} ${circ.toFixed(2)}`,
+      hasSelected: !!selCard, noSelected: !selCard,
+      clearSelected: () => this.setState({ selectedKey: null }),
+      prevCard: () => step(-1), nextCard: () => step(1),
+      sel: selCard ? {
+        label: fLabel(selCard.key, selCard.label), ask: gAsk(selCard.code, selCard.ask), hint: selCard.hint,
+        code: selCard.code, ringLabel: selRing ? ringName(selRing.id) : (selCard.hub ? hubTitle(selCard.code) : ''),
+        groupTitle: gTitle(selCard.code, selCard.groupTitle),
+        chipStyle: `background:${selCard.color}22;color:${selCard.ink};border-radius:999px;padding:4px 11px;font-size:11.5px;font-weight:700;display:inline-block`,
+        value: rec[selCard.key] || '',
+        readValue: (rec[selCard.key] || '').trim() || t.emptyCard,
+        quote: srcs[selCard.key] ? '“' + srcs[selCard.key] + '”' : '', hasQuote: !!srcs[selCard.key],
+        onChange: e => this.setField(selCard.key, e.target.value)
+      } : { chipStyle: '', label: '', ask: '', hint: '', value: '', readValue: '', quote: '', hasQuote: false, code: '', ringLabel: '' },
+
+      groups, hasAutofill: !!(a && a.sources && Object.keys(a.sources).length),
+      autofillNote: (a && a.sessionNote) || '',
+      toggleQuotes: () => this.setState({ showQuotes: !s.showQuotes }),
+      quotesLabel: s.showQuotes ? t.hideSources : t.showSources,
+
+      busy: s.busy, errorMsg: s.errorMsg, analyse: this.analyse,
+      analyseLabel: s.busy ? t.analysing : (ana ? t.analyseAgain : t.analyseRun),
+      hasAnalysis: !!ana && !s.busy, noAnalysis: !ana && !s.busy && !s.errorMsg,
+      analysis: ana || { communication_profile: '', artisan_summary_local: '', artisan_summary_en: '' },
+      strengths: (ana && ana.strengths) || [], gaps: (ana && ana.gaps) || [],
+      recommended: (ana && ana.recommended_segments) || [],
+      vocab: (ana && ana.vocabulary) || [], hasVocab: !!(ana && ana.vocabulary && ana.vocabulary.length),
+      careNotes: (ana && ana.care_notes) || [],
+
+      shareLink: this.shareUrl().replace(/^https?:\/\//, ''),
+      hasQr: !!(s.qr && s.qr !== 'error'), qrPending: !(s.qr && s.qr !== 'error'),
+      qrViewBox: s.qr && s.qr !== 'error' ? `0 0 ${s.qr.size} ${s.qr.size}` : '0 0 1 1',
+      qrPath: (s.qr && s.qr !== 'error' && s.qr.path) || '',
+      copyLink: () => { try { navigator.clipboard.writeText(this.shareUrl()); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1700); },
+      copyLabel: s.copied ? t.copied : t.copyLink,
+      openAsArtisan: () => this.setState({ side: 'artisan', appView: 'install' }),
+      checklist: [t.chk1, t.chk2, t.chk3, t.chk4, t.chk5].map((label, i) => ({
+        label, done: !!(a && a.checked && a.checked[i]),
+        toggle: () => this.patchActive(p => ({ ...p, checked: { ...(p.checked || {}), [i]: !(p.checked || {})[i] } }))
+      })),
+
+      manageQuery: s.manageQuery, setManageQuery: e => this.setState({ manageQuery: e.target.value }),
+      manageRows: filtered.map(p => {
+        const c = this.completeness(p);
+        const practice = Object.values(p.rooms || {}).reduce((n, v) => n + v, 0);
+        const kind = p.revoked ? 'bad' : !c.complete ? 'bad' : !p.analysis || !p.approved ? 'warn' : 'live';
+        const status = p.revoked ? t.stRevoked : !c.complete ? t.stIncomplete : !p.analysis ? t.stNoAnalysis : !p.approved ? t.stNoApproval : t.stLive;
+        return {
+          name: nameOf(p), sub: [p.record.craft_name_local, p.record.craft_region].filter(Boolean).join(' · ') || p.cluster || '—',
+          status, statusStyle: statusStyle(kind), lang: p.lang,
+          metrics: [
+            { value: c.theme + c.reflection + c.story, label: t.cardsCaptured },
+            { value: this.langOf(p.lang).name, label: t.appLang },
+            { value: practice, label: t.practiceRuns },
+            { value: (p.openedDaysAgo === null || p.openedDaysAgo === undefined) ? t.never : p.openedDaysAgo + 'd', label: t.lastOpened }
+          ],
+          open: () => this.setState({ activeId: p.id, orgView: 'board', boardTab: 'board', selectedKey: null }),
+          copy: () => { try { navigator.clipboard.writeText(this.shareUrl(p)); } catch (e) {} this.setState({ copiedId: p.id }); setTimeout(() => this.setState(st => st.copiedId === p.id ? { copiedId: null } : {}), 1700); },
+          copyLabel: s.copiedId === p.id ? t.copied : t.copyLink,
+          trouble: () => this.setState({ troubleId: s.troubleId === p.id ? null : p.id, confirmId: null }),
+          troubleLabel: s.troubleId === p.id ? t.close : t.manageTrouble,
+          troubleOpen: s.troubleId === p.id,
+          editFields: [
+            { label: t.name, value: p.record.artisan_name || '', onChange: e => this.patchProfile(p.id, x => ({ ...x, record: { ...x.record, artisan_name: e.target.value } })) },
+            { label: t.craft, value: p.record.craft_name_local || '', onChange: e => this.patchProfile(p.id, x => ({ ...x, record: { ...x.record, craft_name_local: e.target.value } })) },
+            { label: t.region, value: p.record.craft_region || '', onChange: e => this.patchProfile(p.id, x => ({ ...x, record: { ...x.record, craft_region: e.target.value } })) }
+          ],
+          setLang: e => { const v = e.target.value; this.patchProfile(p.id, x => ({ ...x, lang: v })); },
+          diagnostics: [
+            { label: t.accessLink, value: p.revoked ? t.stRevoked : 'v' + (p.linkVersion || 1), color: p.revoked ? '#A81C24' : '#1F5F54' },
+            { label: t.tabBoard, value: c.complete ? '3/3' : `${c.theme}·${c.reflection}·${c.story}`, color: c.complete ? '#1F5F54' : '#8A5D05' },
+            { label: t.tabAnalysis, value: p.analysis ? '✓' : '—', color: p.analysis ? '#1F5F54' : '#8C8499' },
+            { label: t.mApproved, value: p.approved ? '✓' : '—', color: p.approved ? '#1F5F54' : '#8C8499' },
+            { label: t.lastOpened, value: (p.openedDaysAgo === null || p.openedDaysAgo === undefined) ? t.never : p.openedDaysAgo + 'd', color: '#241F2E' }
+          ],
+          fixes: [
+            { label: p.revoked ? t.fixRestore : t.fixRevoke, run: () => this.patchProfile(p.id, x => ({ ...x, revoked: !x.revoked })) },
+            { label: t.fixNewLink, run: () => this.patchProfile(p.id, x => ({ ...x, linkVersion: (x.linkVersion || 1) + 1, revoked: false })) },
+            { label: p.approved ? t.fixUnapprove : t.fixApprove, run: () => this.patchProfile(p.id, x => ({ ...x, approved: !x.approved })) },
+            { label: t.fixRerun, run: () => { this.patchProfile(p.id, x => ({ ...x, analysis: null })); this.setState({ activeId: p.id, orgView: 'board', boardTab: 'analysis' }); setTimeout(this.analyse, 80); } },
+            { label: t.fixResetPractice, run: () => this.patchProfile(p.id, x => ({ ...x, rooms: {} })) }
+          ],
+          confirming: s.confirmId === p.id, notConfirming: s.confirmId !== p.id,
+          askDelete: () => this.setState({ confirmId: p.id }),
+          cancelDelete: () => this.setState({ confirmId: null }),
+          confirmDelete: () => this.setState(st => {
+            const profiles = st.profiles.filter(x => x.id !== p.id);
+            const activeId = st.activeId === p.id ? (profiles[0] ? profiles[0].id : null) : st.activeId;
+            setTimeout(() => this.persist({ profiles, activeId }), 0);
+            return { profiles, activeId, confirmId: null, troubleId: null };
+          })
+        };
+      }),
+
+      intakeTabs: [{ id: 'upload', label: t.tabUpload }, { id: 'paste', label: t.tabPaste }, { id: 'manual', label: t.tabManual }].map(x => ({
+        label: x.label, go: () => this.setState({ intake: x.id }),
+        style: `border:0;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:40px;background:${s.intake === x.id ? '#fff' : 'transparent'};color:${s.intake === x.id ? '#241F2E' : '#8C8499'};box-shadow:${s.intake === x.id ? '0 1px 3px rgba(36,31,46,.1)' : 'none'};font-family:${uiL.font}`
+      })),
+      intakeUpload: s.intake === 'upload', intakePaste: s.intake === 'paste', intakeManual: s.intake === 'manual',
+      onFile: this.readFile, fileLabel: s.fileName || t.chooseFile,
+      fileHelp: s.fileName ? (s.audioPending ? '—' : `${(s.transcript || '').length.toLocaleString()} chars`) : t.fileHelp,
+      audioPending: s.audioPending,
+      audioNote: 'Speech-to-text runs on the server in the live build. In this prototype, paste the transcript instead — extraction from there is real.',
+      transcript: s.transcript, setTranscript: e => this.setState({ transcript: e.target.value }),
+      pasteHint: 'FACILITATOR: …\nARTISAN: …',
+      transcriptMeta: s.fileName || `${(s.transcript || '').trim().split(/\s+/).filter(Boolean).length} words`,
+      canExtract: !s.extracting && (s.transcript || '').trim().length > 40 && s.intake !== 'manual',
+      extract: this.extract, extracting: s.extracting, extractError: s.extractError,
+      newLang: s.newLang, setNewLang: e => this.setState({ newLang: e.target.value }),
+      newProfile: () => {
+        const id = 'p' + Date.now();
+        const profiles = [...s.profiles, { id, record: blank(), lang: s.newLang, analysis: null, checked: {}, approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 }];
+        this.setState({ profiles, activeId: id, orgView: 'board', boardTab: 'board', selectedKey: null });
+        this.persist({ profiles, activeId: id });
+      },
+
+      aInstall: s.appView === 'install', aHome: s.appView === 'home', aPractice: s.appView === 'practice', aBoard: s.appView === 'board', aChat: s.appView === 'chat',
+      showArtisanNav: s.appView !== 'chat' && s.appView !== 'install', artisanNav,
+      platformTabs: [{ id: 'android', label: 'Android' }, { id: 'ios', label: 'iPhone' }].map(p => ({
+        label: p.label, go: () => this.setState({ platform: p.id }),
+        style: `flex:1;border:0;border-radius:999px;padding:10px;font-size:14px;font-weight:600;cursor:pointer;min-height:44px;background:${s.platform === p.id ? '#fff' : 'transparent'};color:${s.platform === p.id ? '#241F2E' : '#8C8499'};box-shadow:${s.platform === p.id ? '0 1px 3px rgba(36,31,46,.1)' : 'none'};font-family:${recL.font}`
+      })),
+      installSteps: (s.platform === 'ios' ? [t.iosStep1, t.iosStep2, t.iosStep3] : [t.andStep1, t.andStep2, t.andStep3]).map((text, i) => ({ n: i + 1, text })),
+      canPromptInstall: !!s.installPrompt,
+      promptInstall: () => { const p = s.installPrompt; if (p && p.prompt) { p.prompt(); } this.setState({ installPrompt: null, appView: 'home' }); },
+      dismissInstall: () => this.setState({ appView: 'home' }),
+      goInstall: () => this.setState({ appView: 'install' }),
+      initials: firstGraphemes(a ? nameOf(a) : '·'),
+      homeStats: [
+        { value: filled, label: t.cardsCaptured },
+        { value: Object.values((a && a.rooms) || {}).reduce((n, v) => n + v, 0), label: t.practiceRuns },
+        { value: segments.length, label: t.roomsShort }
+      ],
+      guideSteps: [
+        { n: '1', title: t.g1t, body: t.g1b, tint: '#F1E9FA', ink: '#52307C' },
+        { n: '2', title: t.g2t, body: t.g2b, tint: '#E6F6F2', ink: '#1F5F54' },
+        { n: '3', title: t.g3t, body: t.g3b, tint: '#FDF0DE', ink: '#8A5D05' },
+        { n: '4', title: t.g4t, body: t.g4b, tint: '#FBEAE8', ink: '#A81C24' }
+      ],
+      goPractice: () => this.setState({ appView: 'practice' }),
+      goMyBoard: () => this.setState({ appView: 'board' }),
+      artisanSummary: (ana && ana.artisan_summary_local) || t.notReady,
+      segments, customSegment: s.customSegment,
+      setCustomSegment: e => this.setState({ customSegment: e.target.value }),
+      customKey: e => { if (e.key === 'Enter' && (s.customSegment || '').trim()) { e.preventDefault(); this.openSegment(null); } },
+      startCustom: () => { if ((s.customSegment || '').trim()) this.openSegment(null); },
+      history: historyRows, hasHistory: historyRows.length > 0,
+      chatTitle: seg ? (seg.label[aLang] || seg.label.en) : (s.customSegment || '—'),
+      chatSub: seg ? (seg.blurb[aLang] || seg.blurb.en) : recL.name,
+      backHome: () => this.setState({ appView: 'home', coach: null }),
+      messages: s.messages.map(m => ({
+        text: m.content,
+        wrapStyle: `display:flex;${m.role === 'user' ? 'justify-content:flex-end' : 'justify-content:flex-start'}`,
+        bubbleStyle: `max-width:84%;padding:11px 15px;font-size:15.5px;line-height:1.65;white-space:pre-wrap;font-family:${recL.font};${m.role === 'user' ? 'background:#6B3FA0;color:#fff;border-radius:20px 20px 5px 20px' : 'background:#fff;color:#241F2E;border-radius:20px 20px 20px 5px;box-shadow:0 1px 3px rgba(36,31,46,.06)'}`
+      })),
+      chatBusy: s.chatBusy, draft: s.draft,
+      setDraft: e => this.setState({ draft: e.target.value }),
+      draftKey: e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); } },
+      send: this.send, endAndCoach: this.endAndCoach,
+      coachOpen: !!(s.coach && s.coach.items), coachItems: (s.coach && s.coach.items) || []
+    };
+  }
+}
+
+</script>
+</body>
+</html>

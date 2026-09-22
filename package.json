@@ -1,0 +1,14 @@
+{
+  "name": "karigar",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Mandala toolkit companion — facilitator console and artisan practice app.",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo \"static build — nothing to compile yet\"",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
