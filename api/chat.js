@@ -10,24 +10,37 @@
 //   demo       no key, no network. Scripted replies. For layout and flow work only.
 //   gemini     Google AI Studio free tier. RECOMMENDED — best Indic-language quality of
 //              the free options, which matters here more than anything else.
+//              Free-tier prompts may be used by Google to improve its products and read by
+//              human reviewers — see DEPLOY.md before real artisans' sessions go through it.
 //   groq       Groq free tier. Very fast, weaker on Hindi/Gujarati/Marathi.
 //   openrouter OpenRouter's `:free` models. Handy fallback, availability varies.
 //   anthropic  Paid. Only reachable if you set PROVIDER=anthropic yourself.
 //
 // Swapping providers is an env var. The request and response shape never changes, so the
 // front end does not care which one is live.
-
-export const config = { runtime: 'edge' };
+//
+// Callers must be a signed-in facilitator or hold a live handover token. A free tier is
+// metered per day, so an open proxy would let anyone burn the organisation's quota.
+import { currentFacilitator, resolveToken } from '../lib/auth.js';
+import { json, route } from '../lib/http.js';
 
 const PROVIDER = (process.env.PROVIDER || 'demo').toLowerCase();
 
-// Hard ceilings, applied before any provider is called.
-const MAX_OUTPUT_TOKENS = 2000;
+// Hard ceilings, applied before any provider is called. The extractor asks for up to 6000
+// output tokens on a long session, and newer Gemini models spend part of the output budget
+// on thinking, so a lower ceiling truncates the JSON and the extraction fails.
+const MAX_OUTPUT_TOKENS = 8000;
 const MAX_INPUT_CHARS = 60000;
 
-export default async function handler(req) {
-  if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
+async function allowed(req) {
+  const token = req.headers.get('x-karigar-token');
+  if (token) return (await resolveToken(token)).status === 200;
+  return !!(await currentFacilitator(req));
+}
+
+export const POST = route(async req => {
   if (process.env.KARIGAR_PAUSED === '1') return json({ error: 'paused' }, 503);
+  if (!(await allowed(req))) return json({ error: 'unauthorised' }, 401);
 
   let body;
   try { body = await req.json(); } catch { return json({ error: 'Bad JSON' }, 400); }
@@ -36,7 +49,7 @@ export default async function handler(req) {
   if (!Array.isArray(messages) || !messages.length) return json({ error: 'messages required' }, 400);
 
   const maxTokens = Math.min(Number(body.max_tokens) || 1200, MAX_OUTPUT_TOKENS);
-  const inputChars = system.length + messages.reduce((n, m) => n + String(m.content || '').length, 0);
+  const inputChars = String(system).length + messages.reduce((n, m) => n + String(m.content || '').length, 0);
   if (inputChars > MAX_INPUT_CHARS) return json({ error: 'too_large' }, 413);
 
   try {
@@ -59,23 +72,39 @@ export default async function handler(req) {
     return json({ text, provider: PROVIDER });
   } catch (err) {
     // A free tier that is rate-limited should degrade, not break the field tool.
+    console.error('chat upstream', PROVIDER, err);
     return json({ error: 'upstream', provider: PROVIDER, detail: String(err && err.message || err) }, 502);
   }
-}
+});
 
 // ── Google AI Studio (free tier) ────────────────────────────────────────────────
 // Free tier is metered by requests per minute and per day, not by money.
 // Get a key at aistudio.google.com/apikey — no billing account required.
+// Default is Google's "latest Flash" alias: fixed versions are retired on a schedule
+// (gemini-2.0-flash shut down June 2026, gemini-2.5-flash is due October 2026), and a
+// retired model makes every call fail. Pin GEMINI_MODEL only if you need a fixed version.
+const GEMINI_FALLBACK = 'gemini-3.5-flash';
+
 async function gemini(system, messages, maxTokens) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new Error('GEMINI_API_KEY not set');
-  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const pinned = process.env.GEMINI_MODEL;
+  try {
+    return await geminiCall(pinned || 'gemini-flash-latest', key, system, messages, maxTokens);
+  } catch (err) {
+    // Only when the alias itself is unknown; a pinned model's errors are reported as they are.
+    if (pinned || err.status !== 404) throw err;
+    return geminiCall(GEMINI_FALLBACK, key, system, messages, maxTokens);
+  }
+}
 
+async function geminiCall(model, key, system, messages, maxTokens) {
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
     {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      // header rather than ?key= so the key never lands in request logs
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
         systemInstruction: system ? { parts: [{ text: system }] } : undefined,
         contents: messages.map(m => ({
@@ -86,9 +115,15 @@ async function gemini(system, messages, maxTokens) {
       })
     }
   );
-  if (!res.ok) throw new Error('gemini ' + res.status + ' ' + (await res.text()).slice(0, 300));
+  if (!res.ok) {
+    const err = new Error('gemini ' + model + ' ' + res.status + ' ' + (await res.text()).slice(0, 300));
+    err.status = res.status;
+    throw err;
+  }
   const data = await res.json();
-  return (data.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+  const text = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
+  if (!text) throw new Error('gemini returned no text (finishReason ' + (data.candidates?.[0]?.finishReason || 'none') + ')');
+  return text;
 }
 
 // ── Groq / OpenRouter — both speak the OpenAI chat shape ────────────────────────
@@ -113,8 +148,8 @@ async function openaiShaped(system, messages, maxTokens, cfg) {
 async function anthropic(system, messages, maxTokens, model) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error('ANTHROPIC_API_KEY not set — refusing to call a paid provider');
-  const allowed = new Set(['claude-sonnet-4-5', 'claude-haiku-4-5']);
-  const chosen = allowed.has(model) ? model : 'claude-haiku-4-5';   // cheapest by default
+  const allowedModels = new Set(['claude-sonnet-4-5', 'claude-haiku-4-5']);
+  const chosen = allowedModels.has(model) ? model : 'claude-haiku-4-5';   // cheapest by default
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -161,8 +196,4 @@ function demo(system, messages) {
     '[demo mode] Configure a provider to practise for real.'
   ];
   return lines[Math.min(turn - 1, lines.length - 1)] || lines[0];
-}
-
-function json(obj, status = 200) {
-  return new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } });
 }

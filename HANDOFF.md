@@ -41,12 +41,12 @@ Implementation notes:
 
 ## Known prototype shortcuts
 
-| Shortcut | Real implementation |
-|---|---|
-| `localStorage` for everything | Postgres, per-organisation scoping |
-| `window.claude.complete` | `POST /api/chat` (written, key server-side) |
-| Handover tokens derived from profile id | Opaque random tokens, revocable, `linkVersion` bump issues a new one |
-| Cluster figures on the dashboard | Aggregate queries; the four quality metrics already compute from live data |
-| Audio upload acknowledged only | Self-hosted Whisper; recordings deleted after extraction |
-| No auth | Organisation accounts (champion-leader role deferred) |
-| `openedDaysAgo` seeded per profile | Real last-opened telemetry from the artisan app |
+| Shortcut | Real implementation | Status |
+|---|---|---|
+| `localStorage` for everything | Postgres, per-organisation scoping | **Done** — only device preferences (console language, on-phone practice history) stay local |
+| `window.claude.complete` | `POST /api/chat` (key server-side) | **Done** — `runtime.js` provides `window.claude.complete` backed by the proxy |
+| Handover tokens derived from profile id | Opaque random tokens, revocable, `linkVersion` bump issues a new one | **Done** — a new link revokes every older one |
+| Cluster figures on the dashboard | Aggregate queries | **Done** — computed from the organisation's own profiles; the Risk column is empty until someone defines it |
+| Audio upload acknowledged only | Self-hosted Whisper; recordings deleted after extraction | Not yet — `api/transcribe.js` is ready for a `WHISPER_URL` |
+| No auth | Organisation accounts (champion-leader role deferred) | **Done** — email + password, accounts created with `npm run facilitator` |
+| `openedDaysAgo` seeded per profile | Real last-opened telemetry from the artisan app | **Done** — set when the artisan app loads its profile |

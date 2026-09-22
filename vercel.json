@@ -1,10 +1,28 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
   "cleanUrls": true,
+  "functions": {
+    "api/chat.js": {
+      "maxDuration": 60
+    },
+    "api/transcribe.js": {
+      "maxDuration": 300
+    },
+    "api/manifest.js": {
+      "includeFiles": "public/manifest.webmanifest"
+    }
+  },
   "rewrites": [
     {
       "source": "/k/:token",
       "destination": "/index.html"
+    },
+    {
+      "source": "/org",
+      "destination": "/console.html"
     },
     {
       "source": "/org/:path*",
@@ -40,6 +58,19 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
         }
       ]
     }

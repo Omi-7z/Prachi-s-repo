@@ -5,83 +5,89 @@ Start to finish. Everything here is free-tier.
 ## 0. What you need
 
 - A GitHub account with push access to `Omi-7z/Prachi-s-repo`
-- A [Vercel](https://vercel.com) account — sign in **with GitHub**, it makes step 3 one click
-- An Anthropic API key from [console.anthropic.com](https://console.anthropic.com) → API keys
+- A [Vercel](https://vercel.com) account — sign in **with GitHub**, it makes step 2 one click
+- A free Gemini API key from [aistudio.google.com/apikey](https://aistudio.google.com/apikey) — no billing account, no card
 
-## 1. Get the code into the repo
-
-Download this project, then from the folder that contains `deploy/`:
-
-```bash
-cd deploy
-git init
-git add .
-git commit -m "Karigar: initial deploy scaffold"
-git branch -M main
-git remote add origin https://github.com/Omi-7z/Prachi-s-repo.git
-git push -u origin main
-```
-
-The contents of `deploy/` become the repo root — that matters, because Vercel looks for `vercel.json`, `api/` and `public/` at the root.
-
-If the repo already has commits, `git pull --rebase origin main` first.
-
-## 2. Pick a project name
+## 1. Pick a project name
 
 `karigar.vercel.app` is taken. The name of the Vercel **project** becomes the subdomain, so choose one that is free:
 
-- `karigar-toolkit` → karigar-toolkit.vercel.app ← currently set as the default
+- `karigar-toolkit` → karigar-toolkit.vercel.app
 - `karigar-app`, `karigar-mandala`, `mandala-karigar`, `karigar-in`
 
 Vercel tells you immediately if a name is taken; you can rename later under Settings → General without losing the deployment.
 
 A real domain is better long term — `karigar.in` or similar. Vercel → Settings → Domains → Add, then point the two DNS records it shows you. Handover links read cleaner and the PWA install prompt looks less like a test build.
 
-## 3. Deploy
+## 2. Import the repo
 
-**Via the dashboard (easiest):** Vercel → Add New → Project → import `Prachi-s-repo` → set the project name from step 2 → Framework Preset **Other** → Deploy.
+Vercel → Add New → Project → import `Prachi-s-repo` → set the project name from step 1. Leave the framework preset as **Other**; `vercel.json` already sets the build command and the `public` output folder.
 
-**Via CLI:**
+Do not worry if this first deploy has no database yet — the build skips migrations until one is attached.
 
-```bash
-npm i -g vercel
-vercel login
-vercel link          # choose the project name here
-vercel --prod
-```
+## 3. Attach the database
 
-## 4. Add the API key
+Vercel → your project → **Storage** → Create → **Postgres** (Neon) → connect it to the project for Production, Preview and Development.
 
-Vercel → your project → Settings → Environment Variables:
+That sets `DATABASE_URL` / `POSTGRES_URL` for you. The tables are created by the next build: every deploy runs `npm run build`, which applies anything new in `db/migrations/`.
+
+## 4. Add the other environment variables
+
+Vercel → Settings → Environment Variables:
 
 | Name | Value | Environments |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | your key | Production, Preview, Development |
-| `NEXT_PUBLIC_APP_ORIGIN` | `https://<your-project>.vercel.app` | all three |
+| `SESSION_SECRET` | 32+ random characters — `openssl rand -base64 48` | Production, Preview, Development |
+| `PROVIDER` | `gemini` | all three |
+| `GEMINI_API_KEY` | your AI Studio key | all three |
 
-Redeploy after adding them — env vars are baked in at build time.
+Then **Deployments → ⋯ → Redeploy** so the build picks them up and creates the tables.
 
-The key lives only on the server. `api/chat.js` proxies every model call, so it never reaches an artisan's phone.
+`api/chat.js` proxies every model call; keys stay on the server, and it only answers a signed-in facilitator or a phone holding a live handover link. With no `PROVIDER` set it runs in demo mode — no network, no cost, every reply prefixed `[demo mode]`. The paid Anthropic path is only reachable if you set `PROVIDER=anthropic` and an `ANTHROPIC_API_KEY` yourself. `KARIGAR_PAUSED=1` switches every model call off.
 
-## 5. Point the prototype at the live domain
+The Gemini free tier is limited by requests per minute and per day. When the limit is hit, calls fail until it resets; nothing is billed.
 
-In the design, open Tweaks and set **appOrigin** to your real origin. Handover links and QR codes regenerate immediately, so a scan from your phone hits the live app instead of a placeholder.
+### Before real artisans' sessions go through the free tier
 
-## 6. Test the install flow on a real phone
+Google's terms for the unpaid Gemini API allow it to use what is sent — prompts and responses — to improve its products, and human reviewers may read it (detached from your account first). Here, what is sent is a transcript of an artisan's board session, their name, their answers about what may leave their community, and their practice conversations.
 
-1. Open the handover screen on your laptop and scan the QR with your phone's camera.
+That is fine for a pilot with made-up or sample sessions. Before real clusters, either get each artisan's consent for it or move to a tier that does not train on data: Gemini's paid tier (same `PROVIDER=gemini`, billing enabled on the key's project, with a budget cap) or `PROVIDER=anthropic`. No code changes either way.
+
+## 5. Create the first facilitator account
+
+Organisation accounts are made from the command line, so there is no open sign-up page. Copy the database URL from Vercel → Storage → your database → `.env.local` tab, then on your machine:
+
+```bash
+git clone https://github.com/Omi-7z/Prachi-s-repo.git && cd Prachi-s-repo
+npm install
+DATABASE_URL='postgres://…' npm run facilitator -- --org "Your organisation" --name "Your name" --email you@example.org
+```
+
+It asks for a password (12+ characters). Run it again with another email to add colleagues to the same organisation; run it with an existing email to reset that password.
+
+Open `https://<your-project>.vercel.app/org` and sign in.
+
+## 6. Move any prototype profiles across
+
+If someone built profiles in the prototype, open `/org` **in that same browser** and sign in. When the organisation's account is still empty, the console offers to move those profiles into it. The built-in sample artisans are demo data and are not moved.
+
+## 7. Test the install flow on a real phone
+
+1. Open a profile → Handover on your laptop and scan the QR with your phone's camera.
 2. The artisan app opens with the install screen first.
 3. **Android/Chrome:** tap Install, or ⋮ → Install app. **iPhone/Safari:** Share → Add to Home Screen (iOS fires no install event, which is why the screen spells out the steps).
-4. Launch from the home-screen icon. It should open full-screen with no browser chrome and the mandala icon.
+4. Launch from the home-screen icon. It should open full-screen with no browser chrome and the mandala icon, straight onto that artisan's profile.
 
-If it opens in a browser tab instead, the manifest or service worker was not served — check that `manifest.webmanifest` and `sw.js` sit at the deployed root and return 200.
+If it opens in a browser tab instead, check that `/manifest.webmanifest`, `/api/manifest?t=…` and `/sw.js` return 200.
 
-## 7. From here it needs a database
+Back in the console, the overview now counts that app as opened.
 
-The prototype keeps everything in the browser's own storage, which means profiles live on whichever laptop created them and a handover link cannot actually load a profile on the artisan's phone yet.
+## What is live and what is not yet
 
-That is the first thing to build, and `HANDOFF.md` has the schema. Until then the deployed app is a working demo, not a live field tool — fine for showing partners, not yet for a real cluster.
+Live: profiles, card answers with their source lines, analysis, approval, the handover checklist, opaque revocable handover links, last-opened telemetry, practice counts, the cluster table, and organisation sign-in.
+
+Not yet: **transcription** (upload a transcript; audio still needs the self-hosted Whisper service from `HANDOFF.md`), and the **champion-leader** role (reserved in the schema, deliberately not built).
 
 ## Keeping the repo current
 
-Every push to `main` redeploys automatically. Branches get their own preview URL, which is the safe way to try a change before a field visit.
+Every push to `main` redeploys automatically. Branches get their own preview URL, which is the safe way to try a change before a field visit. Previews share the production database unless you enable Neon's per-branch databases in the Storage settings — do that before testing schema changes on a preview.
