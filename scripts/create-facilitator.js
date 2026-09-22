@@ -16,10 +16,10 @@ if (!a.org || !a.name || !a.email) {
 let password = process.env.KARIGAR_PASSWORD;
 if (!password) {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
-  password = await rl.question('Password (12+ characters): ');
+  password = await rl.question('Password (10+ characters): ');
   rl.close();
 }
-if (!password || password.length < 12) { console.error('Password must be at least 12 characters.'); process.exit(1); }
+if (!password || password.length < 10) { console.error('Password must be at least 10 characters.'); process.exit(1); }
 
 const db = getDb();
 const { organisations: O, facilitators: F } = schema;

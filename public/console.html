@@ -21,6 +21,7 @@
   .k-login input:focus { border-color: #6B3FA0; box-shadow: 0 0 0 4px #F1E9FA; }
   .k-login button { margin-top: 22px; width: 100%; min-height: 46px; background: #6B3FA0; color: #fff; border: 0; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
   .k-login button:disabled { opacity: .6; }
+  .k-login .k-switch { margin: 18px 0 0; text-align: center; font-size: 14px; }
   .k-login [data-error] { color: #A81C24; font-size: 13.5px; margin-top: 12px; min-height: 1em; }
 </style>
 </head>
@@ -36,6 +37,28 @@
     <input id="k-password" name="password" type="password" autocomplete="current-password" required>
     <button type="submit">Sign in</button>
     <div data-error aria-live="polite"></div>
+    <p class="k-switch" data-signup-link hidden>New here? <a href="#" data-to="signup">Create an account</a></p>
+  </form>
+</template>
+<template id="signup">
+  <form class="k-login" autocomplete="on">
+    <h1>Create an account</h1>
+    <p>For facilitators and organisations. Artisans do not need one — they use the link you give them.</p>
+    <label for="k-org">Organisation</label>
+    <input id="k-org" name="org" autocomplete="organization" required>
+    <label for="k-name">Your name</label>
+    <input id="k-name" name="name" autocomplete="name" required>
+    <label for="k-email2">Email</label>
+    <input id="k-email2" name="email" type="email" autocomplete="username" required>
+    <label for="k-password2">Password (10+ characters)</label>
+    <input id="k-password2" name="password" type="password" autocomplete="new-password" minlength="10" required>
+    <div data-code hidden>
+      <label for="k-code">Sign-up code</label>
+      <input id="k-code" name="code" autocomplete="off">
+    </div>
+    <button type="submit">Create account</button>
+    <div data-error aria-live="polite"></div>
+    <p class="k-switch">Already have an account? <a href="#" data-to="login">Sign in</a></p>
   </form>
 </template>
 <script type="module" src="/runtime.js"></script>

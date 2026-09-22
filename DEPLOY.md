@@ -55,17 +55,22 @@ That is fine for a pilot with made-up or sample sessions. Before real clusters, 
 
 ## 5. Create the first facilitator account
 
-Organisation accounts are made from the command line, so there is no open sign-up page. Copy the database URL from Vercel → Storage → your database → `.env.local` tab, then on your machine:
+Open `https://<your-project>.vercel.app` — the home page goes to the facilitator sign-in — and click **Create an account**. Each sign-up gets its own organisation; artisans never need an account, they use the link you hand over.
+
+Sign-up is open to anyone by default, which suits a pilot. To control it, add one of these in Vercel → Environment Variables and redeploy:
+
+| Name | Effect |
+| --- | --- |
+| `SIGNUP_CODE` | sign-up asks for this code; share it only with your testers |
+| `SIGNUP_DISABLED` = `1` | no sign-up at all; accounts only from the command line below |
+
+Command line, for adding colleagues to an existing organisation or resetting a password (database URL from Vercel → Storage → your database → `.env.local`):
 
 ```bash
 git clone https://github.com/Omi-7z/Prachi-s-repo.git && cd Prachi-s-repo
 npm install
-DATABASE_URL='postgres://…' npm run facilitator -- --org "Your organisation" --name "Your name" --email you@example.org
+DATABASE_URL='postgres://…' npm run facilitator -- --org "Your organisation" --name "Their name" --email them@example.org
 ```
-
-It asks for a password (12+ characters). Run it again with another email to add colleagues to the same organisation; run it with an existing email to reset that password.
-
-Open `https://<your-project>.vercel.app/org` and sign in.
 
 ## 6. Move any prototype profiles across
 

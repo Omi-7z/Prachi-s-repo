@@ -305,26 +305,37 @@ function message(title, body) {
   mount.appendChild(box);
 }
 
-function loginForm() {
+// Sign in, or create an account when sign-up is open. Resolves once a session exists.
+async function loginForm() {
+  let signup = { open: false, needsCode: false };
+  try { signup = await api('/api/signup'); } catch { /* older server: sign-in only */ }
   return new Promise(resolve => {
-    const tpl = document.getElementById('login');
-    mount.innerHTML = '';
-    mount.appendChild(tpl.content.cloneNode(true));
-    const form = mount.querySelector('form');
-    const err = mount.querySelector('[data-error]');
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      err.textContent = '';
-      const fd = new FormData(form);
-      form.querySelector('button').disabled = true;
-      try {
-        await api('/api/session', { method: 'POST', body: { email: fd.get('email'), password: fd.get('password') } });
-        resolve();
-      } catch (x) {
-        err.textContent = x.status === 401 ? x.message : 'Could not reach the server. Check the connection and try again.';
-        form.querySelector('button').disabled = false;
-      }
-    });
+    const show = which => {
+      mount.innerHTML = '';
+      mount.appendChild(document.getElementById(which).content.cloneNode(true));
+      const form = mount.querySelector('form');
+      const err = mount.querySelector('[data-error]');
+      const link = mount.querySelector('[data-signup-link]');
+      if (link && signup.open) link.hidden = false;
+      const code = mount.querySelector('[data-code]');
+      if (code && signup.needsCode) { code.hidden = false; code.querySelector('input').required = true; }
+      mount.querySelectorAll('[data-to]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); show(a.dataset.to); }));
+      form.querySelector('input').focus();
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        err.textContent = '';
+        const body = Object.fromEntries(new FormData(form));
+        form.querySelector('button').disabled = true;
+        try {
+          await api(which === 'signup' ? '/api/signup' : '/api/session', { method: 'POST', body });
+          resolve();
+        } catch (x) {
+          err.textContent = x.status && x.status < 500 ? x.message : 'Could not reach the server. Check the connection and try again.';
+          form.querySelector('button').disabled = false;
+        }
+      });
+    };
+    show('login');
   });
 }
 
@@ -348,7 +359,8 @@ async function bootArtisan() {
     // Opened from a home-screen icon installed before per-artisan manifests, or typed in.
     const remembered = safeStore.get('karigar-token');
     if (remembered) { location.replace(`/k/${remembered}`); return null; }
-    message('Karigar', 'Open the link your facilitator gave you. If you run sessions for an organisation, sign in at /org.');
+    // No artisan link: this is a facilitator arriving at the home page.
+    location.replace('/org');
     return null;
   }
   // Android installs from the manifest's start_url, so it must carry this artisan's link.
