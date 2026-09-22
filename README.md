@@ -42,14 +42,14 @@ vercel.json              Build, rewrites for /k/:token and /org, PWA headers
 
 ## Deploy
 
-See `DEPLOY.md`. In short: attach Postgres in Vercel, set `SESSION_SECRET` and `ANTHROPIC_API_KEY`,
+See `DEPLOY.md`. In short: attach Postgres in Vercel, set `SESSION_SECRET`, `PROVIDER=gemini` and `GEMINI_API_KEY`,
 deploy (migrations run in the build), then create the first facilitator account.
 
 ## Run it locally
 
 ```bash
 npm install
-cp .env.example .env    # fill DATABASE_URL (any Postgres) and SESSION_SECRET
+cp .env.example .env    # fill DATABASE_URL (any Postgres) and SESSION_SECRET; leave PROVIDER empty for demo mode
 set -a; . ./.env; set +a
 npm run db:migrate
 npm run facilitator -- --org "Your organisation" --name "Your name" --email you@example.org

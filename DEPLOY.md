@@ -6,7 +6,7 @@ Start to finish. Everything here is free-tier.
 
 - A GitHub account with push access to `Omi-7z/Prachi-s-repo`
 - A [Vercel](https://vercel.com) account — sign in **with GitHub**, it makes step 2 one click
-- An Anthropic API key from [console.anthropic.com](https://console.anthropic.com) → API keys
+- A free Gemini API key from [aistudio.google.com/apikey](https://aistudio.google.com/apikey) — no billing account, no card
 
 ## 1. Pick a project name
 
@@ -37,12 +37,21 @@ Vercel → Settings → Environment Variables:
 
 | Name | Value | Environments |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | your key | Production, Preview, Development |
-| `SESSION_SECRET` | 32+ random characters — `openssl rand -base64 48` | all three |
+| `SESSION_SECRET` | 32+ random characters — `openssl rand -base64 48` | Production, Preview, Development |
+| `PROVIDER` | `gemini` | all three |
+| `GEMINI_API_KEY` | your AI Studio key | all three |
 
 Then **Deployments → ⋯ → Redeploy** so the build picks them up and creates the tables.
 
-The API key lives only on the server. `api/chat.js` proxies every model call, and it only answers a signed-in facilitator or a phone holding a live handover link.
+`api/chat.js` proxies every model call; keys stay on the server, and it only answers a signed-in facilitator or a phone holding a live handover link. With no `PROVIDER` set it runs in demo mode — no network, no cost, every reply prefixed `[demo mode]`. The paid Anthropic path is only reachable if you set `PROVIDER=anthropic` and an `ANTHROPIC_API_KEY` yourself. `KARIGAR_PAUSED=1` switches every model call off.
+
+The Gemini free tier is limited by requests per minute and per day. When the limit is hit, calls fail until it resets; nothing is billed.
+
+### Before real artisans' sessions go through the free tier
+
+Google's terms for the unpaid Gemini API allow it to use what is sent — prompts and responses — to improve its products, and human reviewers may read it (detached from your account first). Here, what is sent is a transcript of an artisan's board session, their name, their answers about what may leave their community, and their practice conversations.
+
+That is fine for a pilot with made-up or sample sessions. Before real clusters, either get each artisan's consent for it or move to a tier that does not train on data: Gemini's paid tier (same `PROVIDER=gemini`, billing enabled on the key's project, with a budget cap) or `PROVIDER=anthropic`. No code changes either way.
 
 ## 5. Create the first facilitator account
 
