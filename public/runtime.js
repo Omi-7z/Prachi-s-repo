@@ -136,8 +136,14 @@ class DCLogic {
   }
 }
 
+// Each deploy stamps its build id on the page's runtime.js URL (scripts/stamp-build.js). The
+// app files this loads carry the same id, so a phone whose service worker cached an older
+// build never gets that older copy back.
+const BUILD = new URL(import.meta.url).searchParams.get('v') || '';
+const built = path => (BUILD ? `${path}?v=${encodeURIComponent(BUILD)}` : path);
+
 async function loadComponent() {
-  const html = await (await fetch('/karigar.dc')).text();
+  const html = await (await fetch(built('/karigar.dc'), { cache: 'no-cache' })).text();
   // The HTML parser drops unknown tags inside <select> (and would foster-parent them out of
   // tables), so <sc-for>/<sc-if> are parsed as <template>, which it allows anywhere.
   const safe = html
@@ -149,7 +155,8 @@ async function loadComponent() {
   const root = doc.querySelector('x-dc');
   helmet && helmet.remove();
   const tree = [...root.childNodes].map(compile).filter(Boolean);
-  const src = doc.querySelector('script[data-dc-script]').textContent;
+  const src = doc.querySelector('script[data-dc-script]').textContent
+    .replace(/import\('\.\/(karigar-(?:data|i18n)\.js)'\)/g, (m, file) => `import('${built('/' + file)}')`);
   // eslint-disable-next-line no-new-func
   const Component = new Function('DCLogic', 'React', `${src}\nreturn Component;`)(DCLogic, React);
   return { Component, template: scope => tree.map(t => t(scope)) };

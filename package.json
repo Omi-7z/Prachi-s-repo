@@ -5,7 +5,7 @@
   "description": "Mandala toolkit companion — facilitator console and artisan practice app.",
   "scripts": {
     "dev": "node scripts/dev-server.js",
-    "build": "node scripts/migrate.js",
+    "build": "node scripts/migrate.js && node scripts/stamp-build.js",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node scripts/migrate.js",
     "facilitator": "node scripts/create-facilitator.js"
