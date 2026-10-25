@@ -4,10 +4,25 @@
 // blocks with {{ path }} bindings, driven by one component class. This file is the small
 // runtime that renders it in production, with Preact doing the DOM diffing, and the
 // bridge between that component and the server (profiles, handover links, the model proxy).
-import { h, render, Fragment } from '/vendor/preact.mjs';
+import { h, render, Fragment, isValidElement } from '/vendor/preact.mjs';
 
 const MODE = document.body.dataset.mode; // 'console' | 'artisan'
 const mount = document.getElementById('app');
+
+// The prototype builds a few SVG fragments itself with React.createElement (ring names set
+// along each ring). Preact sets attributes as written, so React's camelCase SVG names
+// (fontSize, textAnchor…) become the hyphenated attributes SVG reads.
+const SVG_CAMEL = /^(font|text|dominant|letter|stroke|fill|stop|clip|alignment|baseline)[A-Z]/;
+const React = {
+  createElement(type, props, ...children) {
+    if (props) {
+      const out = {};
+      for (const k in props) out[SVG_CAMEL.test(k) ? k.replace(/[A-Z]/g, c => '-' + c.toLowerCase()) : k] = props[k];
+      props = out;
+    }
+    return h(type, props, ...children);
+  }
+};
 
 // ── template compiler ───────────────────────────────────────────────────────
 
@@ -57,7 +72,8 @@ function propName(tag, name, type) {
 function compile(node) {
   if (node.nodeType === Node.TEXT_NODE) {
     const get = parseValue(node.nodeValue);
-    return scope => { const v = get(scope); return v == null ? '' : String(v); };
+    // a binding that holds elements the component built itself renders them, not their text
+    return scope => { const v = get(scope); return v == null ? '' : isValidElement(v) ? v : String(v); };
   }
   if (node.nodeType !== Node.ELEMENT_NODE) return null;
   const tag = node.localName;
@@ -135,7 +151,7 @@ async function loadComponent() {
   const tree = [...root.childNodes].map(compile).filter(Boolean);
   const src = doc.querySelector('script[data-dc-script]').textContent;
   // eslint-disable-next-line no-new-func
-  const Component = new Function('DCLogic', `${src}\nreturn Component;`)(DCLogic);
+  const Component = new Function('DCLogic', 'React', `${src}\nreturn Component;`)(DCLogic, React);
   return { Component, template: scope => tree.map(t => t(scope)) };
 }
 
@@ -196,8 +212,11 @@ const status = (() => {
 })();
 
 // The facilitator-editable part of a profile; a change here is what triggers a save.
-const EDITABLE = ['record', 'sources', 'lang', 'analysis', 'checked', 'sessionNote', 'origin', 'approved', 'cluster'];
+const EDITABLE = ['record', 'sources', 'lang', 'recordLang', 'names', 'custom', 'links', 'analysis', 'checked', 'sessionNote', 'origin', 'approved', 'cluster'];
 const signature = p => JSON.stringify(EDITABLE.map(k => p[k] === undefined ? null : p[k]));
+// "Create an empty profile" opens a blank board; it reaches the server with its first answer,
+// so opening New and leaving does not leave an empty profile behind.
+const blankDraft = p => !Object.values(p.record || {}).some(v => String(v || '').trim()) && !(p.custom || []).length && !p.sessionNote && !p.analysis;
 
 function consoleStore(initial, onServerProfile) {
   const saved = new Map(initial.map(p => [p.id, signature(p)]));
@@ -264,7 +283,10 @@ function consoleStore(initial, onServerProfile) {
       const next = new Map(profiles.map(p => [p.id, p]));
       for (const id of saved.keys()) if (!next.has(id)) remove(id);
       latest = next;
-      for (const p of profiles) if (saved.get(p.id) !== signature(p) && !inflight.has(p.id)) schedule(p.id);
+      for (const p of profiles) {
+        if (!saved.has(p.id) && blankDraft(p)) continue;
+        if (saved.get(p.id) !== signature(p) && !inflight.has(p.id)) schedule(p.id);
+      }
     },
     async action(id, action) {
       status('Saving…');
@@ -372,14 +394,14 @@ async function bootArtisan() {
     ({ profile } = await api(`/api/profile?token=${encodeURIComponent(token)}`));
     safeStore.set(cacheKey, profile);
   } catch (e) {
+    // The app's own link screen explains these in the phone's language.
     if (e.status === 410 || e.status === 404) {
       try { localStorage.removeItem(cacheKey); } catch { /* ignore */ }
-      message('This link no longer works', 'Ask your facilitator for a new one. Nothing you practised here was shared with anyone.');
-      return null;
+      return { mode: 'artisan', token, linkError: e.status === 410 ? 'revoked' : 'notfound' };
     }
     // Offline: the board summary is the offline surface. Practice needs the network.
     profile = safeStore.get(cacheKey);
-    if (!profile) { message('No connection', 'Connect to the internet once to open your Karigar app. After that it opens without one.'); return null; }
+    if (!profile) return { mode: 'artisan', token, linkError: 'offline' };
   }
   installModel(token);
   const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;

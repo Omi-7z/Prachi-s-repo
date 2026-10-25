@@ -273,6 +273,120 @@ export const SAMPLES = [
   }
 ];
 
+
+// Complete every sample so each card on the board carries an answer.
+const FILL = {
+  "p-bandhani": {
+    "transmission_strength": "બાંધવાનું પોતે. ગલીની કોઈ પણ છોકરી એક સીઝનમાં સાદી ભીંડી શીખી જાય, અને ઝીણું કામ હજી હાથોહાથ એ જ ઝડપે આગળ જાય છે જેમ પહેલાં જતું.",
+    "material_origin": "કાપડ ભુજ અને જામનગરના વેપારીઓ પાસેથી; રંગનો સામાન બજારમાંથી; દોરો વીસ વર્ષથી એક જ દુકાનેથી, કારણ કે એનો વળ એકસરખો રહે છે.",
+    "first_contact": "મલમલ, નવ વર્ષે. \"પકડાય નહીં એટલું નરમ\" — ગૂંછળું વાળતાં શીખી ત્યાં સુધી કપડું નખ નીચેથી સરકી જતું.",
+    "material_special": "મલમલ નાની ગાંઠ ચોખ્ખી પકડે; ધોયા પછી પણ ટપકું ગોળ રહે. જ્યોર્જેટમાં ટપકું થોડું લંબગોળ થાય — ખરીદનારને ખબર ન પડે, મને પડે.",
+    "material_change_gain": "કેમિકલ રંગથી એકસરખાપણું આવ્યું — મહિનાઓ પહેલાં ગ્રાહકને રંગ કહી શકાય. સસ્તા કાપડથી મંદીનાં વર્ષોમાં પણ ઘરમાં કામ ચાલુ રહ્યું.",
+    "special_vs_everyday": "લગ્નનાં કપડાં વધુ ઝીણાં બંધાય અને ક્યારેય ઉતાવળ નહીં. બજારનો માલ જે નવરું હોય એ બાંધે, એવી ભાતમાં જ્યાં ઢીલી ગાંઠ ચાલી જાય.",
+    "special_object_rule": "કન્યાની ચંદ્રોખાણીનો સ્ટોક માટે ફોટો ન પડે, અને ઘરને મળે એ પહેલાં બીજા ખરીદનારને ન બતાવાય.",
+    "recognition_by_others": "એ ખરીદનાર, અને પછી મારો દીકરો — એણે ત્યારથી દુકાનના લિસ્ટિંગ માટે દરેક કપડાની પાછળની બાજુનો ફોટો પાડવાનું શરૂ કર્યું.",
+    "change_in_lifetime": "ઓર્ડર ગામનાં લગ્નમાંથી દુકાનો તરફ, પછી ઓનલાઇન વેચનારા તરફ ગયા. સમય ટૂંકો થયો. કેમિકલ રંગ સામાન્ય થયા અને કુદરતી રંગ મોંઘી લાઇન બની. ઘરે રંગવાને બદલે હવે મોટા ભાગનું બહાર મોકલીએ છીએ."
+  },
+  "p-dhokra": {
+    "emotion_about_place_change": "\"जंगल दूर हुआ तो मोम महँगा हुआ। गुस्सा नहीं है, बस अब हर चीज़ ख़रीदनी पड़ती है जो पहले जंगल देता था।\"",
+    "family_generations": "चार पीढ़ी तक नाम ले सकते हैं। दादा और पिता ढालते थे, माँ और चाची मोम के धागे बनाती थीं। बेटा ढलाई में हाथ बँटाता है पर रायपुर में नौकरी ढूँढ रहा है; बेटी मोम का काम बहुत बारीक करती है।",
+    "transmission_strength": "मोम का काम। घर के बच्चे खेल-खेल में मोम के धागे लपेटना सीख जाते हैं — हाथ अपने आप सीखता है।",
+    "transmission_weakness": "भट्ठी पढ़ना। धातु कब तैयार है, यह पिता आग के रंग से बताते थे। यह आँख अब घर में सिर्फ़ उनके पास है।",
+    "teaching_difficulty": "कोयला, पीतल और मोम सब महँगे हैं; एक ग़लत ढलाई में हफ़्ते की कमाई जाती है। नया सीखने वाला ग़लती करे, इसकी गुंजाइश घर नहीं उठा सकता।",
+    "primary_material": "पुराना पीतल और काँसा, मधुमक्खी का मोम, साल की राल, नदी की काली मिट्टी, धान की भूसी और गोबर।",
+    "material_origin": "पीतल कबाड़ी से — पुराने बर्तन; मोम और राल हाट से, जंगल से लाने वालों से; मिट्टी गाँव की नदी के किनारे से।",
+    "first_contact": "मोम, सात-आठ साल की उम्र में। गर्म मोम उँगलियों में चिपकता था; पहले धागे टूट-टूट जाते थे।",
+    "material_special": "साल की राल मिला मोम ठंडा होकर भी थोड़ा लचीला रहता है — बारीक जाली बन पाती है, टूटती नहीं।",
+    "material_change_gain": "बिजली का पंखा भट्ठी को एक-सी हवा देता है; अब ढलाई कम बिगड़ती है।",
+    "material_change_loss": "असली मधुमक्खी का मोम कम मिलता है; पैराफ़िन मिलाना पड़ता है और उसमें धागा उतना महीन नहीं खिंचता।",
+    "sensory_scene": "मड़ई के मेले में देवी के आगे नया घोड़ा रखा जाता है। ढोल बजते हैं, धूप में पीतल चमकता है, और गाँव के बुज़ुर्ग पहले हाथ लगाकर देखते हैं।",
+    "remembered_community_phrase": "एक बुज़ुर्ग ने कहा था: \"इसमें जान है, देखो आँख कैसे देख रही है।\"",
+    "special_object_rule": "देवी के लिए बनी मूर्ति की तस्वीर बेचने के लिए नहीं खींचते, और चढ़ाने से पहले उसे बाज़ार नहीं ले जाते।",
+    "not_for_sale_example": "घर के देवस्थान की पुरानी मूर्तियाँ, और पूजा के लिए बने दीये।",
+    "why_protected": "\"वो देवी के हैं, हमारे नहीं।\" बेचने से रिश्ता टूटता है।",
+    "safer_alternative": "मोम का ढाँचा और ढलाई की प्रक्रिया दिखाने में कोई हर्ज नहीं। बाज़ार के लिए बने घोड़े-हाथी की तस्वीरें खुलकर दिखा सकते हैं।",
+    "recognition_by_others": "दिल्ली के एक मेले में एक डिज़ाइनर ने पूछा कि जाली हाथ से कैसे बनती है — फिर पूरा दिन बैठकर देखती रहीं।",
+    "key_stakeholder_of_loss": "गाँव के वो परिवार जो ढलाई से ही घर चलाते हैं, और देवगुड़ी के मेले — जिनमें हमारी मूर्तियाँ चढ़ती हैं।",
+    "artisan_initiated_change": "हमने चार परिवार मिलकर एक साझा भट्ठी बनाई, ताकि कोयले का ख़र्च बँट जाए।",
+    "desired_keep": "मोम के धागे से बनाना, और देवी के काम को बाज़ार से अलग रखना।",
+    "desired_let_go": "यह ज़िद कि हर चीज़ पुराने आकार में ही बने। नए आकार चलेंगे अगर बनाने का तरीका वही रहे।",
+    "desired_change": "ख़रीदार जानें कि हर मूर्ति एक ही बार बनती है — साँचा टूटता है, दूसरी हूबहू नहीं बनती।",
+    "desired_continuity": "हर मूर्ति के लिए नया मोम का ढाँचा। \"साँचे से ढली चीज़ ढोकरा नहीं है।\"",
+    "emotional_story": "पिता की आँखें कमज़ोर हुईं तो पहली बार भट्ठी मेरे हवाले की। धातु डालते वक़्त वो पीछे खड़े रहे और कुछ नहीं बोले। ढलाई ठीक निकली तो बस इतना कहा, \"आग ने तुझे पहचान लिया।\"",
+    "clarification_story": "एक ख़रीदार ने पूछा कि दस एक जैसे हाथी मिलेंगे क्या। मैंने समझाया कि हर हाथी का मोम अलग बनता है और ढलाई में टूटता है। उन्होंने कहा तो फिर ये \"डिफ़ेक्ट\" है। मैंने कहा, नहीं — यही इसका सबूत है कि हाथ से बना है।",
+    "outsider_misunderstanding": "कि ढोकरा \"आदिवासी पुराना काम\" है जो बदलता नहीं। हम हर साल नए आकार बनाते हैं — बदलाव भी हमारा ही है।"
+  },
+  "p-paithani": {
+    "ecological_input": "पाणी आणि हवा — रेशीम ओलसर हवेत जास्त चांगलं विणलं जातं, म्हणून पावसाळ्यानंतरचे महिने आमचे सर्वात चांगले. रेशीम मात्र बंगळुरूहून येतं.",
+    "place_change": "येवल्यात आता पॉवरलूम खूप आले. रस्त्यावर त्यांचा आवाज सतत असतो. पूर्वी गल्लीत फक्त हातमागाचा ठेका ऐकू यायचा.",
+    "emotion_about_place_change": "\"पॉवरलूमचा राग नाही. पण त्यांची साडी \"पैठणी\" म्हणून विकली जाते, त्याचं वाईट वाटतं.\"",
+    "transmission_strength": "विणकाम घरात रोज चालतं, म्हणून मुलं पाहूनच शिकतात. कोणाला शिकवायला बसावं लागत नाही.",
+    "material_origin": "रेशीम बंगळुरूहून व्यापाऱ्यांमार्फत; जर सुरतहून; रंग आम्ही येवल्यातच करतो.",
+    "first_contact": "दहाव्या वर्षी पहिल्यांदा रेशीम धागा जोडला. इतका बारीक की तुटला तरी दिसायचा नाही.",
+    "material_special": "खरी जर उन्हात सोन्यासारखी उबदार चमकते, टेस्टेड जर पांढरी चमकते. हातात घेतली की वजनावरून कळतं.",
+    "material_change_gain": "टेस्टेड जरीमुळे पैठणी कमी किमतीत विकता येते; जास्त घरांना काम मिळतं.",
+    "material_change_loss": "खऱ्या सोन्याच्या जरीची पैठणी आता फक्त ऑर्डरवर बनते. ती चमक नवीन पिढीने पाहिलीच नाही.",
+    "remembered_community_phrase": "लग्नात एक आजी म्हणाल्या: \"हिचा पदर उलटा करून बघ, मागेही तसाच दिसतो — हीच खरी पैठणी.\"",
+    "special_vs_everyday": "लग्नाची पैठणी महिनोन्महिने विणतो, खास नक्षीसह. रोजच्या विक्रीसाठी साधा पदर आणि कमी काठ.",
+    "special_object_rule": "घरच्या मुलीच्या लग्नाची पैठणी आधी विकायला दाखवत नाही, आणि तिचा नक्षीचा नमुना दुसऱ्यासाठी पुन्हा विणत नाही.",
+    "not_for_sale_example": "आईची लग्नाची पैठणी, आणि घराण्याचा एक खास मोराचा नमुना.",
+    "why_protected": "\"तो नमुना आमच्या घराची ओळख आहे.\" तो विकला तर ओळख विकली.",
+    "safer_alternative": "विणकामाची पद्धत, हातमागाचे फोटो, आणि बाजारासाठीचे नमुने खुशाल दाखवा. घराण्याचा नमुना फक्त वर्णनात.",
+    "recognition_by_others": "मुंबईच्या एका प्रदर्शनात एका संग्राहकाने पदराची उलटी बाजू पाहून लगेच ऑर्डर दिली.",
+    "key_stakeholder_of_loss": "गल्लीतले हातमाग विणकर आणि रंगारी — त्यांच्यासाठी दुसरं काम जवळ नाही.",
+    "change_in_lifetime": "खऱ्या जरीकडून टेस्टेड जरीकडे, लग्नाच्या ऑर्डरकडून दुकानांकडे, आणि आता इन्स्टाग्रामवरून थेट ग्राहक. पॉवरलूमची स्पर्धा सर्वात मोठा बदल.",
+    "desired_keep": "हातमाग, आणि पदराची दोन्ही बाजू सारखी दिसणारी विणकाम पद्धत.",
+    "desired_let_go": "फक्त लग्नासाठीच पैठणी हा विचार. दुपट्टे, स्टोल चालतील, विणकाम तेच असेल तर.",
+    "learning_story": "एकदा घाईत ताणा सैल ठेवला. पदर विणून झाल्यावर नक्षी एका बाजूला ओढलेली दिसली. वडिलांनी काहीच न बोलता तो उसवायला सांगितला — तीन आठवड्यांचं काम. त्या दिवसापासून ताणा आधी तपासते.",
+    "clarification_story": "एका ग्राहकाने विचारलं, ही पैठणी इतकी महाग का, ऑनलाइन तीन हजारात मिळते. मी त्यांना पदर उलटा करून दाखवला — हातमागावर मागची बाजूही समोरच्यासारखी असते. पॉवरलूमवर मागे धागे लोंबतात. त्या शांत झाल्या आणि मग पदराला हात लावून बघत राहिल्या.",
+    "outsider_misunderstanding": "की पैठणी म्हणजे फक्त डिझाइन. खरं तर ओळख विणण्याच्या पद्धतीत आहे — नक्षी कोणीही छापू शकतो."
+  },
+  "p-longpi": {
+    "place_change": "The road reached the village and with it more visitors, but the serpentine stone now has to be dug from further up the hill.",
+    "emotion_about_place_change": "\"I am glad for the road. I worry that the hill will not give stone forever.\"",
+    "teaching_memory": "My grandfather let me grind the stone for a whole season before I was allowed to shape anything. When I complained, he put my hand on the paste and asked if it was smooth yet. It never was, by his standard.",
+    "remembered_phrase_gesture": "\"Let the stone tell you.\" Said while pressing the paste between two fingers to test it.",
+    "family_generations": "Three generations I can name. My grandfather and father made pots; my mother polished them. My younger brother left for Imphal; my nephew helps with firing on holidays.",
+    "transmission_strength": "The shaping. Anyone in the family can roll a coil and build a pot by hand — no wheel, so the hands learn directly.",
+    "transmission_weakness": "The firing. Knowing when to pull the pot out and rub it with leaves is a judgment only my father makes without thinking.",
+    "teaching_difficulty": "It is slow, and young people want quicker money. The grinding alone takes days and pays nothing on its own.",
+    "primary_material": "Black serpentine rock and weathered brown clay, ground and mixed into a paste. Machrei leaves for polishing after firing.",
+    "material_origin": "Stone from the hillside above the village, clay from a nearby bank, leaves from the forest edge.",
+    "first_contact": "Grinding stone as a boy. My palms blistered before they hardened.",
+    "material_special": "There is no wheel and no glaze. The stone and clay alone give the black — it stays black because of the material, not paint.",
+    "material_feels_wrong": "If the paste is too wet it slumps and cracks while drying; too dry and it crumbles at the rim.",
+    "correction_action": "Wet paste I leave under cloth overnight; dry paste I knead with a little water until it holds a pinched edge.",
+    "material_change_gain": "Electric grinders save days of work, and we can take larger orders.",
+    "material_change_loss": "Machine-ground paste is finer but less forgiving; the old hand-ground paste had a grit that held shape.",
+    "sensory_scene": "At a feast the cooking pot sits on the fire for hours. The smell of the food mixing with the smoke on the black surface is what people remember.",
+    "remembered_community_phrase": "An elder once said: \"Food tastes like home only from this pot.\"",
+    "special_vs_everyday": "Cooking pots for the household are thick and plain; pieces for visitors and shops are thinner and polished harder.",
+    "special_object_rule": "Pots made for a family feast are not sold afterwards, even if a visitor asks.",
+    "not_for_sale_example": "My grandfather's cooking pot, still used at the new year.",
+    "why_protected": "\"That pot has fed us.\" It belongs to the family's table.",
+    "safer_alternative": "Show the process, the grinding and the firing, freely. Photograph shop pieces, not the family pots.",
+    "recognition_by_others": "A chef in Bengaluru ordered a set after tasting food cooked in one, and wrote to say the pots changed her menu.",
+    "loss_if_stopped": "The knowledge of reading stone and fire would go with my father's generation. Copies in other clay would look right and cook wrong.",
+    "key_stakeholder_of_loss": "The families in the village who make pots, and the people who still cook in them.",
+    "change_in_lifetime": "From making only for the village to selling to tourists and city shops. Kettles and serving dishes appeared because buyers asked for them.",
+    "artisan_initiated_change": "I started making kettles with cane handles after a visitor said she could not use a pot on a modern stove.",
+    "desired_keep": "Hand-building without a wheel, and the leaf polish after firing.",
+    "desired_let_go": "Making only traditional shapes. New shapes are fine if the stone and fire stay the same.",
+    "shareable_content": "The whole process, my views on machine grinding, the chef story, and photographs of shop pieces.",
+    "private_content": "The family pots, and where exactly the best stone is dug.",
+    "desired_change": "Buyers who understand why a pot takes weeks and why the price reflects the hill, not just my time.",
+    "desired_continuity": "Stone from our hill. \"If it is not this stone, it is not Longpi.\"",
+    "learning_story": "I once pulled a pot from the fire too early because visitors were waiting. It looked fine. A week later it cracked on the stove. I learned that the fire decides when, not the customer.",
+    "emotional_story": "The first pot I sold with my own name on the tag went to a woman from Delhi. She sent a photo of her daughter eating from it. I kept that photo on my phone for two years.",
+    "clarification_story": "A visitor asked if the black was painted on. I scraped the base of a broken piece to show the black runs all the way through. She laughed and bought two.",
+    "outsider_misunderstanding": "That the pots are decorative. They are for cooking — that is their purpose and the reason they are made this way."
+  }
+};
+SAMPLES.forEach(s => {
+  const add = FILL[s.id] || {};
+  Object.keys(add).forEach(k => { if (!(s.record[k] || '').trim()) s.record[k] = add[k]; });
+});
+
 export const FIELD_INDEX = (() => {
   const m = {};
   SCHEMA.forEach(g => g.fields.forEach(f => { m[f.key] = { code: g.code, label: f.label, layer: g.layer, deck: g.deck }; }));
@@ -301,3 +415,95 @@ export const HUB = [
   { code: 'SS2', token: 'S2', label: 'Stayed',    color: '#C06A5F' },
   { code: 'SS3', token: 'S3', label: 'Understand', color: '#C06A5F' }
 ];
+
+// Name, craft and place for each sample in every UI language — names transliterated, never translated.
+export const SAMPLE_NAMES = {
+  "p-bandhani": {
+    "en": {
+      "name": "Rehmatbai Khatri",
+      "craft": "Bandhani",
+      "region": "Bhuj taluka, Kutch"
+    },
+    "hi": {
+      "name": "रहमतबाई खत्री",
+      "craft": "बांधणी",
+      "region": "भुज तालुका, कच्छ"
+    },
+    "gu": {
+      "name": "રહેમતબાઈ ખત્રી",
+      "craft": "બાંધણી",
+      "region": "ભુજ તાલુકો, કચ્છ"
+    },
+    "mr": {
+      "name": "रहमतबाई खत्री",
+      "craft": "बांधणी",
+      "region": "भुज तालुका, कच्छ"
+    }
+  },
+  "p-dhokra": {
+    "en": {
+      "name": "Sukhram Vishwakarma",
+      "craft": "Dhokra casting",
+      "region": "Kondagaon, Bastar, Chhattisgarh"
+    },
+    "hi": {
+      "name": "सुखराम विश्वकर्मा",
+      "craft": "ढोकरा ढलाई",
+      "region": "कोंडागांव, बस्तर, छत्तीसगढ़"
+    },
+    "gu": {
+      "name": "સુખરામ વિશ્વકર્મા",
+      "craft": "ઢોકરા ઢાળકામ",
+      "region": "કોંડાગાંવ, બસ્તર, છત્તીસગઢ"
+    },
+    "mr": {
+      "name": "सुखराम विश्वकर्मा",
+      "craft": "ढोकरा ओतकाम",
+      "region": "कोंडागाव, बस्तर, छत्तीसगड"
+    }
+  },
+  "p-paithani": {
+    "en": {
+      "name": "Sunanda Bhalerao",
+      "craft": "Paithani weaving",
+      "region": "Yeola, Nashik"
+    },
+    "hi": {
+      "name": "सुनंदा भालेराव",
+      "craft": "पैठणी बुनाई",
+      "region": "येवला, नासिक"
+    },
+    "gu": {
+      "name": "સુનંદા ભાલેરાવ",
+      "craft": "પૈઠણી વણાટ",
+      "region": "યેવલા, નાશિક"
+    },
+    "mr": {
+      "name": "सुनंदा भालेराव",
+      "craft": "पैठणी विणकाम",
+      "region": "येवला, नाशिक"
+    }
+  },
+  "p-longpi": {
+    "en": {
+      "name": "Ngalengnam Shaiza",
+      "craft": "Longpi ham (black stone pottery)",
+      "region": "Longpi Kajui, Ukhrul, Manipur"
+    },
+    "hi": {
+      "name": "न्गालेंगनाम शाइज़ा",
+      "craft": "लोंगपी हाम (काले पत्थर के बर्तन)",
+      "region": "लोंगपी काजुई, उखरुल, मणिपुर"
+    },
+    "gu": {
+      "name": "ન્ગાલેંગનામ શાઇઝા",
+      "craft": "લોંગપી હામ (કાળા પથ્થરનાં વાસણ)",
+      "region": "લોંગપી કાજુઈ, ઉખરુલ, મણિપુર"
+    },
+    "mr": {
+      "name": "न्गालेंगनाम शाइझा",
+      "craft": "लोंगपी हाम (काळ्या दगडाची भांडी)",
+      "region": "लोंगपी काजुई, उखरुल, मणिपूर"
+    }
+  }
+};
