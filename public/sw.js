@@ -4,7 +4,7 @@
 // opens without internet. The facilitator platform at / and /org is online-only and is never
 // intercepted, so it can never be replaced by a cached artisan page. Model calls and every
 // other /api request always go to the network.
-const VERSION = 'karigar-v4';
+const VERSION = 'karigar-v5';
 // /k/shell is the artisan page with no valid token: the plain app shell, used offline
 const SHELL_PAGE = '/k/shell';
 const SHELL = [
@@ -50,13 +50,23 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Icons never change under the same name: cache first.
+  if (url.pathname.startsWith('/icons/')) {
+    event.respondWith(caches.match(req).then(hit => hit || fetch(req)));
+    return;
+  }
+
+  // The app itself (runtime, design, data, translations): network first, so a deploy reaches
+  // the phone the next time it is online. The cached copy is only the offline fallback. It is
+  // kept under the bare path, whatever build id the URL carries, so the cache does not grow.
+  const key = url.origin + url.pathname;
   event.respondWith(
-    caches.match(req).then(hit => hit || fetch(req).then(res => {
+    fetch(req).then(res => {
       if (res.ok && res.type === 'basic') {
         const copy = res.clone();
-        caches.open(VERSION).then(c => c.put(req, copy));
+        caches.open(VERSION).then(c => c.put(key, copy));
       }
       return res;
-    }))
+    }).catch(() => caches.match(key).then(hit => hit || caches.match(req, { ignoreSearch: true })))
   );
 });
