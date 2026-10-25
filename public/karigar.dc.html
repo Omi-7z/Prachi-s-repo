@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
@@ -27,8 +28,31 @@
   .k-dot:hover { transform: translate(-50%,-50%) scale(1.22); }
   .k-press { transition: transform .12s ease, box-shadow .15s ease, background .15s ease; }
   .k-press:active { transform: scale(.97); }
+  @media (max-width: 760px) {
+    .k-hero { grid-template-columns: minmax(0,1fr) !important; }
+    .k-hero-board { order: -1; max-width: min(440px, 70vw) !important; }
+  }
   @keyframes k-pulse { 0%,100% { opacity:.3 } 50% { opacity:1 } }
+  @media (max-width: 760px) {
+    .k-hero { grid-template-columns: minmax(0,1fr) !important; }
+    .k-hero-board { order: -1; max-width: min(440px, 70vw) !important; }
+  }
+  @keyframes k-card-in { 0% { opacity:0; transform: translateY(28px) scale(.82) rotate(-4deg) } 55% { opacity:1; transform: translateY(-6px) scale(1.025) rotate(.8deg) } 78% { transform: translateY(2px) scale(.995) rotate(-.2deg) } 100% { opacity:1; transform:none } }
+  @keyframes k-card-rise { 0% { transform: translateY(100%) } 70% { transform: translateY(-2%) } 100% { transform:none } }
+  @keyframes k-fade-in { from { opacity:0 } to { opacity:1 } }
+  .k-card-pop { animation: k-card-in .52s cubic-bezier(.2,.8,.25,1) both; transform-origin: 50% 70%; }
+  .k-card-up { animation: k-card-rise .42s cubic-bezier(.2,.8,.25,1) both; }
+  .k-fade { animation: k-fade-in .25s ease both; }
+  .k-phone[data-size="large"] .k-scroll { zoom: 1.14; }
+  @media (max-width: 700px) { .k-apop { position: fixed !important; } }
+  @media (prefers-reduced-motion: reduce) { .k-card-pop, .k-card-up, .k-fade { animation: none !important; } }
+  .k-chiprow { scrollbar-width: none; }
+  .k-chiprow::-webkit-scrollbar { display: none; }
   @keyframes k-rise { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform:none } }
+  @media (max-width: 760px) {
+    .k-hero { grid-template-columns: minmax(0,1fr) !important; }
+    .k-hero-board { order: -1; max-width: min(440px, 70vw) !important; }
+  }
   @keyframes k-sheet { from { transform: translateY(100%) } to { transform: none } }
   .k-rise { animation: k-rise .3s cubic-bezier(.22,1,.36,1) both; }
   @media (max-width: 880px) {
@@ -40,8 +64,6 @@
     .k-editor { position: static !important; }
     .k-sheet { position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important; z-index: 60; max-height: 78vh; overflow: auto; border-radius: 24px 24px 0 0 !important; box-shadow: 0 -12px 40px rgba(36,31,46,.18) !important; animation: k-sheet .28s cubic-bezier(.22,1,.36,1) both; }
     .k-hidemob { display: none !important; }
-    /* on phones the card sheet covers the board, so it only appears once a card is picked */
-    .k-sheet-idle { display: none !important; }
   }
   @media (max-width: 700px) {
     .k-phone { height: auto !important; max-height: none !important; max-width: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; min-height: calc(100vh - 56px) !important; }
@@ -52,6 +74,7 @@
 
 <div style="min-height:100vh;display:flex;flex-direction:column;background:#FBF7F0;color:#241F2E;font-family:{{ bodyFont }};font-size:15px">
 
+  <sc-if value="{{ showHeader }}" hint-placeholder-val="{{ true }}">
   <header style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(251,247,240,.92);backdrop-filter:blur(10px);border-bottom:1px solid #EBE3D6;position:sticky;top:0;z-index:50">
     <div style="display:flex;align-items:center;gap:10px;min-width:0">
       <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink:0;display:block">
@@ -63,13 +86,11 @@
       <span style="font-family:{{ displayFont }};font-weight:600;font-size:19px;letter-spacing:-.01em">Karigar</span>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <sc-if value="{{ showSides }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex;background:#F2EDE4;border-radius:999px;padding:3px">
         <sc-for list="{{ sides }}" as="x" hint-placeholder-count="2">
           <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
         </sc-for>
       </div>
-      </sc-if>
       <sc-if value="{{ isOrg }}" hint-placeholder-val="{{ true }}">
         <select class="k-field" data-role="uilang" value="{{ uiLang }}" onChange="{{ setUiLang }}" style="width:auto;padding:8px 10px;font-size:13.5px;border-radius:999px;min-height:40px">
           <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7">
@@ -82,6 +103,7 @@
       </sc-if>
     </div>
   </header>
+  </sc-if>
 
   <sc-if value="{{ isOrg }}" hint-placeholder-val="{{ true }}">
     <div class="k-shell" style="flex:1;display:grid;grid-template-columns:236px minmax(0,1fr)">
@@ -121,12 +143,52 @@
 
         <sc-if value="{{ vOverview }}" hint-placeholder-val="{{ true }}">
           <section class="k-rise">
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap">
+            <div class="k-hero" style="background:#241F2E;border-radius:30px;padding:clamp(22px,3.4vw,44px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(18px,3vw,48px);align-items:center;overflow:hidden;position:relative">
+              <div style="display:flex;flex-direction:column;gap:14px;min-width:0;position:relative;z-index:1">
+                <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">{{ t.heroKicker }}</div>
+                <h1 style="margin:0;font-family:{{ displayFont }};font-weight:600;font-size:clamp(28px,3.6vw,42px);letter-spacing:-.02em;line-height:1.1;color:#FBF7F0;text-wrap:balance">{{ t.heroTitle }}</h1>
+                <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.65;color:#CFC8DA;text-wrap:pretty">{{ t.heroSub }}</p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+                  <button type="button" onClick="{{ goNew }}" class="k-press" style="background:#F0B23C;color:#241F2E;border:0;border-radius:999px;padding:15px 26px;font-size:16px;font-weight:700;cursor:pointer;min-height:54px;box-shadow:0 6px 20px rgba(240,178,60,.3);white-space:nowrap;flex-shrink:0">{{ t.startSession }} →</button>
+                  <sc-if value="{{ hasLatest }}" hint-placeholder-val="{{ true }}">
+                    <button type="button" onClick="{{ openLatest }}" class="k-press" style="background:transparent;color:#FBF7F0;border:1.5px solid rgba(251,247,240,.28);border-radius:999px;padding:14px 22px;font-size:15px;font-weight:600;cursor:pointer;min-height:54px;white-space:nowrap;flex-shrink:0">{{ t.openBoard }}</button>
+                  </sc-if>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:#A9A1B6">
+                  <span>{{ t.heroLegendLow }}</span>
+                  <span style="display:flex;gap:4px">
+                    <span style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.22)"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.55)"></span>
+                    <span style="width:10px;height:10px;border-radius:50%;background:#fff"></span>
+                  </span>
+                  <span>{{ t.heroLegendHigh }}</span>
+                </div>
+              </div>
+
+              <div class="k-hero-board" style="position:relative;width:100%;max-width:min(440px,62vh);aspect-ratio:1;justify-self:center">
+                <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+                  <circle cx="60" cy="60" r="59" fill="#2E2839"></circle>
+                  <sc-for list="{{ heroRings }}" as="g" hint-placeholder-count="6">
+                    <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6"></circle>
+                  </sc-for>
+                  <circle cx="60" cy="60" r="15" fill="#FBF7F0"></circle>
+                </svg>
+                <div style="position:absolute;inset:0;pointer-events:none">{{ heroRingLabels }}</div>
+                <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">
+                  <div style="font-family:{{ displayFont }};font-size:clamp(22px,3vw,32px);font-weight:700;line-height:1;color:#241F2E;font-variant-numeric:tabular-nums">{{ heroCount }}</div>
+                  <div style="font-size:10.5px;color:#6F6880;margin-top:2px">{{ t.heroSessions }}</div>
+                </div>
+                <sc-for list="{{ heroDots }}" as="d" hint-placeholder-count="40">
+                  <span title="{{ d.title }}" style="{{ d.style }}"></span>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-top:34px">
               <div>
-                <h1 style="margin:0 0 5px;font-family:{{ displayFont }};font-weight:600;font-size:30px;letter-spacing:-.015em;line-height:1.15">{{ t.overviewTitle }}</h1>
+                <h2 style="margin:0 0 5px;font-family:{{ displayFont }};font-weight:600;font-size:24px;letter-spacing:-.015em;line-height:1.2">{{ t.overviewTitle }}</h2>
                 <p style="margin:0;max-width:56ch;font-size:14.5px;line-height:1.6;color:#6F6880">{{ t.overviewSub }}</p>
               </div>
-              <button type="button" onClick="{{ goNew }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:12px 20px;font-size:14.5px;font-weight:600;cursor:pointer;min-height:46px;box-shadow:0 4px 14px rgba(107,63,160,.24)">+ {{ t.newProfile }}</button>
             </div>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin:26px 0 30px">
@@ -230,77 +292,84 @@
             <sc-if value="{{ tabBoard }}" hint-placeholder-val="{{ true }}">
               <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:26px;align-items:start">
                 <div>
-                  <div style="position:relative;width:100%;max-width:600px;aspect-ratio:1;margin:0 auto">
-                    <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
-                      <sc-for list="{{ ringArcs }}" as="g" hint-placeholder-count="6">
-                        <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6" opacity="{{ g.opacity }}"></circle>
-                      </sc-for>
-                      <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
-                      <circle cx="60" cy="60" r="17.4" fill="none" stroke="#EBE3D6" stroke-width="0.7"></circle>
-                      <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
-                      <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ progressDash }}" transform="rotate(-90 60 60)"></circle>
-                    </svg>
-
-                    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:24%">
-                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:clamp(22px,4.4vw,34px);line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ filledCount }}</div>
-                      <div style="font-size:clamp(9px,1.5vw,11.5px);color:#8C8499;margin-top:3px">{{ t.boardOf }} {{ totalCount }}</div>
-                    </div>
-
-                    <sc-for list="{{ ringLabels }}" as="l" hint-placeholder-count="6">
-                      <div style="{{ l.style }}">{{ l.label }}</div>
-                    </sc-for>
-
-                    <sc-for list="{{ boardDots }}" as="d" hint-placeholder-count="30">
-                      <button type="button" onClick="{{ d.pick }}" class="k-dot" title="{{ d.title }}" style="{{ d.style }}"></button>
-                    </sc-for>
-                  </div>
-
-                  <div style="display:flex;flex-direction:column;gap:12px;margin-top:22px">
-                    <sc-for list="{{ hubGroups }}" as="h" hint-placeholder-count="2">
-                      <div>
-                        <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8C8499;margin-bottom:8px">{{ h.label }}</div>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap">
-                          <sc-for list="{{ h.cards }}" as="c" hint-placeholder-count="4">
-                            <button type="button" onClick="{{ c.pick }}" class="k-press" style="{{ c.style }}">
-                              <span style="font-weight:700;font-size:11px;opacity:.7">{{ c.token }}</span>
-                              <span>{{ c.label }}</span>
-                            </button>
-                          </sc-for>
-                        </div>
-                      </div>
+                  <div style="position:relative;width:100%;max-width:620px;aspect-ratio:1;margin:0 auto">
+              <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+                <sc-for list="{{ ringArcs }}" as="g" hint-placeholder-count="6">
+                  <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6" opacity="{{ g.opacity }}"></circle>
+                </sc-for>
+                <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+                <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+                <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ progressDash }}" transform="rotate(-90 60 60)"></circle>
+              </svg>
+              <div style="position:absolute;inset:0;pointer-events:none">{{ ringLabels }}</div>
+              <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:24%;pointer-events:none">
+                <div style="font-family:{{ displayFont }};font-weight:600;font-size:clamp(22px,4.4vw,34px);line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ filledCount }}</div>
+                <div style="font-size:clamp(9px,1.5vw,11px);color:#8C8499;margin-top:3px;font-family:{{ uiFont }}">{{ t.boardOf }} {{ totalCount }}</div>
+              </div>
+              <sc-for list="{{ boardDots }}" as="d" hint-placeholder-count="30">
+                <button type="button" onClick="{{ d.pick }}" class="k-dot" title="{{ d.title }}" aria-label="{{ d.title }}" style="{{ d.style }}"></button>
+              </sc-for>
+            </div>
+                  <p style="margin:12px 0 0;text-align:center;font-size:12.5px;color:#8C8499">{{ t.tapDot }}</p>
+                  <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:16px">
+                    <sc-for list="{{ ringLegend }}" as="l" hint-placeholder-count="6">
+                      <button type="button" onClick="{{ l.pick }}" class="k-press" style="{{ l.style }}">
+                        <span style="width:9px;height:9px;border-radius:50%;background:{{ l.color }};flex-shrink:0"></span>
+                        <span>{{ l.label }}</span>
+                        <span style="font-size:11px;opacity:.6;font-variant-numeric:tabular-nums">{{ l.count }}</span>
+                      </button>
                     </sc-for>
                   </div>
                 </div>
 
-                <div class="k-editor k-sheet {{ sheetState }}" style="position:sticky;top:76px;background:#fff;border-radius:22px;padding:20px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 10px 30px rgba(36,31,46,.07)">
-                  <sc-if value="{{ hasSelected }}" hint-placeholder-val="{{ true }}">
-                    <div>
-                      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
-                        <span style="{{ sel.chipStyle }}">{{ sel.ringLabel }}</span>
-                        <span style="font-size:11.5px;color:#A79FB4;font-variant-numeric:tabular-nums">{{ sel.code }}</span>
-                        <button type="button" onClick="{{ clearSelected }}" class="k-press" style="margin-left:auto;background:#F2EDE4;border:0;border-radius:999px;width:34px;height:34px;font-size:16px;cursor:pointer;color:#6F6880">×</button>
-                      </div>
-                      <h3 style="margin:0 0 4px;font-family:{{ displayFont }};font-weight:600;font-size:19px;line-height:1.25">{{ sel.label }}</h3>
-                      <p style="margin:0 0 14px;font-size:12.5px;line-height:1.55;color:#8C8499">{{ sel.ask }}</p>
-                      <textarea class="k-field" rows="9" placeholder="{{ sel.hint }}" value="{{ sel.value }}" onChange="{{ sel.onChange }}" style="resize:vertical;min-height:170px;font-family:{{ recordFont }}"></textarea>
-                      <sc-if value="{{ sel.hasQuote }}" hint-collapse-val="{{ false }}" hint-placeholder-val="{{ false }}">
-                        <div style="margin-top:11px;background:#FBF7F0;border-radius:12px;padding:10px 12px">
-                          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#A79FB4;margin-bottom:3px">{{ t.sourceLine }}</div>
-                          <div style="font-size:12.5px;line-height:1.5;color:#6F6880;font-style:italic">{{ sel.quote }}</div>
-                        </div>
+                <div class="k-editor" style="position:sticky;top:76px;display:flex;flex-direction:column;gap:14px">
+                  <div style="background:#fff;border-radius:22px;padding:18px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px">
+                      <div style="font-weight:600;font-size:15px">{{ t.progressTitle }}</div>
+                      <sc-if value="{{ sessionComplete }}" hint-placeholder-val="{{ false }}">
+                        <span style="background:#E6F6F2;color:#1F5F54;border-radius:999px;padding:4px 10px;font-size:11.5px;font-weight:700">{{ t.sessionDone }}</span>
                       </sc-if>
-                      <div style="display:flex;gap:8px;margin-top:14px">
-                        <button type="button" onClick="{{ prevCard }}" class="k-press" style="flex:1;background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px">←</button>
-                        <button type="button" onClick="{{ nextCard }}" class="k-press" style="flex:3;background:#241F2E;color:#fff;border:0;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px">{{ t.next }} →</button>
-                      </div>
                     </div>
-                  </sc-if>
-                  <sc-if value="{{ noSelected }}" hint-placeholder-val="{{ false }}">
-                    <div style="text-align:center;padding:26px 8px">
-                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:18px;margin-bottom:6px">{{ t.boardPick }}</div>
-                      <p style="margin:0;font-size:13px;line-height:1.55;color:#8C8499">{{ t.boardPickSub }}</p>
+                    <div style="display:flex;flex-direction:column;gap:10px">
+                      <sc-for list="{{ deckProgress }}" as="p" hint-placeholder-count="3">
+                        <div>
+                          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>{{ p.label }}</span><span style="font-variant-numeric:tabular-nums;color:#6F6880">{{ p.count }}</span></div>
+                          <div style="height:6px;border-radius:6px;background:#F2EDE4;overflow:hidden"><div style="{{ p.bar }}"></div></div>
+                        </div>
+                      </sc-for>
                     </div>
-                  </sc-if>
+                  </div>
+
+                  <div style="background:#fff;border-radius:22px;padding:18px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                    <div style="font-weight:600;font-size:15px">{{ t.connectTitle }}</div>
+                    <p style="margin:4px 0 14px;font-size:12.5px;line-height:1.55;color:#8C8499">{{ t.connectSub }}</p>
+                    <div style="display:flex;flex-direction:column;gap:9px">
+                      <sc-for list="{{ connectRows }}" as="c" hint-placeholder-count="7">
+                        <div style="display:flex;align-items:center;gap:9px">
+                          <button type="button" onClick="{{ c.open }}" class="k-press" title="{{ t.openCard }}" style="{{ c.tokenStyle }}">{{ c.token }}</button>
+                          <div style="flex:1;min-width:0">
+                            <div style="font-size:13px;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.label }}</div>
+                            <div style="font-size:11px;color:#A79FB4;font-variant-numeric:tabular-nums">{{ c.count }}</div>
+                          </div>
+                          <select class="k-field" value="{{ c.value }}" onChange="{{ c.onChange }}" style="width:auto;max-width:140px;min-height:40px;padding:7px 9px;font-size:12.5px;border-radius:12px">
+                            <sc-for list="{{ ringOptions }}" as="o" hint-placeholder-count="7"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                          </select>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+
+                  <div style="background:#fff;border-radius:22px;padding:18px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
+                    <div style="font-weight:600;font-size:15px">{{ t.addQTitle }}</div>
+                    <p style="margin:4px 0 12px;font-size:12.5px;line-height:1.55;color:#8C8499">{{ t.addQSub }}</p>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                      <select class="k-field" value="{{ newQRing }}" onChange="{{ setNewQRing }}" aria-label="{{ t.addQRing }}" style="min-height:44px;font-size:14px">
+                        <sc-for list="{{ ringOnlyOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                      </select>
+                      <input class="k-field" placeholder="{{ t.addQPh }}" value="{{ newQText }}" onChange="{{ setNewQText }}" onKeyDown="{{ newQKey }}" aria-label="{{ t.addQText }}" style="min-height:44px;font-size:14px">
+                      <button type="button" onClick="{{ addQuestion }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;min-height:44px">+ {{ t.addQBtn }}</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </sc-if>
@@ -424,6 +493,8 @@
               </div>
             </sc-if>
 
+
+
             <sc-if value="{{ tabHandover }}" hint-placeholder-val="{{ false }}">
               <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:26px;align-items:start;max-width:900px">
                 <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 24px rgba(36,31,46,.04)">
@@ -443,6 +514,12 @@
                       <div style="width:148px;height:148px;border-radius:14px;background:#fff;display:grid;place-items:center;font-size:12px;color:#A79FB4;flex-shrink:0">···</div>
                     </sc-if>
                   </div>
+                  <sc-if value="{{ isPreviewLink }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:14px;border-radius:14px;padding:11px 13px;font-size:13px;line-height:1.55;background:#FFF6E3;color:#8A5D05">{{ previewNote }}</div>
+                  </sc-if>
+                  <sc-if value="{{ isHostedLink }}" hint-placeholder-val="{{ false }}">
+                    <div style="{{ pubStyle }}">{{ pubText }}</div>
+                  </sc-if>
                   <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:16px">
                     <button type="button" onClick="{{ copyLink }}" class="k-press" style="background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:46px">{{ copyLabel }}</button>
                     <button type="button" onClick="{{ openAsArtisan }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:46px">{{ t.openApp }} →</button>
@@ -560,105 +637,13 @@
             <h1 style="margin:0 0 6px;font-family:{{ displayFont }};font-weight:600;font-size:29px;letter-spacing:-.015em">{{ t.newTitle }}</h1>
             <p style="margin:0 0 22px;max-width:62ch;font-size:14.5px;line-height:1.65;color:#6F6880">{{ t.newSub }}</p>
 
-            <div style="display:flex;gap:6px;background:#F2EDE4;border-radius:999px;padding:4px;margin-bottom:18px;flex-wrap:wrap;width:fit-content;max-width:100%">
-              <sc-for list="{{ intakeTabs }}" as="x" hint-placeholder-count="3">
-                <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
-              </sc-for>
-            </div>
-
-            <sc-if value="{{ intakeManual }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;background:#fff;border-radius:18px;padding:12px 16px;margin-bottom:18px;box-shadow:0 1px 3px rgba(36,31,46,.05)">
-                <p style="margin:0;flex:1 1 260px;font-size:13.5px;line-height:1.55;color:#6F6880">{{ t.manualHint }}</p>
-                <label style="display:flex;align-items:center;gap:8px">
-                  <span style="font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#A79FB4">{{ t.sessionLang }}</span>
-                  <select class="k-field" value="{{ newLang }}" onChange="{{ setNewLang }}" style="width:auto;font-size:14px;padding:8px 10px;border-radius:999px;min-height:40px">
-                    <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7"><option value="{{ l.code }}">{{ l.label }}</option></sc-for>
-                  </select>
-                </label>
-                <sc-if value="{{ manualStarted }}" hint-placeholder-val="{{ false }}">
-                  <button type="button" onClick="{{ openManual }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:42px">{{ t.openProfile }} →</button>
-                </sc-if>
-              </div>
-              <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:26px;align-items:start">
-                <div>
-                  <div style="position:relative;width:100%;max-width:600px;aspect-ratio:1;margin:0 auto">
-                    <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
-                      <sc-for list="{{ ringArcs }}" as="g" hint-placeholder-count="6">
-                        <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6" opacity="{{ g.opacity }}"></circle>
-                      </sc-for>
-                      <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
-                      <circle cx="60" cy="60" r="17.4" fill="none" stroke="#EBE3D6" stroke-width="0.7"></circle>
-                      <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
-                      <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ progressDash }}" transform="rotate(-90 60 60)"></circle>
-                    </svg>
-
-                    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:24%">
-                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:clamp(22px,4.4vw,34px);line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ filledCount }}</div>
-                      <div style="font-size:clamp(9px,1.5vw,11.5px);color:#8C8499;margin-top:3px">{{ t.boardOf }} {{ totalCount }}</div>
-                    </div>
-
-                    <sc-for list="{{ ringLabels }}" as="l" hint-placeholder-count="6">
-                      <div style="{{ l.style }}">{{ l.label }}</div>
-                    </sc-for>
-
-                    <sc-for list="{{ boardDots }}" as="d" hint-placeholder-count="30">
-                      <button type="button" onClick="{{ d.pick }}" class="k-dot" title="{{ d.title }}" style="{{ d.style }}"></button>
-                    </sc-for>
-                  </div>
-
-                  <div style="display:flex;flex-direction:column;gap:12px;margin-top:22px">
-                    <sc-for list="{{ hubGroups }}" as="h" hint-placeholder-count="2">
-                      <div>
-                        <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8C8499;margin-bottom:8px">{{ h.label }}</div>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap">
-                          <sc-for list="{{ h.cards }}" as="c" hint-placeholder-count="4">
-                            <button type="button" onClick="{{ c.pick }}" class="k-press" style="{{ c.style }}">
-                              <span style="font-weight:700;font-size:11px;opacity:.7">{{ c.token }}</span>
-                              <span>{{ c.label }}</span>
-                            </button>
-                          </sc-for>
-                        </div>
-                      </div>
-                    </sc-for>
-                  </div>
-                </div>
-
-                <div class="k-editor k-sheet {{ sheetState }}" style="position:sticky;top:76px;background:#fff;border-radius:22px;padding:20px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 10px 30px rgba(36,31,46,.07)">
-                  <sc-if value="{{ hasSelected }}" hint-placeholder-val="{{ true }}">
-                    <div>
-                      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
-                        <span style="{{ sel.chipStyle }}">{{ sel.ringLabel }}</span>
-                        <span style="font-size:11.5px;color:#A79FB4;font-variant-numeric:tabular-nums">{{ sel.code }}</span>
-                        <button type="button" onClick="{{ clearSelected }}" class="k-press" style="margin-left:auto;background:#F2EDE4;border:0;border-radius:999px;width:34px;height:34px;font-size:16px;cursor:pointer;color:#6F6880">×</button>
-                      </div>
-                      <h3 style="margin:0 0 4px;font-family:{{ displayFont }};font-weight:600;font-size:19px;line-height:1.25">{{ sel.label }}</h3>
-                      <p style="margin:0 0 14px;font-size:12.5px;line-height:1.55;color:#8C8499">{{ sel.ask }}</p>
-                      <textarea class="k-field" rows="9" placeholder="{{ sel.hint }}" value="{{ sel.value }}" onChange="{{ sel.onChange }}" style="resize:vertical;min-height:170px;font-family:{{ recordFont }}"></textarea>
-                      <sc-if value="{{ sel.hasQuote }}" hint-collapse-val="{{ false }}" hint-placeholder-val="{{ false }}">
-                        <div style="margin-top:11px;background:#FBF7F0;border-radius:12px;padding:10px 12px">
-                          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#A79FB4;margin-bottom:3px">{{ t.sourceLine }}</div>
-                          <div style="font-size:12.5px;line-height:1.5;color:#6F6880;font-style:italic">{{ sel.quote }}</div>
-                        </div>
-                      </sc-if>
-                      <div style="display:flex;gap:8px;margin-top:14px">
-                        <button type="button" onClick="{{ prevCard }}" class="k-press" style="flex:1;background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px">←</button>
-                        <button type="button" onClick="{{ nextCard }}" class="k-press" style="flex:3;background:#241F2E;color:#fff;border:0;border-radius:999px;padding:11px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px">{{ t.next }} →</button>
-                      </div>
-                    </div>
-                  </sc-if>
-                  <sc-if value="{{ noSelected }}" hint-placeholder-val="{{ false }}">
-                    <div style="text-align:center;padding:26px 8px">
-                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:18px;margin-bottom:6px">{{ t.boardPick }}</div>
-                      <p style="margin:0;font-size:13px;line-height:1.55;color:#8C8499">{{ t.boardPickSub }}</p>
-                    </div>
-                  </sc-if>
-                </div>
-              </div>
-            </sc-if>
-
-            <sc-if value="{{ notManual }}" hint-placeholder-val="{{ true }}">
             <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start">
               <div>
+                <div style="display:flex;gap:6px;background:#F2EDE4;border-radius:999px;padding:4px;margin-bottom:18px;flex-wrap:wrap">
+                  <sc-for list="{{ intakeTabs }}" as="x" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
+                  </sc-for>
+                </div>
 
                 <sc-if value="{{ intakeUpload }}" hint-placeholder-val="{{ true }}">
                   <label style="display:block;background:#fff;border:2px dashed #DDD4C6;border-radius:22px;padding:40px 22px;text-align:center;cursor:pointer">
@@ -673,6 +658,10 @@
 
                 <sc-if value="{{ intakePaste }}" hint-placeholder-val="{{ false }}">
                   <textarea class="k-field" rows="14" placeholder="{{ pasteHint }}" value="{{ transcript }}" onChange="{{ setTranscript }}" style="min-height:300px;resize:vertical;font-size:14px;font-family:{{ recordFont }}"></textarea>
+                </sc-if>
+
+                <sc-if value="{{ intakeManual }}" hint-placeholder-val="{{ false }}">
+                  <button type="button" onClick="{{ newProfile }}" class="k-press" style="background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;min-height:50px">{{ t.emptyProfile }}</button>
                 </sc-if>
 
                 <sc-if value="{{ canExtract }}" hint-placeholder-val="{{ false }}">
@@ -708,7 +697,6 @@
                 </label>
               </div>
             </div>
-            </sc-if>
           </section>
         </sc-if>
 
@@ -725,9 +713,95 @@
     </div>
   </sc-if>
 
+<sc-if value="{{ orgPopOpen }}" hint-placeholder-val="{{ false }}">
+          <div class="" style="position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:18px">
+            <div class="k-fade" onClick="{{ closePop }}" style="position:absolute;inset:0;background:rgba(36,31,46,.44);backdrop-filter:blur(3px)"></div>
+            <div class="k-card-pop" style="position:relative;width:100%;max-width:560px;max-height:calc(100vh - 36px);display:flex;flex-direction:column;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(36,31,46,.35)">
+              <div style="{{ pop.headStyle }}">
+                <div style="{{ pop.ringDecor }}"></div>
+                <div style="{{ pop.ringDecor2 }}"></div>
+                <div style="position:relative;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span style="{{ pop.pillStyle }}">{{ pop.deck }}</span>
+                  <span style="font-size:12px;font-weight:600;color:{{ pop.ink }};opacity:.75;font-variant-numeric:tabular-nums">{{ pop.code }}</span>
+                  <button type="button" onClick="{{ closePop }}" aria-label="{{ t.closeCard }}" class="k-press" style="margin-left:auto;background:rgba(255,255,255,.8);border:0;border-radius:999px;width:40px;height:40px;font-size:18px;cursor:pointer;color:#241F2E">×</button>
+                </div>
+                <h3 style="position:relative;margin:12px 0 4px;font-family:{{ recordDisplay }};font-weight:600;font-size:23px;line-height:1.2;color:#241F2E;text-wrap:balance">{{ pop.title }}</h3>
+                <sc-if value="{{ pop.hasRing }}" hint-placeholder-val="{{ true }}">
+                  <div style="position:relative;font-size:13px;font-weight:600;color:{{ pop.ink }}">{{ pop.ringLabel }}</div>
+                </sc-if>
+                <div style="position:relative;display:flex;align-items:center;gap:10px;margin-top:14px">
+                  <div style="display:flex;gap:5px">
+                    <sc-for list="{{ pop.marks }}" as="m" hint-placeholder-count="3"><span style="{{ m.style }}"></span></sc-for>
+                  </div>
+                  <span style="font-size:12.5px;color:#4A4356;font-family:{{ recordFont }}">{{ pop.answered }}</span>
+                </div>
+              </div>
+              <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:18px 20px 8px;display:flex;flex-direction:column;gap:12px">
+                <p style="margin:0;font-size:14px;line-height:1.6;color:#6F6880;font-style:italic;font-family:{{ recordFont }}">{{ pop.ask }}</p>
+                <sc-for list="{{ pop.fields }}" as="f" hint-placeholder-count="3">
+                  <div class="k-rise" style="{{ f.boxStyle }}">
+                    <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:8px">
+                      <span style="{{ f.qStyle }}">Q{{ f.n }}</span>
+                      <span style="font-weight:600;font-size:15px;line-height:1.4;font-family:{{ recordFont }}">{{ f.label }}</span>
+                    </div>
+                    <textarea class="k-field" rows="3" placeholder="{{ t.noAnswer }}" value="{{ f.value }}" onChange="{{ f.onChange }}" onFocus="{{ f.pick }}" style="resize:vertical;min-height:76px;font-family:{{ recordFont }};background:#fff"></textarea>
+                      <sc-if value="{{ f.hasQuote }}" hint-placeholder-val="{{ false }}">
+                        <div style="margin-top:8px;font-size:12px;line-height:1.5;color:#8C8499;font-style:italic">{{ t.sourceLine }} · {{ f.quote }}</div>
+                      </sc-if>
+                      <sc-if value="{{ f.isOwn }}" hint-placeholder-val="{{ false }}">
+                        <button type="button" onClick="{{ f.remove }}" class="k-press" style="margin-top:8px;background:transparent;border:0;padding:4px 0;font-size:12.5px;font-weight:600;color:#A81C24;cursor:pointer">{{ t.removeQ }}</button>
+                      </sc-if>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ pop.isHub }}" hint-placeholder-val="{{ false }}">
+                  <label style="display:flex;align-items:center;gap:10px;margin-top:4px;padding:12px 14px;background:#F2EDE4;border-radius:14px">
+                    <span style="font-size:13px;font-weight:600;flex-shrink:0">{{ t.placedOn }}</span>
+                    <select class="k-field" value="{{ pop.linkValue }}" onChange="{{ pop.setLink }}" style="min-height:42px;font-size:14px;background:#fff">
+                      <sc-for list="{{ ringOptions }}" as="o" hint-placeholder-count="7"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                    </select>
+                  </label>
+                </sc-if>
+              </div>
+              <div style="display:flex;gap:8px;padding:12px 20px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #EBE3D6;flex-shrink:0">
+                <button type="button" onClick="{{ prevGroup }}" aria-label="{{ t.prevCardL }}" class="k-press" style="width:48px;background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;font-size:16px;font-weight:600;cursor:pointer;min-height:48px">←</button>
+                <button type="button" onClick="{{ nextGroup }}" class="k-press" style="flex:1;background:#241F2E;color:#fff;border:0;border-radius:999px;padding:12px;font-size:15px;font-weight:600;cursor:pointer;min-height:48px;font-family:{{ recordFont }}">{{ t.nextCardL }} →</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
   <sc-if value="{{ isArtisan }}" hint-placeholder-val="{{ false }}">
     <div class="k-stage" style="flex:1;display:flex;justify-content:center;padding:22px 16px 30px">
-      <div class="k-phone" style="width:100%;max-width:412px;background:#FBF7F0;border:1px solid #EBE3D6;border-radius:30px;box-shadow:0 18px 50px rgba(36,31,46,.13);overflow:hidden;display:flex;flex-direction:column;height:min(820px,calc(100vh - 104px));min-height:380px">
+      <div class="k-phone" data-size="{{ textSize }}" style="position:relative;width:100%;max-width:412px;background:#FBF7F0;border:1px solid #EBE3D6;border-radius:30px;box-shadow:0 18px 50px rgba(36,31,46,.13);overflow:hidden;display:flex;flex-direction:column;height:min(820px,calc(100vh - 104px));min-height:380px">
+
+        <sc-if value="{{ translating }}" hint-placeholder-val="{{ false }}">
+          <div style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:10px 16px;background:#F1E9FA;color:#52307C;font-size:13px;font-weight:600;font-family:{{ recordFont }}">
+            <span style="width:8px;height:8px;border-radius:50%;background:#6B3FA0;animation:k-pulse 1.2s ease-in-out infinite;flex-shrink:0"></span>
+            <span>{{ t.translatingNote }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ translateFailed }}" hint-placeholder-val="{{ false }}">
+          <div style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:10px 16px;background:#FBEAE8;color:#7C3A32;font-size:13px;font-family:{{ recordFont }}">
+            <span style="flex:1">{{ t.translateFail }}</span>
+            <button type="button" onClick="{{ retryTranslate }}" class="k-press" style="background:#fff;border:0;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px;color:#7C3A32">{{ t.retry }}</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ aLinkError }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 28px;gap:16px">
+            <svg width="64" height="64" viewBox="0 0 24 24" style="display:block"><circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle><circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle><circle cx="12" cy="12" r="4.6" fill="none" stroke="#A81C24" stroke-width="2.2"></circle><circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle></svg>
+            <sc-if value="{{ linkLoading }}" hint-placeholder-val="{{ true }}">
+              <div style="font-size:16px;font-weight:600;color:#6F6880;animation:k-pulse 1.3s ease-in-out infinite">{{ linkT.linkLoading }}</div>
+            </sc-if>
+            <sc-if value="{{ linkFailed }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:12px;max-width:320px">
+                <h2 style="margin:0;font-family:{{ displayFont }};font-weight:600;font-size:23px;line-height:1.25">{{ linkT.linkTitle }}</h2>
+                <p style="margin:0;font-size:15.5px;line-height:1.6;color:#4A4356">{{ linkMsg }}</p>
+                <button type="button" onClick="{{ retryLink }}" class="k-press" style="margin-top:6px;background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:14px 26px;font-size:16px;font-weight:600;cursor:pointer;min-height:50px">{{ linkT.linkRetry }}</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
 
         <sc-if value="{{ aInstall }}" hint-placeholder-val="{{ false }}">
           <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:26px 22px 28px;display:flex;flex-direction:column">
@@ -772,26 +846,47 @@
         <sc-if value="{{ aHome }}" hint-placeholder-val="{{ true }}">
           <div class="k-scroll" style="flex:1;overflow:auto;min-height:0">
 
-            <div style="background:linear-gradient(170deg,#F1E9FA 0%,#FBF7F0 78%);padding:24px 20px 22px">
-              <div style="display:flex;align-items:center;gap:14px">
-                <div style="width:56px;height:56px;border-radius:20px;background:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:0 2px 8px rgba(36,31,46,.08)">
-                  <span style="font-family:{{ recordDisplay }};font-weight:600;font-size:22px;color:#6B3FA0">{{ initials }}</span>
+            <div style="background:linear-gradient(175deg,#F1E9FA 0%,#FBF7F0 82%);padding:14px 18px 22px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px">
+                <div style="display:flex;align-items:center;gap:9px">
+                  <svg width="30" height="30" viewBox="0 0 24 24" style="display:block;flex-shrink:0">
+                    <circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle>
+                    <circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle>
+                    <circle cx="12" cy="12" r="4.6" fill="none" stroke="#A81C24" stroke-width="2.2"></circle>
+                    <circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle>
+                  </svg>
+                  <span style="font-family:{{ displayFont }};font-weight:600;font-size:20px;letter-spacing:-.01em">{{ brandName }}</span>
                 </div>
-                <div style="min-width:0;flex:1">
-                  <div style="font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#6B3FA0;font-weight:600;font-family:{{ recordFont }}">{{ t.greeting }}</div>
-                  <h2 style="margin:3px 0 1px;font-family:{{ recordDisplay }};font-weight:600;font-size:24px;line-height:1.2">{{ activeName }}</h2>
-                  <p style="margin:0;font-size:13.5px;color:#6F6880;font-family:{{ recordFont }}">{{ activeSub }}</p>
-                </div>
-                <select class="k-field" data-role="applang" value="{{ appLang }}" onChange="{{ setAppLang }}" style="width:auto;padding:8px 9px;font-size:13px;border-radius:999px;min-height:42px;flex-shrink:0;background:rgba(255,255,255,.8);border-color:transparent;font-family:{{ recordFont }}">
-                  <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7">
-                    <option value="{{ l.code }}">{{ l.label }}</option>
-                  </sc-for>
-                </select>
+                <button type="button" onClick="{{ goProfile }}" aria-label="{{ t.profileTitle }}" class="k-press" style="width:44px;height:44px;border-radius:15px;background:#fff;border:0;cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 8px rgba(36,31,46,.08);font-family:{{ recordDisplay }};font-weight:600;font-size:16px;color:#6B3FA0">{{ initials }}</button>
               </div>
 
-              <div style="display:flex;gap:8px;margin-top:18px">
+              <div style="font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#6B3FA0;font-weight:600;font-family:{{ recordFont }}">{{ t.greeting }}</div>
+              <h2 style="margin:3px 0 2px;font-family:{{ recordDisplay }};font-weight:600;font-size:25px;line-height:1.2">{{ activeName }}</h2>
+              <p style="margin:0 0 14px;font-size:13.5px;color:#6F6880;font-family:{{ recordFont }}">{{ activeSub }}</p>
+
+              <div style="position:relative;width:100%;max-width:360px;aspect-ratio:1;margin:0 auto">
+              <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+                <sc-for list="{{ ringArcs }}" as="g" hint-placeholder-count="6">
+                  <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6" opacity="{{ g.opacity }}"></circle>
+                </sc-for>
+                <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+                <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+                <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ progressDash }}" transform="rotate(-90 60 60)"></circle>
+              </svg>
+              <div style="position:absolute;inset:0;pointer-events:none">{{ ringLabels }}</div>
+              <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:24%;pointer-events:none">
+                <div style="font-family:{{ recordDisplay }};font-weight:600;font-size:28px;line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ filledCount }}</div>
+                <div style="font-size:clamp(9px,1.5vw,11px);color:#8C8499;margin-top:3px;font-family:{{ recordFont }}">{{ t.boardOf }} {{ totalCount }}</div>
+              </div>
+              <sc-for list="{{ boardDots }}" as="d" hint-placeholder-count="30">
+                <button type="button" onClick="{{ d.pick }}" class="k-dot" title="{{ d.title }}" aria-label="{{ d.title }}" style="{{ d.style }}"></button>
+              </sc-for>
+            </div>
+              <p style="margin:10px 0 0;text-align:center;font-size:12.5px;color:#8C8499;font-family:{{ recordFont }}">{{ t.tapDot }}</p>
+
+              <div style="display:flex;gap:8px;margin-top:16px">
                 <sc-for list="{{ homeStats }}" as="k" hint-placeholder-count="3">
-                  <div style="flex:1;background:rgba(255,255,255,.75);border-radius:16px;padding:11px 12px;text-align:center">
+                  <div style="flex:1;background:rgba(255,255,255,.8);border-radius:16px;padding:11px 10px;text-align:center">
                     <div style="font-family:{{ recordDisplay }};font-weight:600;font-size:20px;line-height:1;color:#52307C;font-variant-numeric:tabular-nums">{{ k.value }}</div>
                     <div style="font-size:10.5px;line-height:1.3;margin-top:4px;color:#6F6880;font-family:{{ recordFont }}">{{ k.label }}</div>
                   </div>
@@ -800,6 +895,15 @@
             </div>
 
             <div style="padding:20px 20px 26px;display:flex;flex-direction:column;gap:22px">
+              <button type="button" onClick="{{ goPractice }}" class="k-press" style="width:100%;background:#6B3FA0;color:#fff;border:0;border-radius:24px;padding:22px 20px;cursor:pointer;text-align:left;box-shadow:0 8px 26px rgba(107,63,160,.3)">
+                <span style="display:flex;align-items:center;gap:14px">
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font-family:{{ recordDisplay }};font-weight:600;font-size:22px;line-height:1.2">{{ t.ctaTitle }}</span>
+                    <span style="display:block;font-size:14px;line-height:1.5;margin-top:5px;opacity:.86;font-family:{{ recordFont }}">{{ t.ctaSub }}</span>
+                  </span>
+                  <span style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:20px;flex-shrink:0">→</span>
+                </span>
+              </button>
 
               <div style="background:#fff;border-radius:22px;padding:18px;box-shadow:0 1px 3px rgba(36,31,46,.05),0 8px 22px rgba(36,31,46,.05)">
                 <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#A79FB4;margin-bottom:9px;font-family:{{ recordFont }}">{{ t.yourBoard }}</div>
@@ -830,15 +934,7 @@
                 </div>
               </div>
 
-              <button type="button" onClick="{{ goPractice }}" class="k-press" style="width:100%;background:#6B3FA0;color:#fff;border:0;border-radius:24px;padding:22px 20px;cursor:pointer;text-align:left;box-shadow:0 8px 26px rgba(107,63,160,.3)">
-                <span style="display:flex;align-items:center;gap:14px">
-                  <span style="flex:1;min-width:0">
-                    <span style="display:block;font-family:{{ recordDisplay }};font-weight:600;font-size:22px;line-height:1.2">{{ t.ctaTitle }}</span>
-                    <span style="display:block;font-size:14px;line-height:1.5;margin-top:5px;opacity:.86;font-family:{{ recordFont }}">{{ t.ctaSub }}</span>
-                  </span>
-                  <span style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:20px;flex-shrink:0">→</span>
-                </span>
-              </button>
+
 
               <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ false }}">
                 <div>
@@ -890,7 +986,7 @@
           <div class="k-scroll" style="flex:1;overflow:auto;padding:24px 20px 26px">
             <h2 style="margin:0 0 3px;font-family:{{ recordDisplay }};font-weight:600;font-size:24px">{{ t.navMyBoard }}</h2>
             <p style="margin:0 0 18px;font-size:13.5px;line-height:1.6;color:#6F6880;font-family:{{ recordFont }}">{{ t.boardSub }}</p>
-            <div style="position:relative;width:100%;aspect-ratio:1;margin-bottom:20px">
+<div style="position:relative;width:100%;max-width:100%;aspect-ratio:1;margin:0 auto">
               <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
                 <sc-for list="{{ ringArcs }}" as="g" hint-placeholder-count="6">
                   <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6" opacity="{{ g.opacity }}"></circle>
@@ -899,46 +995,214 @@
                 <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
                 <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ progressDash }}" transform="rotate(-90 60 60)"></circle>
               </svg>
-              <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center">
+              <div style="position:absolute;inset:0;pointer-events:none">{{ ringLabels }}</div>
+              <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:24%;pointer-events:none">
                 <div style="font-family:{{ recordDisplay }};font-weight:600;font-size:30px;line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ filledCount }}</div>
-                <div style="font-size:10.5px;color:#8C8499;font-family:{{ recordFont }}">{{ t.boardOf }} {{ totalCount }}</div>
+                <div style="font-size:clamp(9px,1.5vw,11px);color:#8C8499;margin-top:3px;font-family:{{ recordFont }}">{{ t.boardOf }} {{ totalCount }}</div>
               </div>
               <sc-for list="{{ boardDots }}" as="d" hint-placeholder-count="30">
-                <button type="button" onClick="{{ d.pick }}" class="k-dot" style="{{ d.style }}"></button>
+                <button type="button" onClick="{{ d.pick }}" class="k-dot" title="{{ d.title }}" aria-label="{{ d.title }}" style="{{ d.style }}"></button>
               </sc-for>
             </div>
-            <sc-if value="{{ hasSelected }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#fff;border-radius:20px;padding:18px;box-shadow:0 1px 3px rgba(36,31,46,.05)">
-                <span style="{{ sel.chipStyle }}">{{ sel.ringLabel }}</span>
-                <h3 style="margin:10px 0 6px;font-family:{{ recordDisplay }};font-weight:600;font-size:18px;line-height:1.3">{{ sel.label }}</h3>
-                <p style="margin:0;font-size:15.5px;line-height:1.75;font-family:{{ recordFont }};white-space:pre-wrap">{{ sel.readValue }}</p>
+            <p style="margin:10px 0 0;text-align:center;font-size:12.5px;color:#8C8499;font-family:{{ recordFont }}">{{ t.tapDot }}</p>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:16px">
+                    <sc-for list="{{ ringLegend }}" as="l" hint-placeholder-count="6">
+                      <button type="button" onClick="{{ l.pick }}" class="k-press" style="{{ l.style }}">
+                        <span style="width:9px;height:9px;border-radius:50%;background:{{ l.color }};flex-shrink:0"></span>
+                        <span>{{ l.label }}</span>
+                        <span style="font-size:11px;opacity:.6;font-variant-numeric:tabular-nums">{{ l.count }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ aProfile }}" hint-placeholder-val="{{ false }}">
+          <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:22px 20px 26px;display:flex;flex-direction:column;gap:16px">
+            <h2 style="margin:0;font-family:{{ recordDisplay }};font-weight:600;font-size:24px">{{ t.profileTitle }}</h2>
+            <div style="background:#fff;border-radius:22px;padding:18px;display:flex;gap:14px;align-items:center;box-shadow:0 1px 3px rgba(36,31,46,.05)">
+              <div style="width:62px;height:62px;border-radius:21px;background:#F1E9FA;display:grid;place-items:center;flex-shrink:0;font-family:{{ recordDisplay }};font-weight:600;font-size:24px;color:#6B3FA0">{{ initials }}</div>
+              <div style="min-width:0">
+                <div style="font-family:{{ recordDisplay }};font-weight:600;font-size:19px;line-height:1.25">{{ activeName }}</div>
+                <div style="font-size:13.5px;color:#6F6880;margin-top:2px;font-family:{{ recordFont }}">{{ activeSub }}</div>
+                <div style="font-size:12px;color:#A79FB4;margin-top:6px;font-family:{{ recordFont }}">{{ t.managedNote }}</div>
               </div>
-            </sc-if>
-            <sc-if value="{{ noSelected }}" hint-placeholder-val="{{ true }}">
-              <p style="margin:0;font-size:14px;color:#8C8499;text-align:center;font-family:{{ recordFont }}">{{ t.boardPick }}</p>
-            </sc-if>
+            </div>
+
+            <div style="background:#fff;border-radius:22px;padding:6px 16px;box-shadow:0 1px 3px rgba(36,31,46,.05)">
+              <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #F2EDE4">
+                <span style="font-weight:600;font-size:15px;font-family:{{ recordFont }}">{{ t.setLanguage }}</span>
+                <select class="k-field" data-role="applang" value="{{ appLang }}" onChange="{{ setAppLang }}" style="width:auto;min-height:44px;font-size:14px;padding:8px 10px;border-radius:12px">
+                  <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7"><option value="{{ l.code }}">{{ l.label }}</option></sc-for>
+                </select>
+              </label>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #F2EDE4">
+                <span style="font-weight:600;font-size:15px;font-family:{{ recordFont }}">{{ t.setTextSize }}</span>
+                <div style="display:flex;gap:4px;background:#F2EDE4;border-radius:999px;padding:4px">
+                  <sc-for list="{{ sizeTabs }}" as="z" hint-placeholder-count="2">
+                    <button type="button" onClick="{{ z.go }}" class="k-press" style="{{ z.style }}">{{ z.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+              <button type="button" onClick="{{ goInstall }}" class="k-press" style="display:flex;justify-content:space-between;align-items:center;width:100%;background:transparent;border:0;border-bottom:1px solid #F2EDE4;padding:14px 0;min-height:52px;font-size:15px;font-weight:600;cursor:pointer;text-align:left;font-family:{{ recordFont }};color:#241F2E"><span>{{ t.setInstall }}</span><span style="color:#C4BCD1">›</span></button>
+              <button type="button" onClick="{{ clearHistory }}" class="k-press" style="display:flex;justify-content:space-between;align-items:center;width:100%;background:transparent;border:0;padding:14px 0;min-height:52px;font-size:15px;font-weight:600;cursor:pointer;text-align:left;font-family:{{ recordFont }};color:#A81C24"><span>{{ clearLabel }}</span></button>
+            </div>
+
+            <div style="background:#E6F6F2;border-radius:20px;padding:16px">
+              <div style="font-weight:600;font-size:14.5px;color:#1F5F54;font-family:{{ recordFont }}">{{ t.privacyTitle }}</div>
+              <p style="margin:5px 0 0;font-size:13.5px;line-height:1.6;color:#1F5F54;font-family:{{ recordFont }}">{{ t.privacyNote }}</p>
+            </div>
+            <p style="margin:0;text-align:center;font-size:12px;color:#A79FB4;font-family:{{ recordFont }}">{{ t.appVersion }}</p>
           </div>
         </sc-if>
 
         <sc-if value="{{ aChat }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex;flex-direction:column;flex:1;min-height:0;background:#fff">
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #EBE3D6;flex-shrink:0">
-              <button type="button" onClick="{{ backHome }}" class="k-press" style="border:0;background:#F2EDE4;border-radius:999px;width:42px;height:42px;font-size:19px;cursor:pointer;color:#241F2E;flex-shrink:0">←</button>
-              <div style="min-width:0;flex:1">
-                <div style="font-weight:600;font-size:16px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ chatTitle }}</div>
-                <div style="font-size:11.5px;color:#8C8499;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ chatSub }}</div>
-              </div>
-              <button type="button" onClick="{{ endAndCoach }}" disabled="{{ chatBusy }}" class="k-press" style="border:1.5px solid #EBE3D6;background:#fff;border-radius:999px;padding:9px 13px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:42px;flex-shrink:0;font-family:{{ recordFont }}">{{ t.feedbackBtn }}</button>
+          <div style="position:relative;display:flex;flex-direction:column;flex:1;min-height:0;background:#FBF7F0">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-bottom:1px solid #EBE3D6;flex-shrink:0">
+              <button type="button" onClick="{{ backHome }}" aria-label="←" class="k-press" style="border:0;background:#F2EDE4;border-radius:999px;width:42px;height:42px;font-size:19px;cursor:pointer;color:#241F2E;flex-shrink:0">←</button>
+              <sc-if value="{{ inAssist }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:0">
+                  <svg width="30" height="30" viewBox="0 0 24 24" style="display:block;flex-shrink:0"><circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle><circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle><circle cx="12" cy="12" r="4.6" fill="none" stroke="#A81C24" stroke-width="2.2"></circle><circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle></svg>
+                  <div style="min-width:0">
+                    <div style="font-weight:700;font-size:15.5px;line-height:1.2;font-family:{{ recordFont }}">{{ t.guideName }}</div>
+                    <div style="font-size:11.5px;color:#8C8499;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ t.guideSub }}</div>
+                  </div>
+                </div>
+                <button type="button" onClick="{{ newChat }}" class="k-press" style="border:1.5px solid #EBE3D6;background:#fff;border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:40px;flex-shrink:0;font-family:{{ recordFont }};color:#241F2E">+ {{ t.newChat }}</button>
+              </sc-if>
+              <sc-if value="{{ inPractice }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:0">
+                  <span style="{{ personaBadge }}">{{ personaIcon }}</span>
+                  <div style="min-width:0">
+                    <div style="font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#8C8499;font-family:{{ recordFont }}">{{ t.practisingWith }}</div>
+                    <div style="font-weight:700;font-size:15px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ personaName }}</div>
+                  </div>
+                </div>
+                <button type="button" onClick="{{ endPractice }}" disabled="{{ chatBusy }}" class="k-press" style="border:0;background:#241F2E;color:#fff;border-radius:999px;padding:9px 13px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:40px;flex-shrink:0;font-family:{{ recordFont }}">{{ t.endPractice }}</button>
+              </sc-if>
             </div>
 
-            <div class="k-scroll" style="flex:1;overflow:auto;padding:16px 14px;display:flex;flex-direction:column;gap:11px;min-height:0;background:#FBF7F0">
-              <sc-for list="{{ messages }}" as="m" hint-placeholder-count="3">
-                <div class="k-rise" style="{{ m.wrapStyle }}">
-                  <div style="{{ m.bubbleStyle }}">{{ m.text }}</div>
+            <sc-if value="{{ hasGoal }}" hint-placeholder-val="{{ false }}">
+              <div class="k-rise" style="flex-shrink:0;display:flex;align-items:center;gap:9px;padding:8px 14px;background:#E6F6F2;border-bottom:1px solid #CDEBE3;font-family:{{ recordFont }}">
+                <span style="width:7px;height:7px;border-radius:50%;background:#1F5F54;flex-shrink:0"></span>
+                <span style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#1F5F54;flex-shrink:0">{{ t.goalSeems }}</span>
+                <span style="flex:1;min-width:0;font-size:13.5px;font-weight:600;color:#12443C;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ goalText }}</span>
+              </div>
+            </sc-if>
+
+            <div class="k-scroll" data-role="chatlog" style="flex:1;overflow:auto;padding:16px 14px 18px;display:flex;flex-direction:column;gap:11px;min-height:0">
+              <sc-if value="{{ showWelcome }}" hint-placeholder-val="{{ true }}">
+                <div class="k-rise" style="display:flex;flex-direction:column;gap:18px;padding:10px 4px 4px;font-family:{{ recordFont }}">
+                  <div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+                    <svg width="46" height="46" viewBox="0 0 24 24" style="display:block;flex-shrink:0"><circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle><circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle><circle cx="12" cy="12" r="4.6" fill="none" stroke="#A81C24" stroke-width="2.2"></circle><circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle></svg>
+                    <div>
+                      <div style="font-size:14px;font-weight:600;color:#6B3FA0">{{ welcomeHi }}</div>
+                      <h2 style="margin:3px 0 6px;font-family:{{ recordDisplay }};font-weight:600;font-size:26px;line-height:1.2;text-wrap:balance">{{ t.welcomeTitle }}</h2>
+                      <p style="margin:0;font-size:14.5px;line-height:1.6;color:#6F6880;text-wrap:pretty">{{ t.welcomeSub }}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:#A79FB4;margin-bottom:8px">{{ t.startWith }}</div>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                      <sc-for list="{{ starters }}" as="q" hint-placeholder-count="3">
+                        <button type="button" onClick="{{ q.go }}" class="k-press" style="display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1.5px solid #EBE3D6;border-radius:16px;padding:12px 14px;font-size:15px;line-height:1.4;cursor:pointer;min-height:52px;color:#241F2E;font-family:{{ recordFont }}">
+                          <span style="flex:1">{{ q.text }}</span><span style="color:#C4BCD1;font-size:16px">↗</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:#A79FB4;margin-bottom:8px">{{ t.practiseTitle }}</div>
+                    <div class="k-chiprow" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px">
+                      <sc-for list="{{ segments }}" as="p" hint-placeholder-count="5">
+                        <button type="button" onClick="{{ p.practise }}" class="k-press" style="flex-shrink:0;width:112px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;background:#fff;border:0;border-radius:18px;padding:12px;cursor:pointer;text-align:left;box-shadow:0 1px 3px rgba(36,31,46,.06)">
+                          <span style="width:36px;height:36px;border-radius:12px;background:{{ p.tint }};color:{{ p.ink }};display:grid;place-items:center;font-size:17px;font-weight:700">{{ p.icon }}</span>
+                          <span style="font-size:13px;font-weight:600;line-height:1.3;color:#241F2E;font-family:{{ recordFont }}">{{ p.label }}</span>
+                        </button>
+                      </sc-for>
+                      <button type="button" onClick="{{ openSheet }}" class="k-press" style="flex-shrink:0;width:112px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;background:transparent;border:1.5px dashed #DDD4C6;border-radius:18px;padding:12px;cursor:pointer;text-align:left">
+                        <span style="width:36px;height:36px;border-radius:12px;background:#F2EDE4;color:#6F6880;display:grid;place-items:center;font-size:19px">+</span>
+                        <span style="font-size:13px;font-weight:600;line-height:1.3;color:#6F6880;font-family:{{ recordFont }}">{{ t.someoneElse }}</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
+              </sc-if>
+
+              <sc-for list="{{ messages }}" as="m" hint-placeholder-count="0">
+                <sc-if value="{{ m.isText }}" hint-placeholder-val="{{ false }}">
+                  <div class="k-rise" style="{{ m.wrapStyle }}">
+                    <sc-if value="{{ m.showName }}" hint-placeholder-val="{{ false }}">
+                      <div style="{{ m.nameStyle }}">{{ m.name }}</div>
+                    </sc-if>
+                    <div style="{{ m.bubbleStyle }}">{{ m.text }}</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ m.hasOffer }}" hint-placeholder-val="{{ false }}">
+                  <button type="button" onClick="{{ m.takeOffer }}" class="k-press k-card-up" style="{{ m.offerStyle }}">
+                    <span style="{{ m.offerBadge }}">{{ m.offerIcon }}</span>
+                    <span style="flex:1;font-size:14.5px;font-weight:700;line-height:1.35;font-family:{{ recordFont }}">{{ m.offerLabel }}</span>
+                    <span style="font-size:18px">→</span>
+                  </button>
+                </sc-if>
+                <sc-if value="{{ m.isDivider }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;gap:10px;margin:6px 0;font-family:{{ recordFont }}">
+                    <span style="flex:1;height:1px;background:#E2D9CB"></span>
+                    <span style="font-size:11.5px;font-weight:700;color:#8C8499;text-align:center">{{ m.text }}</span>
+                    <span style="flex:1;height:1px;background:#E2D9CB"></span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ m.isFeedback }}" hint-placeholder-val="{{ false }}">
+                  <div class="k-card-up" style="align-self:stretch;background:#F1E9FA;border-radius:20px;padding:16px;font-family:{{ recordFont }}">
+                    <div style="font-weight:700;font-size:14.5px;color:#52307C;margin-bottom:11px">{{ m.text }}</div>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                      <sc-for list="{{ m.items }}" as="c" hint-placeholder-count="3">
+                        <div>
+                          <div style="font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#6B3FA0;font-weight:700">{{ c.kind }}</div>
+                          <div style="font-size:15px;line-height:1.6;margin-top:2px">{{ c.text }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <button type="button" onClick="{{ m.again }}" class="k-press" style="margin-top:14px;background:#fff;color:#52307C;border:0;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:700;cursor:pointer;min-height:44px;font-family:{{ recordFont }}">↻ {{ t.practiseAgain }}</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ m.isHint }}" hint-placeholder-val="{{ false }}">
+                  <div class="k-card-up" style="align-self:stretch;background:#FFF6E3;border:1.5px solid #F4D08A;border-radius:20px;padding:14px 15px;display:flex;flex-direction:column;gap:10px;font-family:{{ recordFont }}">
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <span style="width:26px;height:26px;border-radius:9px;background:#F0B23C;color:#241F2E;display:grid;place-items:center;font-weight:800;font-size:14px">✧</span>
+                      <span style="font-weight:700;font-size:14px;color:#6B4A05">{{ t.hintTitle }}</span>
+                    </div>
+                    <div>
+                      <div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#8A5D05;font-weight:700">{{ t.hintReading }}</div>
+                      <div style="font-size:14.5px;line-height:1.55;margin-top:2px">{{ m.hint.reading }}</div>
+                    </div>
+                    <div>
+                      <div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#8A5D05;font-weight:700">{{ t.hintTry }}</div>
+                      <ul style="margin:4px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:14.5px;line-height:1.5">
+                        <sc-for list="{{ m.hint.tips }}" as="tip" hint-placeholder-count="2"><li>{{ tip }}</li></sc-for>
+                      </ul>
+                    </div>
+                    <div style="background:#fff;border-radius:14px;padding:10px 12px">
+                      <div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0;font-weight:700">{{ t.hintFromBoard }}</div>
+                      <div style="font-size:14px;line-height:1.5;margin-top:2px">{{ m.hint.from_board }}</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                      <span style="font-size:12.5px;color:#8A5D05">{{ t.hintStarter }}</span>
+                      <button type="button" onClick="{{ m.useStarter }}" class="k-press" style="background:#fff;border:1.5px dashed #F0B23C;border-radius:999px;padding:7px 13px;font-size:14px;cursor:pointer;font-family:{{ recordFont }};color:#241F2E">{{ m.hint.starter }}</button>
+                      <button type="button" onClick="{{ m.dismiss }}" class="k-press" style="margin-left:auto;background:transparent;border:0;font-size:13px;font-weight:700;color:#8A5D05;cursor:pointer;min-height:40px">{{ t.hintDismiss }}</button>
+                    </div>
+                  </div>
+                </sc-if>
               </sc-for>
+              <sc-if value="{{ hintBusy }}" hint-placeholder-val="{{ false }}">
+                <div style="align-self:stretch;background:#FFF6E3;border-radius:18px;padding:12px 15px;font-size:14px;color:#8A5D05;animation:k-pulse 1.3s ease-in-out infinite;font-family:{{ recordFont }}">{{ t.hintBusy }}</div>
+              </sc-if>
               <sc-if value="{{ chatBusy }}" hint-placeholder-val="{{ false }}">
-                <div style="align-self:flex-start;background:#fff;border-radius:18px;padding:11px 15px;font-size:14px;color:#A79FB4;animation:k-pulse 1.3s ease-in-out infinite;font-family:{{ recordFont }}">{{ t.typing }}</div>
+                <div style="align-self:flex-start;display:flex;gap:5px;background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 1px 3px rgba(36,31,46,.06)">
+                  <span style="width:7px;height:7px;border-radius:50%;background:#B9AFC8;animation:k-pulse 1.1s ease-in-out infinite"></span>
+                  <span style="width:7px;height:7px;border-radius:50%;background:#B9AFC8;animation:k-pulse 1.1s ease-in-out .18s infinite"></span>
+                  <span style="width:7px;height:7px;border-radius:50%;background:#B9AFC8;animation:k-pulse 1.1s ease-in-out .36s infinite"></span>
+                </div>
               </sc-if>
               <sc-if value="{{ chatError }}" hint-placeholder-val="{{ false }}">
                 <div role="alert" style="align-self:stretch;background:#FBEAE8;color:#7A1319;border-radius:18px;padding:12px 15px;font-size:14.5px;line-height:1.55;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-family:{{ recordFont }}">
@@ -949,32 +1213,107 @@
                   </sc-if>
                 </div>
               </sc-if>
-              <sc-if value="{{ coachOpen }}" hint-placeholder-val="{{ false }}">
-                <div style="background:#F1E9FA;border-radius:20px;padding:17px;margin-top:6px">
-                  <div style="font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#52307C;font-weight:600;margin-bottom:11px;font-family:{{ recordFont }}">{{ t.feedbackBtn }}</div>
-                  <div style="display:flex;flex-direction:column;gap:13px">
-                    <sc-for list="{{ coachItems }}" as="c" hint-placeholder-count="3">
-                      <div>
-                        <div style="font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#6B3FA0;font-weight:600">{{ c.kind }}</div>
-                        <div style="font-size:15px;line-height:1.65;margin-top:3px;font-family:{{ recordFont }}">{{ c.text }}</div>
-                      </div>
-                    </sc-for>
-                  </div>
-                  <button type="button" onClick="{{ backHome }}" class="k-press" style="margin-top:15px;width:100%;background:#6B3FA0;color:#fff;border:0;border-radius:999px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;min-height:48px;font-family:{{ recordFont }}">{{ t.done }}</button>
-                </div>
-              </sc-if>
             </div>
 
-            <div style="border-top:1px solid #EBE3D6;padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:#fff">
-              <textarea class="k-field" rows="1" placeholder="{{ t.sayHint }}" value="{{ draft }}" onChange="{{ setDraft }}" onKeyDown="{{ draftKey }}" style="resize:none;max-height:120px;font-family:{{ recordFont }};font-size:16px;border-radius:22px"></textarea>
-              <button type="button" onClick="{{ send }}" disabled="{{ chatBusy }}" class="k-press" style="border:0;background:#6B3FA0;color:#fff;border-radius:999px;width:50px;height:50px;font-size:19px;cursor:pointer;flex-shrink:0">↑</button>
+            <sc-if value="{{ hasSuggestions }}" hint-placeholder-val="{{ false }}">
+              <div style="flex-shrink:0;background:#FBF7F0;padding:4px 12px 8px">
+                <div class="k-chiprow" style="display:flex;gap:7px;overflow-x:auto">
+                  <sc-for list="{{ suggestions }}" as="x" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ x.use }}" class="k-press k-rise" style="flex-shrink:0;max-width:250px;background:#fff;color:#2E1A4A;border:1.5px solid #E4D8F2;border-radius:16px;padding:9px 13px;font-size:13.5px;font-weight:600;line-height:1.35;cursor:pointer;min-height:42px;text-align:left;white-space:normal;font-family:{{ recordFont }}">{{ x.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <div style="flex-shrink:0;background:#fff;border-top:1px solid #EBE3D6;padding:10px 12px calc(10px + env(safe-area-inset-bottom))">
+              <div style="{{ composerStyle }}">
+                <textarea class="k-field" rows="1" placeholder="{{ composerPh }}" value="{{ draft }}" onChange="{{ setDraft }}" onKeyDown="{{ draftKey }}" style="resize:none;max-height:120px;border:0;background:transparent;box-shadow:none;padding:8px 6px 4px;font-family:{{ recordFont }};font-size:16px;width:100%"></textarea>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <sc-if value="{{ inAssist }}" hint-placeholder-val="{{ true }}">
+                    <button type="button" onClick="{{ openSheet }}" class="k-press" style="display:flex;align-items:center;gap:6px;border:1.5px solid #EBE3D6;background:#fff;color:#241F2E;border-radius:999px;height:38px;padding:0 12px;font-size:13px;font-weight:600;cursor:pointer;font-family:{{ recordFont }}"><span style="font-size:15px">◎</span><span>{{ t.practiseBtn }}</span></button>
+                  </sc-if>
+                  <sc-if value="{{ inPractice }}" hint-placeholder-val="{{ false }}">
+                    <button type="button" onClick="{{ askHint }}" disabled="{{ hintDisabled }}" class="k-press" style="display:flex;align-items:center;gap:5px;border:1.5px solid #F4D08A;background:#FFF6E3;color:#6B4A05;border-radius:999px;height:38px;padding:0 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:{{ recordFont }}"><span>✧</span><span>{{ t.hintBtn }}</span></button>
+                  </sc-if>
+                  <button type="button" onClick="{{ send }}" disabled="{{ sendDisabled }}" aria-label="{{ t.send }}" class="k-press" style="{{ sendStyle }}">↑</button>
+                </div>
+              </div>
+            </div>
+
+            <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;inset:0;z-index:30;display:flex;align-items:flex-end">
+                <div class="k-fade" onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:rgba(36,31,46,.4)"></div>
+                <div class="k-card-up" style="position:relative;width:100%;max-height:86%;overflow:auto;background:#fff;border-radius:26px 26px 0 0;padding:10px 18px calc(18px + env(safe-area-inset-bottom));font-family:{{ recordFont }}">
+                  <div style="width:40px;height:4px;border-radius:4px;background:#E2D9CB;margin:0 auto 14px"></div>
+                  <div style="font-family:{{ recordDisplay }};font-weight:600;font-size:19px;margin-bottom:12px">{{ t.sheetTitle }}</div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <sc-for list="{{ segments }}" as="p" hint-placeholder-count="5">
+                      <button type="button" onClick="{{ p.practise }}" class="k-press" style="display:flex;align-items:center;gap:12px;width:100%;background:#FBF7F0;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;text-align:left;min-height:60px">
+                        <span style="width:40px;height:40px;border-radius:13px;background:{{ p.tint }};color:{{ p.ink }};display:grid;place-items:center;font-size:18px;font-weight:700;flex-shrink:0">{{ p.icon }}</span>
+                        <span style="flex:1;min-width:0">
+                          <span style="display:block;font-weight:700;font-size:15px;color:#241F2E;font-family:{{ recordFont }}">{{ p.label }}</span>
+                          <span style="display:block;font-size:12.5px;color:#8C8499;margin-top:1px;line-height:1.4;font-family:{{ recordFont }}">{{ p.blurb }}</span>
+                        </span>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <div style="margin-top:14px;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:#A79FB4">{{ t.someoneElse }}</div>
+                  <div style="display:flex;gap:8px;margin-top:7px">
+                    <input class="k-field" placeholder="{{ t.customHint }}" value="{{ customSegment }}" onChange="{{ setCustomSegment }}" onKeyDown="{{ customKey }}" style="min-height:48px;font-size:15px;font-family:{{ recordFont }}">
+                    <button type="button" onClick="{{ startCustom }}" class="k-press" style="background:#241F2E;color:#fff;border:0;border-radius:999px;padding:0 18px;font-size:14.5px;font-weight:600;cursor:pointer;min-height:48px;flex-shrink:0;font-family:{{ recordFont }}">{{ t.start }}</button>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+<sc-if value="{{ appPopOpen }}" hint-placeholder-val="{{ false }}">
+          <div class="k-apop" style="position:absolute;inset:0;z-index:40;display:flex;align-items:flex-end">
+            <div class="k-fade" onClick="{{ closePop }}" style="position:absolute;inset:0;background:rgba(36,31,46,.44);backdrop-filter:blur(3px)"></div>
+            <div class="k-card-up" style="position:relative;width:100%;max-height:88%;display:flex;flex-direction:column;background:#fff;border-radius:28px 28px 0 0;overflow:hidden;box-shadow:0 -18px 50px rgba(36,31,46,.25)">
+              <div style="{{ pop.headStyle }}">
+                <div style="{{ pop.ringDecor }}"></div>
+                <div style="{{ pop.ringDecor2 }}"></div>
+                <div style="position:relative;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span style="{{ pop.pillStyle }}">{{ pop.deck }}</span>
+                  <span style="font-size:12px;font-weight:600;color:{{ pop.ink }};opacity:.75;font-variant-numeric:tabular-nums">{{ pop.code }}</span>
+                  <button type="button" onClick="{{ closePop }}" aria-label="{{ t.closeCard }}" class="k-press" style="margin-left:auto;background:rgba(255,255,255,.8);border:0;border-radius:999px;width:40px;height:40px;font-size:18px;cursor:pointer;color:#241F2E">×</button>
+                </div>
+                <h3 style="position:relative;margin:12px 0 4px;font-family:{{ recordDisplay }};font-weight:600;font-size:23px;line-height:1.2;color:#241F2E;text-wrap:balance">{{ pop.title }}</h3>
+                <sc-if value="{{ pop.hasRing }}" hint-placeholder-val="{{ true }}">
+                  <div style="position:relative;font-size:13px;font-weight:600;color:{{ pop.ink }}">{{ pop.ringLabel }}</div>
+                </sc-if>
+                <div style="position:relative;display:flex;align-items:center;gap:10px;margin-top:14px">
+                  <div style="display:flex;gap:5px">
+                    <sc-for list="{{ pop.marks }}" as="m" hint-placeholder-count="3"><span style="{{ m.style }}"></span></sc-for>
+                  </div>
+                  <span style="font-size:12.5px;color:#4A4356;font-family:{{ recordFont }}">{{ pop.answered }}</span>
+                </div>
+              </div>
+              <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:18px 20px 8px;display:flex;flex-direction:column;gap:12px">
+                <p style="margin:0;font-size:14px;line-height:1.6;color:#6F6880;font-style:italic;font-family:{{ recordFont }}">{{ pop.ask }}</p>
+                <sc-for list="{{ pop.fields }}" as="f" hint-placeholder-count="3">
+                  <div class="k-rise" style="{{ f.boxStyle }}">
+                    <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:8px">
+                      <span style="{{ f.qStyle }}">Q{{ f.n }}</span>
+                      <span style="font-weight:600;font-size:15px;line-height:1.4;font-family:{{ recordFont }}">{{ f.label }}</span>
+                    </div>
+                    <p style="{{ f.readStyle }}">{{ f.readValue }}</p>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:8px;padding:12px 20px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #EBE3D6;flex-shrink:0">
+                <button type="button" onClick="{{ prevGroup }}" aria-label="{{ t.prevCardL }}" class="k-press" style="width:48px;background:#fff;border:1.5px solid #EBE3D6;border-radius:999px;font-size:16px;font-weight:600;cursor:pointer;min-height:48px">←</button>
+                <button type="button" onClick="{{ nextGroup }}" class="k-press" style="flex:1;background:#241F2E;color:#fff;border:0;border-radius:999px;padding:12px;font-size:15px;font-weight:600;cursor:pointer;min-height:48px;font-family:{{ recordFont }}">{{ t.nextCardL }} →</button>
+              </div>
             </div>
           </div>
         </sc-if>
 
         <sc-if value="{{ showArtisanNav }}" hint-placeholder-val="{{ true }}">
-          <nav style="display:grid;grid-template-columns:1fr 1fr;background:#fff;border-top:1px solid #EBE3D6;padding:6px 6px calc(6px + env(safe-area-inset-bottom));flex-shrink:0">
-            <sc-for list="{{ artisanNav }}" as="n" hint-placeholder-count="2">
+          <nav style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#fff;border-top:1px solid #EBE3D6;padding:6px 6px calc(6px + env(safe-area-inset-bottom));flex-shrink:0">
+            <sc-for list="{{ artisanNav }}" as="n" hint-placeholder-count="3">
               <button type="button" onClick="{{ n.go }}" style="{{ n.style }}">
                 <span style="font-size:19px;line-height:1">{{ n.icon }}</span>
                 <span style="font-size:11px;font-weight:600;font-family:{{ recordFont }}">{{ n.label }}</span>
@@ -989,8 +1328,11 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:880},&quot;appOrigin&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://karigar.vercel.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Deployment&quot;},&quot;model&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;claude-sonnet-4-5&quot;,&quot;claude-haiku-4-5&quot;],&quot;default&quot;:&quot;claude-sonnet-4-5&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Agent&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:880},&quot;appOrigin&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://karigar-toolkit.vercel.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Deployment&quot;},&quot;model&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;claude-sonnet-4-5&quot;,&quot;claude-haiku-4-5&quot;],&quot;default&quot;:&quot;claude-sonnet-4-5&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Agent&quot;}}">
+// This device's console preferences. The prototype kept whole profiles here; v4 and v5 are
+// read once, for the import into the organisation's account.
 const STORE = 'karigar-platform-v4';
+const LEGACY_STORES = ['karigar-platform-v4', 'karigar-platform-v5'];
 
 // Plain BMP glyphs rather than emoji — consistent across the Android devices artisans use.
 const SEG_META = {
@@ -1065,7 +1407,6 @@ const EN = {
   readSession: 'Read the session into the cards', reading: 'Reading…',
   readingSub: 'Nothing is invented. Anything the session did not cover is left empty for you.',
   emptyProfile: 'Create an empty profile', sessionLang: 'Session language',
-  manualHint: 'Tap any dot on the board to open that card and write the answer in their words. The profile is created with the first answer and saves as you go.',
   agentDoes: 'What the agent does with it',
   ag1: 'Matches every answer to the card it belongs to.',
   ag2: 'Keeps the artisan\u2019s own words rather than paraphrasing.',
@@ -1111,6 +1452,73 @@ const EN = {
   installSkip: "Not now, open it here",
   installedTitle: "Done — you can open Karigar any time",
   works: "Works without internet for reading your board",
+  heroKicker: "The Ludo Mandala",
+  heroTitle: "Every session starts on the board",
+  heroSub: "Six rings, from the craft itself out to its future. Each dot is a card — the brighter it is, the more of your artisans have answered it.",
+  startSession: "Start a new session",
+  openBoard: "Open the latest board",
+  heroSessions: "sessions",
+  heroLegendLow: "few answered",
+  heroLegendHigh: "most answered",
+  deckTheme: "Theme card",
+  deckReflection: "Reflection card",
+  deckStory: "Story module",
+  deckOwn: "Own question",
+  answeredOf: "{n} of {m} answered",
+  noAnswer: "Not answered yet",
+  closeCard: "Close",
+  prevCardL: "Previous card",
+  nextCardL: "Next card",
+  sessionDone: "Session complete",
+  tapDot: "Tap any dot to open its card",
+  connectTitle: "Connect reflection & story cards",
+  connectSub: "These cards fit any theme. Place each one on the ring it belongs to and it joins the board as a dot.",
+  notPlaced: "Not on the board",
+  placedOn: "On",
+  openCard: "Open",
+  addQTitle: "Add a question to the board",
+  addQSub: "Something the session raised that no card asks. It becomes a dot on the ring you choose.",
+  addQRing: "Ring",
+  addQText: "Question",
+  addQPh: "e.g. Who buys from you most often?",
+  addQBtn: "Add to board",
+  removeQ: "Remove question",
+  ownAsk: "A question added for this session.",
+  progressTitle: "Session progress",
+  hintBtn: "Hint",
+  hintTitle: "A nudge, not an answer",
+  hintReading: "What they are really asking",
+  hintTry: "Ideas to use",
+  hintFromBoard: "From your board",
+  hintStarter: "You could start with",
+  hintBusy: "Thinking of a hint…",
+  hintDismiss: "Got it",
+  hintNeedMsg: "Hints appear once they have said something.",
+  navProfile: "Profile",
+  profileTitle: "Profile & settings",
+  managedNote: "Your facilitator keeps these details up to date.",
+  setLanguage: "App language",
+  setTextSize: "Text size",
+  sizeNormal: "Normal",
+  sizeLarge: "Large",
+  setInstall: "Add Karigar to home screen",
+  setClear: "Clear practice history",
+  setCleared: "Cleared",
+  privacyTitle: "Your privacy",
+  privacyNote: "Your practice conversations stay on this phone. Your facilitator only sees how many you have done.",
+  appVersion: "Karigar · version 0.5",
+  translatingNote: "Showing your details in English…",
+  translateFail: "Could not translate your details. They are shown as recorded.",
+  retry: "Try again",
+  goalTitle: "What do you want from this conversation?",
+  goalSub: "Pick one. The guide will help you steer toward it as you talk.",
+  goalLoading: "Reading your board…",
+  goalOwn: "Or write your own goal",
+  goalStart: "Start",
+  goalLabel: "Goal",
+  suggestTitle: "Try asking",
+  suggestBusy: "Finding next steps…",
+  goalSeems: "Working toward",
   chatError: "They could not answer just now. Check the internet and try again.",
   chatLimit: "The practice partner has reached today's limit. Please try again later.",
   chatUnavailable: "The practice partner is not available right now. Please try again in a little while.",
@@ -1141,7 +1549,7 @@ class Component extends DCLogic {
     qr: null, qrFor: '',
     busy: false, errorMsg: '',
     appView: 'home', platform: 'android', installPrompt: null, segId: null, customSegment: '', messages: [], draft: '',
-    chatBusy: false, coach: null, history: {}
+    chatBusy: false, coach: null, history: {}, hintBusy: false, linkError: '', linkMode: false, pub: {}, mode: 'assist', sheetOpen: false, goal: '', goalStage: false, goalOptions: [], goalBusy: false, goalDraft: '', guide: null, guideBusy: false, newQRing: '', newQText: '', historyCleared: false
   };
 
   async componentDidMount() {
@@ -1155,12 +1563,21 @@ class Component extends DCLogic {
     const boot = this.props.boot;
     const store = this.props.store;
     if (boot && boot.mode === 'artisan') {
-      // The artisan's own phone: one profile, loaded by its handover token. Practice history
-      // is kept on this device only.
-      const p = { checked: {}, sources: {}, approved: true, revoked: false, ...boot.profile };
+      // The artisan's own phone: one profile, loaded by its handover token. Practice history,
+      // text size, app language and translations are this device's own and stay on it.
+      if (boot.linkError) { this.setState({ ready: true, side: 'artisan', linkMode: true, appView: 'linkerror', linkError: boot.linkError }); return; }
+      const mine = store.local.get(`karigar-device:${boot.token}`) || {};
+      const p = this.withIdentity({ checked: {}, sources: {}, approved: true, revoked: false, ...boot.profile, lang: mine.lang || boot.profile.lang, textSize: mine.textSize }, data);
+      // Translations and names cached on this phone are kept only while the profile they were
+      // made from is unchanged.
+      if (mine.trSig && mine.trSig === this.trSig(p)) {
+        p.translations = mine.translations || {};
+        const sig = this.idSig(p);
+        if (mine.names && mine.names.sig === sig) p.names = { ...(p.names && p.names.sig === sig ? p.names : {}), ...mine.names };
+      }
       const seenInstall = store.local.get('karigar-install-seen');
       this.setState({
-        ready: true, side: 'artisan', profiles: [p], activeId: p.id,
+        ready: true, side: 'artisan', linkMode: true, profiles: [p], activeId: p.id,
         history: store.local.get(`karigar-history:${boot.token}`) || {},
         appView: boot.standalone || seenInstall ? 'home' : 'install'
       });
@@ -1171,17 +1588,21 @@ class Component extends DCLogic {
       // Profiles live in the organisation's database. Console language and practice-preview
       // history are this device's preferences only.
       const local = store.local.get(STORE) || {};
-      let profiles = boot.profiles;
+      let profiles = boot.profiles.map(p => this.withIdentity(p, data));
       // One-time move of profiles made in the prototype (browser storage) into the database.
       // The built-in sample artisans are demo data and are never imported.
-      const legacy = (Array.isArray(local.profiles) ? local.profiles : []).filter(p => p && p.id && !/^p-/.test(p.id));
+      const seen = {};
+      const legacy = LEGACY_STORES.flatMap(k => { const v = store.local.get(k); return v && Array.isArray(v.profiles) ? v.profiles : []; })
+        .filter(p => p && p.id && !/^p-/.test(p.id) && !seen[p.id] && (seen[p.id] = true));
       if (!profiles.length && legacy.length && confirm(`Move ${legacy.length} profile(s) saved in this browser into your organisation's account?`)) {
-        profiles = legacy.map(p => ({ ...p, revoked: false, linkVersion: 1, token: null, openedDaysAgo: null, rooms: {} }));
+        profiles = legacy.map(p => {
+          const { token, editKey, publishedToken, translations, remote, ...rest } = p;
+          return { ...rest, revoked: false, linkVersion: 1, token: null, openedDaysAgo: null, rooms: {} };
+        });
       }
       const activeId = profiles.some(p => p.id === local.activeId) ? local.activeId : (profiles[0] ? profiles[0].id : null);
       this.setState({ ready: true, profiles, activeId, uiLang: local.uiLang || 'en', history: local.history || {} });
-      if (profiles !== boot.profiles) setTimeout(() => this.persist({ profiles }), 0);
-      return;
+      if (profiles.some(p => !p.token)) setTimeout(() => this.persist({ profiles }), 0);
     }
   }
 
@@ -1197,6 +1618,92 @@ class Component extends DCLogic {
   }
 
   newId() { return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+  // ── identity: every profile carries its name in every UI language; the server issues its link ──
+  idSig(p) { const r = (p && p.record) || {}; return [r.artisan_name, r.craft_name_local, r.craft_region].map(x => String(x || '').trim()).join('|'); }
+
+  withIdentity(p, data) {
+    const out = { ...p };
+    if (!out.recordLang) out.recordLang = out.lang || 'en';
+    const known = data && data.SAMPLE_NAMES && data.SAMPLE_NAMES[p.id];
+    const sig = this.idSig(out);
+    if (known && !(out.names && out.names.sig === sig)) {
+      const S = (data.SAMPLES || []).find(x => x.id === p.id);
+      if (S && this.idSig({ record: S.record }) === sig) out.names = { sig, ...known };
+    }
+    return out;
+  }
+
+  idText(p, lang) {
+    const r = (p && p.record) || {};
+    const raw = { name: r.artisan_name || '', craft: r.craft_name_local || '', region: r.craft_region || '' };
+    const orig = (p && (p.recordLang || p.lang)) || 'en';
+    if (!lang || lang === orig) return raw;
+    const n = p.names && p.names.sig === this.idSig(p) && p.names[lang];
+    if (n) return { name: n.name || raw.name, craft: n.craft || raw.craft, region: n.region || raw.region };
+    const tr = p.translations && p.translations[lang] && p.translations[lang].record;
+    if (tr && (tr.artisan_name || tr.craft_name_local)) return { name: tr.artisan_name || raw.name, craft: tr.craft_name_local || raw.craft, region: tr.craft_region || raw.region };
+    return raw;
+  }
+
+  needsNames(p, lang) {
+    const orig = p.recordLang || p.lang || 'en';
+    if (!lang || lang === orig || !this.idSig(p).replace(/\|/g, '')) return false;
+    return !(p.names && p.names.sig === this.idSig(p) && p.names[lang]);
+  }
+
+  // Transliterates name, craft and place for every profile shown in a language it was not recorded in.
+  async ensureNames(lang, list) {
+    this._naming = this._naming || {};
+    const todo = list.filter(p => this.needsNames(p, lang) && !this._naming[lang + ':' + p.id + ':' + this.idSig(p)]);
+    if (!todo.length) return;
+    todo.forEach(p => { this._naming[lang + ':' + p.id + ':' + this.idSig(p)] = true; });
+    const L = this.langOf(lang);
+    try {
+      const raw = await window.claude.complete({
+        model: this.props.model || 'claude-sonnet-4-5', max_tokens: 1200,
+        system: 'You render artisan identity fields into another language for a dashboard. Personal names and place names: TRANSLITERATE into the target script, never translate their meaning. Craft names: use the common term in the target language if one exists, otherwise transliterate. Keep short parenthetical notes, translated. Reply with a single JSON object and nothing else.',
+        messages: [{ role: 'user', content: 'Target language: ' + L.name + ' (' + L.name + ' script only).\n\n' + JSON.stringify({ items: todo.map(p => ({ id: p.id, name: p.record.artisan_name || '', craft: p.record.craft_name_local || '', region: p.record.craft_region || '' })) }) + '\n\nReturn exactly { "items": [ { "id": "...", "name": "...", "craft": "...", "region": "..." } ] } with the same ids.' }]
+      });
+      const out = this.parse(raw);
+      const byId = {}; (out.items || []).forEach(x => { if (x && x.id) byId[x.id] = x; });
+      this.setState(st => {
+        const profiles = st.profiles.map(p => {
+          const x = byId[p.id]; if (!x) return p;
+          const sig = this.idSig(p);
+          const base = p.names && p.names.sig === sig ? p.names : { sig };
+          return { ...p, names: { ...base, [lang]: { name: x.name || '', craft: x.craft || '', region: x.region || '' } } };
+        });
+        setTimeout(() => this.persist({ profiles }), 0);
+        return { profiles };
+      });
+    } catch (e) { /* stays on the recorded script; retried next session */ }
+  }
+
+  // ── handover links ──
+  // Script-based fallback for the recorded language of a record.
+  detectLang(record, fallback) {
+    const s = Object.values(record || {}).join(' ');
+    const count = re => (s.match(re) || []).length;
+    const c = { gu: count(/[\u0A80-\u0AFF]/g), dev: count(/[\u0900-\u097F]/g), bn: count(/[\u0980-\u09FF]/g), ta: count(/[\u0B80-\u0BFF]/g), kn: count(/[\u0C80-\u0CFF]/g), en: count(/[A-Za-z]/g) };
+    const top = Object.keys(c).sort((x, y) => c[y] - c[x])[0];
+    if (!c[top]) return fallback;
+    if (top === 'dev') return fallback === 'mr' ? 'mr' : 'hi';
+    return top;
+  }
+
+  // On the deployed platform the server holds every profile, issues the handover token on the
+  // first save, and serves /k/<token> itself (api/artisan-page.js) — there is nothing to publish
+  // from the browser and no link to route here.
+  hosted() { return !!this.props.store; }
+
+  standalone() {
+    if (typeof window === 'undefined') return false;
+    try { return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true || new URLSearchParams(window.location.search).get('src') === 'a2hs'; } catch (e) { return false; }
+  }
+
+  // A link is live once the server has saved the profile and issued its token.
+  publish() {}
 
   // One flat, ordered list of every card on the board, tagged with its ring or hub group.
   buildCards(D) {
@@ -1233,13 +1740,23 @@ class Component extends DCLogic {
     const next = { profiles: s.profiles, activeId: s.activeId, uiLang: s.uiLang, history: s.history, ...patch };
     const store = this.props.store;
     if (!store) return;
-    if (store.mode === 'artisan') { store.local.set(`karigar-history:${store.token}`, next.history); return; }
+    if (store.mode === 'artisan') {
+      // Nothing the artisan does here goes back to the server: practice history and their own
+      // settings stay on this phone, with translations cached so they are not paid for twice.
+      store.local.set(`karigar-history:${store.token}`, next.history);
+      const p = next.profiles[0];
+      if (p) store.local.set(`karigar-device:${store.token}`, { lang: p.lang, textSize: p.textSize, names: p.names, translations: p.translations, trSig: this.trSig(p) });
+      return;
+    }
     // Profiles go to the server; only this device's preferences stay in browser storage.
     store.sync(next.profiles);
     const prev = store.local.get(STORE) || {};
     // Any prototype-era profiles are left in place as a backup; they are only ever read for the import.
     store.local.set(STORE, { ...prev, activeId: next.activeId, uiLang: next.uiLang, history: next.history });
   }
+
+  // What a cached translation was made from; a changed record or summary invalidates it.
+  trSig(p) { return JSON.stringify([p.record, p.custom, p.analysis && p.analysis.artisan_summary_local, p.recordLang]).length + ':' + this.idSig(p); }
 
   patchActive(fn) { this.patchProfile(this.state.activeId, fn); }
 
@@ -1251,21 +1768,89 @@ class Component extends DCLogic {
     });
   }
 
-  setField(key, v) { this.patchActive(p => ({ ...p, record: { ...p.record, [key]: v } })); }
+  setField(key, v) { this.patchActive(p => ({ ...p, record: { ...p.record, [key]: v }, translations: {} })); }
 
-  setManualField(key, v) {
-    const id = this.state.manualId;
-    if (id && this.state.profiles.some(p => p.id === id)) {
-      this.patchProfile(id, p => ({ ...p, record: { ...p.record, [key]: v } }));
-      return;
+  // The record stays in the language it was captured in. When the artisan reads the app in
+  // another language, everything from the record (name, craft, place, answers, summary) is
+  // translated once and cached per language; names are transliterated, never translated.
+  ensureTranslation = async (lang) => {
+    const a = this.active(); if (!a || !lang) return;
+    const orig = a.recordLang || a.lang;
+    const have = a.translations && a.translations[lang];
+    const complete = have && !have.partial && Object.keys(a.record || {}).every(k => !(a.record[k] || '').trim() || (have.record || {})[k]);
+    if (lang === orig || complete || this._translating === a.id + lang) return;
+    this._translating = a.id + lang;
+    this.setState({ translating: true, translateError: false });
+    const L = this.langOf(lang), O = this.langOf(orig);
+    const record = {}; Object.keys(a.record || {}).forEach(k => { if ((a.record[k] || '').trim()) record[k] = a.record[k]; });
+    const custom = {}; (a.custom || []).forEach(q => { custom[q.key] = q.label; });
+    const ana = a.analysis;
+    const system = `You translate an artisan's own profile so they can read it in the language they chose. Translate faithfully and plainly — no polish, no added warmth, nothing left out.
+- Personal names and place names: TRANSLITERATE into the target script. Never translate their meaning.
+- Local craft terms (e.g. bandhej, paithani, dhokra): keep the original word, written in the target script.
+- Keep quotation marks around anything that was a quote.
+- Keep every key exactly as given.
+Reply with a single JSON object and nothing else.`;
+    const run = async (input, max) => this.parse(await window.claude.complete({
+      model: this.props.model || 'claude-sonnet-4-5', max_tokens: max, system,
+      messages: [{ role: 'user', content: `Translate from ${O.name} into ${L.name}. Return the same JSON shape, every string value in ${L.name}.\n\n${JSON.stringify(input)}` }]
+    }));
+    const save = tr => this.patchProfile(a.id, p => {
+      const prev = (p.translations || {})[lang] || {};
+      return { ...p, translations: { ...(p.translations || {}), [lang]: { ...prev, ...tr, record: { ...(prev.record || {}), ...(tr.record || {}) } } } };
+    });
+    try {
+      // Pass 1 — what the home screen shows first: name, craft, place, summary. Lands in seconds.
+      const HEAD = ['artisan_name', 'craft_name_local', 'craft_region', 'practice_span'];
+      const head = {}; HEAD.forEach(k => { if (record[k]) head[k] = record[k]; });
+      const headDone = have && HEAD.every(k => !record[k] || (have.record || {})[k]);
+      const h = headDone ? { record: {}, summary: have.summary, vocabulary: have.vocabulary }
+        : await run({ record: head, summary: ana ? (ana.artisan_summary_local || '') : '', vocabulary: ana ? (ana.vocabulary || []) : [] }, 2000);
+      if (!headDone) save({ ...(have || {}), record: { ...((have && have.record) || {}), ...(h.record || {}) }, custom: (have && have.custom) || {}, summary: h.summary || '', vocabulary: Array.isArray(h.vocabulary) ? h.vocabulary : [], partial: true });
+      // Pass 2 — card answers in small chunks. Indic scripts cost far more tokens than Latin,
+      // so one large request gets truncated; chunks merge in as they land, each retried once,
+      // and a retry later resumes from whatever is still missing.
+      const done = { ...(have && have.record || {}), ...(h.record || {}) };
+      let customOut = (have && have.custom) || {};
+      const todo = Object.keys(record).filter(k => !HEAD.includes(k) && !done[k]);
+      const chunks = []; for (let i = 0; i < todo.length; i += 8) chunks.push(todo.slice(i, i + 8));
+      const ownTodo = Object.keys(custom).filter(k => !customOut[k]);
+      let failed = false;
+      // Three chunks in flight at a time — fast enough to finish while the artisan reads the home screen.
+      const queue = chunks.slice();
+      const worker = async () => {
+        while (queue.length) {
+          const keys = queue.shift();
+          const part = {}; keys.forEach(k => { part[k] = record[k]; });
+          let out = null;
+          // Accept only the keys asked for; models sometimes drop the wrapper or a key.
+          const pick = o => { const src = (o && (o.record || o)) || {}; const got = {}; keys.forEach(k => { if (typeof src[k] === 'string' && src[k].trim()) got[k] = src[k]; }); return got; };
+          for (let attempt = 0; attempt < 2; attempt++) {
+            try { out = { ...(out || {}), ...pick(await run({ record: part }, 4000)) }; } catch (e) { /* retry */ }
+            if (out && keys.every(k => out[k])) break;
+            keys.forEach(k => { if (out && out[k]) delete part[k]; });
+          }
+          if (!out || !Object.keys(out).length) { failed = true; continue; }
+          Object.assign(done, out);
+          save({ record: { ...done }, custom: customOut, summary: h.summary || '', vocabulary: Array.isArray(h.vocabulary) ? h.vocabulary : [], partial: true });
+        }
+      };
+      await Promise.all([worker(), worker(), worker()]);
+      if (ownTodo.length) {
+        const part = {}; ownTodo.forEach(k => { part[k] = custom[k]; });
+        let out = null;
+        for (let attempt = 0; attempt < 2 && !out; attempt++) { try { out = await run({ custom: part }, 1500); } catch (e) { out = null; } }
+        if (out) customOut = { ...customOut, ...(out.custom || {}) }; else failed = true;
+      }
+      if (Object.keys(record).some(k => !HEAD.includes(k) && !done[k])) failed = true;
+      save({ record: { ...done }, custom: customOut, summary: h.summary || '', vocabulary: Array.isArray(h.vocabulary) ? h.vocabulary : [], partial: failed });
+      if (failed) throw new Error('some chunks failed');
+      this.setState({ translating: false });
+    } catch (e) {
+      this.setState({ translating: false, translateError: true });
     }
-    if (!String(v).trim()) return;
-    const nid = this.newId();
-    const profile = { id: nid, record: { ...blank(), [key]: v }, lang: this.state.newLang, analysis: null, checked: {}, sources: {}, origin: 'mandala board', approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 };
-    const profiles = [...this.state.profiles, profile];
-    this.setState({ profiles, manualId: nid, activeId: nid });
-    this.persist({ profiles, activeId: nid });
-  }
+    this._translating = null;
+  };
 
   completeness(p) {
     const D = this.DATA; if (!D) return { theme: 0, reflection: 0, story: 0, complete: false };
@@ -1274,7 +1859,9 @@ class Component extends DCLogic {
     return { theme, reflection, story, complete: theme >= 8 && reflection >= 4 && story >= 2 };
   }
 
-  origin() { return (this.props.appOrigin || 'https://karigar.vercel.app').replace(/\/+$/, ''); }
+  // Handover links use the public production address from the server (lib/origin.js), never
+  // this tab's own address, which may be a login-protected per-deployment URL.
+  origin() { return (this.props.appOrigin || 'https://karigar-toolkit.vercel.app').replace(/\/+$/, ''); }
 
   shareUrl(profile) {
     // The token is opaque and issued by the server when the profile is first saved.
@@ -1284,6 +1871,24 @@ class Component extends DCLogic {
 
   componentDidUpdate() {
     this.ensureQr();
+    if (this.state.ready && this.I18N) {
+      const cur0 = this.active();
+      const vl = this.state.side === 'artisan' ? ((cur0 && cur0.lang) || 'en') : this.state.uiLang;
+      const list = this.state.side === 'artisan' ? (cur0 ? [cur0] : []) : this.state.profiles;
+      if (cur0 && cur0.autoLang && this.state.side === 'org') {
+        const dl = this.detectLang(cur0.record, cur0.recordLang || cur0.lang);
+        if (dl !== cur0.recordLang && Object.values(cur0.record || {}).join('').replace(/\s/g, '').length > 12) this.patchProfile(cur0.id, x => ({ ...x, recordLang: dl, names: null, translations: {} }));
+      }
+      if (list.some(p => this.needsNames(p, vl))) this.ensureNames(vl, list);
+      if (this.state.side === 'org' && this.state.orgView === 'board' && this.state.boardTab === 'handover' && cur0) this.publish(cur0);
+    }
+    const cur = this.active();
+    if (this.state.side === 'artisan' && cur && !this.state.translating && !this.state.translateError) {
+      const orig = cur.recordLang || cur.lang;
+      const tr = cur.translations && cur.translations[cur.lang];
+      const gaps = tr && Object.keys(cur.record || {}).some(k => (cur.record[k] || '').trim() && !(tr.record || {})[k]);
+      if (cur.lang !== orig && (!tr || tr.partial || gaps)) this.ensureTranslation(cur.lang);
+    }
     // Selects whose options stream in after the value is bound need the value re-applied.
     if (typeof document !== 'undefined') {
       const el = document.querySelector('select[data-role="uilang"]');
@@ -1311,6 +1916,12 @@ class Component extends DCLogic {
   }
 
   recordText() {
+    const base = this.recordTextBase(); const a = this.active();
+    const own = ((a && a.custom) || []).filter(q => ((a.record || {})[q.key] || '').trim()).map(q => '  - ' + q.label + ': ' + a.record[q.key].trim());
+    return own.length ? base + '\n\n[Own questions] added by the facilitator for this session\n' + own.join('\n') : base;
+  }
+
+  recordTextBase() {
     const a = this.active(); if (!a || !this.DATA) return '';
     const r = a.record;
     return this.DATA.SCHEMA.map(g => {
@@ -1371,7 +1982,7 @@ RULES
 - Keep local craft terms exactly as spoken.
 
 Reply with a single JSON object and nothing else.`,
-        messages: [{ role: 'user', content: `FIELDS AVAILABLE\n${fieldList}\n\nSESSION TRANSCRIPT\n${text.slice(0, 60000)}\n\nReturn exactly:\n{\n  "fields": { "<field_key>": { "value": "the answer in their words", "quote": "the line you took it from" } },\n  "session_note": "1-2 sentences to the facilitator: what this session covered well and what to go back for"\n}\n\nOnly include a key if the session genuinely answers it.` }]
+        messages: [{ role: 'user', content: `FIELDS AVAILABLE\n${fieldList}\n\nSESSION TRANSCRIPT\n${text.slice(0, 60000)}\n\nReturn exactly:\n{\n  "fields": { "<field_key>": { "value": "the answer in their words", "quote": "the line you took it from" } },\n  "session_note": "1-2 sentences to the facilitator: what this session covered well and what to go back for",\n  "source_language": "the language the artisan's answers are written in, as one code: en, hi, gu, mr, bn, ta or kn"\n}\n\nOnly include a key if the session genuinely answers it.` }]
       });
       const out = this.parse(raw);
       const fields = out.fields || {};
@@ -1385,7 +1996,7 @@ Reply with a single JSON object and nothing else.`,
         if (v && v.quote) sources[k] = String(v.quote).trim();
       });
       const id = this.newId();
-      const profile = { id, record, lang: this.state.newLang, analysis: null, checked: {}, sources, sessionNote: out.session_note || '', origin: this.state.fileName || 'pasted transcript', approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 };
+      const profile = { id, token: null, linkVersion: 1, revoked: false, approved: false, openedDaysAgo: null, rooms: {}, record, lang: this.state.newLang, recordLang: (['en', 'hi', 'gu', 'mr', 'bn', 'ta', 'kn'].includes(String(out.source_language || '').trim()) ? String(out.source_language).trim() : this.detectLang(record, this.state.newLang)), analysis: null, checked: {}, sources, sessionNote: out.session_note || '', origin: this.state.fileName || 'pasted transcript', approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 };
       const profiles = [...this.state.profiles, profile];
       this.setState({ profiles, activeId: id, orgView: 'board', boardTab: 'board', extracting: false, transcript: '', fileName: '', showQuotes: true, selectedKey: null });
       this.persist({ profiles, activeId: id });
@@ -1412,7 +2023,7 @@ Reply with a single JSON object and nothing else.`,
         messages: [{ role: 'user', content: `MANDALA BOARD SESSION\n${this.recordText()}\n\nThe artisan's language is ${L.name}.\n\nReturn exactly:\n{\n  "communication_profile": "3-4 sentences to the facilitator on how this person talks about their work",\n  "strengths": [ { "title": "short", "detail": "anchored in a specific card answer" } ],\n  "gaps": [ { "title": "short", "detail": "what they cannot yet put into words for outsiders, no deficit language" } ],\n  "recommended_segments": [ { "id": "one of: brand, genz, social, ngo, exhibition", "label": "short label", "why": "one sentence tied to this artisan" } ],\n  "vocabulary": ["5-8 of their own words or local craft terms"],\n  "care_notes": ["what a facilitator or brand should handle carefully"],\n  "artisan_summary_local": "4-5 short sentences IN ${L.name}, addressed to the artisan as 'you', telling them what the board showed about their own expertise. Warm, plain, no flattery, no marketing words.",\n  "artisan_summary_en": "the same in English"\n}\n\n3-4 strengths, 3 gaps, 3-4 recommended segments.` }]
       });
       const analysis = this.parse(raw);
-      this.patchActive(p => ({ ...p, analysis }));
+      this.patchActive(p => ({ ...p, analysis, translations: {} }));
       this.setState({ busy: false });
     } catch (e) {
       this.setState({ busy: false, errorMsg: (e && e.message) || 'The model did not return usable JSON.' });
@@ -1430,7 +2041,7 @@ Reply with a single JSON object and nothing else.`,
 
 CHARACTER YOU PLAY
 ${who}
-
+${(() => { const ctx = this.state.messages.filter(m => m.mode === 'assist' && m.role === 'user').slice(-4).map(m => '- ' + m.content).join('\n'); return ctx ? '\nWHAT THE ARTISAN TOLD THEIR GUIDE JUST BEFORE THIS (context only; never mention it)\n' + ctx + '\n' : ''; })()}
 ABOUT THE ARTISAN, from their board session
 ${this.recordText().slice(0, 6000)}
 ${ana ? `\nFacilitator's read: ${ana.communication_profile}\nThey go quiet around: ${(ana.gaps || []).map(g => g.title).join('; ')}` : ''}
@@ -1439,6 +2050,8 @@ HOW TO PLAY
 - Speak ONLY in ${L.name}. Every reply in ${L.name}. Keep their craft terms in their own form.
 - Stay in character. Never break role, never mention being an AI or an exercise.
 - Short turns: two to four sentences, one question at a time.
+${this.state.guide && this.state.guide.goal ? '- The artisan seems to be working toward: "' + this.state.guide.goal + '". Let the conversation test that naturally. Never mention it.' : ''}
+- If the artisan asks you what they should say, answer as your character would. The app gives them hints separately; you never coach.
 - Be realistic, including realistic pressure: negotiate, be sceptical, ask the awkward question. Never cruel.
 - When they undersell themselves, do what your character would really do — ask again, or lose a little interest.
 - ${seg && this.state.segId === 'social' ? 'You are a coach, not a customer: begin by asking what they want from posting.' : 'Open with one natural, in-character line.'}
@@ -1448,63 +2061,258 @@ ${this.groundRules()}
 Reply with plain conversational text only.`;
   }
 
-  openSegment = async (id) => {
-    this.setState({ appView: 'chat', segId: id, messages: [], coach: null, draft: '', chatBusy: true, chatError: false });
+  // ── One chat, two modes ────────────────────────────────────────────────
+  // 'assist': the Karigar guide — helps, plans, nudges toward a goal, offers practice.
+  // 'practice': the same thread hands over to a persona until the artisan ends it.
+  personaFor(segId, custom) {
+    const a = this.active(); const lang = (a && a.lang) || 'en';
+    const st = segId ? this.segText(segId) : null;
+    const meta = (segId && SEG_META[segId]) || { icon: '◎', tint: '#F2EDE4', ink: '#4A4356' };
+    return { label: st ? (st.label[lang] || st.label.en) : (custom || '—'), labelEn: st ? st.label.en : (custom || 'someone'), ...meta };
+  }
+
+  practiceBlock() {
+    const ms = this.state.messages; let i = ms.length - 1;
+    while (i >= 0 && !(ms[i].role === 'divider' && ms[i].kind === 'start')) i--;
+    return ms.slice(i + 1).filter(m => (m.role === 'user' || m.role === 'assistant') && m.mode === 'practice');
+  }
+
+  // The guide sees everything; practice turns are folded in as a note it can refer back to.
+  assistHistory() {
+    const out = []; let block = null;
+    const push = (role, content) => { const last = out[out.length - 1]; if (last && last.role === role) last.content += '\n\n' + content; else out.push({ role, content }); };
+    this.state.messages.forEach(m => {
+      if (m.role === 'divider' && m.kind === 'start') { block = { who: m.who || 'someone', lines: [] }; return; }
+      if (m.mode === 'practice' && (m.role === 'user' || m.role === 'assistant')) { if (block) block.lines.push((m.role === 'user' ? 'ME' : block.who.toUpperCase()) + ': ' + m.content); return; }
+      if (m.role === 'feedback') { if (block) { push('user', '[I just practised a conversation with ' + block.who + '.\n' + block.lines.join('\n') + '\nFeedback I got: ' + (m.items || []).map(x => x.kind + ' — ' + x.text).join(' | ') + ']'); block = null; } return; }
+      if (m.mode === 'assist' && (m.role === 'user' || m.role === 'assistant')) push(m.role, m.content);
+    });
+    if (!out.length || out[0].role !== 'user') out.unshift({ role: 'user', content: '[I opened the Karigar app.]' });
+    return out;
+  }
+
+  assistSystem() {
+    const a = this.active(); const L = this.langOf((a && a.lang) || 'en');
+    const ana = a && a.analysis;
+    const roster = SEG_ORDER.filter(id => this.segText(id)).map(id => '- ' + id + ': ' + this.segText(id).label.en + ' — ' + this.segText(id).blurb.en).join('\n');
+    return `You are the Karigar guide, inside an artisan's own phone app. They have completed a mandala card board with a facilitator from a social innovation lab. You help them communicate their work with confidence — to brands, young audiences, social media, NGOs and exhibition visitors — and you train them to do it themselves.
+
+ABOUT THE ARTISAN, from their board session
+${this.recordText().slice(0, 6000)}
+${ana ? '\nFacilitator\'s read: ' + ana.communication_profile : ''}
+
+HOW YOU WORK
+- Speak ONLY in ${L.name}. Keep their craft terms in their own form.
+- If they have not said what they want, help them find a goal: ask ONE short question, or offer two or three concrete options drawn from their board. Never lecture.
+- When they ask for something practical — a posting plan, steps, how to price, how to prepare for a buyer — give it: short, numbered, plain words, built from their own board.
+- You are training them, not speaking for them. When the task is what THEY should say to someone, ask them to try it in their own words first, then improve it with them.
+- When rehearsing would help, offer a practice conversation by ending your message with one tag on its own line: [[practice:ID]] using one of these IDs, or [[practice:custom:a short description]] for someone else:
+${roster}
+  Offer practice only when it fits, not every turn.
+- Under 110 words unless they asked for a plan or steps. Plain text, no markdown headings or bold; numbered lines are fine.
+- When they come back from practice, refer to what happened in it and the feedback, and help them improve.
+
+${this.groundRules()}`;
+  }
+
+  parseOffer(text) {
+    const m = /\[\[practice:([^\]]+)\]\]/.exec(text || '');
+    const clean = String(text || '').replace(/\[\[practice:[^\]]+\]\]/g, '').trim();
+    if (!m) return { clean, offer: null };
+    const v = m[1].trim();
+    if (v.startsWith('custom:')) return { clean, offer: { segId: null, custom: v.slice(7).trim() } };
+    return { clean, offer: SEG_META[v] && this.segText(v) ? { segId: v, custom: '' } : null };
+  }
+
+  T() { const a = this.active(); const I = this.I18N; return (I && I.TABLES && (I.TABLES[(a && a.lang) || 'en'] || I.TABLES.en)) || EN; }
+
+  openChat = () => this.setState({ appView: 'chat', sheetOpen: false });
+
+  newChat = () => this.setState({ messages: [], mode: 'assist', segId: null, customSegment: '', guide: null, draft: '', chatBusy: false, chatError: false, sheetOpen: false });
+
+  // Older entry point (persona list) now starts practice inside the guide thread.
+  openSegment = (id) => { this.setState({ appView: 'chat' }); this.startPractice(id, id ? '' : this.state.customSegment); };
+
+  startPractice = async (segId, custom) => {
+    if (this.state.chatBusy) return;
+    const P = this.personaFor(segId, custom);
+    const t = this.T();
+    this.setState(st => ({
+      sheetOpen: false, mode: 'practice', segId: segId || null, customSegment: segId ? '' : (custom || ''), guide: null, chatBusy: true,
+      messages: [...st.messages, { role: 'divider', kind: 'start', who: P.labelEn, text: String(t.practiceStarted || '').replace('{who}', P.label) }],
+      chatError: false
+    }));
     // Counts only: which audience was opened. The conversation itself stays on this phone.
     if (this.props.store && this.props.store.mode === 'artisan') {
-      const seg = id || 'custom';
+      const seg = segId || 'custom';
       this.props.store.practice(seg);
       this.patchActive(p => ({ ...p, rooms: { ...(p.rooms || {}), [seg]: ((p.rooms || {})[seg] || 0) + 1 } }));
     }
-    try {
-      const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: [{ role: 'user', content: '[The artisan has just opened the conversation. Say your opening line, in character.]' }] });
-      this.setState({ messages: [{ role: 'assistant', content: (reply || '').trim() }], chatBusy: false });
-    } catch (e) { this.chatFailed(e, () => this.openSegment(id)); }
+    await new Promise(r => setTimeout(r, 0));
+    this.openingLine(segId, custom);
   };
 
-  // A failed model call used to leave the practice screen silent. Say so, and offer a retry.
+  openingLine = async (segId, custom) => {
+    this.setState({ chatBusy: true, chatError: false });
+    try {
+      const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: [{ role: 'user', content: '[The artisan has just opened the conversation. Say your opening line, in character.]' }] });
+      this.setState(st => ({ messages: [...st.messages, { role: 'assistant', mode: 'practice', segId, custom, content: (reply || '').trim() }], chatBusy: false }));
+    } catch (e) { this.chatFailed(e, () => this.openingLine(segId, custom)); }
+  };
+
+  // A failed model call used to leave the chat silent. Say so, and offer a retry.
   chatFailed(e, retry) {
-    if (typeof console !== 'undefined') console.error('practice partner failed:', e);
+    if (typeof console !== 'undefined') console.error('model call failed:', e);
     this._retry = retry;
     this.setState({ chatBusy: false, chatError: true, chatErrorReason: (e && e.reason) || (e && e.status ? 'upstream' : 'offline'), chatErrorDetail: (e && e.detail) || (e && e.message) || '' });
   }
 
-  send = async () => {
-    const text = (this.state.draft || '').trim();
+  // Free tiers are metered per request and per token: send only the recent turns upstream.
+  recentTurns(list, n) {
+    const out = list.slice(-(n || 12));
+    while (out.length && out[0].role !== 'user') out.shift();
+    return out.length ? out : list.slice(-1);
+  }
+
+  send = async (preset) => {
+    const text = (typeof preset === 'string' ? preset : (this.state.draft || '')).trim();
     if (!text || this.state.chatBusy) return;
-    const messages = [...this.state.messages, { role: 'user', content: text }];
-    this.setState({ messages, draft: '', chatBusy: true, coach: null, chatError: false });
+    const mode = this.state.mode || 'assist';
+    const userMsg = { role: 'user', mode, content: text };
+    this.setState(st => ({ messages: [...st.messages, userMsg], draft: '', chatBusy: true, chatError: false, guide: st.guide ? { ...st.guide, suggestions: [] } : null }));
+    await new Promise(r => setTimeout(r, 0));
     try {
-      const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: messages.map(m => ({ role: m.role, content: m.content })) });
-      this.setState({ messages: [...messages, { role: 'assistant', content: (reply || '').trim() }], chatBusy: false });
+      if (mode === 'practice') {
+        const block = this.practiceBlock().map(m => ({ role: m.role, content: m.content }));
+        const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 400, system: this.chatSystem(), messages: [{ role: 'user', content: '[The artisan opens the conversation.]' }, ...block.slice(-11)] });
+        this.setState(st => ({ messages: [...st.messages, { role: 'assistant', mode, segId: st.segId, custom: st.customSegment, content: (reply || '').trim() }], chatBusy: false }));
+      } else {
+        const reply = await window.claude.complete({ model: this.props.model || 'claude-sonnet-4-5', max_tokens: 900, system: this.assistSystem(), messages: this.recentTurns(this.assistHistory(), 12) });
+        const { clean, offer } = this.parseOffer(reply);
+        this.setState(st => ({ messages: [...st.messages, { role: 'assistant', mode, content: clean, offer }], chatBusy: false }));
+      }
+      this.runGuide();
     } catch (e) {
       // put their words back in the box so nothing they said is lost
-      this.setState({ messages: this.state.messages.slice(0, -1), draft: text });
+      this.setState(st => ({ messages: st.messages.filter(m => m !== userMsg), draft: text }));
       this.chatFailed(e, () => this.send());
     }
   };
 
-  endAndCoach = async () => {
-    if (this.state.chatBusy) return;
-    if (!this.state.messages.some(m => m.role === 'user')) return;
+  // Suggested next prompts after every reply, in both modes.
+  runGuide = async () => {
+    const st = this.state; if (st.guideBusy) return;
+    const mode = st.mode || 'assist';
     const a = this.active(); const L = this.langOf((a && a.lang) || 'en');
-    const seg = this.segText(this.state.segId);
-    const label = seg ? seg.label.en : this.state.customSegment;
-    const transcript = this.state.messages.map(m => `${m.role === 'user' ? 'ARTISAN' : 'CHARACTER'}: ${m.content}`).join('\n');
-    this.setState({ chatBusy: true, chatError: false });
+    const lines = mode === 'practice'
+      ? this.practiceBlock().map(m => (m.role === 'user' ? 'ARTISAN' : 'CHARACTER') + ': ' + m.content)
+      : this.assistHistory().map(m => (m.role === 'user' ? 'ARTISAN' : 'GUIDE') + ': ' + m.content);
+    if (!lines.length) return;
+    const P = this.personaFor(st.segId, st.customSegment);
+    const seg = mode === 'practice' ? this.segText(st.segId) : null;
+    const advisor = st.segId === 'social' || st.segId === 'ngo';
+    const rule = mode === 'assist'
+      ? "The artisan is talking to their own guide. Suggestions are follow-up prompts they could send next: concrete requests that build on what the guide just said, e.g. 'Build me a 5-step plan to post this', 'Give me a step-by-step guide for my first post', 'Write three captions I can choose from', 'Let me practise this with a brand buyer'. At most one may answer the guide's last question directly."
+      : advisor
+        ? "The artisan is practising with an advisor (" + P.labelEn + "). At least two suggestions must be concrete requests for something the advisor can produce next, e.g. 'Build me a 5-step plan to post this', 'What photo should I take of it?'. At most one may answer the last question directly."
+        : "The artisan is practising with " + P.labelEn + ", someone they must deal with. Suggestions are things to say or ask next that move toward a good outcome, e.g. 'What quantity are you thinking of?', 'Can I show you the reverse of the cloth?'.";
+    this.setState({ guideBusy: true });
+    try {
+      const raw = await window.claude.complete({
+        model: this.props.model || 'claude-sonnet-4-5', max_tokens: 500,
+        system: `You sit beside an artisan in their Karigar app. They may not know yet what they want; notice what they seem to be working toward and offer next prompts that take them further. ${this.groundRules()}\nReply with a single JSON object and nothing else.`,
+        messages: [{ role: 'user', content: `${seg ? 'CHARACTER\n' + seg.persona + '\n\n' : ''}THEIR BOARD SESSION, abridged\n${this.recordText().slice(0, 3000)}\n\nCONVERSATION\n${lines.slice(-14).join('\n')}\n\nReturn exactly:\n{ "goal": "what the artisan seems to be working toward, at most 8 words, or an empty string if not clear yet", "suggestions": ["three prompts the artisan could send next, first person, at most 12 words each, exactly as they would type them — questions or requests"] }\n${rule}\nMake the three different. ${this.langRule(L)}` }]
+      });
+      const g = this.parse(raw);
+      const code = L.code || ((a && a.lang) || 'en');
+      g.suggestions = (Array.isArray(g.suggestions) ? g.suggestions : []).map(x => typeof x === 'string' ? x : (x && (x.label || x.text)) || '').filter(x => x && this.inScript(x, code)).slice(0, 3);
+      if (!this.inScript(g.goal, code)) g.goal = '';
+      this.setState(s2 => ({ guide: { ...g, goal: g.goal || (s2.guide && s2.guide.goal) || '' }, guideBusy: false }));
+    } catch (e) { this.setState({ guideBusy: false }); }
+  };
+
+  endPractice = async () => {
+    if (this.state.chatBusy || this.state.mode !== 'practice') return;
+    const block = this.practiceBlock();
+    const P = this.personaFor(this.state.segId, this.state.customSegment);
+    const t = this.T();
+    const segId = this.state.segId, custom = this.state.customSegment;
+    if (!block.some(m => m.role === 'user')) {
+      this.setState(st => ({ mode: 'assist', guide: null, messages: [...st.messages, { role: 'divider', kind: 'end', text: t.practiceEnded }] }));
+      return;
+    }
+    const a = this.active(); const L = this.langOf((a && a.lang) || 'en');
+    const transcript = block.map(m => (m.role === 'user' ? 'ARTISAN' : 'CHARACTER') + ': ' + m.content).join('\n');
+    this.setState({ chatBusy: true, chatError: false, guide: null });
     try {
       const raw = await window.claude.complete({
         model: this.props.model || 'claude-sonnet-4-5', max_tokens: 900,
         system: `You coach artisans on talking about their own work. Warm, specific, never condescending. You never tell them their craft knowledge is lacking — only that an outsider could not hear it yet. ${this.groundRules()}\nReply with a single JSON object.`,
-        messages: [{ role: 'user', content: `They practised talking to: ${label}.\n\nTHEIR BOARD SESSION, abridged\n${this.recordText().slice(0, 4000)}\n\nTRANSCRIPT\n${transcript}\n\nReturn exactly:\n{ "items": [\n  { "kind": "STRONG", "text": "one thing they did well, quoting their own words" },\n  { "kind": "TRY THIS", "text": "one concrete sentence to use next time" },\n  { "kind": "YOU KNOW MORE", "text": "one thing from their board they did not use" }\n] }\n\nWrite every "text" in ${L.name}, short plain sentences. Keep "kind" in English.` }]
+        messages: [{ role: 'user', content: `They practised talking to: ${P.labelEn}.\n\nTHEIR BOARD SESSION, abridged\n${this.recordText().slice(0, 4000)}\n\nTRANSCRIPT\n${transcript}\n\nReturn exactly:\n{ "items": [\n  { "kind": "STRONG", "text": "one thing they did well, quoting their own words" },\n  { "kind": "TRY THIS", "text": "one concrete sentence to use next time" },\n  { "kind": "YOU KNOW MORE", "text": "one thing from their board they did not use" }\n] }\n\n${this.langRule(L)} Short plain sentences. Keep "kind" in English.` }]
       });
       const coach = this.parse(raw);
       const history = { ...this.state.history };
-      const key = this.state.segId || ('custom:' + this.state.customSegment);
+      const key = segId || ('custom:' + custom);
       history[key] = (history[key] || 0) + 1;
-      this.setState({ coach, chatBusy: false, history });
+      this.setState(st => ({
+        chatBusy: false, history, mode: 'assist',
+        messages: [...st.messages,
+          { role: 'feedback', segId, custom, items: coach.items || [], text: String(t.feedbackTitle || '').replace('{who}', P.label) },
+          { role: 'divider', kind: 'end', text: t.practiceEnded }]
+      }));
       this.persist({ history });
-    } catch (e) { this.chatFailed(e, () => this.endAndCoach()); }
+      await new Promise(r => setTimeout(r, 0));
+      this.runGuide();
+    } catch (e) { this.chatFailed(e, () => this.endPractice()); }
+  };
+
+  // Trains rather than answers: what they are being asked, how to approach it, and one thing
+  // from their own board. Never a finished reply — at most a few opening words.
+  // Models drift into the board's language when the board and the app language differ.
+  // Anything whose script does not match the app language is dropped rather than shown.
+  inScript(text, lang) {
+    const s = String(text || '').replace(/[\s\d\p{P}\p{S}]/gu, '');
+    if (!s) return true;
+    const RANGES = { hi: /[\u0900-\u097F]/g, mr: /[\u0900-\u097F]/g, gu: /[\u0A80-\u0AFF]/g, bn: /[\u0980-\u09FF]/g, ta: /[\u0B80-\u0BFF]/g, kn: /[\u0C80-\u0CFF]/g, en: /[A-Za-z]/g };
+    const re = RANGES[lang]; if (!re) return true;
+    return ((s.match(re) || []).length / s.length) >= 0.6;
+  }
+
+  langRule(L) {
+    const a = this.active(); const O = this.langOf((a && (a.recordLang || a.lang)) || 'en');
+    return O.code !== L.code ? `The board below is written in ${O.name}. Even so, write EVERY value only in ${L.name}, in ${L.name} script — never in ${O.name}.` : `Write every value in ${L.name}.`;
+  }
+
+  addQuestion() {
+    const text = (this.state.newQText || '').trim(); if (!text) return;
+    const ringId = this.state.newQRing || (this.DATA && this.DATA.RINGS[0].id);
+    const key = 'own_' + Date.now();
+    this.patchActive(p => ({ ...p, custom: [...(p.custom || []), { key, ringId, label: text }], translations: {} }));
+    this.setState({ newQText: '', selectedKey: key });
+  }
+
+  askHint = async () => {
+    const st = this.state;
+    if (st.chatBusy || st.hintBusy || st.mode !== 'practice' || !this.practiceBlock().some(m => m.role === 'assistant')) return;
+    const a = this.active(); const L = this.langOf((a && a.lang) || 'en');
+    const seg = this.segText(st.segId);
+    const who = seg ? seg.persona : st.customSegment;
+    const transcript = this.practiceBlock().map(m => `${m.role === 'user' ? 'ARTISAN' : 'CHARACTER'}: ${m.content}`).join('\n');
+    this.setState({ hintBusy: true, messages: st.messages.filter(m => m.role !== 'hint') });
+    try {
+      const raw = await window.claude.complete({
+        model: this.props.model || 'claude-sonnet-4-5', max_tokens: 600,
+        system: `You are a quiet coach beside an artisan while they practise a real conversation. You NEVER write their reply. Your job is to help them find their own words, so they get better each time. Point them at what they already know from their board. ${this.groundRules()}\nReply with a single JSON object and nothing else.`,
+        messages: [{ role: 'user', content: `THE CHARACTER THEY ARE TALKING TO\n${who}\n\nTHEIR BOARD SESSION, abridged\n${this.recordText().slice(0, 4000)}\n\nCONVERSATION SO FAR\n${transcript}\n\nThey must answer the character's last line next. Return exactly:\n{ "reading": "one short sentence: what the character is really asking or testing", "tips": ["2-3 short pointers on HOW to answer: what to bring in, what to avoid, what tone. Never the answer itself."], "from_board": "one specific thing from their own board they could use, phrased as a reminder", "starter": "the first 3 to 6 words of a sentence they might begin with, ending in …" }\n\n${this.langRule(L)} Short plain sentences. Never write a complete reply.` }]
+      });
+      const hint = this.parse(raw);
+      const hc = L.code || ((a && a.lang) || 'en');
+      hint.tips = (Array.isArray(hint.tips) ? hint.tips : []).filter(x => this.inScript(x, hc)).slice(0, 3);
+      if (!this.inScript(hint.starter, hc)) hint.starter = '';
+      if (!this.inScript(hint.reading, hc)) hint.reading = '';
+      if (!this.inScript(hint.from_board, hc)) hint.from_board = '';
+      this.setState(s2 => ({ hintBusy: false, messages: [...s2.messages, { role: 'hint', id: Date.now(), hint }] }));
+    } catch (e) { this.setState({ hintBusy: false }); }
   };
 
   renderVals() {
@@ -1512,18 +2320,29 @@ Reply with plain conversational text only.`;
     const a = this.active();
     const appLangCode = (a && a.lang) || 'en';
     const t = this.t(s.side === 'artisan' ? appLangCode : s.uiLang);
-    // New → "Type it myself" fills the board directly. It works on its own profile, created
-    // with the first answer, so opening the tab and leaving does not leave an empty profile.
-    const manual = s.side === 'org' && s.orgView === 'new' && s.intake === 'manual';
-    const mp = manual && s.manualId ? s.profiles.find(p => p.id === s.manualId) || null : null;
-    const rec = manual ? ((mp && mp.record) || {}) : ((a && a.record) || {});
-    const srcs = manual ? ((mp && mp.sources) || {}) : ((a && a.sources) || {});
+    const rec0 = (a && a.record) || {};
+    const srcs = (a && a.sources) || {};
     const uiL = this.langOf(s.side === 'artisan' ? appLangCode : s.uiLang);
-    const recL = this.langOf(manual ? (mp ? mp.lang : s.newLang) : ((a && a.lang) || 'en'));
+    const origLang = (a && (a.recordLang || a.lang)) || 'en';
+    const trView = s.side === 'artisan' && a && a.lang !== origLang ? ((a.translations || {})[a.lang] || null) : null;
+    const pendingTr = s.side === 'artisan' && a && a.lang !== origLang && (!trView || !!trView.partial);
+    // Fonts follow what is on screen: the app language in the app, the source language on the console.
+    const recL = this.langOf(s.side === 'artisan' ? ((a && a.lang) || 'en') : origLang);
+    const rec = trView ? { ...rec0, ...trView.record } : rec0;
+    const ownLabel = (key, fb) => (trView && trView.custom && trView.custom[key]) || fb;
     const cards = this.CARDS || [];
     const rings = D ? D.RINGS : [];
-    const filled = cards.filter(c => (rec[c.key] || '').trim()).length;
-    const nameOf = p => (p.record.artisan_name || 'Untitled').split('(')[0].trim();
+    const links = (a && a.links) || {};
+    const own = ((a && a.custom) || []).map(q => {
+      const rr = rings.find(x => x.id === q.ringId) || rings[0] || {};
+      return { key: q.key, label: ownLabel(q.key, q.label), hint: '', ask: '', code: '+', groupTitle: '', groupId: 'own:' + rr.id, ringId: rr.id, color: rr.color || '#6B3FA0', ink: rr.ink || '#52307C', hub: null, own: true };
+    });
+    const allCards = [...cards.map(c => ({ ...c, groupId: c.code })), ...own];
+    const placeOf = c => c.ringId || (c.hub ? links[c.code] || null : null);
+    const filled = allCards.filter(c => (rec[c.key] || '').trim()).length;
+    const viewLang = s.side === 'artisan' ? appLangCode : s.uiLang;
+    const idOf = p => this.idText(p, viewLang);
+    const nameOf = p => (idOf(p).name || t.untitled || 'Untitled').split('(')[0].trim();
     const ringName = id => (I && I.RING_NAMES[id] && (I.RING_NAMES[id][s.side === 'artisan' ? appLangCode : s.uiLang] || I.RING_NAMES[id].en)) || id;
     const hubTitle = code => { const k = I && I.HUB_TITLE_KEY[code]; return (k && t[k]) || code; };
     // Card deck text follows the console language; falls back to the printed English deck.
@@ -1535,63 +2354,162 @@ Reply with plain conversational text only.`;
     const fmt = (str, n) => String(str || '').replace('{n}', n);
 
     // ── board geometry ──────────────────────────────────────────────
-    const ringArcs = rings.map(r => ({ r: r.r, color: r.color, opacity: s.selectedKey && (cards.find(c => c.key === s.selectedKey) || {}).ringId && (cards.find(c => c.key === s.selectedKey) || {}).ringId !== r.id ? 0.42 : 1 }));
-    const ringLabels = rings.map(r => {
-      const top = 50 - (r.r / 120) * 100;
-      return { label: ringName(r.id), style: `position:absolute;left:50%;top:${top}%;transform:translate(-50%,-50%);background:rgba(255,255,255,.93);color:${r.ink};border-radius:999px;padding:2px 9px;font-size:clamp(8.5px,1.55vw,11.5px);font-weight:700;letter-spacing:.01em;white-space:nowrap;pointer-events:none;font-family:${uiL.font}` };
+    const selCard = allCards.find(c => c.key === s.selectedKey) || null;
+    const selRingId = selCard ? placeOf(selCard) : null;
+    const ringArcs = rings.map(r => ({ r: r.r, color: r.color, opacity: selRingId && selRingId !== r.id ? 0.42 : 1 }));
+    const ringText = { craft: '', place: '', lineage: '', material: '', culture: '', pride: '' }; rings.forEach(r => { ringText[r.id] = ringName(r.id); });
+    // Ring names follow the top arc of each band (233°→307°), where no dots sit.
+    const LABEL_INK = { craft: '#3A1F57', place: '#12443C', lineage: '#FFFFFF', material: '#3E1611', culture: '#13304A', pride: '#4D3302' };
+    const labelSvg = (prefix, font) => {
+      const h = React.createElement;
+      const a1 = 233 * Math.PI / 180, a2 = 307 * Math.PI / 180;
+      const p = (r, an) => `${(60 + r * Math.cos(an)).toFixed(2)} ${(60 + r * Math.sin(an)).toFixed(2)}`;
+      return h('svg', { viewBox: '0 0 120 120', style: { width: '100%', height: '100%', display: 'block' }, 'aria-hidden': 'true' },
+        h('defs', null, rings.map(r => h('path', { key: r.id, id: `${prefix}-${r.id}`, d: `M ${p(r.r, a1)} A ${r.r} ${r.r} 0 0 1 ${p(r.r, a2)}`, fill: 'none' }))),
+        rings.map(r => h('text', { key: r.id, fontSize: 3.3, fontWeight: 700, fill: LABEL_INK[r.id] || '#241F2E', textAnchor: 'middle', dominantBaseline: 'central', letterSpacing: 0.12, fontFamily: font, opacity: selRingId && selRingId !== r.id ? 0.5 : 1 },
+          h('textPath', { href: `#${prefix}-${r.id}`, startOffset: '50%' }, ringName(r.id)))));
+    };
+    const onRing = id => allCards.filter(c => placeOf(c) === id);
+    const ringLegend = rings.map(r => {
+      const mine = onRing(r.id);
+      const done = mine.filter(c => (rec[c.key] || '').trim()).length;
+      const on = selRingId === r.id;
+      return {
+        label: ringName(r.id), color: r.color, count: `${done}/${mine.length}`,
+        pick: () => { const first = mine.find(c => !(rec[c.key] || '').trim()) || mine[0]; if (first) this.setState({ selectedKey: first.key }); },
+        style: `display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:38px;border:1.5px solid ${on ? r.color : '#EBE3D6'};background:${on ? '#fff' : 'rgba(255,255,255,.6)'};color:${on ? r.ink : '#241F2E'};font-family:${uiL.font}`
+      };
     });
 
+    // Dots run from -50° to 230°, leaving the top arc clear for the ring's name.
     const boardDots = [];
     rings.forEach(r => {
-      const mine = cards.filter(c => c.ringId === r.id);
+      const mine = onRing(r.id);
       const rp = (r.r / 120) * 100;
-      const span = 292, from = -58;
       mine.forEach((c, i) => {
-        const deg = from + (i + 0.5) * (span / mine.length);
+        const deg = -50 + (i + 0.5) * (280 / mine.length);
         const rad = deg * Math.PI / 180;
-        const left = 50 + rp * Math.cos(rad), top = 50 + rp * Math.sin(rad);
         const has = !!(rec[c.key] || '').trim();
         const on = s.selectedKey === c.key;
         const size = on ? 21 : 15;
-        const bg = on ? '#241F2E' : has ? '#FFFFFF' : 'rgba(255,255,255,.42)';
-        const bd = on ? '3px solid #fff' : has ? `3px solid ${r.ink}` : '2px solid rgba(255,255,255,.9)';
+        const radius = c.hub ? '5px' : '50%';
+        const col = c.hub ? c.color : r.ink;
+        const bg = on ? '#241F2E' : has ? (c.hub ? c.color : '#FFFFFF') : 'rgba(255,255,255,.42)';
+        const bd = on ? '3px solid #fff' : c.own ? `2.5px dashed ${has ? col : '#fff'}` : has ? `3px solid ${col}` : '2px solid rgba(255,255,255,.9)';
         boardDots.push({
-          title: fLabel(c.key, c.label),
+          title: c.own ? c.label : fLabel(c.key, c.label),
           pick: () => this.setState({ selectedKey: c.key }),
-          style: `position:absolute;left:${left}%;top:${top}%;transform:translate(-50%,-50%);width:${size}px;height:${size}px;border-radius:50%;background:${bg};border:${bd};padding:0;cursor:pointer;box-shadow:${on ? '0 0 0 5px rgba(36,31,46,.16)' : '0 1px 3px rgba(0,0,0,.18)'}`
+          style: `position:absolute;left:${50 + rp * Math.cos(rad)}%;top:${50 + rp * Math.sin(rad)}%;transform:translate(-50%,-50%);width:${size}px;height:${size}px;border-radius:${radius};background:${bg};border:${bd};padding:0;cursor:pointer;box-shadow:${on ? '0 0 0 5px rgba(36,31,46,.16)' : '0 1px 3px rgba(0,0,0,.18)'}`
         });
       });
     });
 
-    const hubCards = cards.filter(c => c.hub);
-    // Several story cards share a generic field label ("The moment") — fall back to the card
-    // title wherever a label would otherwise appear twice in the hub row.
-    const hubSeen = {};
-    hubCards.forEach(c => { const l = fLabel(c.key, c.label); hubSeen[l] = (hubSeen[l] || 0) + 1; });
-    const hubLabel = c => { const l = fLabel(c.key, c.label); return hubSeen[l] > 1 ? hubTitle(c.code) : l; };
-    const hubGroups = [
-      { label: t.reflection, cards: hubCards.filter(c => c.hub.kind === 'reflection') },
-      { label: t.stories, cards: hubCards.filter(c => c.hub.kind === 'story') }
-    ].map(g => ({
-      label: g.label,
-      cards: g.cards.map(c => {
-        const has = !!(rec[c.key] || '').trim();
-        const on = s.selectedKey === c.key;
-        return {
-          token: c.hub.token, label: hubLabel(c),
-          pick: () => this.setState({ selectedKey: c.key }),
-          style: `display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer;min-height:42px;border:1.5px solid ${on ? c.color : has ? c.color : '#EBE3D6'};background:${on ? c.color : has ? '#fff' : '#FBF7F0'};color:${on ? '#fff' : has ? c.ink : '#8C8499'};font-family:${uiL.font}`
-        };
-      })
-    }));
+    // Overview hero: same geometry, each dot shows how many artisans answered that card.
+    const heroRings = rings.map(r => ({ r: r.r, color: r.color }));
+    const allProfiles = s.profiles || [];
+    const heroDots = [];
+    rings.forEach(r => {
+      const mine = cards.filter(c => c.ringId === r.id);
+      const rp = (r.r / 120) * 100;
+      mine.forEach((c, i) => {
+        const rad = (-50 + (i + 0.5) * (280 / mine.length)) * Math.PI / 180;
+        const n = allProfiles.filter(p => ((p.record || {})[c.key] || '').trim()).length;
+        const cov = allProfiles.length ? n / allProfiles.length : 0;
+        const size = 9 + cov * 6;
+        heroDots.push({
+          title: `${fLabel(c.key, c.label)} — ${n}/${allProfiles.length}`,
+          style: `position:absolute;left:${50 + rp * Math.cos(rad)}%;top:${50 + rp * Math.sin(rad)}%;transform:translate(-50%,-50%);width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,255,255,${(0.2 + cov * 0.8).toFixed(2)});box-shadow:${cov > 0.7 ? '0 0 0 3px rgba(255,255,255,.14)' : 'none'}`
+        });
+      });
+    });
 
-    const selCard = cards.find(c => c.key === s.selectedKey) || null;
-    const selRing = selCard && selCard.ringId ? rings.find(r => r.id === selCard.ringId) : null;
+    // ── reflection & story cards: placed on a ring by the facilitator ──
+    const setLink = (code, v) => this.patchActive(p => { const l = { ...(p.links || {}) }; if (v) l[code] = v; else delete l[code]; return { ...p, links: l }; });
+    const ringOptions = [{ value: '', label: t.notPlaced }, ...rings.map(r => ({ value: r.id, label: ringName(r.id) }))];
+    const ringOnlyOptions = rings.map(r => ({ value: r.id, label: ringName(r.id) }));
+    const hubCodes = D ? D.HUB.map(h => h.code) : [];
+    const connectRows = hubCodes.map(code => {
+      const mine = allCards.filter(c => c.code === code);
+      const h = mine[0]; if (!h) return null;
+      const placed = links[code];
+      return {
+        token: h.hub.token, label: hubTitle(code), value: placed || '',
+        count: `${mine.filter(c => (rec[c.key] || '').trim()).length}/${mine.length}`,
+        onChange: e => setLink(code, e.target.value),
+        open: () => this.setState({ selectedKey: h.key }),
+        tokenStyle: `width:40px;height:40px;flex-shrink:0;border-radius:12px;border:0;cursor:pointer;font-size:12px;font-weight:800;background:${placed ? h.color : h.color + '1F'};color:${placed ? '#fff' : h.ink}`
+      };
+    }).filter(Boolean);
+
+    const deckOf = c => c.own ? 'own' : c.hub ? c.hub.kind : 'theme';
+    const deckName = { theme: t.deckTheme, reflection: t.deckReflection, story: t.deckStory, own: t.deckOwn };
+    const deckProgress = ['theme', 'reflection', 'story', 'own'].map(k => {
+      const mine = allCards.filter(c => deckOf(c) === k);
+      if (!mine.length) return null;
+      const n = mine.filter(c => (rec[c.key] || '').trim()).length;
+      const col = { theme: '#6D9DC5', reflection: '#6B3FA0', story: '#C06A5F', own: '#F0B23C' }[k];
+      return { label: deckName[k], count: `${n}/${mine.length}`, bar: `height:100%;width:${(n / mine.length * 100).toFixed(1)}%;background:${col};border-radius:6px;transition:width .3s` };
+    }).filter(Boolean);
+
+    // ── card popup ─────────────────────────────────────────────────
+    const groupOrder = [...new Set(allCards.map(c => c.groupId))];
+    const stepGroup = d => {
+      if (!selCard) return;
+      const gi = groupOrder.indexOf(selCard.groupId);
+      const g = groupOrder[(gi + d + groupOrder.length) % groupOrder.length];
+      const first = allCards.find(c => c.groupId === g);
+      if (first) this.setState({ selectedKey: first.key });
+    };
+    const fmt2 = (str, n, m) => String(str || '').replace('{n}', n).replace('{m}', m);
+    let pop = { headStyle: '', ringDecor: '', ringDecor2: '', pillStyle: '', deck: '', code: '', title: '', ringLabel: '', hasRing: false, ink: '#241F2E', marks: [], answered: '', ask: '', fields: [], isHub: false, linkValue: '', setLink: () => {} };
+    if (selCard) {
+      const popCards = allCards.filter(c => c.groupId === selCard.groupId);
+      const col = selCard.color, ink = selCard.ink;
+      const placed = placeOf(selCard);
+      const n = popCards.filter(c => (rec[c.key] || '').trim()).length;
+      pop = {
+        headStyle: `position:relative;overflow:hidden;flex-shrink:0;padding:18px 20px 16px;background:${col}26;border-top:6px solid ${col}`,
+        ringDecor: `position:absolute;right:-46px;top:-46px;width:150px;height:150px;border-radius:50%;border:16px solid ${col};opacity:.22`,
+        ringDecor2: `position:absolute;right:-6px;top:-6px;width:70px;height:70px;border-radius:50%;border:10px solid ${col};opacity:.16`,
+        pillStyle: `background:#fff;color:${ink};border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700;letter-spacing:.02em`,
+        deck: deckName[deckOf(selCard)],
+        // Schema codes are facilitator vocabulary; the artisan never sees them.
+        code: selCard.own || s.side === 'artisan' ? '' : selCard.code,
+        title: selCard.own ? (placed ? ringName(placed) : t.deckOwn) : gTitle(selCard.code, selCard.groupTitle),
+        // Theme cards already carry the ring name as their title — only placed hub cards need the line.
+        ringLabel: placed && selCard.hub ? ringName(placed) : '', hasRing: !!placed && !!selCard.hub,
+        ink, answered: fmt2(t.answeredOf, n, popCards.length),
+        ask: selCard.own ? t.ownAsk : gAsk(selCard.code, selCard.ask),
+        marks: popCards.map(c => ({ style: `width:10px;height:10px;border-radius:${c.hub ? '3px' : '50%'};background:${(rec[c.key] || '').trim() ? col : 'transparent'};border:2px solid ${col}` })),
+        fields: popCards.map((c, i) => {
+          const v = rec[c.key] || ''; const has = !!v.trim(); const on = c.key === selCard.key;
+          return {
+            n: i + 1, label: c.own ? c.label : fLabel(c.key, c.label), value: v,
+            readValue: has ? v : t.noAnswer,
+            readStyle: `margin:0;font-size:15.5px;line-height:1.7;white-space:pre-wrap;font-family:${recL.font};color:${has ? '#241F2E' : '#A79FB4'};font-style:${has ? 'normal' : 'italic'}`,
+            onChange: e => this.setField(c.key, e.target.value),
+            pick: () => { if (s.selectedKey !== c.key) this.setState({ selectedKey: c.key }); },
+            quote: srcs[c.key] ? '“' + srcs[c.key] + '”' : '', hasQuote: !!srcs[c.key],
+            isOwn: !!c.own,
+            remove: () => {
+              this.patchActive(p => { const r2 = { ...p.record }; delete r2[c.key]; return { ...p, record: r2, custom: (p.custom || []).filter(q => q.key !== c.key) }; });
+              this.setState({ selectedKey: null });
+            },
+            boxStyle: `border-radius:18px;padding:14px;background:${on ? col + '14' : '#FBF7F0'};border:1.5px solid ${on ? col + '80' : 'transparent'};transition:background .2s,border-color .2s`,
+            qStyle: `flex-shrink:0;font-size:11px;font-weight:800;color:${has ? '#fff' : ink};background:${has ? col : col + '26'};border-radius:7px;padding:2px 7px;font-variant-numeric:tabular-nums`
+          };
+        }),
+        isHub: !!selCard.hub, linkValue: links[selCard.code] || '',
+        setLink: e => setLink(selCard.code, e.target.value)
+      };
+    }
+
+    const selRing = selRingId ? rings.find(r => r.id === selRingId) : null;
     const selIndex = selCard ? cards.findIndex(c => c.key === selCard.key) : -1;
     const step = d => { const n = cards[(selIndex + d + cards.length) % cards.length]; if (n) this.setState({ selectedKey: n.key }); };
 
     const circ = 2 * Math.PI * 15;
-    const pctDone = cards.length ? filled / cards.length : 0;
+    const pctDone = allCards.length ? filled / allCards.length : 0;
 
     // ── overview ────────────────────────────────────────────────────
     const N = s.profiles.length || 1;
@@ -1610,6 +2528,16 @@ Reply with plain conversational text only.`;
       { value: returning, of: fmt(t.ofUsers, openedCount || N), label: t.mReturned, why: t.mReturnedWhy, color: '#F0B23C', pct: Math.round(returning / (openedCount || N) * 100) + '%' }
     ];
 
+    const attention = [];
+    comp.forEach(({ p, c }) => {
+      const go = (view, tab) => () => this.setState({ activeId: p.id, orgView: view, boardTab: tab || 'board', selectedKey: null });
+      if (!c.complete) attention.push({ who: nameOf(p), issue: c.reflection < 4 ? t.issueNoReflection : t.issueIncomplete, dot: '#A81C24', cta: t.actOpenSession, act: go('board', 'board') });
+      else if (!p.analysis) attention.push({ who: nameOf(p), issue: t.issueNoAnalysis, dot: '#F0B23C', cta: t.actAnalyse, act: () => { this.setState({ activeId: p.id, orgView: 'board' }); setTimeout(this.analyse, 60); } });
+      else if (!p.approved) attention.push({ who: nameOf(p), issue: t.issueNoApproval, dot: '#F0B23C', cta: t.actHandover, act: go('board', 'handover') });
+      else if (p.openedDaysAgo === null || p.openedDaysAgo === undefined) attention.push({ who: nameOf(p), issue: t.issueNeverOpened, dot: '#8C8499', cta: t.actTrouble, act: () => this.setState({ orgView: 'artisans', troubleId: p.id }) });
+      else if (p.openedDaysAgo > 21) attention.push({ who: nameOf(p), issue: fmt(t.issueStale, p.openedDaysAgo), dot: '#8C8499', cta: t.actTrouble, act: () => this.setState({ orgView: 'artisans', troubleId: p.id }) });
+    });
+
     // Facilitation quality by cluster, aggregated from this organisation's own profiles.
     // handed = the artisan has opened their link; in weekly use = practised in the last 7 days.
     const clusterMap = {};
@@ -1626,16 +2554,6 @@ Reply with plain conversational text only.`;
       if (p.practicedDaysAgo !== null && p.practicedDaysAgo !== undefined && p.practicedDaysAgo <= 7) row.active++;
     });
     const clusters = Object.values(clusterMap).sort((x, y) => y.sessions - x.sessions);
-
-    const attention = [];
-    comp.forEach(({ p, c }) => {
-      const go = (view, tab) => () => this.setState({ activeId: p.id, orgView: view, boardTab: tab || 'board', selectedKey: null });
-      if (!c.complete) attention.push({ who: nameOf(p), issue: c.reflection < 4 ? t.issueNoReflection : t.issueIncomplete, dot: '#A81C24', cta: t.actOpenSession, act: go('board', 'board') });
-      else if (!p.analysis) attention.push({ who: nameOf(p), issue: t.issueNoAnalysis, dot: '#F0B23C', cta: t.actAnalyse, act: () => { this.setState({ activeId: p.id, orgView: 'board' }); setTimeout(this.analyse, 60); } });
-      else if (!p.approved) attention.push({ who: nameOf(p), issue: t.issueNoApproval, dot: '#F0B23C', cta: t.actHandover, act: go('board', 'handover') });
-      else if (p.openedDaysAgo === null || p.openedDaysAgo === undefined) attention.push({ who: nameOf(p), issue: t.issueNeverOpened, dot: '#8C8499', cta: t.actTrouble, act: () => this.setState({ orgView: 'artisans', troubleId: p.id }) });
-      else if (p.openedDaysAgo > 21) attention.push({ who: nameOf(p), issue: fmt(t.issueStale, p.openedDaysAgo), dot: '#8C8499', cta: t.actTrouble, act: () => this.setState({ orgView: 'artisans', troubleId: p.id }) });
-    });
 
     const riskStyle = risk => {
       const c = risk === 'Critical' ? ['#FBEAE8', '#A81C24'] : risk === 'Watch' ? ['#FFF6E3', '#8A5D05'] : ['#E6F6F2', '#1F5F54'];
@@ -1682,7 +2600,7 @@ Reply with plain conversational text only.`;
 
     // ── manage ──────────────────────────────────────────────────────
     const query = (s.manageQuery || '').toLowerCase().trim();
-    const filtered = s.profiles.filter(p => !query || [p.record.artisan_name, p.record.craft_name_local, p.record.craft_region, p.cluster].join(' ').toLowerCase().includes(query));
+    const filtered = s.profiles.filter(p => { if (!query) return true; const n = p.names || {}; const extra = Object.keys(n).filter(k => k !== 'sig').map(k => [n[k].name, n[k].craft, n[k].region].join(' ')); return [p.record.artisan_name, p.record.craft_name_local, p.record.craft_region, p.cluster, ...extra].join(' ').toLowerCase().includes(query); });
     const statusStyle = kind => {
       const c = kind === 'live' ? ['#E6F6F2', '#1F5F54'] : kind === 'bad' ? ['#FBEAE8', '#A81C24'] : ['#FFF6E3', '#8A5D05'];
       return `background:${c[0]};color:${c[1]};border-radius:999px;padding:3px 10px;font-size:11px;font-weight:600`;
@@ -1699,6 +2617,7 @@ Reply with plain conversational text only.`;
         label: st.label[aLang] || st.label.en, blurb: st.blurb[aLang] || st.blurb.en,
         icon: SEG_META[id].icon, tint: SEG_META[id].tint, ink: SEG_META[id].ink,
         open: () => this.openSegment(id),
+        practise: () => { this.setState({ appView: 'chat' }); this.startPractice(id, ''); },
         style: 'width:100%;background:#fff;border:0;border-radius:20px;padding:13px 14px;cursor:pointer;box-shadow:0 1px 3px rgba(36,31,46,.05),0 6px 18px rgba(36,31,46,.04);min-height:68px'
       };
     }).filter(Boolean);
@@ -1711,9 +2630,10 @@ Reply with plain conversational text only.`;
 
     const artisanNav = [
       { id: 'home', label: t.navHome, icon: '⌂' },
-      { id: 'board', label: t.navMyBoard, icon: '❋' }
+      { id: 'board', label: t.navMyBoard, icon: '❋' },
+      { id: 'profile', label: t.navProfile, icon: '◉' }
     ].map(n => ({
-      label: n.label, icon: n.icon, go: () => this.setState({ appView: n.id }),
+      label: n.label, icon: n.icon, go: () => this.setState({ appView: n.id, selectedKey: null }),
       style: `display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:transparent;cursor:pointer;padding:8px 2px;min-height:54px;color:${s.appView === n.id ? '#6B3FA0' : '#8C8499'}`
     }));
 
@@ -1723,22 +2643,21 @@ Reply with plain conversational text only.`;
       uiLang: s.uiLang,
       setUiLang: e => { const v = e.target.value; this.setState({ uiLang: v }); this.persist({ uiLang: v }); },
       appLang: aLang,
-      setAppLang: e => { const v = e.target.value; this.patchActive(p => ({ ...p, lang: v })); },
-      showSides: !(this.props.boot && this.props.boot.mode === 'artisan'),
-      canSignOut: !!(this.props.store && this.props.store.signOut) && s.side === 'org',
-      signOut: () => this.props.store.signOut(),
+      setAppLang: e => { const v = e.target.value; this.setState({ translateError: false }); this.patchActive(p => ({ ...p, lang: v })); },
       sides: [{ id: 'org', label: t.org }, { id: 'artisan', label: t.artisanApp }].map(x => ({
         label: x.label,
         go: () => this.setState({ side: x.id }),
         style: `border:0;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px;background:${s.side === x.id ? '#fff' : 'transparent'};color:${s.side === x.id ? '#241F2E' : '#8C8499'};box-shadow:${s.side === x.id ? '0 1px 3px rgba(36,31,46,.12)' : 'none'};font-family:${uiL.font}`
       })),
       isOrg: s.side === 'org', isArtisan: s.side === 'artisan',
+      canSignOut: !!(this.props.store && this.props.store.signOut) && s.side === 'org',
+      signOut: () => this.props.store.signOut(),
 
       navItems,
       roster: s.profiles.map(p => {
         const c = this.completeness(p);
         return {
-          name: nameOf(p), craft: p.record.craft_name_local || p.cluster || '—',
+          name: nameOf(p), craft: idOf(p).craft || p.cluster || '—',
           dot: !c.complete ? '#A81C24' : !p.analysis ? '#F0B23C' : p.approved ? '#6FC9B8' : '#6D9DC5',
           open: () => this.setState({ activeId: p.id, orgView: 'board', boardTab: 'board', selectedKey: null }),
           style: `display:flex;align-items:center;gap:9px;width:100%;border:0;border-radius:12px;padding:9px 10px;cursor:pointer;min-height:44px;background:${s.activeId === p.id ? '#F2EDE4' : 'transparent'};font-family:${uiL.font}`
@@ -1746,7 +2665,7 @@ Reply with plain conversational text only.`;
       }),
 
       vOverview: s.orgView === 'overview', vBoard: s.orgView === 'board' && !!a, vArtisans: s.orgView === 'artisans', vNew: s.orgView === 'new',
-      goNew: () => this.setState({ orgView: 'new', intake: 'upload', transcript: '', fileName: '', audioPending: false, extractError: '', manualId: null, selectedKey: null }),
+      goNew: () => this.setState({ orgView: 'new', intake: 'upload', transcript: '', fileName: '', audioPending: false, extractError: '' }),
       goHandover: () => this.setState({ boardTab: 'handover' }),
 
       metrics, attention, hasAttention: attention.length > 0, noAttention: attention.length === 0,
@@ -1763,12 +2682,29 @@ Reply with plain conversational text only.`;
         ]
       })),
 
-      activeName: a ? nameOf(a) : '', activeSub: a ? ([rec.craft_name_local, rec.craft_region].filter(Boolean).join(' · ') || a.cluster || '') : '',
-      filledCount: filled, totalCount: cards.length,
+      activeName: a ? nameOf(a) : '', activeSub: a ? ([idOf(a).craft, idOf(a).region].filter(Boolean).join(' · ') || a.cluster || '') : '',
+      filledCount: filled, totalCount: allCards.length,
       boardTabs, tabBoard: s.boardTab === 'board', tabList: s.boardTab === 'list', tabAnalysis: s.boardTab === 'analysis', tabHandover: s.boardTab === 'handover',
-      ringArcs, ringLabels, boardDots, hubGroups,
+      ringArcs, ringLegend, boardDots, heroRings, heroDots, ringText,
+      ringLabels: labelSvg('rl-' + (s.side === 'artisan' ? s.appView : 'org'), s.side === 'artisan' ? recL.font : uiL.font),
+      heroRingLabels: labelSvg('rl-hero', uiL.font),
+      uiFont: uiL.font, brandName: 'Karigar',
+      ringOptions, ringOnlyOptions, connectRows, deckProgress,
+      sessionComplete: allCards.length > 0 && filled === allCards.length,
+      orgPopOpen: !!selCard && s.side === 'org' && s.orgView === 'board' && s.boardTab === 'board',
+      appPopOpen: !!selCard && s.side === 'artisan' && (s.appView === 'home' || s.appView === 'board'),
+      pop, closePop: () => this.setState({ selectedKey: null }),
+      prevGroup: () => stepGroup(-1), nextGroup: () => stepGroup(1),
+      newQRing: s.newQRing || (rings[0] && rings[0].id) || '', newQText: s.newQText || '',
+      setNewQRing: e => this.setState({ newQRing: e.target.value }),
+      setNewQText: e => this.setState({ newQText: e.target.value }),
+      newQKey: e => { if (e.key === 'Enter') { e.preventDefault(); this.addQuestion(); } },
+      addQuestion: () => this.addQuestion(),
+      heroCount: allProfiles.length,
+      hasLatest: allProfiles.length > 0,
+      openLatest: () => { const p = allProfiles[allProfiles.length - 1]; if (p) this.setState({ activeId: p.id, orgView: 'board', boardTab: 'board', selectedKey: null }); },
       progressDash: `${(circ * pctDone).toFixed(2)} ${circ.toFixed(2)}`,
-      hasSelected: !!selCard, noSelected: !selCard, sheetState: selCard ? 'k-sheet-open' : 'k-sheet-idle',
+      hasSelected: !!selCard, noSelected: !selCard,
       clearSelected: () => this.setState({ selectedKey: null }),
       prevCard: () => step(-1), nextCard: () => step(1),
       sel: selCard ? {
@@ -1779,7 +2715,7 @@ Reply with plain conversational text only.`;
         value: rec[selCard.key] || '',
         readValue: (rec[selCard.key] || '').trim() || t.emptyCard,
         quote: srcs[selCard.key] ? '“' + srcs[selCard.key] + '”' : '', hasQuote: !!srcs[selCard.key],
-        onChange: e => manual ? this.setManualField(selCard.key, e.target.value) : this.setField(selCard.key, e.target.value)
+        onChange: e => this.setField(selCard.key, e.target.value)
       } : { chipStyle: '', label: '', ask: '', hint: '', value: '', readValue: '', quote: '', hasQuote: false, code: '', ringLabel: '' },
 
       groups, hasAutofill: !!(a && a.sources && Object.keys(a.sources).length),
@@ -1793,10 +2729,21 @@ Reply with plain conversational text only.`;
       analysis: ana || { communication_profile: '', artisan_summary_local: '', artisan_summary_en: '' },
       strengths: (ana && ana.strengths) || [], gaps: (ana && ana.gaps) || [],
       recommended: (ana && ana.recommended_segments) || [],
-      vocab: (ana && ana.vocabulary) || [], hasVocab: !!(ana && ana.vocabulary && ana.vocabulary.length),
+      vocab: (trView && trView.vocabulary.length ? trView.vocabulary : (ana && ana.vocabulary)) || [], hasVocab: !!(ana && ana.vocabulary && ana.vocabulary.length),
       careNotes: (ana && ana.care_notes) || [],
 
       shareLink: this.shareUrl().replace(/^https?:\/\//, ''),
+      isPreviewLink: !this.hosted(), isHostedLink: this.hosted(),
+      previewNote: String(t.previewNote || '').replace('{origin}', this.origin().replace(/^https?:\/\//, '')),
+      // Live as soon as the server has issued this profile's token on its first save.
+      pubText: (() => { const st = a && (a.token ? 'ok' : 'pending'); return st === 'ok' ? String(t.pubLive || '').replace('{name}', a ? nameOf(a) : '') : st === 'error' ? t.pubError : t.pubPending; })(),
+      pubStyle: (() => { const st = a && (a.token ? 'ok' : 'pending'); const c = st === 'ok' ? ['#E6F6F2', '#1F5F54'] : st === 'error' ? ['#FBEAE8', '#A81C24'] : ['#F2EDE4', '#6F6880']; return `margin-top:14px;border-radius:14px;padding:11px 13px;font-size:13px;line-height:1.55;background:${c[0]};color:${c[1]}`; })(),
+      aLinkError: s.appView === 'linkerror',
+      linkLoading: s.linkError === 'loading', linkFailed: !!s.linkError && s.linkError !== 'loading',
+      linkT: (() => { const nl = (typeof navigator !== 'undefined' && (navigator.language || '').slice(0, 2)) || 'en'; return this.t(['hi', 'gu', 'mr'].includes(nl) ? nl : 'en'); })(),
+      linkMsg: (() => { const nl = (typeof navigator !== 'undefined' && (navigator.language || '').slice(0, 2)) || 'en'; const lt = this.t(['hi', 'gu', 'mr'].includes(nl) ? nl : 'en'); return ({ notfound: lt.linkNotFound, revoked: lt.linkRevoked, old: lt.linkOld, offline: lt.linkOffline })[s.linkError] || ''; })(),
+      retryLink: () => { if (typeof location !== 'undefined') location.reload(); },
+      showHeader: !s.linkMode,
       hasQr: !!(s.qr && s.qr !== 'error'), qrPending: !(s.qr && s.qr !== 'error'),
       qrViewBox: s.qr && s.qr !== 'error' ? `0 0 ${s.qr.size} ${s.qr.size}` : '0 0 1 1',
       qrPath: (s.qr && s.qr !== 'error' && s.qr.path) || '',
@@ -1815,7 +2762,7 @@ Reply with plain conversational text only.`;
         const kind = p.revoked ? 'bad' : !c.complete ? 'bad' : !p.analysis || !p.approved ? 'warn' : 'live';
         const status = p.revoked ? t.stRevoked : !c.complete ? t.stIncomplete : !p.analysis ? t.stNoAnalysis : !p.approved ? t.stNoApproval : t.stLive;
         return {
-          name: nameOf(p), sub: [p.record.craft_name_local, p.record.craft_region].filter(Boolean).join(' · ') || p.cluster || '—',
+          name: nameOf(p), sub: [idOf(p).craft, idOf(p).region].filter(Boolean).join(' · ') || p.cluster || '—',
           status, statusStyle: statusStyle(kind), lang: p.lang,
           metrics: [
             { value: c.theme + c.reflection + c.story, label: t.cardsCaptured },
@@ -1862,12 +2809,10 @@ Reply with plain conversational text only.`;
       }),
 
       intakeTabs: [{ id: 'upload', label: t.tabUpload }, { id: 'paste', label: t.tabPaste }, { id: 'manual', label: t.tabManual }].map(x => ({
-        label: x.label, go: () => this.setState({ intake: x.id, selectedKey: null }),
+        label: x.label, go: () => this.setState({ intake: x.id }),
         style: `border:0;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:40px;background:${s.intake === x.id ? '#fff' : 'transparent'};color:${s.intake === x.id ? '#241F2E' : '#8C8499'};box-shadow:${s.intake === x.id ? '0 1px 3px rgba(36,31,46,.1)' : 'none'};font-family:${uiL.font}`
       })),
-      intakeUpload: s.intake === 'upload', intakePaste: s.intake === 'paste', intakeManual: s.intake === 'manual', notManual: s.intake !== 'manual',
-      manualStarted: !!mp,
-      openManual: () => { if (mp) this.setState({ activeId: mp.id, orgView: 'board', boardTab: 'board', selectedKey: null, manualId: null, intake: 'upload' }); },
+      intakeUpload: s.intake === 'upload', intakePaste: s.intake === 'paste', intakeManual: s.intake === 'manual',
       onFile: this.readFile, fileLabel: s.fileName || t.chooseFile,
       fileHelp: s.fileName ? (s.audioPending ? '—' : `${(s.transcript || '').length.toLocaleString()} chars`) : t.fileHelp,
       audioPending: s.audioPending,
@@ -1877,17 +2822,16 @@ Reply with plain conversational text only.`;
       transcriptMeta: s.fileName || `${(s.transcript || '').trim().split(/\s+/).filter(Boolean).length} words`,
       canExtract: !s.extracting && (s.transcript || '').trim().length > 40 && s.intake !== 'manual',
       extract: this.extract, extracting: s.extracting, extractError: s.extractError,
-      newLang: s.newLang,
-      setNewLang: e => { const v = e.target.value; this.setState({ newLang: v }); if (mp) this.patchProfile(mp.id, p => ({ ...p, lang: v })); },
+      newLang: s.newLang, setNewLang: e => this.setState({ newLang: e.target.value }),
       newProfile: () => {
         const id = this.newId();
-        const profiles = [...s.profiles, { id, record: blank(), lang: s.newLang, analysis: null, checked: {}, approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 }];
+        const profiles = [...s.profiles, { id, token: null, autoLang: true, record: blank(), lang: s.newLang, recordLang: s.newLang, analysis: null, checked: {}, approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 }];
         this.setState({ profiles, activeId: id, orgView: 'board', boardTab: 'board', selectedKey: null });
         this.persist({ profiles, activeId: id });
       },
 
       aInstall: s.appView === 'install', aHome: s.appView === 'home', aPractice: s.appView === 'practice', aBoard: s.appView === 'board', aChat: s.appView === 'chat',
-      showArtisanNav: s.appView !== 'chat' && s.appView !== 'install', artisanNav,
+      showArtisanNav: s.appView !== 'chat' && s.appView !== 'install' && s.appView !== 'linkerror', artisanNav,
       platformTabs: [{ id: 'android', label: 'Android' }, { id: 'ios', label: 'iPhone' }].map(p => ({
         label: p.label, go: () => this.setState({ platform: p.id }),
         style: `flex:1;border:0;border-radius:999px;padding:10px;font-size:14px;font-weight:600;cursor:pointer;min-height:44px;background:${s.platform === p.id ? '#fff' : 'transparent'};color:${s.platform === p.id ? '#241F2E' : '#8C8499'};box-shadow:${s.platform === p.id ? '0 1px 3px rgba(36,31,46,.1)' : 'none'};font-family:${recL.font}`
@@ -1909,31 +2853,94 @@ Reply with plain conversational text only.`;
         { n: '3', title: t.g3t, body: t.g3b, tint: '#FDF0DE', ink: '#8A5D05' },
         { n: '4', title: t.g4t, body: t.g4b, tint: '#FBEAE8', ink: '#A81C24' }
       ],
-      goPractice: () => this.setState({ appView: 'practice' }),
+      goPractice: this.openChat,
       goMyBoard: () => this.setState({ appView: 'board' }),
-      artisanSummary: (ana && ana.artisan_summary_local) || t.notReady,
+      goProfile: () => this.setState({ appView: 'profile', selectedKey: null }),
+      aProfile: s.appView === 'profile',
+      textSize: (a && a.textSize) || 'normal',
+      sizeTabs: [{ id: 'normal', label: t.sizeNormal }, { id: 'large', label: t.sizeLarge }].map(z => {
+        const on = ((a && a.textSize) || 'normal') === z.id;
+        return { label: z.label, go: () => this.patchActive(p => ({ ...p, textSize: z.id })),
+          style: `border:0;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:40px;background:${on ? '#fff' : 'transparent'};color:${on ? '#241F2E' : '#8C8499'};box-shadow:${on ? '0 1px 3px rgba(36,31,46,.1)' : 'none'};font-family:${recL.font}` };
+      }),
+      clearHistory: () => { this.setState({ history: {}, historyCleared: true }); this.persist({ history: {} }); setTimeout(() => this.setState({ historyCleared: false }), 1800); },
+      clearLabel: s.historyCleared ? t.setCleared : t.setClear,
+      askHint: this.askHint, hintBusy: !!s.hintBusy,
+      goalStage: !!s.goalStage, notGoalStage: !s.goalStage, goalBusy: !!s.goalBusy,
+      goalOptions: (s.goalOptions || []).map(g => ({ label: g, pick: () => this.chooseGoal(g) })),
+      hasGoalOptions: (s.goalOptions || []).length > 0,
+      goalDraft: s.goalDraft || '', setGoalDraft: e => this.setState({ goalDraft: e.target.value }),
+      goalDraftKey: e => { if (e.key === 'Enter') { e.preventDefault(); this.chooseGoal(s.goalDraft); } },
+      startWithOwnGoal: () => this.chooseGoal(s.goalDraft),
+      hasGoal: !!(s.guide && s.guide.goal), goalText: (s.guide && s.guide.goal) || '',
+      goalNote: '',
+      goalBar: 'height:100%;width:' + (s.guide ? s.guide.progress : 0) + '%;background:#6FC9B8;border-radius:4px;transition:width .5s ease',
+      goalPct: s.guide ? s.guide.progress + '%' : '',
+      suggestions: ((s.guide && s.guide.suggestions) || []).map(x => ({ label: x, use: () => this.send(x) })),
+      hasSuggestions: !!(s.guide && s.guide.suggestions && s.guide.suggestions.length) && !s.chatBusy,
+      guideBusy: !!s.guideBusy && !s.chatBusy,
+      hintDisabled: s.chatBusy || !!s.hintBusy || !s.messages.some(m => m.role === 'assistant'),
+      artisanSummary: (trView && trView.summary) || (ana && !pendingTr && ana.artisan_summary_local) || t.notReady,
+      translating: pendingTr && !s.translateError, translateFailed: pendingTr && !!s.translateError,
+      retryTranslate: () => { this.setState({ translateError: false }); },
       segments, customSegment: s.customSegment,
       setCustomSegment: e => this.setState({ customSegment: e.target.value }),
-      customKey: e => { if (e.key === 'Enter' && (s.customSegment || '').trim()) { e.preventDefault(); this.openSegment(null); } },
-      startCustom: () => { if ((s.customSegment || '').trim()) this.openSegment(null); },
+      customKey: e => { if (e.key === 'Enter' && (s.customSegment || '').trim()) { e.preventDefault(); this.startPractice(null, s.customSegment.trim()); } },
+      startCustom: () => { if ((s.customSegment || '').trim()) this.startPractice(null, s.customSegment.trim()); },
       history: historyRows, hasHistory: historyRows.length > 0,
       chatTitle: seg ? (seg.label[aLang] || seg.label.en) : (s.customSegment || '—'),
       chatSub: seg ? (seg.blurb[aLang] || seg.blurb.en) : recL.name,
-      backHome: () => this.setState({ appView: 'home', coach: null }),
-      messages: s.messages.map(m => ({
-        text: m.content,
-        wrapStyle: `display:flex;${m.role === 'user' ? 'justify-content:flex-end' : 'justify-content:flex-start'}`,
-        bubbleStyle: `max-width:84%;padding:11px 15px;font-size:15.5px;line-height:1.65;white-space:pre-wrap;font-family:${recL.font};${m.role === 'user' ? 'background:#6B3FA0;color:#fff;border-radius:20px 20px 5px 20px' : 'background:#fff;color:#241F2E;border-radius:20px 20px 20px 5px;box-shadow:0 1px 3px rgba(36,31,46,.06)'}`
-      })),
+      backHome: () => this.setState({ appView: 'home', sheetOpen: false }),
+      messages: s.messages.map((m, i) => {
+        const prev = s.messages[i - 1];
+        const isText = m.role === 'user' || m.role === 'assistant';
+        const practice = m.mode === 'practice';
+        const P = practice && m.role === 'assistant' ? this.personaFor(m.segId, m.custom) : null;
+        const showName = m.role === 'assistant' && (!prev || prev.role !== 'assistant' || prev.mode !== m.mode);
+        const o = m.offer ? this.personaFor(m.offer.segId, m.offer.custom) : null;
+        const user = m.role === 'user';
+        const bubble = user
+          ? (practice ? 'background:#241F2E;color:#fff;border-radius:20px 20px 5px 20px' : 'background:#6B3FA0;color:#fff;border-radius:20px 20px 5px 20px')
+          : P ? `background:${P.tint};color:#241F2E;border-radius:5px 20px 20px 20px` : 'background:#fff;color:#241F2E;border-radius:5px 20px 20px 20px;box-shadow:0 1px 3px rgba(36,31,46,.06)';
+        return {
+          isText, isHint: m.role === 'hint', isDivider: m.role === 'divider', isFeedback: m.role === 'feedback',
+          hasOffer: !!o && i === s.messages.length - 1 && s.mode !== 'practice',
+          text: m.content || m.text || '', items: m.items || [],
+          name: P ? P.label : t.guideName, showName: showName && !user,
+          nameStyle: `font-size:11.5px;font-weight:700;margin:0 0 4px 4px;color:${P ? P.ink : '#6B3FA0'};font-family:${recL.font}`,
+          wrapStyle: `display:flex;flex-direction:column;align-items:${user ? 'flex-end' : 'flex-start'}`,
+          bubbleStyle: `max-width:86%;padding:11px 15px;font-size:15.5px;line-height:1.65;white-space:pre-wrap;font-family:${recL.font};${bubble}`,
+          offerLabel: o ? String(t.offerPractice || '').replace('{who}', o.label) : '', offerIcon: o ? o.icon : '',
+          offerStyle: o ? `align-self:flex-start;display:flex;align-items:center;gap:11px;max-width:86%;background:${o.tint};color:${o.ink};border:0;border-radius:18px;padding:11px 14px;cursor:pointer;text-align:left;min-height:54px` : '',
+          offerBadge: o ? `width:34px;height:34px;border-radius:11px;background:#fff;color:${o.ink};display:grid;place-items:center;font-size:16px;font-weight:700;flex-shrink:0` : '',
+          takeOffer: () => o && this.startPractice(m.offer.segId, m.offer.custom),
+          again: () => this.startPractice(m.segId, m.custom),
+          hint: m.hint || { reading: '', tips: [], from_board: '', starter: '' },
+          dismiss: () => this.setState(st => ({ messages: st.messages.filter(x => x !== m) })),
+          useStarter: () => { const v = String((m.hint && m.hint.starter) || '').replace(/[…\.]+$/, '').trim(); this.setState({ draft: v ? v + ' ' : s.draft }); }
+        };
+      }),
+      inAssist: s.mode !== 'practice', inPractice: s.mode === 'practice',
+      showWelcome: !s.messages.length,
+      welcomeHi: String(t.welcomeHi || '').replace('{name}', a ? String(nameOf(a) || '').split(/[ (]/)[0] : '').replace(/,\s*$/, ''),
+      starters: [t.starter1, t.starter2, t.starter3].filter(Boolean).map(q => ({ text: q, go: () => this.send(q) })),
+      personaName: s.mode === 'practice' ? this.personaFor(s.segId, s.customSegment).label : '',
+      personaIcon: s.mode === 'practice' ? this.personaFor(s.segId, s.customSegment).icon : '',
+      personaBadge: (() => { const P = this.personaFor(s.segId, s.customSegment); return `width:36px;height:36px;border-radius:12px;background:${P.tint};color:${P.ink};display:grid;place-items:center;font-size:17px;font-weight:700;flex-shrink:0`; })(),
+      composerPh: s.mode === 'practice' ? t.replyPh : t.askPh,
+      composerStyle: `display:flex;flex-direction:column;gap:4px;border:1.5px solid ${s.mode === 'practice' ? '#241F2E' : '#E2D9CB'};border-radius:22px;padding:6px 8px 8px 10px;background:#fff`,
+      sendDisabled: !!s.chatBusy || !(s.draft || '').trim(),
+      sendStyle: `margin-left:auto;border:0;background:${(s.draft || '').trim() && !s.chatBusy ? '#6B3FA0' : '#E2D9CB'};color:#fff;border-radius:999px;width:38px;height:38px;font-size:18px;cursor:pointer;flex-shrink:0;transition:background .15s`,
+      openSheet: () => this.setState({ sheetOpen: true }), closeSheet: () => this.setState({ sheetOpen: false }), sheetOpen: !!s.sheetOpen,
+      newChat: this.newChat, endPractice: this.endPractice,
       chatBusy: s.chatBusy, draft: s.draft,
       setDraft: e => this.setState({ draft: e.target.value }),
       draftKey: e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); } },
-      send: this.send, endAndCoach: this.endAndCoach,
-      coachOpen: !!(s.coach && s.coach.items), coachItems: (s.coach && s.coach.items) || [],
+      send: this.send,
       chatError: !!s.chatError && !s.chatBusy,
       chatErrorText: s.chatErrorReason === 'quota' ? t.chatLimit : s.chatErrorReason === 'offline' ? t.chatError : t.chatUnavailable,
       // the provider's own message, for the facilitator previewing the app — never on the artisan's phone
-      chatErrorDetail: s.side === 'artisan' && this.props.boot && this.props.boot.mode === 'artisan' ? '' : (s.chatErrorDetail || ''),
+      chatErrorDetail: this.props.boot && this.props.boot.mode === 'artisan' ? '' : (s.chatErrorDetail || ''),
       retryChat: () => { const r = this._retry; this._retry = null; this.setState({ chatError: false }); if (r) r(); }
     };
   }
@@ -1941,4 +2948,5 @@ Reply with plain conversational text only.`;
 
 </script>
 </body>
+</html>
 </html>
