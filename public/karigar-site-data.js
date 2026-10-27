@@ -83,42 +83,62 @@ window.KARIGAR_SITE = (function () {
 
   function seed() {
     var makers = [
-      { id: 'm-rehmat', name: 'Rehmatbai Khatri', local: 'રહેમતબાઈ ખત્રી', craft: 'Bandhani', craftLocal: 'બાંધણી', cat: 'Textile', ring: 'place', lang: 'gu',
+      { id: 'm-rehmat', name: 'Meena Khatri', local: 'મીના ખત્રી', craft: 'Bandhani', craftLocal: 'બાંધણી', cat: 'Textile', ring: 'place', lang: 'gu',
         loc: { village: 'Bhuj taluka', district: 'Kutch district', state: 'Gujarat', region: 'Western India' }, gran: 'district',
-        langs: ['Gujarati', 'Kutchi'], practice: 'Tying since she was nine', credit: 'Rehmatbai Khatri, bandhani maker, Kutch',
+        langs: ['Gujarati', 'Kutchi'], practice: 'Tying since she was nine', credit: 'Meena Khatri, bandhani maker, Kutch',
         about: 'I tie bandhani with the women of my lane. The dots are small and the work is long. I would rather you hear it from me.',
         contact: { open: true, until: '' }, collective: null },
-      { id: 'm-sukhram', name: 'Sukhram Vishwakarma', local: 'सुखराम विश्वकर्मा', craft: 'Dhokra casting', craftLocal: 'ढोकरा ढलाई', cat: 'Metal', ring: 'material', lang: 'hi',
+      { id: 'm-sukhram', name: 'Raju Ram', local: 'राजू राम', craft: 'Dhokra casting', craftLocal: 'ढोकरा ढलाई', cat: 'Metal', ring: 'material', lang: 'hi',
         loc: { village: 'Kondagaon', district: 'Kondagaon district', state: 'Chhattisgarh', region: 'Central India' }, gran: 'state',
-        langs: ['Hindi', 'Halbi'], practice: 'Twenty-two years at the furnace', credit: 'Sukhram Vishwakarma, dhokra caster, Bastar',
+        langs: ['Hindi', 'Halbi'], practice: 'Twenty-two years at the furnace', credit: 'Raju Ram, dhokra caster, Bastar',
         about: 'My father cast lamps for the village. I cast what people ask for now, but I still begin every piece the way he did, with wax.',
         contact: { open: true, until: '' }, collective: null },
-      { id: 'm-sunanda', name: 'Sunanda Bhalerao', local: 'सुनंदा भालेराव', craft: 'Paithani weaving', craftLocal: 'पैठणी विणकाम', cat: 'Textile', ring: 'culture', lang: 'mr',
+      { id: 'm-sunanda', name: 'Asha More', local: 'आशा मोरे', craft: 'Paithani weaving', craftLocal: 'पैठणी विणकाम', cat: 'Textile', ring: 'culture', lang: 'mr',
         loc: { village: 'Yeola', district: 'Nashik district', state: 'Maharashtra', region: 'Western India' }, gran: 'district',
-        langs: ['Marathi'], practice: 'At the loom since sixteen', credit: 'Sunanda Bhalerao, paithani weaver, Yeola',
+        langs: ['Marathi'], practice: 'At the loom since sixteen', credit: 'Asha More, paithani weaver, Yeola',
         about: 'In Yeola there is a loom in every lane. I weave borders, mostly peacocks, and lately I teach my daughter-in-law.',
         contact: { open: false, until: '1 December 2026' }, collective: 'm-yeola' },
-      { id: 'm-ngaleng', name: 'Ngalengnam Shaiza', local: 'Ngalengnam Shaiza', craft: 'Longpi pottery', craftLocal: 'Longpi ham', cat: 'Clay', ring: 'place', lang: 'en',
+      { id: 'm-ngaleng', name: 'Lily Shaiza', local: 'Lily Shaiza', craft: 'Longpi pottery', craftLocal: 'Longpi ham', cat: 'Clay', ring: 'place', lang: 'en',
         loc: { village: 'Longpi Kajui', district: 'Ukhrul district', state: 'Manipur', region: 'Northeast India' }, gran: 'district',
-        langs: ['Tangkhul', 'English'], practice: 'Fourteen years of hand-building', credit: 'Ngalengnam Shaiza, Longpi potter, Ukhrul',
+        langs: ['Tangkhul', 'English'], practice: 'Fourteen years of hand-building', credit: 'Lily Shaiza, Longpi potter, Ukhrul',
         about: 'We do not use a wheel. Everything is shaped by hand on a flat stone, the way my aunt showed me.',
         contact: { open: true, until: '' }, collective: null },
-      { id: 'm-yeola', name: 'Yeola Handloom Sisters', local: 'येवला हातमाग भगिनी', craft: 'Paithani weaving', craftLocal: 'पैठणी', cat: 'Textile', ring: 'culture', lang: 'mr', isCollective: true,
+      { id: 'm-yeola', name: 'Yeola Weavers', local: 'येवला विणकर गट', craft: 'Paithani weaving', craftLocal: 'पैठणी', cat: 'Textile', ring: 'culture', lang: 'mr', isCollective: true,
         loc: { village: 'Yeola', district: 'Nashik district', state: 'Maharashtra', region: 'Western India' }, gran: 'district',
-        langs: ['Marathi'], practice: 'Eleven weavers, three looms', credit: 'Yeola Handloom Sisters (collective), Nashik',
+        langs: ['Marathi'], practice: 'Eleven weavers, three looms', credit: 'Yeola Weavers (collective), Nashik',
         about: 'Eleven of us share three looms and one dye room. We are credited as a group because the sari is made by a group.',
-        members: ['Sunanda Bhalerao', 'and ten weavers who keep their names private'], contact: { open: true, until: '' }, collective: null }
+        members: ['Asha More', 'and ten weavers who keep their names private'], contact: { open: true, until: '' }, collective: null },
+      { id: 'm-ravi', name: 'Ravi Kumar', local: 'ರವಿ ಕುಮಾರ್', craft: 'Channapatna toys', craftLocal: 'ಚನ್ನಪಟ್ಟಣ ಗೊಂಬೆ', cat: 'Wood', ring: 'material', lang: 'en',
+        loc: { village: 'Channapatna', district: 'Ramanagara district', state: 'Karnataka', region: 'South India' }, gran: 'district',
+        langs: ['Kannada'], practice: 'At the lathe for nineteen years', credit: 'Ravi Kumar, lacquerware turner, Channapatna',
+        about: 'I turn ivory-wood on a lathe and colour it with lacquer sticks. Most of my toys are for children who will chew them, so the colours are vegetable.',
+        contact: { open: true, until: '' }, collective: null },
+      { id: 'm-gopal', name: 'Gopal Prajapati', local: 'गोपाल प्रजापति', craft: 'Molela terracotta', craftLocal: 'मोलेला माटी', cat: 'Clay', ring: 'culture', lang: 'hi',
+        loc: { village: 'Molela', district: 'Rajsamand district', state: 'Rajasthan', region: 'Western India' }, gran: 'district',
+        langs: ['Hindi', 'Mewari'], practice: 'Third generation in the family workshop', credit: 'Gopal Prajapati, terracotta maker, Molela',
+        about: 'Villages come to Molela to buy their gods. I make the plaques the way my grandfather did, from river clay and donkey dung, fired in the open.',
+        contact: { open: true, until: '' }, collective: null },
+      { id: 'm-salma', name: 'Salma Bano', local: 'सलमा बानो', craft: 'Dhurrie weaving', craftLocal: 'दरी बुनाई', cat: 'Textile', ring: 'lineage', lang: 'hi',
+        loc: { village: 'Salawas', district: 'Jodhpur district', state: 'Rajasthan', region: 'Western India' }, gran: 'state',
+        langs: ['Hindi', 'Marwari'], practice: 'Weaving since she was twelve', credit: 'Salma Bano, dhurrie weaver, Rajasthan',
+        about: 'I weave flat rugs on a pit loom in our courtyard. My hands do the counting now; my head is free to listen to the radio.',
+        contact: { open: false, until: '15 January 2027' }, collective: null },
+      { id: 'm-sita', name: 'Sita Devi', local: 'सीता देवी', craft: 'Madhubani painting', craftLocal: 'मधुबनी चित्र', cat: 'Painting', ring: 'place', lang: 'hi',
+        loc: { village: 'Jitwarpur', district: 'Madhubani district', state: 'Bihar', region: 'East India' }, gran: 'district',
+        langs: ['Maithili', 'Hindi'], practice: 'Painting since her own wedding', credit: 'Sita Devi, Madhubani painter, Bihar',
+        about: 'We painted walls before we painted paper. I still grind my black from soot and my yellow from turmeric when I can.',
+        contact: { open: true, until: '' }, collective: null }
     ];
     function c(lang, by, purposes, rights) { return { purposes: purposes, duration: 'open', until: '', rights: rights, grantedAt: '12 Oct 2026', lang: lang, by: by, assisted: true }; }
     var stories = [
       { id: 's-water', maker: 'm-rehmat', ring: 'place', card: 'Place ring · card 2', date: '12 Oct 2026', tier: 'public', rights: 'KR-2', orig: 'gu', media: true, mediaAlt: 'Tied cloth drying after the red dye bath', depicts: 'Process',
-        consent: c('Gujarati', 'Rehmatbai Khatri', ['page', 'press'], 'KR-2'),
-        corrections: [{ date: '18 Oct 2026', note: 'An earlier version said the dye bath is boiled for an hour. Rehmatbai corrected this: it is kept warm, never boiled.' }],
+        consent: c('Gujarati', 'Meena Khatri', ['page', 'press'], 'KR-2'),
+        corrections: [{ date: '18 Oct 2026', note: 'An earlier version said the dye bath is boiled for an hour. Meena corrected this: it is kept warm, never boiled.' }],
         versions: {
           en: { title: 'Kutch had the water for it', body: ['People ask why bandhani is here and not somewhere else. I tell them: we did not bring it. Kutch had the water for it, so it stayed.', 'The red comes out differently from each well. My mother knew which well gave the deepest colour before the monsoon and which one after. We keep the dye bath warm, never boiling, or the knots loosen. Now the water has gone down, we buy it from tankers, and the red is never quite the same twice.', 'I don’t call it heritage. It is our work. It belongs to this place the way the salt does.'] },
           gu: { title: 'કચ્છમાં એનું પાણી હતું', body: ['લોકો પૂછે છે કે બાંધણી અહીં જ કેમ છે. હું કહું છું: અમે એને અહીં લાવ્યા નથી. કચ્છમાં એનું પાણી હતું, એટલે એ અહીં રહી ગઈ.', 'દરેક કૂવાનું પાણી લાલ રંગ જુદો કાઢે છે. મારી મા જાણતી કે ચોમાસા પહેલાં કયો કૂવો ઘેરો રંગ આપે. રંગનું પાણી ગરમ રાખીએ, ઉકાળીએ નહીં, નહીં તો ગાંઠ ઢીલી થાય.', 'હું એને વારસો નથી કહેતી. એ અમારું કામ છે. મીઠાની જેમ એ આ જગ્યાનું છે.'] }
         } },
-      { id: 's-thumb', maker: 'm-rehmat', ring: 'lineage', card: 'Lineage ring · card 1', date: '12 Oct 2026', tier: 'link', rights: 'KR-1', orig: 'gu', media: false, consent: c('Gujarati', 'Rehmatbai Khatri', ['page'], 'KR-1'), corrections: [],
+      { id: 's-thumb', maker: 'm-rehmat', ring: 'lineage', card: 'Lineage ring · card 1', date: '12 Oct 2026', tier: 'link', rights: 'KR-1', orig: 'gu', media: false, consent: c('Gujarati', 'Meena Khatri', ['page'], 'KR-1'), corrections: [],
         versions: {
           en: { title: 'My mother’s thumbnail', body: ['My mother kept the nail of her left thumb long. That was her tool — she lifted the cloth over it to make each dot. I was nine when she put the cloth in my hand.', 'She did not explain. She tied, I watched, and when my dot was too big she untied it without a word. That silence taught me more than any instruction.'] },
           gu: { title: 'મારી માનો અંગૂઠો', body: ['મારી મા ડાબા અંગૂઠાનો નખ લાંબો રાખતી. એ જ એનું ઓજાર હતું. હું નવ વર્ષની હતી ત્યારે એણે કાપડ મારા હાથમાં મૂક્યું.', 'એ સમજાવતી નહીં. એ બાંધતી, હું જોતી. એ ચુપકીએ મને ઘણું શીખવ્યું.'] }
@@ -126,28 +146,36 @@ window.KARIGAR_SITE = (function () {
       { id: 's-wedding', maker: 'm-rehmat', ring: 'pride', card: 'Pride ring · card 3', date: '12 Oct 2026', tier: 'private', rights: 'KR-0', orig: 'en', media: false, consent: null, corrections: [],
         boundary: { what: 'the wedding odhani pattern', scope: 'Do not publish', collective: true },
         versions: { en: { title: 'What we tie only for our daughters', body: ['There is one pattern we tie only for our own daughters’ weddings. A shop asked me for it last year. I said no.', 'Some things are not for sale, and not for showing either.'] } } },
-      { id: 's-wax', maker: 'm-sukhram', ring: 'material', card: 'Material ring · card 2', date: '30 Sep 2026', tier: 'public', rights: 'KR-1', orig: 'hi', media: true, mediaAlt: 'Wax threads wound around a clay core', depicts: 'Process', consent: c('Hindi', 'Sukhram Vishwakarma', ['page', 'teach'], 'KR-1'), corrections: [],
+      { id: 's-wax', maker: 'm-sukhram', ring: 'material', card: 'Material ring · card 2', date: '30 Sep 2026', tier: 'public', rights: 'KR-1', orig: 'hi', media: true, mediaAlt: 'Wax threads wound around a clay core', depicts: 'Process', consent: c('Hindi', 'Raju Ram', ['page', 'teach'], 'KR-1'), corrections: [],
         versions: {
           en: { title: 'Wax is my pencil', body: ['Before the metal, there is wax. I draw with it — thin threads of beeswax and resin, wound around the clay core while it is still soft in my hands.', 'In winter the wax goes stiff and I keep it by the fire. In May it melts if I look at it. Every figure you see began as a thread I pulled with my thumb.', 'When the metal is poured, the wax is gone. Nothing of my drawing remains except its shape in brass.'] },
           hi: { title: 'मोम मेरी पेंसिल है', body: ['धातु से पहले मोम होता है। मैं उसी से चित्र बनाता हूँ — मधुमक्खी के मोम और राल के पतले धागे, जिन्हें मिट्टी के साँचे पर लपेटता हूँ जब वह अभी नरम होता है।', 'सर्दी में मोम सख़्त हो जाता है, तो उसे आग के पास रखता हूँ। मई में तो देखने भर से पिघल जाता है।', 'जब धातु डाली जाती है, मोम चला जाता है। मेरे चित्र में से कुछ नहीं बचता, बस पीतल में उसका आकार।'] }
         } },
-      { id: 's-pond', maker: 'm-sukhram', ring: 'place', card: 'Place ring · card 3', date: '30 Sep 2026', tier: 'public', rights: 'KR-2', orig: 'hi', media: false, consent: c('Hindi', 'Sukhram Vishwakarma', ['page', 'press'], 'KR-2'), corrections: [],
+      { id: 's-pond', maker: 'm-sukhram', ring: 'place', card: 'Place ring · card 3', date: '30 Sep 2026', tier: 'public', rights: 'KR-2', orig: 'hi', media: false, consent: c('Hindi', 'Raju Ram', ['page', 'press'], 'KR-2'), corrections: [],
         versions: {
           en: { title: 'The clay by the school pond', body: ['The core needs clay that holds. Ours comes from the edge of the pond behind the old school. Clay from other places cracks on the mould.', 'Last year they started building there. I went every evening for a month to fill sacks before it was gone.'] },
           hi: { title: 'स्कूल के तालाब वाली मिट्टी', body: ['भीतर के साँचे के लिए ऐसी मिट्टी चाहिए जो टिके। हमारी मिट्टी पुराने स्कूल के पीछे वाले तालाब के किनारे से आती है।', 'पिछले साल वहाँ निर्माण शुरू हुआ। मैं महीने भर हर शाम बोरियाँ भरने जाता रहा।'] }
         } },
-      { id: 's-peacock', maker: 'm-sunanda', ring: 'culture', card: 'Culture ring · card 1', date: '22 Sep 2026', tier: 'public', rights: 'KR-0', orig: 'mr', media: true, mediaAlt: 'Peacock border on the loom, half woven', depicts: 'Object', consent: c('Marathi', 'Sunanda Bhalerao', ['page'], 'KR-0'), corrections: [],
+      { id: 's-peacock', maker: 'm-sunanda', ring: 'culture', card: 'Culture ring · card 1', date: '22 Sep 2026', tier: 'public', rights: 'KR-0', orig: 'mr', media: true, mediaAlt: 'Peacock border on the loom, half woven', depicts: 'Object', consent: c('Marathi', 'Asha More', ['page'], 'KR-0'), corrections: [],
         versions: {
           en: { title: 'The peacock border takes a week', body: ['A paithani border is woven with the hand, not the shuttle. Every colour in the peacock is a separate little bobbin that I pass through and turn back.', 'One border takes me a week if no one is ill and the power stays on. My daughter-in-law sits at the other side of the loom now. She is faster than I was at her age.'] },
           mr: { title: 'मोराचा काठ आठवडा घेतो', body: ['पैठणीचा काठ धोट्याने नाही, हाताने विणला जातो. मोरातला प्रत्येक रंग वेगळ्या छोट्या कांडीचा असतो.', 'घरात कोणी आजारी नसेल आणि वीज टिकली तर एक काठ आठवड्यात होतो. आता माझी सून मागाच्या दुसऱ्या बाजूला बसते.'] }
         } },
-      { id: 's-hillsides', maker: 'm-ngaleng', ring: 'place', card: 'Place ring · card 1', date: '16 Sep 2026', tier: 'public', rights: 'KR-3', orig: 'en', media: true, mediaAlt: 'Black stone and weathered rock, ground for clay', depicts: 'Material', consent: c('English', 'Ngalengnam Shaiza', ['page', 'teach'], 'KR-3'), corrections: [],
+      { id: 's-hillsides', maker: 'm-ngaleng', ring: 'place', card: 'Place ring · card 1', date: '16 Sep 2026', tier: 'public', rights: 'KR-3', orig: 'en', media: true, mediaAlt: 'Black stone and weathered rock, ground for clay', depicts: 'Material', consent: c('English', 'Lily Shaiza', ['page', 'teach'], 'KR-3'), corrections: [],
         versions: { en: { title: 'Only two hillsides', body: ['Longpi ham needs a black serpentine stone mixed with weathered rock. It comes from two hillsides near the village. Without that rock there is no Longpi, anywhere.', 'We don’t use a wheel. I shape every pot by hand on a flat stone, then fire it and rub it with leaves while it is hot. That is where the black shine comes from.'] } } },
-      { id: 's-together', maker: 'm-yeola', ring: 'pride', card: 'Reflection · Sharing', date: '08 Sep 2026', tier: 'public', rights: 'KR-2', orig: 'mr', media: false, consent: c('Marathi', 'Yeola Handloom Sisters', ['page', 'press'], 'KR-2'), corrections: [],
+      { id: 's-together', maker: 'm-yeola', ring: 'pride', card: 'Reflection · Sharing', date: '08 Sep 2026', tier: 'public', rights: 'KR-2', orig: 'mr', media: false, consent: c('Marathi', 'Yeola Weavers', ['page', 'press'], 'KR-2'), corrections: [],
         versions: {
           en: { title: 'Why we weave together', body: ['Eleven of us share three looms and one dye room. When an order comes, we decide together who weaves which part.', 'We are credited as a group because the sari is made by a group. If you write about it, please name the collective, not one of us.'] },
           mr: { title: 'आम्ही एकत्र का विणतो', body: ['आम्ही अकरा जणी तीन माग आणि एक रंगखोली वाटून घेतो. ऑर्डर आली की कोण कोणता भाग विणणार हे आम्ही मिळून ठरवतो.', 'साडी गट बनवतो, म्हणून श्रेय गटाला. याबद्दल लिहिलं तर गटाचं नाव द्या.'] }
-        } }
+        } },
+      { id: 's-lacquer', maker: 'm-ravi', ring: 'material', card: 'Material ring · card 1', date: '06 Oct 2026', tier: 'public', rights: 'KR-1', orig: 'en', media: false, consent: c('Kannada', 'Ravi Kumar', ['page', 'teach'], 'KR-1'), corrections: [],
+        versions: { en: { title: 'The colour comes from the heat of my hand', body: ['I press a stick of lacquer against the wood while it spins. The friction melts it. Too hard and it smears; too soft and nothing sticks.', 'When the power goes, the lathe stops, and so do I. People think toys are quick. A good top takes me most of a morning.'] } } },
+      { id: 's-gods', maker: 'm-gopal', ring: 'culture', card: 'Culture ring · card 1', date: '02 Oct 2026', tier: 'public', rights: 'KR-2', orig: 'hi', media: true, mediaAlt: 'Carved and painted figures of deities', depicts: 'Object', consent: c('Hindi', 'Gopal Prajapati', ['page', 'press'], 'KR-2'), corrections: [],
+        versions: { en: { title: 'Villages come here to buy their gods', body: ['Before a festival, priests walk from villages two days away to collect plaques of Dharmraj and Nagdev. They pay what they can, and we do not argue.', 'Tourists buy the same plaques to hang in their living rooms. I am glad they buy. I only ask that they know what it is.'] } } },
+      { id: 's-count', maker: 'm-salma', ring: 'lineage', card: 'Lineage ring · card 1', date: '28 Sep 2026', tier: 'public', rights: 'KR-1', orig: 'hi', media: true, mediaAlt: 'Colourful handwoven textiles on a stone wall', depicts: 'Object', consent: c('Hindi', 'Salma Bano', ['page'], 'KR-1'), corrections: [],
+        versions: { en: { title: 'My grandmother’s count', body: ['Every dhurrie starts with a count my grandmother used — so many threads of red, then a gap, then the border. She never wrote it down. Nor have I.', 'My daughter wants to study. Good. I have recorded the count on Karigar, private, so it is somewhere if she ever wants it.'] } } },
+      { id: 's-walls', maker: 'm-sita', ring: 'place', card: 'Place ring · card 1', date: '20 Sep 2026', tier: 'public', rights: 'KR-3', orig: 'hi', media: false, consent: c('Maithili', 'Sita Devi', ['page', 'teach'], 'KR-3'), corrections: [],
+        versions: { en: { title: 'We painted walls first', body: ['In Mithila the women painted the walls of the marriage room — the kohbar — for the bride and groom. Paper came later, when people from outside wanted to take it home.', 'When I paint on paper I still start in the same corner I would start a wall: top left, with the sun.'] } } }
     ];
     var requests = [
       { id: 'r1', maker: 'm-rehmat', name: 'Anika Rao', org: 'Textile museum, Ahmedabad', email: 'anika@example.org', cat: 'Institutional', daysLeft: 22, status: 'pending',
@@ -158,29 +186,90 @@ window.KARIGAR_SITE = (function () {
         purposeGu: 'શું તમે ઓર્ડર લો છો? નાની દુકાન માટે તમારા રંગોમાં વીસ સ્કાર્ફ જોઈએ છે.' }
     ];
     var partners = [{ id: 'pt1', maker: 'm-rehmat', name: 'Craft school, Bhuj — teaching team', until: '31 Mar 2027' }];
-    var log = [{ at: '12 Oct 2026', text: 'Facilitator-assisted: Meera (Kutch field team) helped publish “Kutch had the water for it” with Rehmatbai present.' }];
-    return { v: 1, makers: makers, stories: stories, requests: requests, partners: partners, log: log, blocked: [], deleted: false };
+    var log = [{ at: '12 Oct 2026', text: 'Facilitator-assisted: Meera (Kutch field team) helped publish “Kutch had the water for it” with Meena present.' }];
+    return { v: 2, makers: makers, stories: stories, requests: requests, partners: partners, log: log, blocked: [], deleted: false };
   }
 
   // Stand-in photographs (Unsplash licence) until each maker supplies their own, with consent.
   function U(id, w) { return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=' + (w || 900) + '&q=70'; }
   var PHOTOS = {
     makers: {
-      'm-rehmat': { src: U('1558703374-f9a51255e1cc'), alt: 'Dyed cloth drying on a line in the sun' },
-      'm-sukhram': null,
-      'm-sunanda': { src: U('1540292370723-60cf448886c3'), alt: 'Handwoven silk in pink, green and blue' },
-      'm-ngaleng': { src: U('1524497440-4da55062cb4a'), alt: 'A potter’s clay-covered hands shaping a pot' },
-      'm-yeola': { src: U('1626889268968-2280ec97c38b'), alt: 'Rolls of dyed yarn ready for the loom' }
+      'm-rehmat': { src: U('1614025000673-edf238aaf5d4', 700), alt: 'Meena, wearing her silver bangles' },
+      'm-sukhram': { src: U('1640239259272-6f26a9affb98', 700), alt: 'Raju sitting on the floor of his workshop' },
+      'm-sunanda': { src: U('1632649027900-389e810204e6', 700), alt: 'Asha working thread by hand' },
+      'm-ngaleng': { src: U('1524497440-4da55062cb4a', 700), alt: 'Lily’s clay-covered hands shaping a pot' },
+      'm-yeola': { src: U('1640292343595-889db1c8262e', 700), alt: 'A weaver of the collective at the loom' },
+      'm-ravi': { src: U('1721508490084-1b1de5b230d4', 700), alt: 'Ravi working a piece of wood' },
+      'm-gopal': { src: U('1726931535215-e4c6e05a2cff', 700), alt: 'Gopal sitting among his finished figures' },
+      'm-salma': { src: U('1773847099204-238d283b2845', 700), alt: 'Salma’s hands tying the fringe of a rug' },
+      'm-sita': { src: U('1738322212738-40d684b36beb', 700), alt: 'Sita on the floor beside her water bowl and brushes' }
     },
     stories: {
       's-water': U('1705248383815-c6bc07898592'),
       's-peacock': U('1585751092218-cea84c1ecf01'),
-      's-hillsides': U('1613833684971-9411a2b00970')
+      's-hillsides': U('1613833684971-9411a2b00970'),
+      's-wax': U('1763475945282-a5e1a1e189df'),
+      's-gods': U('1765441863467-12214bb5d729'),
+      's-count': U('1766585749270-441fb7a3a11f')
     }
   };
 
+  // Generic Ludo Mandala — the same questions every artisan sees. Inner ring first.
+  var GBOARD = {
+    why: {
+      craft: 'The centre of the board: what the craft is called at home, what it does well, what its maker hopes for it.',
+      place: 'Craft belongs somewhere. This ring records where — at whatever level of detail the maker is comfortable sharing.',
+      lineage: 'Who passed it on, and who it is being passed to. Teachers are named and credited, if the maker wants.',
+      material: 'Tools, materials, and what is getting harder to find. Often the ring buyers and researchers find most useful.',
+      culture: 'When the work is used, worn or gifted — and what outsiders should not copy.',
+      pride: 'The outer ring: what the maker wants credit for, what they would never sell, what they want remembered.'
+    },
+    cards: [
+      ['craft', 'What do you call your craft at home?'], ['craft', 'What is your craft best at?'], ['craft', 'What do you wish for it?'],
+      ['place', 'Why is this craft made here?'], ['place', 'Where do you sit to work?'], ['place', 'What would you show a visitor first?'],
+      ['lineage', 'Who taught you?'], ['lineage', 'How old were you when you started?'], ['lineage', 'Who are you teaching?'],
+      ['material', 'What is your most important tool?'], ['material', 'Where do your materials come from?'], ['material', 'What is getting harder to find?'], ['material', 'What do you do with the leftovers?'],
+      ['culture', 'When is your work used or worn?'], ['culture', 'Is there a song or saying that goes with it?'], ['culture', 'What should outsiders not copy?'], ['culture', 'Which festival keeps you busiest?'], ['culture', 'What has changed in what people ask for?'],
+      ['pride', 'What would you never sell?'], ['pride', 'Who should get credit?'], ['pride', 'What do you want the next generation to know?'], ['pride', 'What makes your work yours?'], ['pride', 'What would you change about how buyers treat you?']
+    ]
+  };
+
+  var TESTI = {
+    org: [
+      { who: 'Meera Joshi', role: 'Field coordinator', org: 'Kutch Mahila Craft Sangathan', ring: 'place', text: 'We used to write the artisan bios ourselves, and we got them wrong. Now a session takes an afternoon, and the women correct the drafts before anything goes out — sometimes twice.' },
+      { who: 'Anil Netam', role: 'Programme lead', org: 'Bastar Metal Craft Cooperative', ring: 'material', text: 'The consent screens took our members longer than we expected. That is the point. Two of them chose to keep everything private, and the app treats that as a complete answer.' },
+      { who: 'Kavya Rao', role: 'Curator', org: 'Textile museum, Ahmedabad', ring: 'culture', text: 'We needed one quote for a panel. The request went through Karigar, Meena replied within a week and corrected our caption. No other sourcing process has given us that.' }
+    ],
+    art: [
+      { maker: 'm-rehmat', lang: 'Said in Gujarati', text: 'I speak, it writes. When it writes wrong, I fix it. My daughter used to do this for me — now I do it myself.' },
+      { maker: 'm-sukhram', lang: 'Said in Hindi', text: 'A shop in Delhi wanted my photos for their website. Karigar asked me first. Before, nobody asked.' },
+      { maker: 'm-ngaleng', lang: 'Said in English', text: 'Two stories I kept only for my family. The rest everyone can see. Good that it is my choice, not theirs.' }
+    ]
+  };
+
+  // Makers who use Karigar privately. Shown only as a craft and region, never a name.
+  var PRIVATE = [
+    { craft: 'Kantha embroidery', region: 'West Bengal', note: 'Keeps every story in her private archive.' },
+    { craft: 'Bidri metalwork', region: 'Karnataka', note: 'Shares only with partners he approves.' },
+    { craft: 'Bandhani', region: 'Gujarat', note: 'Recording for her grandchildren, not for the public.' }
+  ];
+
+  var PCHECK = [
+    'Open any story: the maker’s chosen name is on it, and on every image.',
+    'Every story says what it may be used for. When a maker withdraws it, it is gone from this site within minutes.',
+    'Read the question cards on the board — none asks about money, hardship or need.',
+    'Try to reuse a story commercially: Karigar asks for a separate agreement with the maker first.',
+    'Most makers never publish anything. The private tiles on the makers page are real accounts.',
+    'Each story lists its corrections, dated, in public.',
+    'Every core task works by voice, in the maker’s language, on a low-cost phone.',
+    'Our reports count credit, contact and correction. You will not find a view count anywhere.',
+    'AI training is off on every story unless the maker turns it on.',
+    'Partner access always shows an end date, and never renews by itself.',
+    'Council decisions are public, dated, and each maps to a setting you can read.'
+  ];
+
   // A photo essay told in the maker's own words, one frame per step.
-  var ESSAY = { maker: 'm-rehmat', title: 'One odhani, eleven days', sub: 'Rehmatbai recorded these lines on her phone while she worked. The photos are stand-ins until she chooses her own.',
+  var ESSAY = { maker: 'm-rehmat', title: 'One odhani, eleven days', sub: 'Meena recorded these lines on her phone while she worked. The photos are stand-ins until she chooses her own.',
     frames: [
       { src: U('1705250466297-90035b3a2b26', 700), day: 'Day 1', line: 'The cloth comes washed and folded in four. I mark the dots with geru and a wooden block.' },
       { src: U('1465199549974-7d82de6e2830', 700), day: 'Days 2–7', line: 'Then we tie. Four of us on the floor, the radio on. About three thousand knots.' },
@@ -188,7 +277,7 @@ window.KARIGAR_SITE = (function () {
       { src: U('1558703374-f9a51255e1cc', 700), day: 'Days 9–11', line: 'It dries in the yard. You only see the pattern when you pull the knots open.' }
     ] };
 
-  // Rehmatbai's mandala board, as recorded in her first session. Outer ring first.
+  // Meena's mandala board, as recorded in her first session. Outer ring first.
   var BOARD = [
     { ring: 'craft', q: 'What do you call your craft?', a: 'Bandhani. At home we just say bandhej, the tying.' },
     { ring: 'craft', q: 'What is it best at?', a: 'Colour that stays bright for thirty years.' },
@@ -218,14 +307,14 @@ window.KARIGAR_SITE = (function () {
   // Notes left by people who worked with a maker through Karigar. The maker approves each one before it shows.
   var VOICES = [
     { maker: 'm-rehmat', who: 'Anika Rao', role: 'Curator, textile museum, Ahmedabad', date: 'Oct 2026', what: 'Exhibition panel',
-      text: 'We asked for one line for a panel on water and dye. Rehmatbai sent it back with a correction to our caption — we had written “boiled”. She was right. The panel is better for it.' },
+      text: 'We asked for one line for a panel on water and dye. Meena sent it back with a correction to our caption — we had written “boiled”. She was right. The panel is better for it.' },
     { maker: 'm-sukhram', who: 'Tomás Ibarra', role: 'Lighting studio, Lisbon', date: 'Aug 2026', what: 'Commission · 12 lamps',
       text: 'The lamps arrived three weeks after the date we agreed — the monsoon held up the firing, and he told us so early. Every one is slightly different, which is what we wanted. We’ve ordered again.' },
     { maker: 'm-ngaleng', who: 'Priya Menon', role: 'Teacher, design school, Bengaluru', date: 'Sep 2026', what: 'Teaching use',
-      text: 'My second-years used “Only two hillsides” in a materials module. Two students wrote to Ngalengnam with questions and she answered both, in a voice note, in English. It was the best session of the term.' },
+      text: 'My second-years used “Only two hillsides” in a materials module. Two students wrote to Lily with questions and she answered both, in a voice note, in English. It was the best session of the term.' },
     { maker: 'm-yeola', who: 'Hemant Kulkarni', role: 'Journalist, Pune', date: 'Jul 2026', what: 'Press',
       text: 'They asked me to credit the collective, not one weaver. I had to rewrite my lede. Fair enough — the sari really is made by eleven people.' }
   ];
 
-  return { RINGS: RINGS, RIGHTS: RIGHTS, TIERS: TIERS, PURPOSES: PURPOSES, CATS: CATS, L: L, PRINCIPLES: PRINCIPLES, DECISIONS: DECISIONS, PHOTOS: PHOTOS, ESSAY: ESSAY, BOARD: BOARD, VOICES: VOICES, seed: seed };
+  return { RINGS: RINGS, RIGHTS: RIGHTS, TIERS: TIERS, PURPOSES: PURPOSES, CATS: CATS, L: L, PRINCIPLES: PRINCIPLES, DECISIONS: DECISIONS, PHOTOS: PHOTOS, ESSAY: ESSAY, BOARD: BOARD, VOICES: VOICES, GBOARD: GBOARD, TESTI: TESTI, PRIVATE: PRIVATE, PCHECK: PCHECK, seed: seed };
 })();
