@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  // The organisation console used to live at "/". Old bookmarks and home-screen icons
+  // ("/?src=a2hs", "/?org=…", "/#…") keep working: anything the website itself does not
+  // use goes to /console with the same query and hash. vercel.json redirects the known
+  // query keys on the server; this catches the rest, and hashes, which never reach it.
+  (function () {
+    var q = location.search.slice(1).split('&').filter(function (kv) { return kv && !/^(utm_[a-z]+|fbclid|gclid)=/.test(kv); });
+    var h = location.hash;
+    if (q.length || (h && h !== '#' && h.indexOf('#/') !== 0)) location.replace('/console' + location.search + h);
+  })();
+</script>
+<title>Karigar — craft, told by the people who make it</title>
+<meta name="description" content="Karigar helps artisans tell their craft in their own words and their own language, and decide who sees it. Meet the makers, read their stories, or sign in to the facilitator console.">
+<meta name="theme-color" content="#FBF7F0">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Karigar">
+<meta property="og:title" content="Karigar — craft, told by the people who make it">
+<meta property="og:description" content="Artisans tell their craft in their own words and their own language, and decide who sees it.">
+<meta property="og:url" content="__KARIGAR_ORIGIN__/">
+<!-- placeholder: replace with a 1200×630 share image -->
+<meta property="og:image" content="__KARIGAR_ORIGIN__/icons/icon-512.png">
+<meta name="twitter:card" content="summary">
+<link rel="modulepreload" href="/vendor/preact.mjs">
+<style>
+  body { margin: 0; background: #FBF7F0; color: #241F2E; font-family: "Hanken Grotesk", system-ui, sans-serif; }
+  .k-boot { max-width: 30rem; margin: 18vh auto 0; padding: 0 20px; text-align: center; }
+  .k-boot h1 { font-size: 24px; font-weight: 600; margin: 0 0 10px; }
+  .k-boot p { font-size: 16px; line-height: 1.6; color: #6F6880; margin: 0; }
+</style>
+</head>
+<body data-mode="site" data-app-origin="__KARIGAR_ORIGIN__">
+<div id="app"><div class="k-boot"><p>Karigar</p></div></div>
+<noscript><div class="k-boot"><h1>Karigar</h1><p>Craft, told by the people who make it. This site needs JavaScript.</p></div></noscript>
+<script type="module" src="/runtime.js?v=__KARIGAR_BUILD__"></script>
+</body>
+</html>

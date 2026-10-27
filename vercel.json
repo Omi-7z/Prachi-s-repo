@@ -18,11 +18,31 @@
       "includeFiles": "public/artisan.html"
     }
   },
-  "rewrites": [
+  "redirects": [
     {
       "source": "/",
-      "destination": "/console"
+      "has": [
+        {
+          "type": "query",
+          "key": "src"
+        }
+      ],
+      "destination": "/console",
+      "permanent": true
     },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "org"
+        }
+      ],
+      "destination": "/console",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
     {
       "source": "/k/:token",
       "destination": "/api/artisan-page?t=:token"

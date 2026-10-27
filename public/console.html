@@ -23,11 +23,13 @@
   .k-login button:disabled { opacity: .6; }
   .k-login .k-switch { margin: 18px 0 0; text-align: center; font-size: 14px; }
   .k-login [data-error] { color: #A81C24; font-size: 13.5px; margin-top: 12px; min-height: 1em; }
+  .k-home { display: block; max-width: 380px; margin: 0 auto; padding: 16px 24px 0; font-size: 13.5px; font-weight: 600; color: #6F6880; text-decoration: none; }
 </style>
 </head>
 <body data-mode="console">
 <div id="app"><div class="k-boot"><p>Karigar</p></div></div>
 <template id="login">
+  <a class="k-home" href="/">← Karigar website</a>
   <form class="k-login" autocomplete="on">
     <h1>Karigar</h1>
     <p>Sign in with your organisation account.</p>
@@ -41,6 +43,7 @@
   </form>
 </template>
 <template id="signup">
+  <a class="k-home" href="/">← Karigar website</a>
   <form class="k-login" autocomplete="on">
     <h1>Create an account</h1>
     <p>For facilitators and organisations. Artisans do not need one — they use the link you give them.</p>

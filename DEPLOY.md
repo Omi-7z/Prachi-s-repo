@@ -49,7 +49,7 @@ Then **Deployments → ⋯ → Redeploy** so the build picks them up and creates
 
 The Gemini free tier is limited by requests per minute and per day. When the limit is hit, calls fail until it resets; nothing is billed.
 
-**Check the AI is working:** sign in at `/org`, then open `/api/chat?test=1` (one call) or `/api/chat?test=2` (a two-turn practice exchange). It shows `"test":"ok"` with a reply, or `"failed"` with a `reason` (`quota`, `key`, `upstream`) and the provider's own message. Previewing the artisan app from the console also shows that message under any chat error; artisans only see a plain sentence in their language.
+**Check the AI is working:** sign in at `/console`, then open `/api/chat?test=1` (one call) or `/api/chat?test=2` (a two-turn practice exchange). It shows `"test":"ok"` with a reply, or `"failed"` with a `reason` (`quota`, `key`, `upstream`) and the provider's own message. Previewing the artisan app from the console also shows that message under any chat error; artisans only see a plain sentence in their language.
 
 When a Gemini model's free quota runs out, the proxy moves on to the next (`gemini-flash-lite-latest`, `gemini-3.5-flash`, `gemini-3.5-flash-lite`), since each has its own quota. Adding a free `GROQ_API_KEY` from console.groq.com gives one more fallback after those — weaker in Indic languages, but it keeps a session going.
 
@@ -80,7 +80,7 @@ DATABASE_URL='postgres://…' npm run facilitator -- --org "Your organisation" -
 
 ## 6. Move any prototype profiles across
 
-If someone built profiles in the prototype, open `/org` **in that same browser** and sign in. When the organisation's account is still empty, the console offers to move those profiles into it. The built-in sample artisans are demo data and are not moved.
+If someone built profiles in the prototype, open `/console` **in that same browser** and sign in. When the organisation's account is still empty, the console offers to move those profiles into it. The built-in sample artisans are demo data and are not moved.
 
 ## 7. Test the install flow on a real phone
 

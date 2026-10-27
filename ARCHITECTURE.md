@@ -29,7 +29,8 @@ practice_events id, profile_id, segment_id, created_at      -- no transcript, ev
 
 | Route | Who | Notes |
 |---|---|---|
-| `/org` | authed facilitator | overview, board, artisans, new session |
+| `/` | anyone | public website; its pages are hash routes (`#/makers`, `#/how`, `#/signin` …) |
+| `/console` (and `/org`) | authed facilitator | overview, board, artisans, new session |
 | `/k/:token` | artisan, no login | PWA scope; 410 on revoked token |
 | `POST /api/chat` | both | model proxy; model allowlist enforced |
 | `GET /api/profile?token=` | artisan app | strips facilitator-only fields |

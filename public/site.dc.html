@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Noto+Sans+Devanagari:wght@400;500;600&amp;family=Noto+Sans+Gujarati:wght@400;500;600&amp;display=swap">
+<script src="./karigar-site-data.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #FBF7F0; color: #241F2E; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #6B3FA0; }
+  a:hover { color: #52307C; }
+  input, textarea, select, button { font-family: inherit; color: inherit; font-size: inherit; }
+  :focus-visible { outline: 3px solid #B98BE0; outline-offset: 2px; }
+  .w-burger { display: none !important; }
+  @keyframes w-rise { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+  @keyframes w-spin { to { transform: rotate(360deg) } }
+  .w-page { animation: w-rise .4s cubic-bezier(.22,1,.36,1) both; }
+  .w-orbit { animation: w-spin 140s linear infinite; }
+  @media (max-width: 860px) {
+    .w-hero { grid-template-columns: minmax(0,1fr) !important; }
+    .w-hero-board { order: -1; max-width: min(440px, 80vw) !important; }
+    .w-nav { display: none !important; }
+    .w-burger { display: inline-flex !important; }
+    .w-split { grid-template-columns: minmax(0,1fr) !important; }
+    .w-side { position: static !important; flex-direction: row !important; overflow-x: auto; }
+    .w-sheet { left: 0 !important; right: 0 !important; top: auto !important; bottom: 0 !important; width: auto !important; max-height: 90vh !important; border-radius: 24px 24px 0 0 !important; }
+  }
+  @media (prefers-reduced-motion: reduce) { .w-page, .w-orbit { animation: none !important; } html { scroll-behavior: auto; } }
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#FBF7F0;color:#241F2E;font-family:'Hanken Grotesk', 'Noto Sans Gujarati', 'Noto Sans Devanagari', system-ui, sans-serif;font-size:16px;line-height:1.55">
+<sc-if value="{{ showSample }}" hint-placeholder-val="{{ true }}">
+<div style="background:#241F2E;color:#E2D9CB;font-size:13px;text-align:center;padding:7px 16px;line-height:1.4">Preview build. Every maker shown here is a composite sample record, not a real person.</div>
+</sc-if>
+<header style="position:sticky;top:0;z-index:40;background:rgba(251,247,240,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #EBE3D6">
+  <div style="max-width:1240px;margin:0 auto;padding:12px clamp(18px,4vw,40px);display:flex;align-items:center;gap:16px">
+    <a href="#/" aria-label="Karigar home" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#241F2E;flex-shrink:0">
+      <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" style="display:block"><circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle><circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle><circle cx="12" cy="12" r="4.6" fill="none" stroke="#A81C24" stroke-width="2.2"></circle><circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle></svg>
+      <span style="font-family:'Bricolage Grotesque', system-ui, sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em">Karigar</span>
+    </a>
+    <nav class="w-nav" aria-label="Main" style="display:flex;gap:2px;margin-left:16px;flex:1">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+        <a href="{{ n.href }}" style="padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:500;font-size:15px;color:{{ n.color }};background:{{ n.bg }}">{{ n.label }}</a>
+      </sc-for>
+    </nav>
+    <div style="flex:1" class="w-burger"></div>
+    <a class="w-nav" href="#/signin" style="display:inline-flex;align-items:center;padding:10px 18px;border-radius:999px;background:#241F2E;color:#FBF7F0;text-decoration:none;font-weight:600;font-size:15px">Sign in</a>
+    <button class="w-burger" onClick="{{ toggleMenu }}" aria-label="Menu" style="align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff;cursor:pointer;font-weight:600">☰</button>
+  </div>
+  <sc-if value="{{ menu }}">
+    <div style="border-top:1px solid #EBE3D6;padding:10px clamp(18px,4vw,40px) 18px;display:flex;flex-direction:column;gap:4px;background:#FBF7F0">
+      <sc-for list="{{ navItems }}" as="n">
+        <a href="{{ n.href }}" style="padding:13px 14px;border-radius:12px;text-decoration:none;font-weight:500;font-size:17px;color:{{ n.color }};background:{{ n.bg }}">{{ n.label }}</a>
+      </sc-for>
+      <a href="#/signin" style="margin-top:8px;padding:14px;border-radius:12px;text-align:center;background:#241F2E;color:#FBF7F0;text-decoration:none;font-weight:600">Sign in</a>
+    </div>
+  </sc-if>
+</header>
+<main style="flex:1">
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div class="w-page">
+  <section style="max-width:1240px;margin:0 auto;padding:clamp(20px,3vw,36px) clamp(18px,4vw,40px) 56px">
+    <div class="w-hero" style="background:#241F2E;border-radius:30px;padding:clamp(22px,3.4vw,48px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,3vw,56px);align-items:center;overflow:hidden;position:relative">
+      <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+        <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">The Ludo Mandala</div>
+        <h1 style="margin:0;font-family:'Bricolage Grotesque', system-ui, sans-serif;font-weight:600;font-size:clamp(38px,5.4vw,72px);line-height:1;letter-spacing:-.03em;color:#FBF7F0;text-wrap:balance">Craft, told by the people who make it.</h1>
+        <p style="margin:0;max-width:48ch;font-size:clamp(16px,1.4vw,18px);line-height:1.6;color:#CFC8DA;text-wrap:pretty">Every Karigar story starts on this board: six rings, from the craft itself out to what it means for the future. Artisans answer in their own words and language, then decide, one story at a time, what the world gets to see.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+          <a href="#/makers" style="display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;background:#F0B23C;color:#241F2E;text-decoration:none;font-weight:700;font-size:16px;min-height:54px;box-sizing:border-box;box-shadow:0 6px 20px rgba(240,178,60,.3)">Meet the makers <span aria-hidden="true">→</span></a>
+          <a href="#/how" style="display:inline-flex;align-items:center;padding:14px 22px;border-radius:999px;border:1.5px solid rgba(251,247,240,.28);color:#FBF7F0;text-decoration:none;font-weight:600;font-size:15px;min-height:54px;box-sizing:border-box">How Karigar works</a>
+        </div>
+        <div style="margin-top:8px;background:#FBF7F0;border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-height:132px;color:#241F2E">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <span style="font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:999px;background:{{ bCard.soft }};color:{{ bCard.ink }}">Rehmatbai · {{ bCard.ringLabel }}</span>
+            <div style="display:flex;gap:6px">
+              <button onClick="{{ bPrev }}" aria-label="Previous card" style="width:34px;height:34px;border-radius:50%;border:1px solid #EBE3D6;background:#fff;cursor:pointer;font-size:15px;color:#241F2E">←</button>
+              <button onClick="{{ bNext }}" aria-label="Next card" style="width:34px;height:34px;border-radius:50%;border:1px solid #EBE3D6;background:#fff;cursor:pointer;font-size:15px;color:#241F2E">→</button>
+            </div>
+          </div>
+          <div style="font-size:14px;color:#6F6880">{{ bCard.q }}</div>
+          <sc-if value="{{ bCard.filled }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,20px);line-height:1.3;text-wrap:pretty">“{{ bCard.a }}”</div>
+          </sc-if>
+          <sc-if value="{{ bCard.empty }}">
+            <div style="font-size:15px;color:#4A4356;font-style:italic">Not answered yet — she can come back to this card whenever she likes.</div>
+          </sc-if>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#A9A1B6;flex-wrap:wrap">
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid #A81C24;box-sizing:border-box"></span>Answered</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.42);border:2px solid rgba(255,255,255,.9);box-sizing:border-box"></span>Still open</span>
+          <span>{{ bFilled }} of {{ bTotal }} answered · tap a dot</span>
+        </div>
+      </div>
+      <div class="w-hero-board" style="position:relative;width:100%;max-width:min(500px,68vh);aspect-ratio:1;justify-self:center">
+        <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block" aria-hidden="true">
+          <circle cx="60" cy="60" r="59" fill="#2E2839"></circle>
+            <circle cx="60" cy="60" r="21" fill="none" stroke="#B98BE0" stroke-width="6"></circle>
+            <circle cx="60" cy="60" r="27.6" fill="none" stroke="#6FC9B8" stroke-width="6"></circle>
+            <circle cx="60" cy="60" r="34.2" fill="none" stroke="#A81C24" stroke-width="6"></circle>
+            <circle cx="60" cy="60" r="40.8" fill="none" stroke="#C06A5F" stroke-width="6"></circle>
+            <circle cx="60" cy="60" r="47.4" fill="none" stroke="#6D9DC5" stroke-width="6"></circle>
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#F0B23C" stroke-width="6"></circle>
+          <circle cx="60" cy="60" r="15" fill="#FBF7F0"></circle>
+        </svg>
+        <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none" aria-hidden="true">
+          <defs>
+              <path id="wh-craft" d="M 47.36 43.23 A 21 21 0 0 1 72.64 43.23" fill="none"></path>
+              <path id="wh-place" d="M 43.39 37.96 A 27.6 27.6 0 0 1 76.61 37.96" fill="none"></path>
+              <path id="wh-lineage" d="M 39.42 32.69 A 34.2 34.2 0 0 1 80.58 32.69" fill="none"></path>
+              <path id="wh-material" d="M 35.45 27.42 A 40.8 40.8 0 0 1 84.55 27.42" fill="none"></path>
+              <path id="wh-culture" d="M 31.47 22.14 A 47.4 47.4 0 0 1 88.53 22.14" fill="none"></path>
+              <path id="wh-pride" d="M 27.50 16.87 A 54 54 0 0 1 92.50 16.87" fill="none"></path>
+          </defs>
+            <text font-size="3.3" font-weight="700" fill="#3A1F57" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-craft" startOffset="50%">MY CRAFT</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#12443C" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-place" startOffset="50%">PLACE</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-lineage" startOffset="50%">LINEAGE</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#3E1611" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-material" startOffset="50%">MATERIAL &amp; TOOLS</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#13304A" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-culture" startOffset="50%">CULTURAL MEANING</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#4D3302" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-pride" startOffset="50%">PRIDE &amp; STAKE</textPath></text>
+        </svg>
+        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:22%">
+          <div style="font-family:'Bricolage Grotesque', sans-serif;font-size:clamp(14px,1.7vw,20px);font-weight:700;line-height:1.05;color:#241F2E">બાંધણી</div>
+          <div style="font-size:10.5px;color:#6F6880;margin-top:3px">Bandhani</div>
+        </div>
+        <sc-for list="{{ bDots }}" as="d" hint-placeholder-count="0">
+          <button type="button" title="{{ d.label }}" onClick="{{ d.pick }}" aria-label="{{ d.label }}" aria-pressed="{{ d.on }}" style="{{ d.style }}"></button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:0 clamp(18px,4vw,40px)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));border-top:1px solid #EBE3D6;border-bottom:1px solid #EBE3D6">
+      <div style="padding:26px 24px 26px 0;display:flex;flex-direction:column;gap:6px"><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px">Private until they say so</div><div style="color:#6F6880;font-size:15px">Every new story starts in the maker’s own archive. Publishing is a choice, never a default.</div></div>
+      <div style="padding:26px 24px;display:flex;flex-direction:column;gap:6px;border-left:1px solid #EBE3D6"><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px">Credited, every time</div><div style="color:#6F6880;font-size:15px">The maker’s name, as they chose it, travels with every story, image and share.</div></div>
+      <div style="padding:26px 0 26px 24px;display:flex;flex-direction:column;gap:6px;border-left:1px solid #EBE3D6"><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px">Reached through Karigar</div><div style="color:#6F6880;font-size:15px">No phone numbers, no addresses. Visitors send a request; the maker decides.</div></div>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:96px clamp(18px,4vw,40px) 0">
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:720px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">One record, two faces</div>
+      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(32px,4vw,52px);line-height:1.04;letter-spacing:-.025em;text-wrap:balance">A private workspace, a public page, and one deliberate step between them.</h2>
+    </div>
+    <div style="margin-top:40px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:20px;align-items:stretch" class="w-split">
+      <div style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><span style="font-size:13px;font-weight:600;color:#4A4356;background:#F2EDE4;padding:5px 10px;border-radius:999px">Only the maker</span><span style="font-size:13px;color:#8C8499">Karigar app</span></div>
+        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:26px;letter-spacing:-.01em">Their workspace</div>
+        <p style="margin:0;color:#6F6880;text-wrap:pretty">The card session with their facilitator, the mandala of their craft, drafts in their own voice, and practice conversations. Nothing here is ever seen by anyone else.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto"><span style="font-size:13px;padding:5px 10px;border-radius:999px;background:#FBF7F0;border:1px solid #EBE3D6">Session mandala</span><span style="font-size:13px;padding:5px 10px;border-radius:999px;background:#FBF7F0;border:1px solid #EBE3D6">Drafts</span><span style="font-size:13px;padding:5px 10px;border-radius:999px;background:#FBF7F0;border:1px solid #EBE3D6">Practice chats</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:8px 4px;text-align:center">
+        <div style="width:56px;height:56px;border-radius:50%;background:#6B3FA0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px">→</div>
+        <div style="font-weight:600;font-size:15px;max-width:140px">Publish</div>
+        <div style="font-size:13px;color:#6F6880;max-width:150px">Chosen by the maker. Reversible in one tap.</div>
+      </div>
+      <div style="background:#241F2E;color:#FBF7F0;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><span style="font-size:13px;font-weight:600;color:#241F2E;background:#6FC9B8;padding:5px 10px;border-radius:999px">Who they choose</span><span style="font-size:13px;color:#A79FB4">karigar.in</span></div>
+        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:26px;letter-spacing:-.01em">Their public page</div>
+        <p style="margin:0;color:#C4BCD1;text-wrap:pretty">Published stories, a profile, and a mediated way to get in touch. Each story has its own audience, purpose and reuse terms, set by the maker.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto"><span style="font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid #4A4356">Stories</span><span style="font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid #4A4356">Profile</span><span style="font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid #4A4356">Contact requests</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:96px clamp(18px,4vw,40px) 0">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Makers</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;line-height:1.05">Meet the people behind the work</h2></div>
+      <a href="#/makers" style="font-weight:600;text-decoration:none">Browse all makers →</a>
+    </div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px">
+      <sc-for list="{{ homeMakers }}" as="m" hint-placeholder-count="4">
+        <a href="{{ m.href }}" style="display:flex;flex-direction:column;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:22px;overflow:hidden">
+          <div style="height:200px;background:{{ m.tint }};position:relative;overflow:hidden">
+            <sc-if value="{{ m.hasPhoto }}"><img src="{{ m.photo }}" alt="{{ m.photoAlt }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></sc-if>
+            <sc-if value="{{ m.noPhoto }}"><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:{{ m.ink }};text-align:center;padding:16px"><span style="font-size:30px;font-weight:600;line-height:1">{{ m.craftLocal }}</span><span style="font-size:13px">Photos to come — {{ m.first }} is choosing them</span></div></sc-if>
+            <span style="position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:600;padding:5px 10px;border-radius:999px;background:#fff;color:{{ m.ink }}">{{ m.craftLocal }}</span>
+          </div>
+          <div style="padding:18px 20px 20px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px;letter-spacing:-.01em">{{ m.name }}</div>
+            <div style="color:#6F6880;font-size:15px">{{ m.craft }} · {{ m.place }}</div>
+            <div style="margin-top:8px;font-size:14px;color:#4A4356;line-height:1.45">{{ m.practice }}</div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+    <p style="margin:14px 0 0;font-size:14px;color:#8C8499">Listed alphabetically. Karigar does not rank makers.</p>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:96px clamp(18px,4vw,40px) 0">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">In her own words</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;line-height:1.05">{{ essay.title }}</h2><p style="margin:0;color:#4A4356;font-size:17px;text-wrap:pretty">{{ essay.sub }}</p></div>
+      <a href="#/maker/m-rehmat" style="font-weight:600;text-decoration:none">Rehmatbai’s page →</a>
+    </div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+      <sc-for list="{{ essay.frames }}" as="f" hint-placeholder-count="4">
+        <figure style="margin:0;display:flex;flex-direction:column;gap:12px">
+          <div style="aspect-ratio:4/5;border-radius:20px;overflow:hidden;background:#F3ECFA"><img src="{{ f.src }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+          <figcaption style="display:flex;flex-direction:column;gap:4px"><span style="font-size:13px;font-weight:600;color:#6B3FA0">{{ f.day }}</span><span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:500;font-size:18px;line-height:1.3;text-wrap:pretty">“{{ f.line }}”</span></figcaption>
+        </figure>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:88px clamp(18px,4vw,40px) 0">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Newly published</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;line-height:1.05">Stories, in the maker’s voice</h2></div>
+      <a href="#/makers" style="font-weight:600;text-decoration:none">All stories →</a>
+    </div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
+      <sc-for list="{{ homeStories }}" as="x" hint-placeholder-count="3">
+        <a href="{{ x.href }}" style="display:flex;flex-direction:column;gap:14px;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:24px;border-top:6px solid {{ x.ringColor }}">
+          <sc-if value="{{ x.hasPhoto }}"><div style="margin:-24px -24px 4px;height:180px;overflow:hidden;background:{{ x.tint }}"><img src="{{ x.photo }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div></sc-if>
+          <div style="display:flex;justify-content:space-between;gap:10px;font-size:13px"><span style="font-weight:600;color:{{ x.ink }}">{{ x.ring }}</span><span style="color:#8C8499">{{ x.date }}</span></div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.015em;text-wrap:balance">{{ x.title }}</div>
+          <sc-if value="{{ x.hasOrig }}"><div style="font-size:16px;color:#6F6880">{{ x.origTitle }}</div></sc-if>
+          <p style="margin:0;color:#4A4356;font-size:15px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">{{ x.excerpt }}</p>
+          <div style="margin-top:auto;padding-top:12px;border-top:1px solid #F2EDE4;font-size:14px;color:#6F6880"><b style="color:#241F2E;font-weight:600">{{ x.maker }}</b> · {{ x.craft }}</div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:96px clamp(18px,4vw,40px) 0">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">After working together</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;line-height:1.05">Notes from people who reached out</h2><p style="margin:0;color:#4A4356;font-size:17px;text-wrap:pretty">No stars, no scores. Each note is shown only after the maker has read it and said yes.</p></div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <sc-for list="{{ voices }}" as="v" hint-placeholder-count="4">
+        <div style="background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span style="font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;background:#F2EDE4;color:#4A4356">{{ v.what }}</span><span style="font-size:13px;color:#8C8499">{{ v.date }}</span></div>
+          <p style="margin:0;font-size:16px;line-height:1.6;color:#241F2E;text-wrap:pretty">{{ v.text }}</p>
+          <div style="margin-top:auto;padding-top:12px;border-top:1px solid #F2EDE4;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{ v.who }}</span><span style="font-size:14px;color:#6F6880">{{ v.role }}</span><a href="{{ v.href }}" style="font-size:14px;font-weight:600;text-decoration:none;margin-top:4px">Worked with {{ v.maker }} →</a></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:96px clamp(18px,4vw,40px) 0">
+    <div style="background:#F2EDE4;border-radius:32px;padding:clamp(28px,5vw,64px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Principles</div>
+        <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.025em;line-height:1.05;text-wrap:balance">Eleven rules, written as things you can check.</h2>
+        <p style="margin:0;color:#4A4356">They are not values on a wall. Each one is a test the platform has to pass.</p>
+        <a href="#/principles" style="align-self:flex-start;margin-top:8px;display:inline-flex;padding:13px 22px;border-radius:999px;background:#241F2E;color:#FBF7F0;text-decoration:none;font-weight:600">Read all eleven</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        <sc-for list="{{ principlesShort }}" as="p" hint-placeholder-count="4">
+          <div style="background:#FBF7F0;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:'Bricolage Grotesque', sans-serif;font-size:14px;font-weight:600;color:#6B3FA0">{{ p.n }}</span>
+            <div style="font-weight:600;font-size:17px">{{ p.t }}</div>
+            <div style="color:#6F6880;font-size:15px;line-height:1.5">{{ p.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1240px;margin:0 auto;padding:96px clamp(18px,4vw,40px) 0">
+    <h2 style="margin:0 0 28px;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.025em">Where do you come in?</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <div style="border:1.5px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;background:#fff">
+        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">I make craft</div>
+        <p style="margin:0;color:#6F6880;flex:1">Open your Karigar app with the card your facilitator gave you, or manage what is on your public page.</p>
+        <a href="#/signin" style="align-self:flex-start;font-weight:600;text-decoration:none">Artisan sign in →</a>
+      </div>
+      <div style="border:1.5px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;background:#fff">
+        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">I run sessions with artisans</div>
+        <p style="margin:0;color:#6F6880;flex:1">NGOs, cooperatives and field teams use the facilitator console to run card sessions and hand each artisan their own app.</p>
+        <a href="#/orgs" style="align-self:flex-start;font-weight:600;text-decoration:none">For organisations →</a>
+      </div>
+      <div style="border:1.5px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;background:#fff">
+        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">I want to work with a maker</div>
+        <p style="margin:0;color:#6F6880;flex:1">Buyers, press, researchers and museums: read their stories, respect their terms, and send a request through Karigar.</p>
+        <a href="#/makers" style="align-self:flex-start;font-weight:600;text-decoration:none">Find a maker →</a>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+<sc-if value="{{ isMakers }}">
+<div class="w-page" style="max-width:1240px;margin:0 auto;padding:56px clamp(18px,4vw,40px) 0">
+  <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(38px,5vw,64px);letter-spacing:-.03em;line-height:1">Makers &amp; stories</h1>
+  <p style="margin:14px 0 0;color:#4A4356;font-size:18px;max-width:640px">Browse and search. There is no feed and no ranking — makers are listed alphabetically, stories by the date they were published.</p>
+  <div style="margin-top:28px;display:flex;flex-direction:column;gap:14px;padding:18px;background:#fff;border:1px solid #EBE3D6;border-radius:20px">
+    <label style="display:flex;align-items:center;gap:10px;background:#FBF7F0;border:1.5px solid #EBE3D6;border-radius:14px;padding:0 14px">
+      <span aria-hidden="true" style="color:#8C8499">⌕</span>
+      <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Search by name, craft, place — in any script" aria-label="Search makers and stories" style="flex:1;border:0;background:transparent;outline:none;padding:14px 0;font-size:16px;min-width:0">
+    </label>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+      <sc-for list="{{ craftChips }}" as="c" hint-placeholder-count="4">
+        <button onClick="{{ c.pick }}" style="padding:9px 16px;border-radius:999px;border:1.5px solid;cursor:pointer;font-weight:500;font-size:15px;min-height:42px;{{ c.style }}">{{ c.label }}</button>
+      </sc-for>
+      <span style="flex:1"></span>
+      <select value="{{ fRegion }}" onChange="{{ setRegion }}" aria-label="State" style="padding:10px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff;min-height:42px">
+        <sc-for list="{{ regionOpts }}" as="o"><option value="{{ o.v }}">{{ o.label }}</option></sc-for>
+      </select>
+      <select value="{{ fLang }}" onChange="{{ setLang }}" aria-label="Language" style="padding:10px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff;min-height:42px">
+        <sc-for list="{{ langOpts }}" as="o"><option value="{{ o.v }}">{{ o.label }}</option></sc-for>
+      </select>
+    </div>
+  </div>
+  <div role="tablist" style="margin-top:28px;display:flex;gap:24px;border-bottom:1px solid #EBE3D6">
+    <button role="tab" onClick="{{ showMakersTab }}" style="background:none;border:0;border-bottom:2.5px solid;padding:10px 0;font-weight:600;font-size:17px;cursor:pointer;{{ tabMakersStyle }}">{{ makersTabLabel }}</button>
+    <button role="tab" onClick="{{ showStoriesTab }}" style="background:none;border:0;border-bottom:2.5px solid;padding:10px 0;font-weight:600;font-size:17px;cursor:pointer;{{ tabStoriesStyle }}">{{ storiesTabLabel }}</button>
+  </div>
+  <sc-if value="{{ btabMakers }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-top:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
+      <sc-for list="{{ browseMakers }}" as="m" hint-placeholder-count="4">
+        <a href="{{ m.href }}" style="display:flex;flex-direction:column;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:22px;overflow:hidden">
+          <div style="height:180px;background:{{ m.tint }};position:relative;overflow:hidden">
+            <sc-if value="{{ m.hasPhoto }}"><img src="{{ m.photo }}" alt="{{ m.photoAlt }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></sc-if>
+            <sc-if value="{{ m.noPhoto }}"><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:{{ m.ink }};text-align:center;padding:16px"><span style="font-size:30px;font-weight:600;line-height:1">{{ m.craftLocal }}</span><span style="font-size:13px">Photos to come — {{ m.first }} is choosing them</span></div></sc-if>
+            <span style="position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:600;padding:5px 10px;border-radius:999px;background:#fff;color:{{ m.ink }}">{{ m.craftLocal }}</span>
+            <sc-if value="{{ m.isCollective }}"><span style="position:absolute;right:12px;top:12px;font-size:12px;font-weight:600;padding:4px 9px;border-radius:999px;background:#fff;color:{{ m.ink }}">Collective</span></sc-if>
+          </div>
+          <div style="padding:18px 20px 20px;display:flex;flex-direction:column;gap:6px;flex:1">
+            <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px">{{ m.name }}</div>
+            <sc-if value="{{ m.local }}"><div style="color:#6F6880;font-size:15px">{{ m.local }}</div></sc-if>
+            <div style="color:#4A4356;font-size:15px">{{ m.craft }} · {{ m.place }}</div>
+            <div style="margin-top:auto;padding-top:10px;display:flex;justify-content:space-between;gap:8px;font-size:13px;color:#8C8499"><span>{{ m.langs }}</span><span>{{ m.storyNote }}</span></div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+    <sc-if value="{{ noMakers }}"><div style="margin-top:24px;padding:40px;text-align:center;border:1.5px dashed #DDD4C6;border-radius:20px;color:#6F6880">No makers match that search. <button onClick="{{ clearFilters }}" style="background:none;border:0;color:#6B3FA0;font-weight:600;cursor:pointer;text-decoration:underline">Clear filters</button></div></sc-if>
+  </sc-if>
+  <sc-if value="{{ btabStories }}">
+    <div style="margin-top:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
+      <sc-for list="{{ browseStories }}" as="x">
+        <a href="{{ x.href }}" style="display:flex;flex-direction:column;gap:12px;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:24px;border-top:6px solid {{ x.ringColor }}">
+          <div style="display:flex;justify-content:space-between;gap:10px;font-size:13px"><span style="font-weight:600;color:{{ x.ink }}">{{ x.ring }}</span><span style="color:#8C8499">{{ x.date }}</span></div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:23px;line-height:1.15;text-wrap:balance">{{ x.title }}</div>
+          <sc-if value="{{ x.hasOrig }}"><div style="font-size:16px;color:#6F6880">{{ x.origTitle }}</div></sc-if>
+          <p style="margin:0;color:#4A4356;font-size:15px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">{{ x.excerpt }}</p>
+          <div style="margin-top:auto;padding-top:12px;border-top:1px solid #F2EDE4;font-size:14px;color:#6F6880;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span><b style="color:#241F2E;font-weight:600">{{ x.maker }}</b> · {{ x.craft }}</span><span>{{ x.langs }}</span></div>
+        </a>
+      </sc-for>
+    </div>
+    <sc-if value="{{ noStories }}"><div style="margin-top:24px;padding:40px;text-align:center;border:1.5px dashed #DDD4C6;border-radius:20px;color:#6F6880">No published stories match. <button onClick="{{ clearFilters }}" style="background:none;border:0;color:#6B3FA0;font-weight:600;cursor:pointer;text-decoration:underline">Clear filters</button></div></sc-if>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isMaker }}">
+<div class="w-page">
+  <sc-if value="{{ mkFound }}">
+    <section style="background:{{ mk.tint }};position:relative;overflow:hidden">
+      <div style="position:absolute;right:-120px;top:-120px;width:460px;height:460px;border-radius:50%;border:2px solid {{ mk.ringColor }};opacity:.5"></div>
+      <div style="position:absolute;right:-40px;top:-40px;width:300px;height:300px;border-radius:50%;border:2px solid {{ mk.ringColor }};opacity:.5"></div>
+      <div style="max-width:1240px;margin:0 auto;padding:40px clamp(18px,4vw,40px) 48px;position:relative;display:flex;flex-direction:column;gap:18px">
+        <a href="#/makers" style="font-size:15px;font-weight:600;text-decoration:none;color:{{ mk.ink }}">← All makers</a>
+        <div style="font-size:clamp(28px,3.4vw,40px);font-weight:600;color:{{ mk.ink }}">{{ mk.craftLocal }}</div>
+        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(40px,6vw,76px);letter-spacing:-.035em;line-height:.98">{{ mk.name }}</h1>
+        <sc-if value="{{ mk.local }}"><div style="font-size:22px;color:#4A4356">{{ mk.local }}</div></sc-if>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="padding:7px 13px;border-radius:999px;background:#fff;font-size:14px;font-weight:500">{{ mk.craft }}</span>
+          <span style="padding:7px 13px;border-radius:999px;background:#fff;font-size:14px;font-weight:500">{{ mk.place }}</span>
+          <span style="padding:7px 13px;border-radius:999px;background:#fff;font-size:14px;font-weight:500">{{ mk.langs }}</span>
+          <span style="padding:7px 13px;border-radius:999px;background:#fff;font-size:14px;font-weight:500">{{ mk.practice }}</span>
+        </div>
+      </div>
+    </section>
+    <section style="max-width:1240px;margin:0 auto;padding:48px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr);gap:48px;align-items:start" class="w-split">
+      <div style="display:flex;flex-direction:column;gap:36px">
+        <blockquote style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,30px);line-height:1.3;letter-spacing:-.01em;text-wrap:pretty;border-left:0">“{{ mk.about }}”</blockquote>
+        <sc-if value="{{ mk.hasMembers }}"><div style="padding:18px 20px;background:#fff;border:1px solid #EBE3D6;border-radius:16px;font-size:15px"><b>Members:</b> {{ mk.members }}. Stories from this page are credited to the collective.</div></sc-if>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:28px">Stories</h2>
+          <sc-for list="{{ mkStories }}" as="x">
+            <a href="{{ x.href }}" style="display:grid;grid-template-columns:6px minmax(0,1fr);gap:20px;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px 24px 22px 0;overflow:hidden">
+              <span style="background:{{ x.ringColor }};border-radius:0 4px 4px 0"></span>
+              <span style="display:flex;flex-direction:column;gap:8px">
+                <span style="display:flex;justify-content:space-between;gap:10px;font-size:13px"><b style="color:{{ x.ink }};font-weight:600">{{ x.ring }} · {{ x.card }}</b><span style="color:#8C8499">{{ x.date }}</span></span>
+                <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:23px;line-height:1.15">{{ x.title }}</span>
+                <span style="color:#4A4356;font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ x.excerpt }}</span>
+                <span style="font-size:13px;color:#8C8499">{{ x.langs }}</span>
+              </span>
+            </a>
+          </sc-for>
+          <sc-if value="{{ mkNoStories }}"><div style="padding:28px;border:1.5px dashed #DDD4C6;border-radius:18px;color:#6F6880">No published stories yet. That is a normal choice — many makers keep their record private.</div></sc-if>
+        </div>
+      </div>
+      <aside style="position:sticky;top:96px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:14px">
+          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:21px">Get in touch</div>
+          <sc-if value="{{ mk.contactOpen }}">
+            <p style="margin:0;color:#6F6880;font-size:15px">Send a request through Karigar. {{ mk.first }} reads it in {{ mk.primaryLang }} and decides whether to reply. Contact details are never shown here.</p>
+            <a href="{{ mk.contactHref }}" style="display:flex;justify-content:center;padding:14px 20px;border-radius:999px;background:#6B3FA0;color:#fff;text-decoration:none;font-weight:600">Send a request</a>
+          </sc-if>
+          <sc-if value="{{ mk.contactClosed }}">
+            <p style="margin:0;color:#4A4356;font-size:15px;padding:14px;background:#F2EDE4;border-radius:14px">{{ mk.contactClosedText }}</p>
+          </sc-if>
+        </div>
+        <div style="background:#F2EDE4;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px;font-size:15px">
+          <div style="font-weight:600">How to credit</div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif;font-size:17px">{{ mk.credit }}</div>
+          <div style="color:#6F6880;font-size:14px">Each story also carries its own reuse terms.</div>
+        </div>
+        <sc-if value="{{ mk.hasCollective }}"><a href="{{ mk.collectiveHref }}" style="padding:18px 22px;border:1px solid #EBE3D6;border-radius:18px;text-decoration:none;color:#241F2E;background:#fff;font-size:15px">Member of <b>{{ mk.collectiveName }}</b> →</a></sc-if>
+      </aside>
+    </section>
+  </sc-if>
+  <sc-if value="{{ mkMissing }}">
+    <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-size:40px">This page isn’t available</h1><p style="margin:0;color:#6F6880">The maker may have made it private or removed it. That is always their choice.</p><a href="#/makers" style="font-weight:600">Browse makers</a></div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isStory }}">
+<div class="w-page">
+  <sc-if value="{{ stFound }}">
+    <article style="max-width:1240px;margin:0 auto;padding:40px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);gap:56px;align-items:start" class="w-split">
+      <div style="display:flex;flex-direction:column;gap:24px;min-width:0">
+        <a href="{{ st.makerHref }}" style="font-size:15px;font-weight:600;text-decoration:none">← {{ st.maker }}</a>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:14px">
+          <span style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:{{ st.tint }};color:{{ st.ink }};font-weight:600"><span style="width:9px;height:9px;border-radius:50%;background:{{ st.ringColor }}"></span>{{ st.ring }}</span>
+          <span style="color:#8C8499">{{ st.card }} · Published {{ st.date }}</span>
+          <sc-if value="{{ st.isLink }}"><span style="padding:6px 12px;border-radius:999px;background:#FFF6E3;color:#8A5D05;font-weight:600">Shared by link · not listed</span></sc-if>
+        </div>
+        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(38px,5.4vw,68px);letter-spacing:-.03em;line-height:1.02;text-wrap:balance">{{ st.title }}</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <sc-if value="{{ st.multiLang }}">
+            <sc-for list="{{ st.langTabs }}" as="t"><button onClick="{{ t.pick }}" style="padding:9px 15px;border-radius:999px;border:1.5px solid;cursor:pointer;font-size:14px;font-weight:500;min-height:42px;{{ t.style }}">{{ t.label }}</button></sc-for>
+          </sc-if>
+          <button onClick="{{ st.listen }}" style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;border:1.5px solid #6B3FA0;background:#fff;color:#6B3FA0;cursor:pointer;font-weight:600;font-size:14px;min-height:42px"><span aria-hidden="true">▶</span>{{ st.listenLabel }}</button>
+        </div>
+        <sc-if value="{{ st.isTranslation }}"><div style="font-size:14px;color:#6F6880">Translated from {{ st.origName }}. The {{ st.origName }} version is the one {{ st.maker }} told.</div></sc-if>
+        <sc-if value="{{ st.hasMedia }}">
+          <figure style="margin:0;display:flex;flex-direction:column;gap:8px">
+            <div style="position:relative;width:100%;aspect-ratio:16/10;border-radius:20px;overflow:hidden;background:{{ st.tint }}">
+              <image-slot id="{{ st.slotId }}" shape="rect" placeholder="{{ st.mediaAlt }}"></image-slot>
+            </div>
+            <figcaption style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:13px;color:#6F6880"><span>{{ st.mediaAlt }}</span><span style="font-weight:600;color:#241F2E">© {{ st.credit }} · Not for reproduction</span></figcaption>
+          </figure>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:20px;font-size:clamp(18px,1.5vw,20px);line-height:1.7;color:#241F2E;max-width:680px">
+          <sc-for list="{{ st.paras }}" as="p" hint-placeholder-count="3"><p style="margin:0;text-wrap:pretty">{{ p.t }}</p></sc-for>
+        </div>
+        <div style="max-width:680px;padding-top:20px;border-top:1px solid #EBE3D6;font-size:15px;color:#4A4356">Told by <b style="color:#241F2E">{{ st.credit }}</b>, in a Karigar card session. {{ st.consentLine }}</div>
+        <sc-if value="{{ st.hasCorrections }}">
+          <div style="max-width:680px;padding:18px 20px;background:#FFF6E3;border-radius:16px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-weight:600;color:#8A5D05;font-size:14px">Correction</div>
+            <sc-for list="{{ st.corrections }}" as="c"><div style="font-size:15px;color:#4A4356"><b>{{ c.date }}</b> — {{ c.note }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <aside style="position:sticky;top:96px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8C8499">Reuse terms</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:15px;padding:5px 10px;border-radius:8px;background:#241F2E;color:#FBF7F0">{{ st.rightsCode }}</span><span style="font-weight:600;font-size:17px">{{ st.rightsLabel }}</span></div>
+          <p style="margin:0;color:#4A4356;font-size:15px">{{ st.rightsDesc }}</p>
+          <div style="font-size:14px;color:#6F6880;padding-top:10px;border-top:1px solid #F2EDE4">Not licensed for AI training or image generation. This page tells crawlers so.</div>
+          <button onClick="{{ share }}" style="padding:13px 18px;border-radius:999px;border:0;background:#241F2E;color:#FBF7F0;font-weight:600;cursor:pointer;min-height:46px">{{ shareLabel }}</button>
+          <button onClick="{{ toggleEmbed }}" style="padding:12px 18px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;font-weight:600;cursor:pointer;min-height:46px">{{ embedLabel }}</button>
+          <sc-if value="{{ embedOpen }}"><textarea readonly="" aria-label="Embed code" style="width:100%;min-height:120px;font-family:ui-monospace, monospace;font-size:12px;padding:12px;border-radius:12px;border:1px solid #EBE3D6;background:#FBF7F0;resize:vertical">{{ st.embedCode }}</textarea></sc-if>
+        </div>
+        <div style="background:#F2EDE4;border-radius:20px;padding:20px;font-size:14px;color:#4A4356;line-height:1.55">Credit and rights travel inside the page and the image files. Someone determined can still strip them — Karigar makes the right thing the default, it cannot make copying impossible.</div>
+        <a href="{{ st.makerHref }}" style="padding:18px 20px;border:1px solid #EBE3D6;border-radius:18px;text-decoration:none;color:#241F2E;background:#fff;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:#8C8499">Maker</span><b style="font-size:17px">{{ st.maker }}</b><span style="font-size:14px;color:#6F6880">{{ st.craft }} · {{ st.place }}</span></a>
+      </aside>
+    </article>
+    <sc-if value="{{ stHasMore }}">
+      <section style="max-width:1240px;margin:0 auto;padding:72px clamp(18px,4vw,40px) 0">
+        <h2 style="margin:0 0 20px;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:28px">More from {{ st.maker }}</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
+          <sc-for list="{{ st.more }}" as="x">
+            <a href="{{ x.href }}" style="display:flex;flex-direction:column;gap:10px;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:22px;border-top:6px solid {{ x.ringColor }}">
+              <span style="font-size:13px;font-weight:600;color:{{ x.ink }}">{{ x.ring }}</span>
+              <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px;line-height:1.15">{{ x.title }}</span>
+              <span style="color:#4A4356;font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ x.excerpt }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+  </sc-if>
+  <sc-if value="{{ stMissing }}">
+    <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-size:40px">This story isn’t available</h1><p style="margin:0;color:#6F6880">The maker may have made it private. When a story is closed, it closes for everyone at once.</p><a href="#/makers" style="font-weight:600">Browse stories</a></div>
+  </sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ isContact }}">
+<div class="w-page" style="max-width:1100px;margin:0 auto;padding:48px clamp(18px,4vw,40px) 0">
+  <sc-if value="{{ cmFound }}">
+    <a href="{{ cm.href }}" style="font-size:15px;font-weight:600;text-decoration:none">← {{ cm.name }}</a>
+    <sc-if value="{{ cmForm }}">
+      <div style="margin-top:20px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);gap:48px;align-items:start" class="w-split">
+        <form onSubmit="{{ submitContact }}" novalidate="" style="display:flex;flex-direction:column;gap:24px">
+          <div><h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(34px,4.4vw,52px);letter-spacing:-.03em;line-height:1.04">Send {{ cm.first }} a request</h1>
+          <p style="margin:12px 0 0;color:#4A4356;font-size:17px">Be clear about who you are and what you want. That is what they will decide on.</p></div>
+          <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px">
+            <legend style="font-weight:600;margin-bottom:10px">What is this about?</legend>
+            <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ cats }}" as="c" hint-placeholder-count="7"><button type="button" onClick="{{ c.pick }}" style="padding:10px 16px;border-radius:999px;border:1.5px solid;cursor:pointer;font-weight:500;min-height:44px;{{ c.style }}">{{ c.label }}</button></sc-for></div>
+            <sc-if value="{{ eCat }}"><div role="alert" style="color:#A81C24;font-size:14px">{{ eCat }}</div></sc-if>
+          </fieldset>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+            <label style="display:flex;flex-direction:column;gap:6px;font-weight:600">Your name<input value="{{ cf.name }}" onChange="{{ setCfName }}" autocomplete="name" style="font-weight:400;padding:13px 14px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff;outline:none"><sc-if value="{{ eName }}"><span role="alert" style="color:#A81C24;font-size:14px;font-weight:400">{{ eName }}</span></sc-if></label>
+            <label style="display:flex;flex-direction:column;gap:6px;font-weight:600">Organisation <span style="font-weight:400;color:#8C8499;font-size:14px;margin-top:-4px">Optional</span><input value="{{ cf.org }}" onChange="{{ setCfOrg }}" autocomplete="organization" style="font-weight:400;padding:13px 14px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff;outline:none"></label>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:6px;font-weight:600">Email for the reply<input type="email" value="{{ cf.email }}" onChange="{{ setCfEmail }}" autocomplete="email" style="font-weight:400;padding:13px 14px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff;outline:none"><span style="font-weight:400;color:#6F6880;font-size:14px">Not shown to {{ cm.first }} unless they accept and choose to share contacts.</span><sc-if value="{{ eEmail }}"><span role="alert" style="color:#A81C24;font-size:14px;font-weight:400">{{ eEmail }}</span></sc-if></label>
+          <label style="display:flex;flex-direction:column;gap:6px;font-weight:600">What would you like, and why?<textarea value="{{ cf.purpose }}" onChange="{{ setCfPurpose }}" maxlength="600" rows="6" placeholder="Plain words work best — it will be translated." style="font-weight:400;padding:13px 14px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff;outline:none;resize:vertical;line-height:1.6"></textarea><span style="font-weight:400;color:#8C8499;font-size:13px;align-self:flex-end">{{ purposeCount }}</span><sc-if value="{{ ePurpose }}"><span role="alert" style="color:#A81C24;font-size:14px;font-weight:400">{{ ePurpose }}</span></sc-if></label>
+          <sc-if value="{{ dupe }}"><div role="alert" style="padding:14px 16px;border-radius:14px;background:#FBEAE8;color:#7A1319;font-size:15px">You already have a request waiting with {{ cm.first }}. One at a time — it closes by itself after 30 days.</div></sc-if>
+          <button type="submit" style="align-self:flex-start;padding:15px 26px;border-radius:999px;border:0;background:#6B3FA0;color:#fff;font-weight:600;font-size:16px;cursor:pointer;min-height:50px">Send request</button>
+        </form>
+        <aside style="background:#F2EDE4;border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:16px;position:sticky;top:96px">
+          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:21px">What happens next</div>
+          <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:12px;color:#4A4356;font-size:15px">
+            <li>{{ cm.first }} sees your request in {{ cm.lang }}, and can listen to it.</li>
+            <li>They can accept, decline, or not reply. Not replying is a normal answer.</li>
+            <li>If they accept, a conversation opens through Karigar. Phone numbers are shared only if they want.</li>
+            <li>Unanswered requests close after 30 days. You will not be asked to follow up.</li>
+          </ol>
+        </aside>
+      </div>
+    </sc-if>
+    <sc-if value="{{ cfDone }}">
+      <div style="margin-top:28px;max-width:680px;background:#fff;border:1px solid #EBE3D6;border-radius:28px;padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:16px">
+        <div style="width:52px;height:52px;border-radius:50%;background:#E6F6F2;color:#1F5F54;display:flex;align-items:center;justify-content:center;font-size:24px">✓</div>
+        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:36px;letter-spacing:-.02em">Request sent</h1>
+        <p style="margin:0;color:#4A4356;font-size:17px">{{ cm.first }} will see it in {{ cm.lang }}. If they accept, you will get an email from Karigar. If you hear nothing within 30 days, the request has closed — please don’t chase it elsewhere.</p>
+        <a href="{{ cm.href }}" style="align-self:flex-start;font-weight:600">Back to {{ cm.name }}</a>
+      </div>
+    </sc-if>
+    <sc-if value="{{ cmClosed }}">
+      <div style="margin-top:28px;max-width:680px;background:#F2EDE4;border-radius:28px;padding:40px;display:flex;flex-direction:column;gap:12px">
+        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px">{{ cm.first }} isn’t taking requests right now</h1>
+        <p style="margin:0;color:#4A4356">They have closed contact for a while. You are welcome to read their stories in the meantime.</p>
+      </div>
+    </sc-if>
+  </sc-if>
+  <sc-if value="{{ cmMissing }}"><div style="padding:80px 0;text-align:center"><h1 style="font-family:'Bricolage Grotesque', sans-serif">This maker isn’t available</h1><a href="#/makers">Browse makers</a></div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isHow }}">
+<div class="w-page">
+  <section style="max-width:1240px;margin:0 auto;padding:64px clamp(18px,4vw,40px) 0;max-width:1240px">
+    <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">How it works</div>
+    <h1 style="margin:14px 0 0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(40px,5.6vw,72px);letter-spacing:-.035em;line-height:1;max-width:900px;text-wrap:balance">From a card on the floor to a story the maker owns.</h1>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:56px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+    <div style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px"><span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:40px;color:#F0B23C;line-height:1">1</span><div style="font-weight:600;font-size:20px">A session, in person</div><p style="margin:0;color:#6F6880">A facilitator sits with the artisan and a mandala board of cards — Place, Lineage, Material, Culture, Pride. The artisan answers in their own language. Nothing is written for them.</p></div>
+    <div style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px"><span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:40px;color:#6D9DC5;line-height:1">2</span><div style="font-weight:600;font-size:20px">Their own app</div><p style="margin:0;color:#6F6880">The artisan receives a link or QR card for their Karigar app: the session, drafts in their voice, and a guide to practise talking about their work. The organisation’s access ends at upload.</p></div>
+    <div style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px"><span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:40px;color:#A81C24;line-height:1">3</span><div style="font-weight:600;font-size:20px">Publishing, by choice</div><p style="margin:0;color:#6F6880">Only the artisan can publish. For each story they pick who can see it, for what purpose, and for how long. Before confirming, Karigar says in plain words — and out loud — who will see it.</p></div>
+    <div style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px"><span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:40px;color:#6FC9B8;line-height:1">4</span><div style="font-weight:600;font-size:20px">Changeable, always</div><p style="margin:0;color:#6F6880">Correct a fact, close a story, go fully private, or take everything and leave. None of it needs anyone’s permission.</p></div>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:88px clamp(18px,4vw,40px) 0">
+    <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.025em">Four ways to share a story</h2>
+    <p style="margin:12px 0 0;color:#4A4356;max-width:640px;font-size:17px">Set per story, and within a story per detail — a maker can publish how they work while keeping their village and their material source private. Every story starts as “Only me”.</p>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+      <sc-for list="{{ tiersList }}" as="t" hint-placeholder-count="4">
+        <div style="border-radius:22px;padding:24px;background:{{ t.bg }};display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:12px;height:12px;border-radius:50%;background:{{ t.color }}"></span><b style="font-size:19px;color:{{ t.color }}">{{ t.label }}</b></div>
+          <div style="font-size:13px;color:#6F6880;font-weight:600">{{ t.name }}</div>
+          <p style="margin:0;color:#241F2E;font-size:15px">{{ t.who }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:88px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px" class="w-split">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.025em">Consent is never one checkbox</h2>
+      <p style="margin:0;color:#4A4356;font-size:17px">A photo taken for a workshop is not available for a campaign, an archive or AI training. Each purpose gets its own record, and anyone can ask Karigar: who agreed, to what, when, in what language, and is it still current?</p>
+    </div>
+    <div style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:24px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 18px;font-size:15px">
+      <b>Purpose</b><span style="color:#4A4356">What it may be used for</span>
+      <b>Audience</b><span style="color:#4A4356">Who may see it</span>
+      <b>Medium</b><span style="color:#4A4356">Where it may appear</span>
+      <b>Duration</b><span style="color:#4A4356">Open-ended, or until a date</span>
+      <b>Reuse</b><span style="color:#4A4356">Whether others may republish, and how</span>
+      <b>Community</b><span style="color:#4A4356">Whether others must also agree</span>
+      <b>Withdrawal</b><span style="color:#4A4356">One tap — as easy as agreeing</span>
+    </div>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:88px clamp(18px,4vw,40px) 0">
+    <div style="background:#241F2E;color:#FBF7F0;border-radius:32px;padding:clamp(28px,5vw,56px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:36px" class="w-split">
+      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.4vw,42px);letter-spacing:-.025em;line-height:1.05">What Karigar is not</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;color:#C4BCD1">
+        <div><b style="color:#FBF7F0;display:block;margin-bottom:4px">Not a marketplace</b>Nothing is sold here. Buyers send requests, makers decide.</div>
+        <div><b style="color:#FBF7F0;display:block;margin-bottom:4px">Not a social network</b>No feed, no followers, no likes, no view counts.</div>
+        <div><b style="color:#FBF7F0;display:block;margin-bottom:4px">Not a portfolio host</b>Stories come from the maker’s own record, with context and terms attached.</div>
+        <div><b style="color:#FBF7F0;display:block;margin-bottom:4px">Not a data source</b>No artisan content is used for training or marketing without separate consent.</div>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPrinciples }}">
+<div class="w-page">
+  <section style="max-width:1240px;margin:0 auto;padding:64px clamp(18px,4vw,40px) 0">
+    <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Principles &amp; governance</div>
+    <h1 style="margin:14px 0 0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(40px,5.6vw,72px);letter-spacing:-.035em;line-height:1;max-width:900px;text-wrap:balance">Artisan-owned has to mean something you can check.</h1>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:48px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:#EBE3D6;border:1px solid #EBE3D6;border-radius:24px;overflow:hidden">
+    <sc-for list="{{ principles }}" as="p" hint-placeholder-count="11">
+      <div style="background:#FBF7F0;padding:26px;display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:15px;color:#6B3FA0">{{ p.n }}</span>
+        <div style="font-weight:600;font-size:18px">{{ p.t }}</div>
+        <div style="color:#6F6880;font-size:15px">{{ p.d }}</div>
+      </div>
+    </sc-for>
+  </section>
+  <section id="rights" style="max-width:1240px;margin:0 auto;padding:88px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.025em">Rights vocabulary</h2>
+      <p style="margin:0;color:#4A4356">Every story carries one of these statements. It is a fixed list kept by the council — not free text — so it can be read by people and machines alike.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <sc-for list="{{ rightsList }}" as="r" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:start;padding:18px 20px;background:#fff;border:1px solid #EBE3D6;border-radius:16px">
+          <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;padding:5px 0;border-radius:8px;background:#241F2E;color:#FBF7F0;text-align:center;font-size:14px">{{ r.code }}</span>
+          <div><b>{{ r.label }}</b><div style="color:#6F6880;font-size:15px">{{ r.desc }}</div></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  <section id="council" style="max-width:1240px;margin:0 auto;padding:88px clamp(18px,4vw,40px) 0">
+    <div style="display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.025em">The council decides</h2>
+        <p style="margin:0;color:#4A4356">A rotating council of artisans, local facilitators and translators, with legal, safety, accessibility and IP advisers. It sets data rules, the rights vocabulary, story standards, partner criteria and safeguarding — and its decisions change the platform’s settings directly.</p>
+        <p style="margin:0;color:#8C8499;font-size:14px">The council is being constituted. The entries shown are the first proposals.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ decisions }}" as="d" hint-placeholder-count="5">
+          <div style="padding:18px 20px;background:#fff;border:1px solid #EBE3D6;border-radius:16px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;gap:12px;font-size:13px;color:#8C8499"><b style="color:#6B3FA0">{{ d.id }}</b><span>{{ d.date }}</span></div>
+            <div style="font-size:16px">{{ d.text }}</div>
+            <code style="align-self:flex-start;font-size:12px;padding:4px 8px;border-radius:6px;background:#F2EDE4;color:#4A4356">{{ d.config }}</code>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:88px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+    <div style="background:#F2EDE4;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px">
+      <h3 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">Data commitments</h3>
+      <ul style="margin:0;padding-left:20px;color:#4A4356;display:flex;flex-direction:column;gap:8px">
+        <li>Deleted from live systems within 7 days, and from backups within 35 days.</li>
+        <li>Full export in open formats — media at original size, consent and boundary records included.</li>
+        <li>Photo location data is stripped on upload.</li>
+        <li>Nothing is used for training, marketing or licensing without separate, specific consent.</li>
+      </ul>
+    </div>
+    <div style="background:#F2EDE4;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px">
+      <h3 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">What we can’t promise</h3>
+      <p style="margin:0;color:#4A4356">Credit lines, rights data and “no AI” instructions are built into every page and image. A determined person can still strip them. Karigar makes correct credit the default and stripping it a deliberate act — it cannot make copying impossible.</p>
+    </div>
+    <div id="report" style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px">
+      <h3 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">Report material about you</h3>
+      <sc-if value="{{ tdForm }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submitTd }}" novalidate="" style="display:flex;flex-direction:column;gap:10px">
+          <p style="margin:0;color:#6F6880;font-size:15px">If another account has published something about you or your community, tell us. The council’s safeguarding group reviews every report.</p>
+          <input value="{{ td.name }}" onChange="{{ setTdName }}" placeholder="Your name" aria-label="Your name" style="padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff">
+          <input value="{{ td.link }}" onChange="{{ setTdLink }}" placeholder="Link to the story or page" aria-label="Link" style="padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff">
+          <textarea value="{{ td.what }}" onChange="{{ setTdWhat }}" rows="3" placeholder="What is wrong?" aria-label="What is wrong" style="padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff;resize:vertical"></textarea>
+          <sc-if value="{{ tdErr }}"><div role="alert" style="color:#A81C24;font-size:14px">{{ tdErr }}</div></sc-if>
+          <button type="submit" style="align-self:flex-start;padding:12px 20px;border-radius:999px;border:0;background:#241F2E;color:#FBF7F0;font-weight:600;cursor:pointer;min-height:44px">Send report</button>
+        </form>
+      </sc-if>
+      <sc-if value="{{ tdSent }}"><p style="margin:0;padding:14px;border-radius:12px;background:#E6F6F2;color:#1F5F54">Report received. The material is hidden from search while it is reviewed.</p></sc-if>
+    </div>
+  </section>
+</div>
+</sc-if>
+<sc-if value="{{ isOrgs }}">
+<div class="w-page">
+  <section style="max-width:1240px;margin:0 auto;padding:64px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:48px;align-items:end" class="w-split">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">For organisations</div>
+      <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(40px,5.6vw,72px);letter-spacing:-.035em;line-height:1;text-wrap:balance">Facilitate the session. Then step back.</h1>
+      <p style="margin:0;color:#4A4356;font-size:18px;max-width:620px">The facilitator console helps NGOs, cooperatives and field teams run Karigar card sessions, turn recordings into an artisan’s own record, and hand it over. What happens after that belongs to the artisan.</p>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start">
+      <a href="#/signin" style="display:inline-flex;padding:15px 24px;border-radius:999px;background:#241F2E;color:#FBF7F0;text-decoration:none;font-weight:600">Sign in to the console</a>
+      <a href="#/orgs/request" style="display:inline-flex;padding:15px 24px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;color:#241F2E;text-decoration:none;font-weight:600">Request an account</a>
+    </div>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:56px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+    <div style="background:#E6F6F2;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px">
+      <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px;color:#1F5F54">Your organisation can</div>
+      <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;color:#241F2E">
+        <li>Create artisan records and run card sessions</li>
+        <li>Upload recordings and session notes</li>
+        <li>Review the AI-drafted profile with the artisan before handover</li>
+        <li>Send each artisan their app by link or printed QR card</li>
+        <li>Help an artisan use their account while sitting with them — every assisted action is logged</li>
+      </ul>
+    </div>
+    <div style="background:#FBEAE8;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px">
+      <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px;color:#7A1319">Your organisation cannot</div>
+      <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;color:#241F2E">
+        <li>Publish, edit or take down anything for an artisan</li>
+        <li>See an artisan’s private archive or practice conversations</li>
+        <li>Read or answer their contact requests</li>
+        <li>Use their stories in your own reports or campaigns without their separate consent</li>
+      </ul>
+      <p style="margin:auto 0 0;font-size:14px;color:#7A1319">This is enforced by permissions, not by trust.</p>
+    </div>
+  </section>
+  <section style="max-width:1240px;margin:0 auto;padding:72px clamp(18px,4vw,40px) 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start" class="w-split">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.025em">Before a first session</h2>
+      <p style="margin:0;color:#4A4356">Read the consent script aloud, in the artisan’s language, before the cards come out. It includes one line facilitators often skip:</p>
+      <blockquote style="margin:0;padding:20px 22px;background:#fff;border:1px solid #EBE3D6;border-radius:18px;font-family:'Bricolage Grotesque', sans-serif;font-size:19px;line-height:1.4">“When you practise conversations in your app, what you say is processed by Google’s Gemini service to write the replies. It is not published, and you can delete it.”</blockquote>
+      <p style="margin:0;color:#6F6880;font-size:15px">Then confirm the artisan has the app working on their own phone before you leave.</p>
+    </div>
+    <div id="request" style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px">
+      <h3 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">Request an organisation account</h3>
+      <sc-if value="{{ oaForm }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submitOa }}" novalidate="" style="display:flex;flex-direction:column;gap:12px">
+          <label style="display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:15px">Your name<input value="{{ oa.name }}" onChange="{{ setOaName }}" autocomplete="name" style="font-weight:400;padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff"></label>
+          <label style="display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:15px">Organisation<input value="{{ oa.org }}" onChange="{{ setOaOrg }}" autocomplete="organization" style="font-weight:400;padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff"></label>
+          <label style="display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:15px">Work email<input type="email" value="{{ oa.email }}" onChange="{{ setOaEmail }}" autocomplete="email" style="font-weight:400;padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff"></label>
+          <label style="display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:15px">Where you work, and with which crafts<textarea value="{{ oa.region }}" onChange="{{ setOaRegion }}" rows="3" style="font-weight:400;padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff;resize:vertical"></textarea></label>
+          <sc-if value="{{ oaErr }}"><div role="alert" style="color:#A81C24;font-size:14px">{{ oaErr }}</div></sc-if>
+          <button type="submit" style="align-self:flex-start;padding:13px 22px;border-radius:999px;border:0;background:#6B3FA0;color:#fff;font-weight:600;cursor:pointer;min-height:46px">Send request</button>
+        </form>
+      </sc-if>
+      <sc-if value="{{ oaSent }}"><p style="margin:0;padding:16px;border-radius:14px;background:#E6F6F2;color:#1F5F54">Thank you. Someone from the Karigar team will write to you about onboarding and the partner criteria set by the council.</p></sc-if>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSignin }}">
+<div class="w-page" style="max-width:560px;margin:0 auto;padding:56px 20px 0">
+  <h1 style="margin:0;text-align:center;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(36px,5vw,52px);letter-spacing:-.03em">Sign in</h1>
+  <div role="tablist" style="margin:28px auto 0;display:grid;grid-template-columns:1fr 1fr;padding:4px;background:#F2EDE4;border-radius:999px">
+    <button role="tab" onClick="{{ pickArt }}" style="padding:12px;border:0;border-radius:999px;font-weight:600;cursor:pointer;min-height:46px;{{ artTabStyle }}">I’m an artisan</button>
+    <button role="tab" onClick="{{ pickOrg }}" style="padding:12px;border:0;border-radius:999px;font-weight:600;cursor:pointer;min-height:46px;{{ orgTabStyle }}">Organisation</button>
+  </div>
+  <sc-if value="{{ signinArt }}">
+    <div style="margin-top:20px;background:#fff;border:1px solid #EBE3D6;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;gap:16px;align-items:center;padding:16px;border-radius:18px;background:#F1E9FA">
+        <div style="width:56px;height:56px;flex-shrink:0;border-radius:12px;background:#fff;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:8px" aria-hidden="true"><span style="background:#241F2E;border-radius:2px"></span><span></span><span style="background:#241F2E;border-radius:2px"></span><span></span><span style="background:#241F2E;border-radius:2px"></span><span></span><span style="background:#241F2E;border-radius:2px"></span><span style="background:#241F2E;border-radius:2px"></span><span style="background:#241F2E;border-radius:2px"></span></div>
+        <div style="font-size:15px;color:#241F2E"><b>Scan the QR on your Karigar card</b> with your phone camera. It opens your app straight away — no password.</div>
+      </div>
+      <form onSubmit="{{ openApp }}" novalidate="" style="display:flex;flex-direction:column;gap:8px">
+        <label for="kcode" style="font-weight:600">Or type the code under the QR</label>
+        <input id="kcode" value="{{ code }}" onChange="{{ setCode }}" placeholder="the letters after /k/ in your link" autocomplete="off" style="padding:14px 16px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff;font-size:18px;letter-spacing:.04em">
+        <sc-if value="{{ artErr }}"><div role="alert" style="color:#A81C24;font-size:14px">{{ artErr }}</div></sc-if>
+        <button type="submit" style="margin-top:6px;padding:15px;border-radius:999px;border:0;background:#6B3FA0;color:#fff;font-weight:600;font-size:16px;cursor:pointer;min-height:50px">Open my Karigar app</button>
+      </form>
+      <sc-if value="{{ studioDemo }}">
+      <div style="padding-top:16px;border-top:1px solid #F2EDE4;display:flex;flex-direction:column;gap:8px">
+        <div style="font-weight:600">Manage your public page</div>
+        <div style="font-size:15px;color:#6F6880">Choose who sees each story, answer requests, and download or delete your record.</div>
+        <a href="#/studio/stories" style="align-self:flex-start;padding:12px 20px;border-radius:999px;border:1.5px solid #DDD4C6;text-decoration:none;color:#241F2E;font-weight:600">Open my page settings (sample: Rehmatbai)</a>
+      </div>
+      </sc-if>
+      <p style="margin:0;font-size:14px;color:#8C8499">Lost your card? Ask your facilitator for a new link — the old one stops working.</p>
+    </div>
+  </sc-if>
+  <sc-if value="{{ signinOrg }}" hint-placeholder-val="{{ true }}">
+    <form onSubmit="{{ orgSubmit }}" novalidate="" style="margin-top:20px;background:#fff;border:1px solid #EBE3D6;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px">
+      <p style="margin:0;color:#6F6880;font-size:15px">For facilitators and field teams. Opens the facilitator console.</p>
+      <label style="display:flex;flex-direction:column;gap:6px;font-weight:600">Email<input type="email" value="{{ orgEmail }}" onChange="{{ setOrgEmail }}" autocomplete="email" style="font-weight:400;padding:13px 14px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff"></label>
+      <label style="display:flex;flex-direction:column;gap:6px;font-weight:600">Password<input type="password" value="{{ orgPass }}" onChange="{{ setOrgPass }}" autocomplete="current-password" style="font-weight:400;padding:13px 14px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff"></label>
+      <sc-if value="{{ orgErr }}"><div role="alert" style="color:#A81C24;font-size:14px">{{ orgErr }}</div></sc-if>
+      <button type="submit" disabled="{{ orgBusy }}" style="margin-top:4px;padding:15px;border-radius:999px;border:0;background:#241F2E;color:#FBF7F0;font-weight:600;font-size:16px;cursor:pointer;min-height:50px">Sign in to the console</button>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:14px"><a href="#/orgs">Request an account</a><a href="{{ consoleUrl }}">Open the console</a></div>
+    </form>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isNotFound }}">
+  <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-size:44px">Page not found</h1><a href="#/" style="font-weight:600">Go home</a></div>
+</sc-if>
+<sc-if value="{{ isStudio }}">
+<div class="w-page" style="max-width:1240px;margin:0 auto;padding:32px clamp(18px,4vw,40px) 0">
+  <sc-if value="{{ isDeleted }}">
+    <div style="max-width:640px;margin:48px auto;background:#fff;border:1px solid #EBE3D6;border-radius:28px;padding:40px;display:flex;flex-direction:column;gap:14px">
+      <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-size:34px">Your account is deleted</h1>
+      <p style="margin:0;color:#4A4356">Your page, stories and requests are gone from Karigar’s live systems. Backups clear within 35 days. Nothing was kept for research.</p>
+      <button onClick="{{ restore }}" style="align-self:flex-start;padding:12px 20px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;font-weight:600;cursor:pointer">Restore the sample record</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ notDeleted }}">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-bottom:24px;border-bottom:1px solid #EBE3D6">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:52px;height:52px;border-radius:50%;background:#E6F6F2;border:2px solid #6FC9B8;display:flex;align-items:center;justify-content:center;font-weight:600;color:#1F5F54;font-size:20px">ર</div>
+        <div><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px">{{ me.name }}</div><div style="color:#6F6880;font-size:15px">{{ me.local }} · {{ me.craft }}</div></div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <div style="display:flex;padding:3px;background:#F2EDE4;border-radius:999px" role="group" aria-label="Language">
+          <button onClick="{{ setEn }}" style="padding:9px 14px;border:0;border-radius:999px;font-weight:600;cursor:pointer;min-height:40px;{{ enStyle }}">English</button>
+          <button onClick="{{ setGu }}" style="padding:9px 14px;border:0;border-radius:999px;font-weight:600;cursor:pointer;min-height:40px;{{ guStyle }}">ગુજરાતી</button>
+        </div>
+        <a href="{{ me.href }}" style="padding:10px 16px;border-radius:999px;border:1.5px solid #DDD4C6;text-decoration:none;color:#241F2E;font-weight:600;background:#fff">See my public page</a>
+      </div>
+    </div>
+    <div style="margin-top:24px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:32px;align-items:start" class="w-split">
+      <nav class="w-side" aria-label="Page settings" style="position:sticky;top:96px;display:flex;flex-direction:column;gap:4px">
+        <sc-for list="{{ studioTabs }}" as="t" hint-placeholder-count="5"><a href="{{ t.href }}" style="padding:12px 16px;border-radius:14px;text-decoration:none;font-weight:600;white-space:nowrap;{{ t.style }}">{{ t.label }}</a></sc-for>
+      </nav>
+      <div style="min-width:0">
+        <sc-if value="{{ sStories }}" hint-placeholder-val="{{ true }}">
+          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.stories }}</h1>
+          <p style="margin:8px 0 22px;color:#6F6880">{{ L.storiesSub }}</p>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ myStories }}" as="x" hint-placeholder-count="3">
+              <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-start">
+                  <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                    <span style="font-size:13px;font-weight:600;color:#8C8499;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:{{ x.ringColor }}"></span>{{ x.ring }}</span>
+                    <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:21px;line-height:1.2">{{ x.title }}</span>
+                  </div>
+                  <span style="padding:6px 12px;border-radius:999px;font-weight:600;font-size:14px;color:{{ x.tierColor }};background:{{ x.tierBg }};white-space:nowrap">{{ x.tierLabel }}</span>
+                </div>
+                <div style="font-size:14px;color:#6F6880">{{ x.consentLine }}</div>
+                <sc-if value="{{ x.hasBoundary }}"><div style="font-size:14px;padding:10px 12px;border-radius:12px;background:#FBEAE8;color:#7A1319">Boundary · {{ x.boundaryText }}</div></sc-if>
+                <sc-if value="{{ x.isEditing }}">
+                  <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:14px;background:#FBF7F0">
+                    <textarea value="{{ editText }}" onChange="{{ setEditText }}" rows="7" aria-label="Story text" style="padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff;line-height:1.6;resize:vertical"></textarea>
+                    <button onClick="{{ toggleFact }}" style="display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer;text-align:left;font-size:15px"><span style="width:22px;height:22px;border-radius:6px;border:1.5px solid;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;{{ factBox }}">✓</span>This corrects a fact — show a short public note</button>
+                    <sc-if value="{{ editFact }}"><input value="{{ editWhy }}" onChange="{{ setEditWhy }}" placeholder="What changed? e.g. the dye is kept warm, not boiled" aria-label="What changed" style="padding:11px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff"></sc-if>
+                    <div style="display:flex;gap:8px"><button onClick="{{ saveEdit }}" style="padding:10px 18px;border-radius:999px;border:0;background:#241F2E;color:#FBF7F0;font-weight:600;cursor:pointer;min-height:44px">{{ L.save }}</button><button onClick="{{ cancelEdit }}" style="padding:10px 18px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;font-weight:600;cursor:pointer;min-height:44px">{{ L.cancel }}</button></div>
+                    <div style="font-size:13px;color:#8C8499">No one approves your corrections.</div>
+                  </div>
+                </sc-if>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <button onClick="{{ x.edit }}" style="padding:10px 16px;border-radius:999px;border:0;background:#6B3FA0;color:#fff;font-weight:600;cursor:pointer;min-height:44px">{{ L.who }}</button>
+                  <sc-if value="{{ x.notPrivate }}"><button onClick="{{ x.makePrivate }}" style="padding:10px 16px;border-radius:999px;border:1.5px solid #241F2E;background:#fff;font-weight:600;cursor:pointer;min-height:44px">{{ L.private }}</button></sc-if>
+                  <button onClick="{{ x.correct }}" style="padding:10px 16px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;font-weight:600;cursor:pointer;min-height:44px">{{ L.correct }}</button>
+                  <sc-if value="{{ x.viewable }}"><a href="{{ x.viewHref }}" style="padding:10px 16px;border-radius:999px;text-decoration:none;font-weight:600;min-height:44px;display:inline-flex;align-items:center">{{ L.view }} →</a></sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <p style="margin:18px 0 0;font-size:14px;color:#8C8499">New stories come from your Karigar app, and always arrive here as “Only me”.</p>
+        </sc-if>
+
+        <sc-if value="{{ sRequests }}">
+          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.requests }}</h1>
+          <p style="margin:8px 0 18px;color:#6F6880">{{ L.reqSub }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:20px;padding:14px;border-radius:16px;background:#F2EDE4">
+            <span style="font-weight:600;font-size:15px;margin-right:4px">Requests are</span>
+            <sc-for list="{{ closeOpts }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.pick }}" style="padding:8px 14px;border-radius:999px;border:1.5px solid;cursor:pointer;font-size:14px;font-weight:500;min-height:40px;{{ o.style }}">{{ o.label }}</button></sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ myReqs }}" as="r" hint-placeholder-count="2">
+              <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px"><div><b style="font-size:17px">{{ r.name }}</b> <span style="color:#6F6880">· {{ r.org }}</span></div><span style="padding:5px 11px;border-radius:999px;background:#F2EDE4;font-size:13px;font-weight:600">{{ r.cat }}</span></div>
+                <p style="margin:0;font-size:16px;line-height:1.55">{{ r.text }}</p>
+                <sc-if value="{{ r.pending }}">
+                  <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+                    <button onClick="{{ r.hear }}" style="padding:10px 16px;border-radius:999px;border:1.5px solid #6B3FA0;background:#fff;color:#6B3FA0;font-weight:600;cursor:pointer;min-height:44px">▶ {{ L.hear }}</button>
+                    <button onClick="{{ r.accept }}" style="padding:10px 16px;border-radius:999px;border:0;background:#1F5F54;color:#fff;font-weight:600;cursor:pointer;min-height:44px">{{ L.accept }}</button>
+                    <button onClick="{{ r.decline }}" style="padding:10px 16px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;font-weight:600;cursor:pointer;min-height:44px">{{ L.decline }}</button>
+                    <button onClick="{{ r.block }}" style="padding:10px 12px;border-radius:999px;border:0;background:none;color:#A81C24;font-weight:600;cursor:pointer;min-height:44px">{{ L.block }}</button>
+                    <span style="flex:1"></span><span style="font-size:13px;color:#8C8499">{{ r.expiry }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ r.accepted }}"><div style="padding:12px 14px;border-radius:12px;background:#E6F6F2;color:#1F5F54;font-size:15px">Accepted. Messages go through Karigar — share your phone number only if you want to.</div></sc-if>
+                <sc-if value="{{ r.declined }}"><div style="font-size:14px;color:#8C8499">Declined.</div></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sPartners }}">
+          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.partners }}</h1>
+          <p style="margin:8px 0 22px;color:#6F6880">{{ L.partSub }}</p>
+          <sc-for list="{{ partners }}" as="p">
+            <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:20px 22px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
+              <div><b style="font-size:17px">{{ p.name }}</b><div style="color:#6F6880;font-size:15px">Can see stories marked “People I approve” · until {{ p.until }}</div></div>
+              <button onClick="{{ p.revoke }}" style="padding:10px 16px;border-radius:999px;border:1.5px solid #241F2E;background:#fff;font-weight:600;cursor:pointer;min-height:44px">Remove access</button>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noPartners }}"><div style="padding:28px;border:1.5px dashed #DDD4C6;border-radius:18px;color:#6F6880">Nobody has partner access. You can grant it when you accept a request.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ sProfile }}">
+          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.profile }}</h1>
+          <p style="margin:8px 0 22px;color:#6F6880">{{ L.profSub }}</p>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:12px">
+              <b>How much of your place to show</b>
+              <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ grans }}" as="g" hint-placeholder-count="5"><button onClick="{{ g.pick }}" style="padding:9px 15px;border-radius:999px;border:1.5px solid;cursor:pointer;font-weight:500;min-height:42px;{{ g.style }}">{{ g.label }}</button></sc-for></div>
+              <div style="font-size:15px;color:#4A4356">Visitors see: <b>{{ me.place }}</b></div>
+              <div style="font-size:13px;color:#8C8499">Karigar never reads location from your photos.</div>
+            </div>
+            <label style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px;font-weight:600">How you want to be credited when others use your work
+              <input value="{{ me.credit }}" onChange="{{ setCredit }}" style="font-weight:400;padding:13px 14px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff">
+              <span style="font-weight:400;font-size:14px;color:#6F6880">This line appears on every story, image caption, share and embed.</span>
+            </label>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sData }}">
+          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.data }}</h1>
+          <p style="margin:8px 0 22px;color:#6F6880">{{ L.dataSub }}</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+            <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px">
+              <b style="font-size:18px">Download everything</b>
+              <p style="margin:0;color:#6F6880;font-size:15px;flex:1">Stories, media at full size, consent and boundary records — in open formats, enough to set up your page somewhere else.</p>
+              <button onClick="{{ exportData }}" style="align-self:flex-start;padding:11px 18px;border-radius:999px;border:0;background:#241F2E;color:#FBF7F0;font-weight:600;cursor:pointer;min-height:44px">Download</button>
+            </div>
+            <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px">
+              <b style="font-size:18px">Make everything private</b>
+              <p style="margin:0;color:#6F6880;font-size:15px;flex:1">Every story goes to “Only me” and requests close, right now. Your archive stays exactly as it is.</p>
+              <button onClick="{{ goPrivate }}" style="align-self:flex-start;padding:11px 18px;border-radius:999px;border:1.5px solid #241F2E;background:#fff;font-weight:600;cursor:pointer;min-height:44px">Make all private</button>
+            </div>
+            <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px">
+              <b style="font-size:18px">Delete my account</b>
+              <p style="margin:0;color:#6F6880;font-size:15px;flex:1">Removed from live systems within 7 days, from backups within 35. No copy is kept.</p>
+              <sc-if value="{{ confirmDel }}">
+                <div style="display:flex;flex-wrap:wrap;gap:8px"><button onClick="{{ doDel }}" style="padding:11px 18px;border-radius:999px;border:0;background:#A81C24;color:#fff;font-weight:600;cursor:pointer;min-height:44px">Yes, delete</button><button onClick="{{ noDel }}" style="padding:11px 18px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;font-weight:600;cursor:pointer;min-height:44px">Keep it</button></div>
+              </sc-if>
+              <sc-if value="{{ notConfirmDel }}"><button onClick="{{ askDel }}" style="align-self:flex-start;padding:11px 18px;border-radius:999px;border:1.5px solid #A81C24;background:#fff;color:#A81C24;font-weight:600;cursor:pointer;min-height:44px">Delete</button></sc-if>
+            </div>
+          </div>
+          <div style="margin-top:22px;background:#F2EDE4;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px">
+            <b>When a facilitator helped you</b>
+            <sc-for list="{{ logs }}" as="l"><div style="font-size:15px;color:#4A4356"><b>{{ l.at }}</b> — {{ l.text }}</div></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+<sc-if value="{{ sheetOpen }}">
+  <div onClick="{{ closeSheet }}" style="position:fixed;inset:0;background:rgba(36,31,46,.45);z-index:70"></div>
+  <div class="w-sheet" role="dialog" aria-modal="true" aria-label="Who can see this" style="position:fixed;top:24px;right:24px;bottom:24px;width:min(560px,calc(100vw - 48px));z-index:80;background:#FBF7F0;border-radius:28px;box-shadow:0 24px 60px rgba(36,31,46,.25);overflow:auto;padding:28px;display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+      <div><div style="font-size:13px;color:#8C8499;font-weight:600">{{ L.who }}</div><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px;line-height:1.2">{{ sh.title }}</div></div>
+      <button onClick="{{ closeSheet }}" aria-label="Close" style="width:44px;height:44px;flex-shrink:0;border-radius:50%;border:1.5px solid #DDD4C6;background:#fff;cursor:pointer;font-size:18px">×</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <sc-for list="{{ sh.tiers }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.pick }}" style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;border:2px solid;cursor:pointer;text-align:left;min-height:56px;{{ t.style }}">
+          <span style="width:20px;height:20px;border-radius:50%;border:2px solid {{ t.ring }};background:{{ t.dot }};flex-shrink:0;box-shadow:inset 0 0 0 3px #fff"></span>
+          <span style="display:flex;flex-direction:column"><b style="font-size:16px">{{ t.label }}</b><span style="font-size:13px;color:#6F6880">{{ t.name }}</span></span>
+        </button>
+      </sc-for>
+    </div>
+    <sc-if value="{{ sh.blocked }}"><div role="alert" style="padding:16px;border-radius:16px;background:#FBEAE8;color:#7A1319;font-size:15px">{{ sh.blockText }}</div></sc-if>
+    <sc-if value="{{ sh.notPrivate }}">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <b>What may it be used for?</b>
+        <sc-for list="{{ sh.purposes }}" as="p" hint-placeholder-count="5">
+          <button onClick="{{ p.toggle }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1.5px solid;cursor:pointer;text-align:left;{{ p.style }}">
+            <span style="width:22px;height:22px;border-radius:6px;border:1.5px solid;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;{{ p.box }}">✓</span>
+            <span style="display:flex;flex-direction:column"><b style="font-size:15px">{{ p.label }}</b><span style="font-size:13px;color:#6F6880">{{ p.note }}</span></span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ sh.aiOn }}"><div style="font-size:14px;padding:10px 12px;border-radius:12px;background:#FFF6E3;color:#8A5D05">You are allowing AI training. This is a separate consent and can be withdrawn here at any time — copies already made by others may not be recoverable.</div></sc-if>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <b>Can others reuse it?</b>
+        <sc-for list="{{ sh.rights }}" as="r" hint-placeholder-count="5">
+          <button onClick="{{ r.pick }}" style="display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;border:1.5px solid;cursor:pointer;text-align:left;{{ r.style }}"><b style="font-size:15px">{{ r.code }} · {{ r.label }}</b><span style="font-size:13px;color:#6F6880">{{ r.desc }}</span></button>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <b>For how long?</b>
+        <div style="display:flex;flex-wrap:wrap;gap:8px"><button onClick="{{ sh.setOpen }}" style="padding:9px 15px;border-radius:999px;border:1.5px solid;cursor:pointer;min-height:42px;{{ sh.durOpenStyle }}">Until I change it</button><button onClick="{{ sh.setDate }}" style="padding:9px 15px;border-radius:999px;border:1.5px solid;cursor:pointer;min-height:42px;{{ sh.durDateStyle }}">Until a date</button></div>
+        <sc-if value="{{ sh.isDate }}"><input type="date" value="{{ sh.until }}" onChange="{{ sh.setUntil }}" aria-label="End date" style="align-self:flex-start;padding:10px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff"></sc-if>
+      </div>
+    </sc-if>
+    <div style="padding:18px;border-radius:18px;background:#241F2E;color:#FBF7F0;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:13px;font-weight:600;color:#B98BE0">Before you save — who will see it</div>
+      <div style="font-size:16px;line-height:1.55">{{ sh.summary }}</div>
+      <button onClick="{{ sh.hear }}" style="align-self:flex-start;padding:9px 16px;border-radius:999px;border:1.5px solid #6F6880;background:transparent;color:#FBF7F0;font-weight:600;cursor:pointer;min-height:42px">▶ {{ sh.hearLabel }}</button>
+    </div>
+    <div style="display:flex;gap:10px;position:sticky;bottom:-28px;background:#FBF7F0;padding:12px 0 4px">
+      <sc-if value="{{ sh.canSave }}"><button onClick="{{ sh.save }}" style="flex:1;padding:15px;border-radius:999px;border:0;background:#6B3FA0;color:#fff;font-weight:600;font-size:16px;cursor:pointer;min-height:50px">{{ L.save }}</button></sc-if>
+      <button onClick="{{ closeSheet }}" style="padding:15px 22px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;font-weight:600;cursor:pointer;min-height:50px">{{ L.cancel }}</button>
+    </div>
+  </div>
+</sc-if>
+</sc-if>
+</main>
+<sc-if value="{{ hasToast }}">
+  <div role="status" style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:90;background:#241F2E;color:#FBF7F0;padding:12px 20px;border-radius:14px;font-size:15px;box-shadow:0 12px 32px rgba(36,31,46,.25);max-width:calc(100vw - 32px)">{{ toast }}</div>
+</sc-if>
+<footer style="background:#241F2E;color:#E2D9CB;margin-top:96px">
+  <div style="max-width:1240px;margin:0 auto;padding:64px clamp(18px,4vw,40px) 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px">
+    <div style="display:flex;flex-direction:column;gap:14px;grid-column:span 1">
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle><circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle><circle cx="12" cy="12" r="4.6" fill="none" stroke="#E0646B" stroke-width="2.2"></circle><circle cx="12" cy="12" r="1.9" fill="#B98BE0"></circle></svg>
+        <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px;color:#FBF7F0">Karigar</span>
+      </div>
+      <p style="margin:0;font-size:15px;line-height:1.6;color:#C4BCD1;max-width:300px;text-wrap:pretty">Craft stories, owned by the people who make the craft. Not a marketplace, not a social network.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8C8499">Explore</div>
+      <a href="#/makers" style="color:#FBF7F0;text-decoration:none">Makers &amp; stories</a>
+      <a href="#/how" style="color:#FBF7F0;text-decoration:none">How it works</a>
+      <a href="#/principles" style="color:#FBF7F0;text-decoration:none">Principles</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8C8499">Trust</div>
+      <a href="#/principles/rights" style="color:#FBF7F0;text-decoration:none">Rights vocabulary</a>
+      <a href="#/principles/council" style="color:#FBF7F0;text-decoration:none">Council decisions</a>
+      <a href="#/principles/report" style="color:#FBF7F0;text-decoration:none">Report material about you</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8C8499">Sign in</div>
+      <a href="#/signin" style="color:#FBF7F0;text-decoration:none">For artisans</a>
+      <a href="#/orgs" style="color:#FBF7F0;text-decoration:none">For organisations</a>
+    </div>
+  </div>
+  <div style="max-width:1240px;margin:0 auto;padding:20px clamp(18px,4vw,40px) 36px;border-top:1px solid #3A3446;display:flex;flex-wrap:wrap;gap:12px 28px;font-size:13px;color:#A79FB4">
+    <span>No view counts, likes or followers — anywhere.</span>
+    <span>Deletion: live systems within 7 days, backups within 35 days.</span>
+    <span>Artisan content is never used for AI training without separate consent.</span>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;consoleUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;/console&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;appOrigin&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Links&quot;},&quot;sampleNotice&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;}}">
+class Component extends DCLogic {
+  state = {
+    route: 'home', param: '', menu: false,
+    q: '', fCraft: 'All', fRegion: 'All', fLang: 'All', btab: 'makers', bSel: 0,
+    stLang: null, speaking: false, shared: false, embed: false,
+    cf: { cat: '', name: '', org: '', email: '', purpose: '' }, cfTried: false, cfDone: false,
+    sTab: 'org', orgEmail: '', orgPass: '', orgErr: '', orgBusy: false, code: '', artErr: '',
+    oa: { name: '', org: '', email: '', region: '' }, oaTried: false, oaSent: false,
+    td: { name: '', link: '', what: '' }, tdTried: false, tdSent: false,
+    studio: 'stories', sLang: 'en', sheet: null, draft: null,
+    editing: null, editText: '', editFact: false, editWhy: '',
+    confirmDel: false, toast: '', db: null
+  };
+
+  get K() { return window.KARIGAR_SITE; }
+
+  componentDidMount() {
+    this._hc = () => this.readRoute();
+    window.addEventListener('hashchange', this._hc);
+    const boot = () => {
+      if (!this.K) { this._boot = setTimeout(boot, 60); return; }
+      let db = null;
+      try { db = JSON.parse(localStorage.getItem('karigar-site-v1') || 'null'); } catch (e) {}
+      if (!db || db.v !== 1) db = this.K.seed();
+      this.setState({ db }, () => this.readRoute(true));
+    };
+    boot();
+  }
+  componentWillUnmount() { window.removeEventListener('hashchange', this._hc); clearTimeout(this._boot); try { speechSynthesis.cancel(); } catch (e) {} }
+
+  readRoute(first) {
+    const raw = window.location.hash || '';
+    if (raw && !raw.startsWith('#/')) { this.scrollToId(raw.slice(1)); return; }
+    const h = raw.replace(/^#\/?/, '');
+    const parts = h.split('/');
+    const route = parts[0] || 'home', param = parts[1] || '';
+    if (['orgs', 'principles', 'how'].includes(route) && param) {
+      this.setState({ route, param, menu: false });
+      setTimeout(() => this.scrollToId(param), 60);
+      return;
+    }
+    const next = { route, param, menu: false, stLang: null, shared: false, embed: false, speaking: false, sheet: null, editing: null, confirmDel: false };
+    if (route === 'contact') Object.assign(next, { cfDone: false, cfTried: false });
+    if (route === 'studio') {
+      // The page-settings studio is still a design sample with no account behind it. Artisans
+      // sign in with their card's link, so this hands off to that instead of the sample login.
+      if (!this.props.studioDemo) { this.setState({ sTab: 'artisan' }); window.location.replace('#/signin'); return; }
+      next.studio = param || 'stories';
+    }
+    try { speechSynthesis.cancel(); } catch (e) {}
+    this.setState(next);
+    if (!first) window.scrollTo(0, 0);
+  }
+
+  scrollToId(id) {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 88, behavior: 'smooth' });
+  }
+
+  persist(db) { this.setState({ db }); try { localStorage.setItem('karigar-site-v1', JSON.stringify(db)); } catch (e) {} }
+  mut(fn) { const db = JSON.parse(JSON.stringify(this.state.db)); fn(db); this.persist(db); }
+  flash(t) { this.setState({ toast: t }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: '' }), 3000); }
+
+  speak(text, lang) {
+    try {
+      if (this.state.speaking) { speechSynthesis.cancel(); this.setState({ speaking: false }); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = ({ gu: 'gu-IN', hi: 'hi-IN', mr: 'mr-IN', en: 'en-IN' })[lang] || 'en-IN';
+      u.rate = 0.92; u.onend = () => this.setState({ speaking: false });
+      speechSynthesis.cancel(); speechSynthesis.speak(u); this.setState({ speaking: true });
+    } catch (e) { this.flash('Audio is not available in this browser.'); }
+  }
+
+  place(m) {
+    if (!m) return '';
+    const l = m.loc;
+    return ({ village: `${l.village}, ${l.district}, ${l.state}`, district: `${l.district}, ${l.state}`, state: l.state, region: l.region, withheld: '' })[m.gran] || '';
+  }
+  maker(id) { return (this.state.db.makers || []).find(m => m.id === id); }
+  tier(id) { return this.K.TIERS.find(t => t.id === id) || this.K.TIERS[0]; }
+  right(code) { return this.K.RIGHTS.find(r => r.code === code) || this.K.RIGHTS[0]; }
+  chip(on) { return on ? 'background:#241F2E;color:#FBF7F0;border-color:#241F2E' : 'background:#fff;color:#241F2E;border-color:#E2D9CB'; }
+
+  makerCard(m) {
+    const R = this.K.RINGS[m.ring];
+    const pub = this.state.db.stories.filter(s => s.maker === m.id && s.tier === 'public').length;
+    return { id: m.id, href: '#/maker/' + m.id, name: m.name, local: m.local !== m.name ? m.local : '', craft: m.craft, craftLocal: m.craftLocal,
+      place: this.place(m) || 'Location not shown', langs: m.langs.join(' · '), tint: R.soft, ink: R.ink, ringColor: R.color, ringLabel: R.label,
+      isCollective: !!m.isCollective, first: m.isCollective ? 'the collective' : m.name.split(' ')[0], ...(() => { const P = (this.K.PHOTOS.makers || {})[m.id]; return { hasPhoto: !!P, noPhoto: !P, photo: P ? P.src : '', photoAlt: P ? P.alt : '' }; })(), storyNote: pub ? (pub === 1 ? '1 published story' : pub + ' published stories') : 'Profile only', practice: m.practice };
+  }
+  storyCard(s) {
+    const m = this.maker(s.maker); const R = this.K.RINGS[s.ring]; const v = s.versions.en || Object.values(s.versions)[0];
+    const o = s.versions[s.orig];
+    return { id: s.id, href: '#/story/' + s.id, title: v.title, origTitle: o && s.orig !== 'en' ? o.title : '', hasOrig: !!(o && s.orig !== 'en'), excerpt: v.body[0],
+      maker: m ? m.name : '', craft: m ? m.craft : '', ring: R.label, tint: R.soft, ink: R.ink, ringColor: R.color, card: s.card, date: s.date, photo: (this.K.PHOTOS.stories || {})[s.id] || '', hasPhoto: !!(this.K.PHOTOS.stories || {})[s.id],
+      langs: Object.keys(s.versions).map(k => ({ en: 'English', gu: 'ગુજરાતી', hi: 'हिन्दी', mr: 'मराठी' })[k]).join(' · ') };
+  }
+
+  openSheet(s) {
+    const c = s.consent && !s.consent.withdrawnAt ? s.consent : {};
+    this.setState({ sheet: s.id, draft: { tier: s.tier, purposes: c.purposes || ['page'], duration: c.duration || 'open', until: c.until || '', rights: c.rights || s.rights || 'KR-0' } });
+  }
+
+  exportData() {
+    const db = this.state.db; const me = 'm-rehmat';
+    const out = { format: 'karigar-export/1', exported_at: new Date().toISOString(), profile: db.makers.find(m => m.id === me),
+      stories: db.stories.filter(s => s.maker === me).map(s => ({ ...s, boundary_record: s.boundary || null, consent_record: s.consent })),
+      contact_requests: db.requests.filter(r => r.maker === me), approved_partners: db.partners.filter(p => p.maker === me), assistance_log: db.log,
+      rights_vocabulary: this.K.RIGHTS, note: 'The live export is a zip: this record plus every media file at original resolution.' };
+    const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'karigar-rehmatbai-khatri.json'; a.click();
+    this.flash('Your record has been downloaded.');
+  }
+
+  boardVals() {
+    const K = this.K, B = K.BOARD, sel = this.state.bSel, rr = { craft: 21, place: 27.6, lineage: 34.2, material: 40.8, culture: 47.4, pride: 54 };
+    const dots = [];
+    Object.keys(rr).forEach(rk => { const items = B.map((c, i) => ({ c, i })).filter(o => o.c.ring === rk), n = items.length, rp = rr[rk] / 120 * 100, R = K.RINGS[rk];
+      items.forEach((o, j) => { const rad = (-50 + (j + 0.5) * (280 / n)) * Math.PI / 180, on = o.i === sel, has = !!o.c.a, size = on ? 21 : 15;
+        const bg = on ? '#241F2E' : has ? '#FFFFFF' : 'rgba(255,255,255,.42)', bd = on ? '3px solid #fff' : has ? '3px solid ' + R.ink : '2px solid rgba(255,255,255,.9)';
+        dots.push({ label: R.label + ': ' + o.c.q + (has ? '' : ' (open)'), on, pick: () => this.setState({ bSel: o.i }),
+          style: 'position:absolute;left:' + (50 + rp * Math.cos(rad)).toFixed(2) + '%;top:' + (50 + rp * Math.sin(rad)).toFixed(2) + '%;transform:translate(-50%,-50%);width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + bg + ';border:' + bd + ';padding:0;cursor:pointer;box-sizing:border-box;transition:width .15s,height .15s;box-shadow:' + (on ? '0 0 0 5px rgba(251,247,240,.18)' : '0 1px 3px rgba(0,0,0,.18)') }); }); });
+    const c = B[sel] || B[0], R = K.RINGS[c.ring], go = d => this.setState({ bSel: (sel + d + B.length) % B.length });
+    return { bDots: dots, bTotal: B.length, bFilled: B.filter(x => x.a).length, bPrev: () => go(-1), bNext: () => go(1),
+      bCard: { ringLabel: R.label, soft: R.soft, ink: R.ink, q: c.q, a: c.a || '', filled: !!c.a, empty: !c.a } };
+  }
+
+  renderVals() {
+    const s = this.state; const K = this.K;
+    const route = s.route;
+    const flags = {
+      isStudio: route === 'studio', isPublicChrome: route !== 'studio',
+      isHome: route === 'home', isMakers: route === 'makers', isMaker: route === 'maker', isStory: route === 'story', isContact: route === 'contact',
+      isHow: route === 'how', isPrinciples: route === 'principles', isOrgs: route === 'orgs', isSignin: route === 'signin',
+      isNotFound: !['home', 'makers', 'maker', 'story', 'contact', 'how', 'principles', 'orgs', 'signin', 'studio'].includes(route)
+    };
+    const consoleUrl = this.props.consoleUrl || '/console';
+    // the deployed public address (lib/origin.js), handed in by the runtime; this page's own address otherwise
+    const appOrigin = (this.props.appOrigin || window.location.origin).replace(/\/+$/, '');
+    const navDefs = [['makers', 'Makers & stories'], ['how', 'How it works'], ['principles', 'Principles'], ['orgs', 'For organisations']];
+    const navItems = navDefs.map(([r, label]) => {
+      const on = route === r || (r === 'makers' && (route === 'maker' || route === 'story' || route === 'contact'));
+      return { href: '#/' + r, label, color: on ? '#52307C' : '#4A4356', bg: on ? '#F1E9FA' : 'transparent' };
+    });
+    const base = { ...flags, navItems, showSample: this.props.sampleNotice !== false, menu: s.menu, toggleMenu: () => this.setState({ menu: !s.menu }),
+      toast: s.toast, hasToast: !!s.toast, consoleUrl, ready: !!s.db, studioDemo: !!this.props.studioDemo };
+    if (!s.db || !K) return base;
+    const db = s.db; const live = !db.deleted; const chip = this.chip.bind(this);
+
+    const makersAll = live ? db.makers : db.makers.filter(m => m.id !== 'm-rehmat');
+    const sorted = [...makersAll].sort((a, b) => a.name.localeCompare(b.name));
+    const pubStories = db.stories.filter(x => x.tier === 'public' && makersAll.some(m => m.id === x.maker));
+
+    // browse
+    const q = s.q.trim().toLowerCase();
+    const regions = ['All', ...Array.from(new Set(makersAll.filter(m => m.gran !== 'withheld').map(m => m.loc.state))).sort()];
+    const langsAll = ['All', ...Array.from(new Set(makersAll.flatMap(m => m.langs))).sort()];
+    const fm = sorted.filter(m => (s.fCraft === 'All' || m.cat === s.fCraft) && (s.fRegion === 'All' || (m.gran !== 'withheld' && m.loc.state === s.fRegion)) && (s.fLang === 'All' || m.langs.includes(s.fLang)) &&
+      (!q || [m.name, m.local, m.craft, m.craftLocal, this.place(m)].join(' ').toLowerCase().includes(q)));
+    const fs = pubStories.filter(x => { const m = fm.find(z => z.id === x.maker); return m && (!q || JSON.stringify(x.versions).toLowerCase().includes(q) || [m.name, m.craft, m.local].join(' ').toLowerCase().includes(q)); })
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // maker
+    const mRaw = route === 'maker' ? makersAll.find(m => m.id === s.param) : null;
+    let mk = null;
+    if (mRaw) {
+      const col = mRaw.collective ? this.maker(mRaw.collective) : null; const first = mRaw.isCollective ? 'The collective' : mRaw.name.split(' ')[0];
+      mk = { ...this.makerCard(mRaw), about: mRaw.about, credit: mRaw.credit, contactOpen: mRaw.contact.open, contactClosed: !mRaw.contact.open,
+        contactClosedText: mRaw.contact.until ? `${first} is not taking requests until ${mRaw.contact.until}.` : `${first} is not taking requests right now.`,
+        contactHref: '#/contact/' + mRaw.id, first, hasCollective: !!col, collectiveName: col ? col.name : '', collectiveHref: col ? '#/maker/' + col.id : '',
+        members: (mRaw.members || []).join(', '), hasMembers: !!(mRaw.members && mRaw.members.length), primaryLang: mRaw.langs[0] };
+    }
+    const mkStories = mRaw ? db.stories.filter(x => x.maker === mRaw.id && x.tier === 'public').map(x => this.storyCard(x)) : [];
+
+    // story
+    const sRaw = route === 'story' ? db.stories.find(x => x.id === s.param && makersAll.some(m => m.id === x.maker)) : null;
+    let st = null;
+    if (sRaw && (sRaw.tier === 'public' || sRaw.tier === 'link')) {
+      const m = this.maker(sRaw.maker); const R = K.RINGS[sRaw.ring];
+      const lang = s.stLang && sRaw.versions[s.stLang] ? s.stLang : sRaw.orig;
+      const v = sRaw.versions[lang]; const rt = this.right(sRaw.rights);
+      const names = { en: 'English', gu: 'ગુજરાતી', hi: 'हिन्दी', mr: 'मराठी' };
+      const canonical = appOrigin + '/#/story/' + sRaw.id;
+      const order = Object.keys(sRaw.versions).sort((a, b) => (b === sRaw.orig) - (a === sRaw.orig));
+      st = { id: sRaw.id, title: v.title, paras: v.body.map((t, i) => ({ t, i })), maker: m.name, makerHref: '#/maker/' + m.id, craft: m.craft, place: this.place(m) || 'Location not shown',
+        ring: R.label, ringColor: R.color, tint: R.soft, ink: R.ink, card: sRaw.card, date: sRaw.date, credit: m.credit,
+        rightsCode: rt.code, rightsLabel: rt.label, rightsDesc: rt.desc, isLink: sRaw.tier === 'link',
+        hasMedia: !!sRaw.media, mediaAlt: sRaw.mediaAlt || '', depicts: sRaw.depicts || '', slotId: 'story-' + sRaw.id,
+        corrections: sRaw.corrections || [], hasCorrections: (sRaw.corrections || []).length > 0,
+        langTabs: order.map(k => ({ label: (names[k] || k) + (k === sRaw.orig ? ' · told in' : ' · translation'), style: chip(k === lang), pick: () => this.setState({ stLang: k }) })),
+        multiLang: order.length > 1, isTranslation: lang !== sRaw.orig, origName: (names[sRaw.orig] || 'English').replace(/ .*/, ''),
+        canonical, consentLine: sRaw.consent ? `Consent given ${sRaw.consent.grantedAt}, in ${sRaw.consent.lang}, by ${sRaw.consent.by}.` : '',
+        embedCode: `<blockquote cite="${canonical}">“${sRaw.versions[sRaw.orig].body[0]}” — ${m.credit}. Rights: ${rt.code} ${rt.label}. ${canonical}</blockquote>`,
+        listen: () => this.speak(v.title + '. ' + v.body.join(' '), lang), listenLabel: s.speaking ? 'Stop listening' : 'Listen',
+        more: db.stories.filter(x => x.maker === m.id && x.id !== sRaw.id && x.tier === 'public').map(x => this.storyCard(x)) };
+    }
+
+    // contact
+    const cRaw = route === 'contact' ? makersAll.find(m => m.id === s.param) : null;
+    const cf = s.cf;
+    const cfErr = { cat: !cf.cat ? 'Choose what this is about.' : '', name: cf.name.trim().length < 2 ? 'Tell them who you are.' : '',
+      email: /^\S+@\S+\.\S+$/.test(cf.email.trim()) ? '' : 'Enter an email Karigar can reply to.',
+      purpose: cf.purpose.trim().length < 30 ? 'Say what you would like in a sentence or two (at least 30 characters).' : '' };
+    const cfOk = !cfErr.cat && !cfErr.name && !cfErr.email && !cfErr.purpose;
+    const dupe = !!cRaw && db.requests.some(r => r.maker === cRaw.id && r.status === 'pending' && r.email.toLowerCase() === cf.email.trim().toLowerCase());
+    const setCf = k => e => this.setState({ cf: { ...s.cf, [k]: e.target.value } });
+    const errOf = k => s.cfTried ? cfErr[k] : '';
+
+    // studio
+    const me = 'm-rehmat'; const meM = this.maker(me); const lk = s.sLang; const Lx = K.L[lk] || K.L.en;
+    const myStories = db.stories.filter(x => x.maker === me).map(x => {
+      const t = this.tier(x.tier); const v = (lk === 'gu' && x.versions.gu) || x.versions.en; const c = x.consent;
+      const purposeNames = c ? c.purposes.map(p => (K.PURPOSES.find(z => z.id === p) || {}).label).join(', ') : '';
+      return { id: x.id, title: v.title, ring: K.RINGS[x.ring].label, ringColor: K.RINGS[x.ring].color, tierLabel: t[lk] || t.en, tierColor: t.color, tierBg: t.bg,
+        isPrivate: x.tier === 'private', notPrivate: x.tier !== 'private', viewable: x.tier === 'public' || x.tier === 'link', viewHref: '#/story/' + x.id,
+        consentLine: c && !c.withdrawnAt && x.tier !== 'private' ? `For: ${purposeNames} · ${this.right(c.rights).code} ${this.right(c.rights).label} · ${c.duration === 'open' ? 'until you change it' : 'until ' + c.until}` : 'In your archive. Nothing is shared.',
+        hasBoundary: !!x.boundary, boundaryText: x.boundary ? `${x.boundary.scope}: ${x.boundary.what}${x.boundary.collective ? ' · community boundary' : ''}` : '',
+        corrCount: (x.corrections || []).length ? `${x.corrections.length} public correction note` : '',
+        edit: () => this.openSheet(x),
+        makePrivate: () => { this.mut(d => { const y = d.stories.find(z => z.id === x.id); y.tier = 'private'; if (y.consent) y.consent.withdrawnAt = new Date().toDateString(); }); this.flash('Private now. Removed from your page and from anyone holding the link.'); },
+        correct: () => this.setState({ editing: x.id, editText: x.versions.en.body.join('\n\n'), editFact: false, editWhy: '' }), isEditing: s.editing === x.id };
+    });
+    const sheetStory = s.sheet ? db.stories.find(x => x.id === s.sheet) : null;
+    const d = s.draft;
+    let sh = null;
+    if (sheetStory && d) {
+      const t = this.tier(d.tier); const blocked = !!sheetStory.boundary && d.tier !== 'private';
+      const purposeText = d.purposes.map(p => (K.PURPOSES.find(z => z.id === p) || {}).label.toLowerCase()).join(', ');
+      const summary = d.tier === 'private' ? t.who.en : `${t.who.en} It may be used for: ${purposeText || 'nothing yet'}. Reuse: ${this.right(d.rights).label}. Your place shows as “${this.place(meM) || 'not shown'}”. This lasts ${d.duration === 'open' ? 'until you change it' : 'until ' + (d.until || 'the date you pick')}.`;
+      sh = { title: ((lk === 'gu' && sheetStory.versions.gu) || sheetStory.versions.en).title, isPrivate: d.tier === 'private', notPrivate: d.tier !== 'private',
+        tiers: K.TIERS.map(x => ({ label: x[lk] || x.en, name: x.name, style: x.id === d.tier ? `border-color:${x.color};background:${x.bg}` : 'border-color:#E2D9CB;background:#fff', dot: x.id === d.tier ? x.color : '#fff', ring: x.color, pick: () => this.setState({ draft: { ...d, tier: x.id } }) })),
+        who: t.who[lk] || t.who.en, blocked, blockText: sheetStory.boundary ? `You set a boundary on this story: “${sheetStory.boundary.scope} — ${sheetStory.boundary.what}”. ${sheetStory.boundary.collective ? 'It is a community boundary, so it can only change after your community agrees. ' : ''}The story stays safe in your archive.` : '',
+        purposes: K.PURPOSES.map(p => { const on = d.purposes.includes(p.id); return { label: p.label, note: p.note, style: on ? 'border-color:#6B3FA0;background:#F1E9FA' : 'border-color:#E2D9CB;background:#fff', box: on ? 'background:#6B3FA0;border-color:#6B3FA0;color:#fff' : 'background:#fff;border-color:#C4BCD1;color:transparent', toggle: () => this.setState({ draft: { ...d, purposes: on ? d.purposes.filter(z => z !== p.id) : [...d.purposes, p.id] } }) }; }),
+        aiOn: d.purposes.includes('ai'),
+        rights: K.RIGHTS.map(r => ({ code: r.code, label: r.label, desc: r.desc, style: r.code === d.rights ? 'border-color:#6B3FA0;background:#F1E9FA' : 'border-color:#E2D9CB;background:#fff', pick: () => this.setState({ draft: { ...d, rights: r.code } }) })),
+        durOpenStyle: chip(d.duration === 'open'), durDateStyle: chip(d.duration === 'date'), isDate: d.duration === 'date', until: d.until,
+        setOpen: () => this.setState({ draft: { ...d, duration: 'open' } }), setDate: () => this.setState({ draft: { ...d, duration: 'date' } }), setUntil: e => this.setState({ draft: { ...d, until: e.target.value } }),
+        summary, hear: () => this.speak(summary, 'en'), hearLabel: s.speaking ? 'Stop' : Lx.hear,
+        canSave: !blocked && (d.tier === 'private' || d.purposes.length > 0) && !(d.duration === 'date' && !d.until),
+        save: () => {
+          if (blocked || !(d.tier === 'private' || d.purposes.length)) return;
+          this.mut(db2 => { const y = db2.stories.find(z => z.id === sheetStory.id); y.tier = d.tier; y.rights = d.rights;
+            y.consent = d.tier === 'private' ? (y.consent ? { ...y.consent, withdrawnAt: new Date().toDateString() } : null)
+              : { purposes: d.purposes, duration: d.duration, until: d.until, rights: d.rights, grantedAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }), lang: lk === 'gu' ? 'Gujarati' : 'English', by: 'Rehmatbai Khatri', assisted: false }; });
+          this.setState({ sheet: null }); this.flash(d.tier === 'private' ? 'Kept in your archive.' : `Saved. Who can see it: ${t.en}.`);
+        } };
+    }
+    const closeSheet = () => this.setState({ sheet: null });
+
+    const myReqs = db.requests.filter(r => r.maker === me).map(r => {
+      const text = lk === 'gu' && r.purposeGu ? r.purposeGu : r.purpose;
+      return { id: r.id, name: r.name, org: r.org, cat: r.cat, text, pending: r.status === 'pending', accepted: r.status === 'accepted', declined: r.status === 'declined',
+        expiry: `Closes by itself in ${r.daysLeft} days`,
+        accept: () => { this.mut(x => { x.requests.find(z => z.id === r.id).status = 'accepted'; }); this.flash('Accepted. A conversation is open through Karigar.'); },
+        decline: () => { this.mut(x => { x.requests.find(z => z.id === r.id).status = 'declined'; }); this.flash('Declined. They get a polite note, with no reason given.'); },
+        block: () => { this.mut(x => { x.requests.find(z => z.id === r.id).status = 'declined'; if (!x.blocked.includes(r.email)) x.blocked.push(r.email); }); this.flash('Blocked. They cannot send you requests again.'); },
+        hear: () => this.speak(`${r.name}, ${r.org}. ${text}`, lk === 'gu' && r.purposeGu ? 'gu' : 'en') };
+    });
+    const pendingCount = myReqs.filter(r => r.pending).length;
+    const studioTabs = [['stories', Lx.stories], ['requests', Lx.requests + (pendingCount ? ` (${pendingCount})` : '')], ['partners', Lx.partners], ['profile', Lx.profile], ['data', Lx.data]]
+      .map(([id, label]) => ({ href: '#/studio/' + id, label, style: s.studio === id ? 'background:#241F2E;color:#FBF7F0' : 'background:transparent;color:#4A4356' }));
+    const grans = [['village', 'Village'], ['district', 'District'], ['state', 'State'], ['region', 'Region only'], ['withheld', 'Don’t show']]
+      .map(([id, label]) => ({ label, style: chip(meM && meM.gran === id), pick: () => this.mut(x => { x.makers.find(z => z.id === me).gran = id; }) }));
+    const curClose = !meM ? 'open' : meM.contact.open ? 'open' : ({ '15 November 2026': '2w', '25 January 2027': '3m' })[meM.contact.until] || 'off';
+    const closeOpts = [['open', 'Open'], ['2w', 'Closed for 2 weeks'], ['3m', 'Closed for 3 months'], ['off', 'Closed until I reopen']]
+      .map(([id, label]) => ({ label, style: chip(curClose === id), pick: () => this.mut(x => { const c = x.makers.find(z => z.id === me).contact; c.open = id === 'open'; c.until = ({ '2w': '15 November 2026', '3m': '25 January 2027' })[id] || ''; }) }));
+
+    const oa = s.oa; const oaBad = !oa.name.trim() || !oa.org.trim() || !/^\S+@\S+\.\S+$/.test(oa.email.trim());
+    const td = s.td; const tdBad = !td.name.trim() || !td.link.trim() || td.what.trim().length < 10;
+
+    return { ...base,
+      ...this.boardVals(),
+      essay: K.ESSAY, voices: K.VOICES.filter(v => makersAll.some(m => m.id === v.maker)).map(v => { const m = this.maker(v.maker); return { ...v, maker: m.isCollective ? m.name : m.name.split(' ')[0], href: '#/maker/' + m.id }; }),
+      homeMakers: sorted.filter(m => !m.isCollective).slice(0, 4).map(m => this.makerCard(m)),
+      homeStories: [...pubStories].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3).map(x => this.storyCard(x)),
+      principles: K.PRINCIPLES.map(([t, dd], i) => ({ n: String(i + 1).padStart(2, '0'), t, d: dd })),
+      principlesShort: K.PRINCIPLES.slice(0, 4).map(([t, dd], i) => ({ n: String(i + 1).padStart(2, '0'), t, d: dd })),
+      rightsList: K.RIGHTS, decisions: K.DECISIONS, tiersList: K.TIERS.map(t => ({ label: t.en, name: t.name, who: t.who.en, color: t.color, bg: t.bg })),
+
+      q: s.q, setQ: e => this.setState({ q: e.target.value }),
+      craftChips: ['All', 'Textile', 'Metal', 'Clay'].map(c => ({ label: c === 'All' ? 'All crafts' : c, style: chip(s.fCraft === c), pick: () => this.setState({ fCraft: c }) })),
+      regionOpts: regions.map(r => ({ v: r, label: r === 'All' ? 'Any state' : r })), fRegion: s.fRegion, setRegion: e => this.setState({ fRegion: e.target.value }),
+      langOpts: langsAll.map(r => ({ v: r, label: r === 'All' ? 'Any language' : r })), fLang: s.fLang, setLang: e => this.setState({ fLang: e.target.value }),
+      tabMakersStyle: s.btab === 'makers' ? 'color:#241F2E;border-color:#241F2E' : 'color:#8C8499;border-color:transparent',
+      tabStoriesStyle: s.btab === 'stories' ? 'color:#241F2E;border-color:#241F2E' : 'color:#8C8499;border-color:transparent',
+      showMakersTab: () => this.setState({ btab: 'makers' }), showStoriesTab: () => this.setState({ btab: 'stories' }),
+      btabMakers: s.btab === 'makers', btabStories: s.btab === 'stories', makersTabLabel: `Makers · ${fm.length}`, storiesTabLabel: `Stories · ${fs.length}`,
+      browseMakers: fm.map(m => this.makerCard(m)), browseStories: fs.map(x => this.storyCard(x)),
+      noMakers: fm.length === 0, noStories: fs.length === 0,
+      clearFilters: () => this.setState({ q: '', fCraft: 'All', fRegion: 'All', fLang: 'All' }),
+
+      mk, mkFound: !!mk, mkMissing: route === 'maker' && !mk, mkStories, mkHasStories: mkStories.length > 0, mkNoStories: !!mk && mkStories.length === 0,
+      st, stFound: !!st, stMissing: route === 'story' && !st, stHasMore: !!st && st.more.length > 0,
+      shareLabel: s.shared ? 'Copied, with credit' : 'Copy link with credit',
+      share: () => { if (!st) return; try { navigator.clipboard.writeText(`${st.title} — ${st.credit}. Rights: ${st.rightsCode} ${st.rightsLabel}. ${st.canonical}`); } catch (e) {} this.setState({ shared: true }); },
+      embedOpen: s.embed, toggleEmbed: () => this.setState({ embed: !s.embed }), embedLabel: s.embed ? 'Hide embed code' : 'Embed with credit',
+
+      cm: cRaw ? { name: cRaw.name, first: cRaw.isCollective ? 'The collective' : cRaw.name.split(' ')[0], href: '#/maker/' + cRaw.id, lang: cRaw.langs[0], until: cRaw.contact.until } : null,
+      cmFound: !!cRaw, cmMissing: route === 'contact' && !cRaw, cmForm: !!cRaw && cRaw.contact.open && !s.cfDone, cmClosed: !!cRaw && !cRaw.contact.open, cfDone: !!cRaw && s.cfDone,
+      cats: K.CATS.map(c => ({ label: c, style: chip(cf.cat === c), pick: () => this.setState({ cf: { ...s.cf, cat: c } }) })),
+      cf, setCfName: setCf('name'), setCfOrg: setCf('org'), setCfEmail: setCf('email'), setCfPurpose: setCf('purpose'),
+      eCat: errOf('cat'), eName: errOf('name'), eEmail: errOf('email'), ePurpose: errOf('purpose'), purposeCount: `${cf.purpose.trim().length} / 600`,
+      dupe: s.cfTried && dupe,
+      submitContact: e => { if (e && e.preventDefault) e.preventDefault(); this.setState({ cfTried: true }); if (!cfOk || dupe) return;
+        if (!db.blocked.includes(cf.email.trim())) this.mut(x => { x.requests.unshift({ id: 'r' + Date.now(), maker: cRaw.id, name: cf.name.trim(), org: cf.org.trim() || 'Independent', email: cf.email.trim(), cat: cf.cat, purpose: cf.purpose.trim(), daysLeft: 30, status: 'pending' }); });
+        this.setState({ cfDone: true, cf: { cat: '', name: '', org: '', email: cf.email, purpose: '' }, cfTried: false }); window.scrollTo(0, 0); },
+
+      signinOrg: s.sTab === 'org', signinArt: s.sTab === 'artisan',
+      orgTabStyle: s.sTab === 'org' ? 'background:#fff;color:#241F2E;box-shadow:0 1px 3px rgba(36,31,46,.14)' : 'background:transparent;color:#6F6880',
+      artTabStyle: s.sTab === 'artisan' ? 'background:#fff;color:#241F2E;box-shadow:0 1px 3px rgba(36,31,46,.14)' : 'background:transparent;color:#6F6880',
+      pickOrg: () => this.setState({ sTab: 'org' }), pickArt: () => this.setState({ sTab: 'artisan' }),
+      orgEmail: s.orgEmail, orgPass: s.orgPass, setOrgEmail: e => this.setState({ orgEmail: e.target.value, orgErr: '' }), setOrgPass: e => this.setState({ orgPass: e.target.value, orgErr: '' }), orgErr: s.orgErr,
+      orgBusy: s.orgBusy, orgSubmit: e => { if (e && e.preventDefault) e.preventDefault(); if (s.orgBusy) return; if (!/^\S+@\S+\.\S+$/.test(s.orgEmail.trim()) || !s.orgPass) { this.setState({ orgErr: 'Enter the email and password for your organisation account.' }); return; }
+        // the console's own sign-in (a real session cookie); without it, as in the design preview, open the console
+        if (!this.props.signIn) { window.location.href = consoleUrl; return; }
+        this.setState({ orgBusy: true, orgErr: '' });
+        this.props.signIn(s.orgEmail.trim(), s.orgPass).then(() => { window.location.href = consoleUrl; },
+          err => this.setState({ orgBusy: false, orgErr: err && err.status && err.status < 500 ? err.message : 'Could not reach Karigar. Check the connection and try again.' })); },
+      code: s.code, setCode: e => this.setState({ code: e.target.value, artErr: '' }), artErr: s.artErr,
+      openApp: e => { if (e && e.preventDefault) e.preventDefault(); const raw = s.code.trim(); const tok = (raw.match(/\/k\/([A-Za-z0-9_-]+)/) || [, raw])[1];
+        if (!/^[A-Za-z0-9_-]{8,64}$/.test(tok)) { this.setState({ artErr: 'Type the code printed under the QR on your card.' }); return; } window.location.href = appOrigin + '/k/' + tok; },
+
+      oa, setOaName: e => this.setState({ oa: { ...s.oa, name: e.target.value } }), setOaOrg: e => this.setState({ oa: { ...s.oa, org: e.target.value } }),
+      setOaEmail: e => this.setState({ oa: { ...s.oa, email: e.target.value } }), setOaRegion: e => this.setState({ oa: { ...s.oa, region: e.target.value } }),
+      oaErr: s.oaTried && oaBad ? 'Add your name, organisation and a work email.' : '', oaSent: s.oaSent, oaForm: !s.oaSent,
+      submitOa: e => { if (e && e.preventDefault) e.preventDefault(); this.setState({ oaTried: true }); if (!oaBad) this.setState({ oaSent: true }); },
+      td, setTdName: e => this.setState({ td: { ...s.td, name: e.target.value } }), setTdLink: e => this.setState({ td: { ...s.td, link: e.target.value } }), setTdWhat: e => this.setState({ td: { ...s.td, what: e.target.value } }),
+      tdErr: s.tdTried && tdBad ? 'Add your name, the link, and what is wrong.' : '', tdSent: s.tdSent, tdForm: !s.tdSent,
+      submitTd: e => { if (e && e.preventDefault) e.preventDefault(); this.setState({ tdTried: true }); if (!tdBad) this.setState({ tdSent: true }); },
+
+      L: Lx, studioTabs, sStories: s.studio === 'stories', sRequests: s.studio === 'requests', sPartners: s.studio === 'partners', sProfile: s.studio === 'profile', sData: s.studio === 'data',
+      enStyle: lk === 'en' ? 'background:#fff;color:#241F2E' : 'background:transparent;color:#6F6880', guStyle: lk === 'gu' ? 'background:#fff;color:#241F2E' : 'background:transparent;color:#6F6880',
+      setEn: () => this.setState({ sLang: 'en' }), setGu: () => this.setState({ sLang: 'gu' }),
+      me: meM ? { name: meM.name, local: meM.local, place: this.place(meM) || 'Not shown', credit: meM.credit, craft: meM.craft, href: '#/maker/' + meM.id, contactOpen: meM.contact.open } : {},
+      isDeleted: db.deleted, notDeleted: !db.deleted,
+      myStories, sh, sheetOpen: !!sh, closeSheet,
+      editText: s.editText, setEditText: e => this.setState({ editText: e.target.value }), editFact: s.editFact, toggleFact: () => this.setState({ editFact: !s.editFact }),
+      factBox: s.editFact ? 'background:#6B3FA0;border-color:#6B3FA0;color:#fff' : 'background:#fff;border-color:#C4BCD1;color:transparent',
+      editWhy: s.editWhy, setEditWhy: e => this.setState({ editWhy: e.target.value }), cancelEdit: () => this.setState({ editing: null }),
+      saveEdit: () => { const id = s.editing; const body = s.editText.split(/\n\s*\n/).map(t => t.trim()).filter(Boolean); if (!body.length) return;
+        this.mut(x => { const y = x.stories.find(z => z.id === id); y.versions.en.body = body; if (s.editFact) { y.corrections = y.corrections || []; y.corrections.push({ date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }), note: s.editWhy.trim() || 'The maker corrected a fact in this story.' }); } });
+        this.setState({ editing: null }); this.flash(s.editFact ? 'Corrected. A short public note says the story changed.' : 'Saved.'); },
+      myReqs, hasReqs: myReqs.length > 0, closeOpts, contactOpenNow: !!meM && meM.contact.open,
+      partners: db.partners.filter(p => p.maker === me).map(p => ({ ...p, revoke: () => { this.mut(x => { x.partners = x.partners.filter(z => z.id !== p.id); }); this.flash('Access removed. Effective now.'); } })),
+      hasPartners: db.partners.some(p => p.maker === me), noPartners: !db.partners.some(p => p.maker === me),
+      grans, setCredit: e => this.mut(x => { x.makers.find(z => z.id === me).credit = e.target.value; }),
+      logs: db.log, exportData: () => this.exportData(),
+      goPrivate: () => { this.mut(x => { x.stories.filter(z => z.maker === me).forEach(z => { z.tier = 'private'; if (z.consent) z.consent.withdrawnAt = new Date().toDateString(); }); x.makers.find(z => z.id === me).contact.open = false; }); this.flash('Everything is private. Your archive is untouched.'); },
+      confirmDel: s.confirmDel, notConfirmDel: !s.confirmDel, askDel: () => this.setState({ confirmDel: true }), noDel: () => this.setState({ confirmDel: false }),
+      doDel: () => { this.mut(x => { x.deleted = true; x.stories = x.stories.filter(z => z.maker !== me); x.requests = x.requests.filter(z => z.maker !== me); x.partners = []; }); this.setState({ confirmDel: false }); this.flash('Deleted from live systems. Backups clear within 35 days.'); },
+      restore: () => { this.persist(K.seed()); this.flash('Sample record restored.'); }
+    };
+  }
+}
+</script>
+</body>
+</html>
