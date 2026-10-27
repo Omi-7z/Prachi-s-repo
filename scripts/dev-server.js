@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
+import { publicOrigin } from '../lib/origin.js';
 
 const root = new URL('..', import.meta.url).pathname;
 const PORT = Number(process.env.PORT || 3000);
@@ -22,7 +23,7 @@ function apiFile(pathname) {
 
 function rewrite(pathname) {
   if (/^\/org(\/.*)?$/.test(pathname)) return '/console.html';
-  if (pathname === '/') return '/console.html';
+  if (pathname === '/') return '/index.html';
   return pathname;
 }
 
@@ -44,14 +45,17 @@ async function serveApi(req, res, url) {
   res.writeHead(response.status, headers).end(Buffer.from(await response.arrayBuffer()));
 }
 
-async function serveStatic(res, url) {
+async function serveStatic(req, res, url) {
   let path = rewrite(url.pathname);
   let file = normalize(join(root, 'public', path));
   if (!file.startsWith(join(root, 'public'))) { res.writeHead(403).end(); return; }
   if (!existsSync(file) && existsSync(file + '.html')) file += '.html'; // cleanUrls
   try {
     if (!(await stat(file)).isFile()) throw new Error('dir');
-    res.writeHead(200, { 'content-type': TYPES[extname(file)] || 'application/octet-stream', 'cache-control': 'no-cache' }).end(await readFile(file));
+    let body = await readFile(file);
+    // stamp-build.js does this in the Vercel build
+    if (extname(file) === '.html') body = body.toString().replaceAll('__KARIGAR_ORIGIN__', publicOrigin(new Request(url, { headers: req.headers })));
+    res.writeHead(200, { 'content-type': TYPES[extname(file)] || 'application/octet-stream', 'cache-control': 'no-cache' }).end(body);
   } catch {
     res.writeHead(404, { 'content-type': 'text/plain' }).end('Not found');
   }
@@ -62,11 +66,16 @@ createServer(async (req, res) => {
   // mirrors the vercel.json rewrite: /k/<token> is rendered by a function
   const k = url.pathname.match(/^\/k\/([^/]+)\/?$/);
   if (k) { url.pathname = '/api/artisan-page'; url.searchParams.set('t', k[1]); }
+  // mirrors the vercel.json redirects: old console links on "/"
+  if (url.pathname === '/' && (url.searchParams.has('src') || url.searchParams.has('org'))) {
+    res.writeHead(308, { location: '/console' + url.search }).end();
+    return;
+  }
   try {
     if (url.pathname.startsWith('/api/')) await serveApi(req, res, url);
-    else await serveStatic(res, url);
+    else await serveStatic(req, res, url);
   } catch (e) {
     console.error(e);
     if (!res.headersSent) res.writeHead(500).end('server error');
   }
-}).listen(PORT, () => console.log(`Karigar dev server on http://localhost:${PORT}  (console: /org)`));
+}).listen(PORT, () => console.log(`Karigar dev server on http://localhost:${PORT}  (console: /console)`));

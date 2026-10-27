@@ -4,9 +4,10 @@
 // blocks with {{ path }} bindings, driven by one component class. This file is the small
 // runtime that renders it in production, with Preact doing the DOM diffing, and the
 // bridge between that component and the server (profiles, handover links, the model proxy).
+// The public website at / (site.dc.html) is a design of the same kind and renders the same way.
 import { h, render, Fragment, isValidElement } from '/vendor/preact.mjs';
 
-const MODE = document.body.dataset.mode; // 'console' | 'artisan'
+const MODE = document.body.dataset.mode; // 'console' | 'artisan' | 'site'
 const mount = document.getElementById('app');
 
 // The prototype builds a few SVG fragments itself with React.createElement (ring names set
@@ -142,8 +143,8 @@ class DCLogic {
 const BUILD = new URL(import.meta.url).searchParams.get('v') || '';
 const built = path => (BUILD ? `${path}?v=${encodeURIComponent(BUILD)}` : path);
 
-async function loadComponent() {
-  const html = await (await fetch(built('/karigar.dc'), { cache: 'no-cache' })).text();
+async function loadComponent(design) {
+  const html = await (await fetch(built(design), { cache: 'no-cache' })).text();
   // The HTML parser drops unknown tags inside <select> (and would foster-parent them out of
   // tables), so <sc-for>/<sc-if> are parsed as <template>, which it allows anywhere.
   const safe = html
@@ -151,7 +152,15 @@ async function loadComponent() {
     .replace(/<\/sc-(for|if)>/g, '</template>');
   const doc = new DOMParser().parseFromString(safe, 'text/html');
   const helmet = doc.querySelector('helmet');
-  if (helmet) [...helmet.children].forEach(el => document.head.appendChild(document.importNode(el, true)));
+  if (helmet) [...helmet.children].forEach(el => {
+    // a parsed <script> never runs, so the design's own scripts (./name.js) are added afresh
+    if (el.localName === 'script') {
+      const s = document.createElement('script');
+      s.src = built('/' + el.getAttribute('src').replace(/^\.?\//, ''));
+      s.async = false;
+      document.head.appendChild(s);
+    } else document.head.appendChild(document.importNode(el, true));
+  });
   const root = doc.querySelector('x-dc');
   helmet && helmet.remove();
   const tree = [...root.childNodes].map(compile).filter(Boolean);
@@ -306,7 +315,7 @@ function consoleStore(initial, onServerProfile) {
       }
     },
     practice() { /* the facilitator's preview of the artisan app is not practice */ },
-    signOut: async () => { await api('/api/session', { method: 'DELETE' }); location.href = '/'; },
+    signOut: async () => { await api('/api/session', { method: 'DELETE' }); location.href = '/console'; },
     local: safeStore
   };
 }
@@ -415,8 +424,24 @@ async function bootArtisan() {
   return { mode: 'artisan', token, profile, standalone };
 }
 
+// The website: public pages, plus the organisation sign-in, which opens a real console session.
+async function mainSite() {
+  const comp = await loadComponent('/site.dc');
+  // the deployed public address (lib/origin.js), stamped on the page at build time
+  const stamped = document.body.dataset.appOrigin || '';
+  const appOrigin = /^https?:\/\/[^/\s]+$/.test(stamped) ? stamped : location.origin;
+  const signIn = (email, password) => api('/api/session', { method: 'POST', body: { email, password } });
+  const instance = new comp.Component({ consoleUrl: '/console', appOrigin, sampleNotice: true, signIn });
+  instance._template = comp.template;
+  mount.innerHTML = '';
+  instance._render();
+  instance._mounted = true;
+  if (instance.componentDidMount) await instance.componentDidMount();
+}
+
 async function main() {
-  const [boot, comp] = await Promise.all([MODE === 'console' ? bootConsole() : bootArtisan(), loadComponent()]);
+  if (MODE === 'site') return mainSite();
+  const [boot, comp] = await Promise.all([MODE === 'console' ? bootConsole() : bootArtisan(), loadComponent('/karigar.dc')]);
   if (!boot) return;
   let instance;
   const onServerProfile = p => instance.mergeServerProfile(p);
