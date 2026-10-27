@@ -345,7 +345,10 @@ function message(title, body) {
   mount.appendChild(box);
 }
 
+const SIGNUP_PREFILL = 'karigar-signup-prefill';
+
 // Sign in, or create an account when sign-up is open. Resolves once a session exists.
+// The website's "Request an account" opens this at /console#signup, with its answers filled in.
 async function loginForm() {
   let signup = { open: false, needsCode: false };
   try { signup = await api('/api/signup'); } catch { /* older server: sign-in only */ }
@@ -360,7 +363,13 @@ async function loginForm() {
       const code = mount.querySelector('[data-code]');
       if (code && signup.needsCode) { code.hidden = false; code.querySelector('input').required = true; }
       mount.querySelectorAll('[data-to]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); show(a.dataset.to); }));
-      form.querySelector('input').focus();
+      if (which === 'signup') {
+        let pre = null;
+        try { pre = JSON.parse(sessionStorage.getItem(SIGNUP_PREFILL) || 'null'); sessionStorage.removeItem(SIGNUP_PREFILL); } catch { /* ignore */ }
+        if (pre) for (const k of ['org', 'name', 'email']) if (pre[k] && form.elements[k]) form.elements[k].value = String(pre[k]).slice(0, 200);
+      }
+      const first = [...form.querySelectorAll('input')].find(i => !i.value && !i.closest('[hidden]'));
+      (first || form.querySelector('input')).focus();
       form.addEventListener('submit', async e => {
         e.preventDefault();
         err.textContent = '';
@@ -368,6 +377,7 @@ async function loginForm() {
         form.querySelector('button').disabled = true;
         try {
           await api(which === 'signup' ? '/api/signup' : '/api/session', { method: 'POST', body });
+          if (location.hash === '#signup') history.replaceState(null, '', location.pathname + location.search);
           resolve();
         } catch (x) {
           err.textContent = x.status && x.status < 500 ? x.message : 'Could not reach the server. Check the connection and try again.';
@@ -375,7 +385,7 @@ async function loginForm() {
         }
       });
     };
-    show('login');
+    show(signup.open && location.hash === '#signup' ? 'signup' : 'login');
   });
 }
 
@@ -431,7 +441,15 @@ async function mainSite() {
   const stamped = document.body.dataset.appOrigin || '';
   const appOrigin = /^https?:\/\/[^/\s]+$/.test(stamped) ? stamped : location.origin;
   const signIn = (email, password) => api('/api/session', { method: 'POST', body: { email, password } });
-  const instance = new comp.Component({ consoleUrl: '/console', appOrigin, sampleNotice: true, signIn });
+  // "Request an account" is the console's own sign-up. What was typed here is carried over in
+  // this tab's sessionStorage (never the URL), and the password is chosen there.
+  const requestAccount = async ({ name, org, email }) => {
+    const { open } = await api('/api/signup');
+    if (!open) throw new Error('New organisation accounts are not open online right now. Ask the Karigar team for one.');
+    try { sessionStorage.setItem(SIGNUP_PREFILL, JSON.stringify({ name, org, email })); } catch { /* private mode: the form starts empty */ }
+    location.href = '/console#signup';
+  };
+  const instance = new comp.Component({ consoleUrl: '/console', appOrigin, sampleNotice: true, signIn, requestAccount });
   instance._template = comp.template;
   mount.innerHTML = '';
   instance._render();
