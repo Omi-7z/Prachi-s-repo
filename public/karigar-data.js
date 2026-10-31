@@ -20,7 +20,7 @@ export const SCHEMA = [
     { key: 'place_change', label: 'How the place has changed', rows: 3, hint: 'roads, weather, access, water table' },
     { key: 'emotion_about_place_change', label: 'Their reaction to that change', rows: 2, hint: 'in their words' }
   ]},
-  { deck: 'theme', code: 'Lineage 1–3', layer: 'Transmission', title: 'Lineage', ask: 'Who taught them, how the craft moves between generations, and where transmission holds or breaks.', fields: [
+  { deck: 'theme', code: 'Lineage 1–3', layer: 'Transmission', title: 'Legacy', ask: 'Who taught them, how the craft moves between generations, and where transmission holds or breaks.', fields: [
     { key: 'teacher_name_relation', label: 'Who first taught them', rows: 1, hint: 'name and relation' },
     { key: 'teaching_memory', label: 'One teaching memory', rows: 3, hint: 'a scene, not a summary' },
     { key: 'remembered_phrase_gesture', label: 'Phrase or gesture passed down', rows: 2, hint: '' },
@@ -400,7 +400,7 @@ export const ALL_KEYS = Object.keys(FIELD_INDEX);
 export const RINGS = [
   { id: 'craft',    code: 'Identity',      label: 'My Craft',         color: '#B98BE0', ink: '#4A2A6B', r: 21.0, purpose: 'How artisans name their own craft, its strengths and their wish for the future.' },
   { id: 'place',    code: 'Place 1–3',     label: 'Place',            color: '#6FC9B8', ink: '#1F5F54', r: 27.6, purpose: 'Where the craft belongs, and how the place, land and water shape the work.' },
-  { id: 'lineage',  code: 'Lineage 1–3',   label: 'Lineage',          color: '#A81C24', ink: '#7A1319', r: 34.2, purpose: 'Who taught the craft, the generational chain, and where teaching holds or breaks.' },
+  { id: 'lineage',  code: 'Lineage 1–3',   label: 'Legacy',           color: '#A81C24', ink: '#7A1319', r: 34.2, purpose: 'Who taught the craft, the generational chain, and where teaching holds or breaks.' },
   { id: 'material', code: 'Material 1–3',  label: 'Material & Tools', color: '#C06A5F', ink: '#7C3A32', r: 40.8, purpose: 'What materials and tools are used, how they behave in the hands, how they changed.' },
   { id: 'culture',  code: 'Culture 1–3',   label: 'Cultural Meaning', color: '#6D9DC5', ink: '#2C5476', r: 47.4, purpose: 'How the craft appears in everyday and special life, and what stays within the community.' },
   { id: 'pride',    code: 'Pride 1–3',     label: 'Pride & Stake',    color: '#F0B23C', ink: '#8A5D05', r: 54.0, purpose: 'What makes artisans proud, what would be lost if the craft stops, and what they accept or refuse.' }

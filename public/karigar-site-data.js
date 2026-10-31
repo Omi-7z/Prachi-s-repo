@@ -4,7 +4,7 @@ window.KARIGAR_SITE = (function () {
   var RINGS = {
     craft: { label: 'My Craft', color: '#B98BE0', ink: '#4A2A6B', soft: '#F3ECFA' },
     place: { label: 'Place', color: '#6FC9B8', ink: '#1F5F54', soft: '#E6F6F2' },
-    lineage: { label: 'Lineage', color: '#A81C24', ink: '#7A1319', soft: '#FBEAE8' },
+    lineage: { label: 'Legacy', color: '#A81C24', ink: '#7A1319', soft: '#FBEAE8' },
     material: { label: 'Material & Tools', color: '#C06A5F', ink: '#7C3A32', soft: '#F8ECEA' },
     culture: { label: 'Cultural Meaning', color: '#6D9DC5', ink: '#2C5476', soft: '#EAF1F8' },
     pride: { label: 'Pride & Stake', color: '#F0B23C', ink: '#8A5D05', soft: '#FFF6E3' }
@@ -234,6 +234,64 @@ window.KARIGAR_SITE = (function () {
     ]
   };
 
+
+  // The Craft Voice Kit — six theme decks, one per ring. Wording follows the printed cards.
+  var THEMES = [
+    { ring: 'craft', name: 'My Craft', cover: '/cards/craft.png', bg: '#F5E4F6', ink: '#5B2A6B', intro: 'These prompts help you talk about what your craft is in your own words: what it is called, what makes it different, the motifs and colours you use, and the part of the work you are most specialised in.',
+      groups: [
+        { name: 'How you describe your craft', cards: [['What do you call this craft in your own language?', 'How would you explain it to someone who has never seen it?'], ['How do you usually describe your craft?', 'What do you say about it to people around you, like buyers or children?'], ['What makes this craft different?', 'What is one thing that sets it apart from other work around you?']] },
+        { name: 'Motifs and colours', cards: [['Name a motif you often make. What does it mean to you?', 'Which colours feel most true to this craft, and why?'], ['The story of one motif', 'Think of one real piece with this motif. What did people say or feel about it?'], ['Have the colours changed over time?', 'If yes, what changed, and what has stayed the same?']] },
+        { name: 'Specialisation and living practice', cards: [['Which part of this craft are you best at?', 'What have you or your group added, changed or invented in it?'], ['What do people come to you for?', 'What do they ask you to do because you do it best?'], ['What would you keep, and what would you change?', 'From the changes you have seen, name one of each.']] } ] },
+    { ring: 'place', name: 'Place', cover: '/cards/place.png', bg: '#E2F2EF', ink: '#1D5B54', intro: 'These prompts help you talk about how your craft is tied to your home: where people say it belongs, what the land and water give your work, and how changes in the place have affected your craft and feelings.',
+      groups: [
+        { name: 'Where the craft belongs', cards: [['Where does this craft come from?', 'Which place or region do people connect with this craft?'], ['How is it said in your local language?', 'When people say where this craft is from, what words do they use?'], ['Feeling of belonging to this place', 'When you say it belongs here, what about this place makes you proud?']] },
+        { name: 'What the place gives', cards: [['What does this place give to the craft?', 'What from its soil, water or plants do you use? Give one example.'], ['One moment of using it', 'Tell us about a day you used this thing from the place in your work.'], ['What changes if it is missing?', 'If it is not available, what do you have to do differently?']] },
+        { name: 'How the place has changed', cards: [['How has this place changed?', 'Since you began this craft, has the water, land, weather or roads changed? Name one change that affected your work.'], ['Before and after', 'How was your work before this change, and how is it now?'], ['Your first feeling about the change', 'What do you feel first: worry, relief, anger, joy or something else? Why?']] } ] },
+    { ring: 'lineage', name: 'Legacy', cover: '/cards/lineage.png', bg: '#FBE8E8', ink: '#7E1418', intro: 'These prompts help you talk about the people and generations behind your craft: who taught you, how the work has travelled through your family, and how teaching happens today, including where it feels strong and where it is becoming difficult.',
+      groups: [
+        { name: 'Who taught you', cards: [['Who first taught you this craft?', 'Who are they, and how are they related to you?'], ['One teaching memory', 'Tell us about one day they were teaching you that you still remember clearly.'], ['What they said or did that stayed with you', 'Is there one thing they said or did that you still remember when you work today?']] },
+        { name: 'The chain across generations', cards: [['How many generations in your family have done this work, including you?', 'Who did it before you, and who is doing it after you?'], ['How would you draw your craft family as a line?', 'For example: grandfather \u2192 father \u2192 me \u2192 my daughter.'], ['Where does the chain feel strong or weak?', 'Who holds the craft strongly now, and where is it becoming weak?']] },
+        { name: 'How teaching happens', cards: [['How do you usually teach this craft?', 'Describe one real moment when you were teaching, or trying to teach, this work.'], ['Picture that moment', 'Where were you sitting or standing, and what were your hands doing?'], ['One difficulty in teaching', 'What made it hard to teach: time, money, other work, or their interest?']] } ] },
+    { ring: 'material', name: 'Material & Tools', cover: '/cards/material.png', bg: '#F9E8E4', ink: '#8A3A32', intro: 'These prompts help you talk about what your hands work with every day: which materials and tools you use, how they behave in your hands, and how changes in materials have made some things easier and some things harder.',
+      groups: [
+        { name: 'What you work with', cards: [['Which materials do you use most?', 'Where does each one come from: a market, a forest, a river or a house?'], ['Your first time with this material', 'Do you remember when you first worked with it? Tell us a little about that time.'], ['What makes this material different?', 'Compared to others you have used, what is special about this one?']] },
+        { name: 'Material behaviour', cards: [['A moment the material \u2018spoke\u2019 to you', 'When did your hands tell you \u2018this is right\u2019 or \u2018this is wrong\u2019?'], ['What do you do when it feels wrong?', 'When it does not feel right in your hands, what is your next step?'], ['How long does one piece take to finish?', 'Is there a part you should never rush? What changes when you must work faster?']] },
+        { name: 'When the material changed', cards: [['Have the materials changed since your elders\u2019 time?', 'Name one change in material that affected your work.'], ['Why did this change happen?', 'In your view, what was the reason?'], ['What was gained, and what was lost?', 'Because of this change, what became easier and what became harder?']] } ] },
+    { ring: 'culture', name: 'Cultural Meaning', cover: '/cards/culture.png', bg: '#E6EEF8', ink: '#1E4A7C', intro: 'These prompts help you talk about what your craft means in your community: when it appears in everyday and special life, what rules people follow around it, and which designs or uses should not be sold or shown outside.',
+      groups: [
+        { name: 'When your craft appears in life', cards: [['How do your family or community use things made with this craft?', 'Name one everyday use and one special use.'], ['Why are these things important to use?', 'Are there cultural or social reasons? Why do they matter to you, your home or your community?'], ['Your feelings about these things', 'Pride, attachment, devotion, fulfilment or something else?']] },
+        { name: 'Special and everyday', cards: [['Is anything from this craft kept only for special days?', 'If yes, tell us about one such thing.'], ['Are there rules around using it?', 'Who can touch it, when does it come out, and where is it kept?'], ['How would it feel if it were missing?', 'If it was not there on that special day, what would change for people?']] },
+        { name: 'What is not for sale', cards: [['Is there a design, motif or use that should not be sold or shown to outsiders?', 'Share one example and why you feel that way.'], ['Why is this boundary important?', 'Why should it stay within the family or community?'], ['What could you share with outsiders instead?', 'What kind of design or story are you comfortable sharing?']] } ] },
+    { ring: 'pride', name: 'Pride & Stake', cover: '/cards/pride.png', bg: '#FCEFD2', ink: '#3D2B0E', intro: 'These prompts help you talk about what is at stake in this craft: what makes you feel proud, what would be lost if the work stopped, and which changes you want to keep, let go, or resist in the future.',
+      groups: [
+        { name: 'What makes you proud', cards: [['What makes you proud of this craft, or your work in it?', 'Think of one piece, one skill or one moment.'], ['A moment when that pride was visible', 'Tell us about one moment when you felt this pride very strongly.'], ['Who shared that pride with you?', 'Did anyone notice or say something that you still remember?']] },
+        { name: 'What would be lost', cards: [['If you had to stop this craft, what would be lost for you, your family or community?', 'Imagine one day without this craft. What would be different?'], ['Who would feel that loss most?', 'You, someone in your family, or the whole community?'], ['On a normal day, how many hours go into this craft, including small tasks?', 'When time is tight, like before a delivery or festival, what changes, and what do you feel you lose?']] },
+        { name: 'How your craft has changed', cards: [['How has this craft changed in your lifetime?', 'Tell us about one change you have seen.'], ['A change you or other artisans started', 'Did you or artisans around you decide to make a change yourselves? Tell us about it.'], ['What would you keep, and what would you let go?', 'From all the changes you have seen, name one of each.']] } ] }
+  ];
+  GBOARD.cards = []; GBOARD.why = {};
+  THEMES.forEach(function (t) { GBOARD.why[t.ring] = t.intro; t.groups.forEach(function (g, gi) { g.cards.forEach(function (c) { GBOARD.cards.push([t.ring, c[0], c[1], g.name, gi + 1]); }); }); });
+
+  var REFLECT = { bg: '#D6EBD9', ink: '#3B5A24', cards: [
+    { name: 'Strength', cover: '/cards/r-strength.png', q: 'From everything you shared today, what feels strongest in your craft right now?', hint: 'Tell us one thing that is going well.', does: 'Names one real strength, so the conversation is not only about loss or risk.' },
+    { name: 'Concern', cover: '/cards/r-concern.png', q: 'From everything you have shared, what worries you most about this craft?', hint: 'Tell us one concern that feels important.', does: 'Names one worry about the craft\u2019s future, and treats it with honesty and care.' },
+    { name: 'Sharing & Boundary', cover: '/cards/r-sharing.png', q: 'What are you happy to share with outsiders, and what would you keep within your family or community?', hint: 'Name one thing to share and one thing to keep private.', does: 'Decides which parts of the story may travel. The maker\u2019s boundaries come first.' },
+    { name: 'Future', cover: '/cards/r-future.png', q: 'What is one change you would like to see in this craft, and one thing you want to keep as it is?', hint: 'Name one change and one thing to keep.', does: 'Names one change wanted, and one thing that must stay the same.' } ] };
+
+  var STORYCARDS = { bg: '#FBF1E1', ink: '#262C5E', cards: [
+    { code: 'SS1', q: 'Tell us about one moment in this craft that taught you something important.', hint: 'What happened in that moment? What did you learn from it?' },
+    { code: 'SS2', q: 'Tell us about one moment in this craft that has stayed with you.', hint: 'Why has it stayed with you? How do you feel when you remember it now?' },
+    { code: 'SS3', q: 'Tell us about one moment from this craft that you wish others understood better.', hint: 'Who do you wish understood it better? What do people usually miss in such moments?' } ] };
+
+  var PRINT = [
+    { name: 'My Craft', id: 'craft', note: 'A3 portrait \u00b7 duplex, flip on long edge' },
+    { name: 'Place', id: 'place', note: 'A3 portrait \u00b7 duplex, flip on long edge' },
+    { name: 'Legacy', id: 'lineage', note: 'A3 portrait \u00b7 duplex, flip on long edge' },
+    { name: 'Material & Tools', id: 'material', note: 'A3 landscape \u00b7 duplex, flip on short edge' },
+    { name: 'Cultural Meaning', id: 'culture', note: 'A3 portrait \u00b7 duplex, flip on long edge' },
+    { name: 'Pride & Stake', id: 'pride', note: 'A3 landscape \u00b7 duplex' },
+    { name: 'Reflection cards', id: 'reflection', note: 'A3 portrait \u00b7 duplex' }
+  ].map(function (p) { var f = '/kit/print/' + p.id; return { name: p.name, note: p.note, enFront: f + '-en-front.svg', enBack: f + '-en-back.svg', hiFront: f + '-hi-front.svg', hiBack: f + '-hi-back.svg' }; });
+
   var TESTI = {
     org: [
       { who: 'Meera Joshi', role: 'Field coordinator', org: 'Kutch Mahila Craft Sangathan', ring: 'place', text: 'We used to write the artisan bios ourselves, and we got them wrong. Now a session takes an afternoon, and the women correct the drafts before anything goes out — sometimes twice.' },
@@ -316,5 +374,5 @@ window.KARIGAR_SITE = (function () {
       text: 'They asked me to credit the collective, not one weaver. I had to rewrite my lede. Fair enough — the sari really is made by eleven people.' }
   ];
 
-  return { RINGS: RINGS, RIGHTS: RIGHTS, TIERS: TIERS, PURPOSES: PURPOSES, CATS: CATS, L: L, PRINCIPLES: PRINCIPLES, DECISIONS: DECISIONS, PHOTOS: PHOTOS, ESSAY: ESSAY, BOARD: BOARD, VOICES: VOICES, GBOARD: GBOARD, TESTI: TESTI, PRIVATE: PRIVATE, PCHECK: PCHECK, seed: seed };
+  return { RINGS: RINGS, RIGHTS: RIGHTS, TIERS: TIERS, PURPOSES: PURPOSES, CATS: CATS, L: L, PRINCIPLES: PRINCIPLES, DECISIONS: DECISIONS, PHOTOS: PHOTOS, ESSAY: ESSAY, BOARD: BOARD, VOICES: VOICES, GBOARD: GBOARD, THEMES: THEMES, REFLECT: REFLECT, STORYCARDS: STORYCARDS, PRINT: PRINT, TESTI: TESTI, PRIVATE: PRIVATE, PCHECK: PCHECK, seed: seed };
 })();

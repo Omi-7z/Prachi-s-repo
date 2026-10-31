@@ -10,11 +10,13 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&family=Noto+Sans+Tamil:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500;1,6..72,600&family=Figtree:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&family=Noto+Sans+Tamil:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600&display=swap">
 <style>
   html, body { height: 100%; }
   body { margin: 0; background: #FBF7F0; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
   * { box-sizing: border-box; }
+  button, input, select, textarea { font-family: inherit; }
+  button { -webkit-font-smoothing: antialiased; }
   a { color: #6B3FA0; }
   a:hover { color: #52307C; }
   input, textarea, select, button { font-family: inherit; color: inherit; }
@@ -32,6 +34,14 @@
     .k-hero { grid-template-columns: minmax(0,1fr) !important; }
     .k-hero-board { order: -1; max-width: min(440px, 70vw) !important; }
   }
+  @keyframes k-an-draw { 0% { stroke-dashoffset: 100 } 45%, 68% { stroke-dashoffset: 0 } 100% { stroke-dashoffset: -100 } }
+  @keyframes k-an-spin { to { transform: rotate(360deg) } }
+  @keyframes k-an-breathe { 0%,100% { transform: scale(1) } 50% { transform: scale(1.06) } }
+  .k-an-ring { stroke-dasharray: 100; stroke-dashoffset: 100; animation: k-an-draw 2.6s cubic-bezier(.6,0,.2,1) infinite; }
+  .k-an-orbit { animation: k-an-spin 3.2s linear infinite; }
+  .k-an-orbit2 { animation: k-an-spin 5.4s linear infinite reverse; }
+  .k-an-hub { transform-origin: 60px 60px; animation: k-an-breathe 1.6s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .k-an-ring { animation: none; stroke-dashoffset: 0; } .k-an-orbit, .k-an-orbit2, .k-an-hub { animation: none; } }
   @keyframes k-pulse { 0%,100% { opacity:.3 } 50% { opacity:1 } }
   @media (max-width: 760px) {
     .k-hero { grid-template-columns: minmax(0,1fr) !important; }
@@ -39,6 +49,8 @@
   }
   @keyframes k-card-in { 0% { opacity:0; transform: translateY(28px) scale(.82) rotate(-4deg) } 55% { opacity:1; transform: translateY(-6px) scale(1.025) rotate(.8deg) } 78% { transform: translateY(2px) scale(.995) rotate(-.2deg) } 100% { opacity:1; transform:none } }
   @keyframes k-card-rise { 0% { transform: translateY(100%) } 70% { transform: translateY(-2%) } 100% { transform:none } }
+  @keyframes k-cover-in { 0% { opacity:0; transform: translate(30px,-20px) rotate(24deg) } 100% { opacity:1; transform: rotate(9deg) } }
+  .k-cover { animation: k-cover-in .6s .12s cubic-bezier(.2,.8,.25,1) both; }
   @keyframes k-fade-in { from { opacity:0 } to { opacity:1 } }
   .k-card-pop { animation: k-card-in .52s cubic-bezier(.2,.8,.25,1) both; transform-origin: 50% 70%; }
   .k-card-up { animation: k-card-rise .42s cubic-bezier(.2,.8,.25,1) both; }
@@ -84,9 +96,7 @@
         <circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle>
       </svg>
       <span style="font-family:{{ displayFont }};font-weight:600;font-size:19px;letter-spacing:-.01em">Karigar</span>
-      <sc-if value="{{ canSignOut }}" hint-placeholder-val="{{ false }}">
-        <a href="/" class="k-hidemob" style="font-size:13px;font-weight:600;color:#8C8499;text-decoration:none;white-space:nowrap;padding:8px 4px">← Karigar website</a>
-      </sc-if>
+      <a href="/" style="font-size:13px;font-weight:600;color:#6B3FA0;text-decoration:none;padding:6px 10px;border-radius:999px;background:#F1E9FA;white-space:nowrap">← Website</a>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <div style="display:flex;background:#F2EDE4;border-radius:999px;padding:3px">
@@ -149,7 +159,7 @@
             <div class="k-hero" style="background:#241F2E;border-radius:30px;padding:clamp(22px,3.4vw,44px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(18px,3vw,48px);align-items:center;overflow:hidden;position:relative">
               <div style="display:flex;flex-direction:column;gap:14px;min-width:0;position:relative;z-index:1">
                 <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">{{ t.heroKicker }}</div>
-                <h1 style="margin:0;font-family:{{ displayFont }};font-weight:600;font-size:clamp(28px,3.6vw,42px);letter-spacing:-.02em;line-height:1.1;color:#FBF7F0;text-wrap:balance">{{ t.heroTitle }}</h1>
+                <h1 style="margin:0;font-family:{{ displayFont }};font-weight:600;font-size:clamp(28px,3.6vw,42px);letter-spacing:-.01em;line-height:1.1;color:#FBF7F0;text-wrap:balance">{{ t.heroTitle }}</h1>
                 <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.65;color:#CFC8DA;text-wrap:pretty">{{ t.heroSub }}</p>
                 <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
                   <button type="button" onClick="{{ goNew }}" class="k-press" style="background:#F0B23C;color:#241F2E;border:0;border-radius:999px;padding:15px 26px;font-size:16px;font-weight:700;cursor:pointer;min-height:54px;box-shadow:0 6px 20px rgba(240,178,60,.3);white-space:nowrap;flex-shrink:0">{{ t.startSession }} →</button>
@@ -158,28 +168,27 @@
                   </sc-if>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:#A9A1B6">
+                  <span style="width:13px;height:13px;box-sizing:border-box;border-radius:50%;background:rgba(255,255,255,.42);border:2px solid rgba(255,255,255,.9)"></span>
                   <span>{{ t.heroLegendLow }}</span>
-                  <span style="display:flex;gap:4px">
-                    <span style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.22)"></span>
-                    <span style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.55)"></span>
-                    <span style="width:10px;height:10px;border-radius:50%;background:#fff"></span>
-                  </span>
+                  <span style="width:13px;height:13px;box-sizing:border-box;border-radius:50%;background:#FFFFFF;border:3px solid #6B3FA0;margin-left:8px"></span>
                   <span>{{ t.heroLegendHigh }}</span>
                 </div>
               </div>
 
               <div class="k-hero-board" style="position:relative;width:100%;max-width:min(440px,62vh);aspect-ratio:1;justify-self:center">
                 <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block">
-                  <circle cx="60" cy="60" r="59" fill="#2E2839"></circle>
+                  <circle cx="60" cy="60" r="57.6" fill="#FBF7F0"></circle>
                   <sc-for list="{{ heroRings }}" as="g" hint-placeholder-count="6">
                     <circle cx="60" cy="60" r="{{ g.r }}" fill="none" stroke="{{ g.color }}" stroke-width="6"></circle>
                   </sc-for>
-                  <circle cx="60" cy="60" r="15" fill="#FBF7F0"></circle>
+                  <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+                  <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+                  <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ heroDash }}" transform="rotate(-90 60 60)"></circle>
                 </svg>
                 <div style="position:absolute;inset:0;pointer-events:none">{{ heroRingLabels }}</div>
-                <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">
-                  <div style="font-family:{{ displayFont }};font-size:clamp(22px,3vw,32px);font-weight:700;line-height:1;color:#241F2E;font-variant-numeric:tabular-nums">{{ heroCount }}</div>
-                  <div style="font-size:10.5px;color:#6F6880;margin-top:2px">{{ t.heroSessions }}</div>
+                <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:22%">
+                  <div style="font-family:{{ displayFont }};font-weight:600;font-size:clamp(18px,2.6vw,30px);line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ heroCount }}</div>
+                  <div style="font-size:clamp(8px,.9vw,10.5px);color:#8C8499;margin-top:2px">{{ t.heroSessions }}</div>
                 </div>
                 <sc-for list="{{ heroDots }}" as="d" hint-placeholder-count="40">
                   <span title="{{ d.title }}" style="{{ d.style }}"></span>
@@ -398,7 +407,7 @@
                         <sc-for list="{{ g.fields }}" as="f" hint-placeholder-count="3">
                           <div>
                             <div style="font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#A79FB4;margin-bottom:4px">{{ f.label }}</div>
-                            <textarea class="k-field" rows="{{ f.rows }}" placeholder="{{ f.hint }}" value="{{ f.value }}" onChange="{{ f.onChange }}" style="font-size:14px;padding:9px 11px;font-family:{{ recordFont }}"></textarea>
+                            <textarea readOnly="{{ orgTrRO }}" class="k-field" rows="{{ f.rows }}" placeholder="{{ f.hint }}" value="{{ f.value }}" onChange="{{ f.onChange }}" style="font-size:14px;padding:9px 11px;font-family:{{ recordFont }}"></textarea>
                             <sc-if value="{{ f.showQuote }}" hint-placeholder-val="{{ false }}">
                               <div style="font-size:11.5px;line-height:1.45;color:#A79FB4;font-style:italic;margin-top:5px;padding-left:9px;border-left:2px solid #EBE3D6">{{ f.quote }}</div>
                             </sc-if>
@@ -414,8 +423,34 @@
             <sc-if value="{{ tabAnalysis }}" hint-placeholder-val="{{ false }}">
               <div>
                 <sc-if value="{{ busy }}" hint-placeholder-val="{{ false }}">
-                  <div style="padding:70px 0;text-align:center">
-                    <div style="font-family:{{ displayFont }};font-weight:600;font-size:21px;animation:k-pulse 1.5s ease-in-out infinite">{{ t.analysing }}</div>
+                  <div role="status" aria-live="polite" style="padding:44px 0 56px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center">
+                    <div style="position:relative;width:min(240px,62vw);aspect-ratio:1">
+                      <svg viewBox="0 0 120 120" style="width:100%;height:100%;display:block" aria-hidden="true">
+                        <circle cx="60" cy="60" r="57.6" fill="#FFFFFF"></circle>
+                        <circle cx="60" cy="60" r="21" fill="none" stroke="#F2EDE4" stroke-width="6"></circle>
+                        <circle cx="60" cy="60" r="27.6" fill="none" stroke="#F2EDE4" stroke-width="6"></circle>
+                        <circle cx="60" cy="60" r="34.2" fill="none" stroke="#F2EDE4" stroke-width="6"></circle>
+                        <circle cx="60" cy="60" r="40.8" fill="none" stroke="#F2EDE4" stroke-width="6"></circle>
+                        <circle cx="60" cy="60" r="47.4" fill="none" stroke="#F2EDE4" stroke-width="6"></circle>
+                        <circle cx="60" cy="60" r="54" fill="none" stroke="#F2EDE4" stroke-width="6"></circle>
+                        <circle class="k-an-ring" pathLength="100" cx="60" cy="60" r="21" fill="none" stroke="#B98BE0" stroke-width="6" transform="rotate(-90 60 60)" style="animation-delay:0s"></circle>
+                        <circle class="k-an-ring" pathLength="100" cx="60" cy="60" r="27.6" fill="none" stroke="#6FC9B8" stroke-width="6" transform="rotate(-90 60 60)" style="animation-delay:.16s"></circle>
+                        <circle class="k-an-ring" pathLength="100" cx="60" cy="60" r="34.2" fill="none" stroke="#A81C24" stroke-width="6" transform="rotate(-90 60 60)" style="animation-delay:.32s"></circle>
+                        <circle class="k-an-ring" pathLength="100" cx="60" cy="60" r="40.8" fill="none" stroke="#C06A5F" stroke-width="6" transform="rotate(-90 60 60)" style="animation-delay:.48s"></circle>
+                        <circle class="k-an-ring" pathLength="100" cx="60" cy="60" r="47.4" fill="none" stroke="#6D9DC5" stroke-width="6" transform="rotate(-90 60 60)" style="animation-delay:.64s"></circle>
+                        <circle class="k-an-ring" pathLength="100" cx="60" cy="60" r="54" fill="none" stroke="#F0B23C" stroke-width="6" transform="rotate(-90 60 60)" style="animation-delay:.8s"></circle>
+                        <g class="k-an-hub"><circle cx="60" cy="60" r="15" fill="#6B3FA0"></circle><circle cx="60" cy="60" r="9" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-dasharray="2 2.4"></circle><circle cx="60" cy="60" r="3.2" fill="#F0B23C"></circle></g>
+                      </svg>
+                      <div class="k-an-orbit" style="position:absolute;inset:0" aria-hidden="true"><span style="position:absolute;left:50%;top:3.4%;width:13px;height:13px;margin-left:-6.5px;box-sizing:border-box;border-radius:50%;background:#FFFFFF;border:3px solid #6B3FA0;box-shadow:0 2px 6px rgba(36,31,46,.25)"></span></div>
+                      <div class="k-an-orbit2" style="position:absolute;inset:0" aria-hidden="true"><span style="position:absolute;left:50%;top:19.2%;width:10px;height:10px;margin-left:-5px;box-sizing:border-box;border-radius:50%;background:#FFFFFF;border:2.5px solid #A81C24"></span></div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+                      <div style="font-family:{{ displayFont }};font-weight:600;font-size:21px">{{ t.analysing }}</div>
+                      <div style="font-size:14.5px;color:#4A4356;min-height:22px;max-width:40ch">{{ anStepText }}</div>
+                    </div>
+                    <div style="display:flex;gap:6px" aria-hidden="true">
+                      <sc-for list="{{ anSteps }}" as="x" hint-placeholder-count="6"><span style="{{ x.style }}"></span></sc-for>
+                    </div>
                   </div>
                 </sc-if>
                 <sc-if value="{{ errorMsg }}" hint-placeholder-val="{{ false }}">
@@ -660,7 +695,7 @@
                 </sc-if>
 
                 <sc-if value="{{ intakePaste }}" hint-placeholder-val="{{ false }}">
-                  <textarea class="k-field" rows="14" placeholder="{{ pasteHint }}" value="{{ transcript }}" onChange="{{ setTranscript }}" style="min-height:300px;resize:vertical;font-size:14px;font-family:{{ recordFont }}"></textarea>
+                  <textarea readOnly="{{ orgTrRO }}" class="k-field" rows="14" placeholder="{{ pasteHint }}" value="{{ transcript }}" onChange="{{ setTranscript }}" style="min-height:300px;resize:vertical;font-size:14px;font-family:{{ recordFont }}"></textarea>
                 </sc-if>
 
                 <sc-if value="{{ intakeManual }}" hint-placeholder-val="{{ false }}">
@@ -723,12 +758,16 @@
               <div style="{{ pop.headStyle }}">
                 <div style="{{ pop.ringDecor }}"></div>
                 <div style="{{ pop.ringDecor2 }}"></div>
+                <sc-if value="{{ pop.hasArt }}" hint-placeholder-val="{{ false }}"><img src="{{ pop.art }}" loading="lazy" alt="" class="k-cover" style="position:absolute;right:62px;top:-14px;width:72px;aspect-ratio:.615;object-fit:cover;border-radius:7px;box-shadow:0 10px 24px rgba(36,31,46,.28);pointer-events:none"></sc-if>
                 <div style="position:relative;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
                   <span style="{{ pop.pillStyle }}">{{ pop.deck }}</span>
                   <span style="font-size:12px;font-weight:600;color:{{ pop.ink }};opacity:.75;font-variant-numeric:tabular-nums">{{ pop.code }}</span>
+                  <sc-if value="{{ langBar.show }}" hint-placeholder-val="{{ false }}">
+                    <button type="button" onClick="{{ langBar.toggle }}" title="{{ langBar.text }}" class="k-press" style="display:inline-flex;align-items:center;gap:6px;border:1.5px solid rgba(255,255,255,.9);background:rgba(255,255,255,.7);color:#241F2E;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:36px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 5h9M8.5 3v2M6 5c0 4 3 7 6 8M11 5c0 4-3 8-7 9"></path><path d="M13 21l4-9 4 9M14.5 18h5"></path></svg>{{ langBar.btnShort }}</button>
+                  </sc-if>
                   <button type="button" onClick="{{ closePop }}" aria-label="{{ t.closeCard }}" class="k-press" style="margin-left:auto;background:rgba(255,255,255,.8);border:0;border-radius:999px;width:40px;height:40px;font-size:18px;cursor:pointer;color:#241F2E">×</button>
                 </div>
-                <h3 style="position:relative;margin:12px 0 4px;font-family:{{ recordDisplay }};font-weight:600;font-size:23px;line-height:1.2;color:#241F2E;text-wrap:balance">{{ pop.title }}</h3>
+                <h3 style="position:relative;margin:12px 0 4px;padding-right:76px;font-family:{{ recordDisplay }};font-weight:600;font-size:23px;line-height:1.2;color:#241F2E;text-wrap:balance">{{ pop.title }}</h3>
                 <sc-if value="{{ pop.hasRing }}" hint-placeholder-val="{{ true }}">
                   <div style="position:relative;font-size:13px;font-weight:600;color:{{ pop.ink }}">{{ pop.ringLabel }}</div>
                 </sc-if>
@@ -747,7 +786,7 @@
                       <span style="{{ f.qStyle }}">Q{{ f.n }}</span>
                       <span style="font-weight:600;font-size:15px;line-height:1.4;font-family:{{ recordFont }}">{{ f.label }}</span>
                     </div>
-                    <textarea class="k-field" rows="3" placeholder="{{ t.noAnswer }}" value="{{ f.value }}" onChange="{{ f.onChange }}" onFocus="{{ f.pick }}" style="resize:vertical;min-height:76px;font-family:{{ recordFont }};background:#fff"></textarea>
+                    <textarea readOnly="{{ orgTrRO }}" class="k-field" rows="3" placeholder="{{ t.noAnswer }}" value="{{ f.value }}" onChange="{{ f.onChange }}" onFocus="{{ f.pick }}" style="resize:vertical;min-height:76px;font-family:{{ recordFont }};background:#fff"></textarea>
                       <sc-if value="{{ f.hasQuote }}" hint-placeholder-val="{{ false }}">
                         <div style="margin-top:8px;font-size:12px;line-height:1.5;color:#8C8499;font-style:italic">{{ t.sourceLine }} · {{ f.quote }}</div>
                       </sc-if>
@@ -1172,7 +1211,7 @@
                 <sc-if value="{{ m.isHint }}" hint-placeholder-val="{{ false }}">
                   <div class="k-card-up" style="align-self:stretch;background:#FFF6E3;border:1.5px solid #F4D08A;border-radius:20px;padding:14px 15px;display:flex;flex-direction:column;gap:10px;font-family:{{ recordFont }}">
                     <div style="display:flex;align-items:center;gap:8px">
-                      <span style="width:26px;height:26px;border-radius:9px;background:#F0B23C;color:#241F2E;display:grid;place-items:center;font-weight:800;font-size:14px">✧</span>
+                      <span style="width:26px;height:26px;border-radius:9px;background:#F0B23C;color:#241F2E;display:grid;place-items:center;font-weight:700;font-size:14px">✧</span>
                       <span style="font-weight:700;font-size:14px;color:#6B4A05">{{ t.hintTitle }}</span>
                     </div>
                     <div>
@@ -1230,7 +1269,7 @@
 
             <div style="flex-shrink:0;background:#fff;border-top:1px solid #EBE3D6;padding:10px 12px calc(10px + env(safe-area-inset-bottom))">
               <div style="{{ composerStyle }}">
-                <textarea class="k-field" rows="1" placeholder="{{ composerPh }}" value="{{ draft }}" onChange="{{ setDraft }}" onKeyDown="{{ draftKey }}" style="resize:none;max-height:120px;border:0;background:transparent;box-shadow:none;padding:8px 6px 4px;font-family:{{ recordFont }};font-size:16px;width:100%"></textarea>
+                <textarea readOnly="{{ orgTrRO }}" class="k-field" rows="1" placeholder="{{ composerPh }}" value="{{ draft }}" onChange="{{ setDraft }}" onKeyDown="{{ draftKey }}" style="resize:none;max-height:120px;border:0;background:transparent;box-shadow:none;padding:8px 6px 4px;font-family:{{ recordFont }};font-size:16px;width:100%"></textarea>
                 <div style="display:flex;align-items:center;gap:6px">
                   <sc-if value="{{ inAssist }}" hint-placeholder-val="{{ true }}">
                     <button type="button" onClick="{{ openSheet }}" class="k-press" style="display:flex;align-items:center;gap:6px;border:1.5px solid #EBE3D6;background:#fff;color:#241F2E;border-radius:999px;height:38px;padding:0 12px;font-size:13px;font-weight:600;cursor:pointer;font-family:{{ recordFont }}"><span style="font-size:15px">◎</span><span>{{ t.practiseBtn }}</span></button>
@@ -1278,12 +1317,16 @@
               <div style="{{ pop.headStyle }}">
                 <div style="{{ pop.ringDecor }}"></div>
                 <div style="{{ pop.ringDecor2 }}"></div>
+                <sc-if value="{{ pop.hasArt }}" hint-placeholder-val="{{ false }}"><img src="{{ pop.art }}" loading="lazy" alt="" class="k-cover" style="position:absolute;right:62px;top:-14px;width:72px;aspect-ratio:.615;object-fit:cover;border-radius:7px;box-shadow:0 10px 24px rgba(36,31,46,.28);pointer-events:none"></sc-if>
                 <div style="position:relative;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
                   <span style="{{ pop.pillStyle }}">{{ pop.deck }}</span>
                   <span style="font-size:12px;font-weight:600;color:{{ pop.ink }};opacity:.75;font-variant-numeric:tabular-nums">{{ pop.code }}</span>
+                  <sc-if value="{{ langBar.show }}" hint-placeholder-val="{{ false }}">
+                    <button type="button" onClick="{{ langBar.toggle }}" title="{{ langBar.text }}" class="k-press" style="display:inline-flex;align-items:center;gap:6px;border:1.5px solid rgba(255,255,255,.9);background:rgba(255,255,255,.7);color:#241F2E;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:36px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 5h9M8.5 3v2M6 5c0 4 3 7 6 8M11 5c0 4-3 8-7 9"></path><path d="M13 21l4-9 4 9M14.5 18h5"></path></svg>{{ langBar.btnShort }}</button>
+                  </sc-if>
                   <button type="button" onClick="{{ closePop }}" aria-label="{{ t.closeCard }}" class="k-press" style="margin-left:auto;background:rgba(255,255,255,.8);border:0;border-radius:999px;width:40px;height:40px;font-size:18px;cursor:pointer;color:#241F2E">×</button>
                 </div>
-                <h3 style="position:relative;margin:12px 0 4px;font-family:{{ recordDisplay }};font-weight:600;font-size:23px;line-height:1.2;color:#241F2E;text-wrap:balance">{{ pop.title }}</h3>
+                <h3 style="position:relative;margin:12px 0 4px;padding-right:76px;font-family:{{ recordDisplay }};font-weight:600;font-size:23px;line-height:1.2;color:#241F2E;text-wrap:balance">{{ pop.title }}</h3>
                 <sc-if value="{{ pop.hasRing }}" hint-placeholder-val="{{ true }}">
                   <div style="position:relative;font-size:13px;font-weight:600;color:{{ pop.ink }}">{{ pop.ringLabel }}</div>
                 </sc-if>
@@ -1606,6 +1649,12 @@ class Component extends DCLogic {
       const activeId = profiles.some(p => p.id === local.activeId) ? local.activeId : (profiles[0] ? profiles[0].id : null);
       this.setState({ ready: true, profiles, activeId, uiLang: local.uiLang || 'en', history: local.history || {} });
       if (profiles.some(p => !p.token)) setTimeout(() => this.persist({ profiles }), 0);
+      // The website's "Preview the artisan app" opens /console#app: the facilitator's preview of the
+      // app for the profile in hand. (/console#k=<code> never reaches here — runtime.js sends it to /k/<code>.)
+      if (typeof window !== 'undefined' && /^#app\b/.test(window.location.hash || '') && activeId) {
+        this.setState({ side: 'artisan', appView: 'install' });
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
     }
   }
 
@@ -1728,10 +1777,17 @@ class Component extends DCLogic {
   }
 
   t(code) {
-    const tab = this.I18N && this.I18N.TABLES[code || this.state.uiLang];
-    return tab ? Object.assign({}, EN, tab) : EN;
+    const c = code || this.state.uiLang, tab = this.I18N && this.I18N.TABLES[c];
+    const out = tab ? Object.assign({}, EN, tab) : Object.assign({}, EN);
+    if (c === 'en') Object.assign(out, { heroSub: 'Six rings, from the craft itself out to its future. Each dot is a card. A solid dot means at least one of your artisans has answered it.', heroLegendLow: 'Not yet answered', heroLegendHigh: 'Answered' });
+    return out;
   }
-  langOf(code) { const L = this.I18N ? this.I18N.LANGS : []; return L.find(l => l.code === code) || L[0] || { font: 'sans-serif', display: 'sans-serif', name: 'English' }; }
+  langOf(code) {
+    const L = this.I18N ? this.I18N.LANGS : [];
+    const l = L.find(x => x.code === code) || L[0] || { font: 'sans-serif', display: 'sans-serif', name: 'English' };
+    const sw = f => String(f || '').split('Hanken Grotesk').join('Figtree').split('Bricolage Grotesque').join('Newsreader');
+    return { ...l, font: sw(l.font), display: sw(l.display) };
+  }
   active() { return this.state.profiles.find(p => p.id === this.state.activeId) || null; }
 
   componentWillUnmount() {
@@ -1892,6 +1948,19 @@ Reply with a single JSON object and nothing else.`;
       const gaps = tr && Object.keys(cur.record || {}).some(k => (cur.record[k] || '').trim() && !(tr.record || {})[k]);
       if (cur.lang !== orig && (!tr || tr.partial || gaps)) this.ensureTranslation(cur.lang);
     }
+    if (this.state.side === 'org' && cur && this.state.orgView === 'board' && this.state.orgRead !== 'orig' && !this.state.translating && !this.state.translateError) {
+      const orig = cur.recordLang || cur.lang, ul = this.state.uiLang;
+      const tr = cur.translations && cur.translations[ul];
+      const gaps = tr && Object.keys(cur.record || {}).some(k => (cur.record[k] || '').trim() && !(tr.record || {})[k]);
+      const key = cur.id + ':' + ul + ':' + Object.keys(cur.record || {}).length;
+      if (ul !== orig && (!tr || tr.partial || gaps) && this._orgTr !== key) { this._orgTr = key; this.ensureTranslation(ul); }
+    }
+    if (this.state.side === 'org' && cur && this.state.orgView === 'board' && this.state.boardTab === 'analysis' && !cur.analysis && !this.state.busy && !this.state.errorMsg) {
+      this._anTried = this._anTried || {};
+      if (!this._anTried[cur.id] && this.recordText().trim()) { this._anTried[cur.id] = 1; this.analyse(); }
+    }
+    if (this.state.busy && !this._anTick) this._anTick = setInterval(() => this.setState(s => ({ anStep: ((s.anStep || 0) + 1) % 6 })), 1700);
+    if (!this.state.busy && this._anTick) { clearInterval(this._anTick); this._anTick = null; if (this.state.anStep) this.setState({ anStep: 0 }); }
     // Selects whose options stream in after the value is bound need the value re-applied.
     if (typeof document !== 'undefined') {
       const el = document.querySelector('select[data-role="uilang"]');
@@ -2327,10 +2396,13 @@ ${this.groundRules()}`;
     const srcs = (a && a.sources) || {};
     const uiL = this.langOf(s.side === 'artisan' ? appLangCode : s.uiLang);
     const origLang = (a && (a.recordLang || a.lang)) || 'en';
-    const trView = s.side === 'artisan' && a && a.lang !== origLang ? ((a.translations || {})[a.lang] || null) : null;
+    const orgTrOn = s.side === 'org' && !!a && s.uiLang !== origLang && s.orgRead !== 'orig';
+    const orgTr = orgTrOn ? ((a.translations || {})[s.uiLang] || null) : null;
+    const orgPending = orgTrOn && (!orgTr || !!orgTr.partial);
+    const trView = s.side === 'artisan' && a && a.lang !== origLang ? ((a.translations || {})[a.lang] || null) : orgTr;
     const pendingTr = s.side === 'artisan' && a && a.lang !== origLang && (!trView || !!trView.partial);
     // Fonts follow what is on screen: the app language in the app, the source language on the console.
-    const recL = this.langOf(s.side === 'artisan' ? ((a && a.lang) || 'en') : origLang);
+    const recL = this.langOf(s.side === 'artisan' ? ((a && a.lang) || 'en') : (orgTrOn ? s.uiLang : origLang));
     const rec = trView ? { ...rec0, ...trView.record } : rec0;
     const ownLabel = (key, fb) => (trView && trView.custom && trView.custom[key]) || fb;
     const cards = this.CARDS || [];
@@ -2410,7 +2482,7 @@ ${this.groundRules()}`;
     // Overview hero: same geometry, each dot shows how many artisans answered that card.
     const heroRings = rings.map(r => ({ r: r.r, color: r.color }));
     const allProfiles = s.profiles || [];
-    const heroDots = [];
+    const heroDots = [], heroCov = [];
     rings.forEach(r => {
       const mine = cards.filter(c => c.ringId === r.id);
       const rp = (r.r / 120) * 100;
@@ -2418,10 +2490,11 @@ ${this.groundRules()}`;
         const rad = (-50 + (i + 0.5) * (280 / mine.length)) * Math.PI / 180;
         const n = allProfiles.filter(p => ((p.record || {})[c.key] || '').trim()).length;
         const cov = allProfiles.length ? n / allProfiles.length : 0;
-        const size = 9 + cov * 6;
+        heroCov.push(cov);
+        const bg = n ? '#FFFFFF' : 'rgba(255,255,255,.42)', bd = n ? `3px solid ${r.ink}` : '2px solid rgba(255,255,255,.9)';
         heroDots.push({
           title: `${fLabel(c.key, c.label)} — ${n}/${allProfiles.length}`,
-          style: `position:absolute;left:${50 + rp * Math.cos(rad)}%;top:${50 + rp * Math.sin(rad)}%;transform:translate(-50%,-50%);width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,255,255,${(0.2 + cov * 0.8).toFixed(2)});box-shadow:${cov > 0.7 ? '0 0 0 3px rgba(255,255,255,.14)' : 'none'}`
+          style: `position:absolute;left:${50 + rp * Math.cos(rad)}%;top:${50 + rp * Math.sin(rad)}%;transform:translate(-50%,-50%);width:15px;height:15px;box-sizing:border-box;border-radius:50%;background:${bg};border:${bd};box-shadow:0 1px 3px rgba(0,0,0,.18)`
         });
       });
     });
@@ -2440,7 +2513,7 @@ ${this.groundRules()}`;
         count: `${mine.filter(c => (rec[c.key] || '').trim()).length}/${mine.length}`,
         onChange: e => setLink(code, e.target.value),
         open: () => this.setState({ selectedKey: h.key }),
-        tokenStyle: `width:40px;height:40px;flex-shrink:0;border-radius:12px;border:0;cursor:pointer;font-size:12px;font-weight:800;background:${placed ? h.color : h.color + '1F'};color:${placed ? '#fff' : h.ink}`
+        tokenStyle: `width:40px;height:40px;flex-shrink:0;border-radius:12px;border:0;cursor:pointer;font-size:12px;font-weight:700;background:${placed ? h.color : h.color + '1F'};color:${placed ? '#fff' : h.ink}`
       };
     }).filter(Boolean);
 
@@ -2464,7 +2537,7 @@ ${this.groundRules()}`;
       if (first) this.setState({ selectedKey: first.key });
     };
     const fmt2 = (str, n, m) => String(str || '').replace('{n}', n).replace('{m}', m);
-    let pop = { headStyle: '', ringDecor: '', ringDecor2: '', pillStyle: '', deck: '', code: '', title: '', ringLabel: '', hasRing: false, ink: '#241F2E', marks: [], answered: '', ask: '', fields: [], isHub: false, linkValue: '', setLink: () => {} };
+    let pop = { art: '', hasArt: false, headStyle: '', ringDecor: '', ringDecor2: '', pillStyle: '', deck: '', code: '', title: '', ringLabel: '', hasRing: false, ink: '#241F2E', marks: [], answered: '', ask: '', fields: [], isHub: false, linkValue: '', setLink: () => {} };
     if (selCard) {
       const popCards = allCards.filter(c => c.groupId === selCard.groupId);
       const col = selCard.color, ink = selCard.ink;
@@ -2476,6 +2549,7 @@ ${this.groundRules()}`;
         ringDecor2: `position:absolute;right:-6px;top:-6px;width:70px;height:70px;border-radius:50%;border:10px solid ${col};opacity:.16`,
         pillStyle: `background:#fff;color:${ink};border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700;letter-spacing:.02em`,
         deck: deckName[deckOf(selCard)],
+        art: ['craft', 'place', 'lineage', 'material', 'culture', 'pride'].includes(placed) ? '/cards/' + placed + '.png' : '', hasArt: ['craft', 'place', 'lineage', 'material', 'culture', 'pride'].includes(placed),
         // Schema codes are facilitator vocabulary; the artisan never sees them.
         code: selCard.own || s.side === 'artisan' ? '' : selCard.code,
         title: selCard.own ? (placed ? ringName(placed) : t.deckOwn) : gTitle(selCard.code, selCard.groupTitle),
@@ -2499,7 +2573,7 @@ ${this.groundRules()}`;
               this.setState({ selectedKey: null });
             },
             boxStyle: `border-radius:18px;padding:14px;background:${on ? col + '14' : '#FBF7F0'};border:1.5px solid ${on ? col + '80' : 'transparent'};transition:background .2s,border-color .2s`,
-            qStyle: `flex-shrink:0;font-size:11px;font-weight:800;color:${has ? '#fff' : ink};background:${has ? col : col + '26'};border-radius:7px;padding:2px 7px;font-variant-numeric:tabular-nums`
+            qStyle: `flex-shrink:0;font-size:11px;font-weight:700;color:${has ? '#fff' : ink};background:${has ? col : col + '26'};border-radius:7px;padding:2px 7px;font-variant-numeric:tabular-nums`
           };
         }),
         isHub: !!selCard.hub, linkValue: links[selCard.code] || '',
@@ -2642,6 +2716,18 @@ ${this.groundRules()}`;
 
     return {
       t, bodyFont: uiL.font, displayFont: uiL.display, recordFont: recL.font, recordDisplay: recL.display,
+      orgTrRO: orgTrOn && s.orgView === 'board',
+      langBar: (() => {
+        const show = s.side === 'org' && !!a && s.uiLang !== origLang;
+        const ui = this.langOf(s.uiLang).name, og = this.langOf(origLang).name;
+        return { show,
+          text: !orgTrOn ? 'Showing the answers as recorded, in ' + og + '. You can edit them here.' : orgPending ? 'Translating the answers into ' + ui + '…' : 'Showing the answers translated into ' + ui + '. They were recorded in ' + og + ', so to edit them, switch to ' + og + '.',
+          btn: orgTrOn ? 'Read in ' + og + ', as recorded' : 'Read in ' + ui,
+          btnShort: orgTrOn ? 'As recorded · ' + og : 'Read in ' + ui,
+          toggle: () => this.setState({ orgRead: orgTrOn ? 'orig' : 'ui' }) };
+      })(),
+      anStepText: ['Reading the session', 'Listening for how they name their craft', 'Placing answers on Place and Legacy', 'Noticing materials and tools', 'Weighing meaning and pride', 'Writing the communication profile'][(s.anStep || 0) % 6] + '…',
+      anSteps: ['#B98BE0', '#6FC9B8', '#A81C24', '#C06A5F', '#6D9DC5', '#F0B23C'].map((c, i) => ({ style: 'width:' + (i === (s.anStep || 0) % 6 ? 22 : 8) + 'px;height:8px;border-radius:999px;background:' + (i <= (s.anStep || 0) % 6 ? c : '#E6DED1') + ';transition:width .3s, background .3s' })),
       langOptions: I ? I.LANGS : [],
       uiLang: s.uiLang,
       setUiLang: e => { const v = e.target.value; this.setState({ uiLang: v }); this.persist({ uiLang: v }); },
@@ -2688,7 +2774,7 @@ ${this.groundRules()}`;
       activeName: a ? nameOf(a) : '', activeSub: a ? ([idOf(a).craft, idOf(a).region].filter(Boolean).join(' · ') || a.cluster || '') : '',
       filledCount: filled, totalCount: allCards.length,
       boardTabs, tabBoard: s.boardTab === 'board', tabList: s.boardTab === 'list', tabAnalysis: s.boardTab === 'analysis', tabHandover: s.boardTab === 'handover',
-      ringArcs, ringLegend, boardDots, heroRings, heroDots, ringText,
+      ringArcs, ringLegend, boardDots, heroRings, heroDots, heroDash: (() => { const c = 2 * Math.PI * 15, f = heroCov.length ? heroCov.reduce((x, y) => x + y, 0) / heroCov.length : 0; return (f * c).toFixed(2) + ' ' + c.toFixed(2); })(), ringText,
       ringLabels: labelSvg('rl-' + (s.side === 'artisan' ? s.appView : 'org'), s.side === 'artisan' ? recL.font : uiL.font),
       heroRingLabels: labelSvg('rl-hero', uiL.font),
       uiFont: uiL.font, brandName: 'Karigar',
