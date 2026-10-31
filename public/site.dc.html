@@ -48,6 +48,7 @@
   .w-page { animation: w-rise .4s cubic-bezier(.22,1,.36,1) both; }
   .w-orbit { animation: w-spin 140s linear infinite; }
   @media (max-width: 860px) {
+    .w-split > div[style*="sticky"] { position: static !important; }
     .w-hero { grid-template-columns: minmax(0,1fr) !important; }
     .w-hero-board { order: -1; max-width: min(440px, 80vw) !important; }
     .w-nav { display: none !important; }
@@ -193,7 +194,7 @@
           <button onClick="{{ kitDraw }}" style="display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;background:#F0B23C;color:#241F2E;border:0;font-weight:600;font-size:16px;min-height:52px;cursor:pointer;font-family:inherit">Draw a card</button>
           <a href="#/kit" style="display:inline-flex;align-items:center;padding:13px 22px;border-radius:999px;border:1.5px solid rgba(251,247,240,.28);color:#FBF7F0;text-decoration:none;font-weight:600;font-size:15px;min-height:52px;box-sizing:border-box">Explore the kit →</a>
         </div>
-      </div><div style="position:relative;height:clamp(280px,30vw,400px);min-width:0">
+      </div><div style="position:relative;height:calc(clamp(104px,12vw,168px) * 1.92 + 44px);min-width:0;align-self:center">
         <sc-for list="{{ kitFan }}" as="f" hint-placeholder-count="0">
           <button type="button" class="w-fan" onClick="{{ f.open }}" aria-label="Open the {{ f.name }} deck" style="{{ f.style }}"><img src="{{ f.cover }}" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>
         </sc-for>
@@ -280,7 +281,7 @@
 
   <section style="max-width:1440px;margin:0 auto;padding:96px clamp(16px,2.4vw,32px) 0">
     <div style="background:#F2EDE4;border-radius:32px;padding:clamp(28px,5vw,64px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
-      <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="position:sticky;top:96px;align-self:start;display:flex;flex-direction:column;gap:16px">
         <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Principles</div>
         <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">Eleven rules, written as things you can check.</h2>
         <p style="margin:0;color:#4A4356">They are not values on a wall. Each one is a test the platform has to pass.</p>
@@ -849,7 +850,7 @@
     </div>
   </section>
   <section id="rights" style="max-width:1440px;margin:0 auto;padding:88px clamp(16px,2.4vw,32px) 0;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
-    <div style="display:flex;flex-direction:column;gap:14px">
+    <div style="position:sticky;top:96px;align-self:start;display:flex;flex-direction:column;gap:14px">
       <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.012em">Rights vocabulary</h2>
       <p style="margin:0;color:#4A4356">Every story carries one of these statements. It is a fixed list kept by the council — not free text — so it can be read by people and machines alike.</p>
     </div>
@@ -864,7 +865,7 @@
   </section>
   <section id="council" style="max-width:1440px;margin:0 auto;padding:88px clamp(16px,2.4vw,32px) 0">
     <div style="display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
-      <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="position:sticky;top:96px;align-self:start;display:flex;flex-direction:column;gap:14px">
         <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.012em">The council decides</h2>
         <p style="margin:0;color:#4A4356">A rotating council of artisans, local facilitators and translators, with legal, safety, accessibility and IP advisers. It sets data rules, the rights vocabulary, story standards, partner criteria and safeguarding — and its decisions change the platform’s settings directly.</p>
         <p style="margin:0;color:#8C8499;font-size:14px">The council is being constituted. The entries shown are the first proposals.</p>
@@ -1483,7 +1484,7 @@ class Component extends DCLogic {
     const K = this.K, T = K.THEMES, B = K.GBOARD.cards, n = T.length, first = rk => Math.max(0, B.findIndex(x => x[0] === rk));
     const fan = T.map((t, i) => { const a = (i - (n - 1) / 2) * 10;
       return { cover: t.cover, name: t.name, open: () => this.openCard(first(t.ring)),
-        style: 'position:absolute;left:50%;bottom:2%;width:clamp(104px,12vw,168px);aspect-ratio:.615;margin-left:calc(clamp(104px,12vw,168px) / -2);padding:0;border:0;background:none;cursor:pointer;border-radius:12px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.4);transform-origin:50% 150%;transform:rotate(' + a + 'deg);z-index:' + i }; });
+        style: 'position:absolute;left:50%;top:26px;width:clamp(104px,12vw,168px);aspect-ratio:.615;margin-left:calc(clamp(104px,12vw,168px) / -2);padding:0;border:0;background:none;cursor:pointer;border-radius:12px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.4);transform-origin:50% 150%;transform:rotate(' + a + 'deg);z-index:' + i }; });
     const decks = T.map(t => ({ name: t.name, cover: t.cover, bg: t.bg, ink: t.ink, intro: t.intro, groups: t.groups.map(g => g.name), open: () => this.openCard(first(t.ring)) }));
     return { kitFan: fan, kitDecks: decks, kitReflect: K.REFLECT.cards, kitStory: K.STORYCARDS.cards, kitPrint: K.PRINT,
       kitDraw: () => this.openCard(Math.floor(Math.random() * B.length)),
