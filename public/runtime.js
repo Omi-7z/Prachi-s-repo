@@ -215,7 +215,7 @@ function installModel(token) {
 const status = (() => {
   const el = document.createElement('div');
   el.setAttribute('role', 'status');
-  el.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:90;background:#241F2E;color:#fff;border-radius:999px;padding:7px 13px;font:600 12.5px/1.2 "Hanken Grotesk",system-ui,sans-serif;box-shadow:0 4px 14px rgba(36,31,46,.2);opacity:0;transition:opacity .2s;pointer-events:none';
+  el.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:90;background:#241F2E;color:#fff;border-radius:999px;padding:7px 13px;font:600 12.5px/1.2 "Figtree",system-ui,sans-serif;box-shadow:0 4px 14px rgba(36,31,46,.2);opacity:0;transition:opacity .2s;pointer-events:none';
   document.body.appendChild(el);
   let timer;
   return (text, sticky) => {
@@ -459,6 +459,10 @@ async function mainSite() {
 
 async function main() {
   if (MODE === 'site') return mainSite();
+  // The website's artisan code entry opens /console#k=<code>. The artisan app lives at /k/<token>
+  // (api/artisan-page.js) and needs no sign-in, so go there instead of the console's login.
+  const k = MODE === 'console' && /^#k=([A-Za-z0-9_-]{8,64})$/.exec(location.hash);
+  if (k) { location.replace('/k/' + k[1]); return; }
   const [boot, comp] = await Promise.all([MODE === 'console' ? bootConsole() : bootArtisan(), loadComponent('/karigar.dc')]);
   if (!boot) return;
   let instance;

@@ -10,13 +10,15 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Noto+Sans+Devanagari:wght@400;500;600&amp;family=Noto+Sans+Gujarati:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500;1,6..72,600&amp;family=Figtree:wght@400;500;600;700;800&amp;family=Noto+Sans+Devanagari:wght@400;500;600&amp;family=Noto+Sans+Gujarati:wght@400;500;600&amp;display=swap">
 <script src="./karigar-site-data.js"></script>
 <script src="./image-slot.js"></script>
 <style>
   html { scroll-behavior: smooth; }
   body { margin: 0; background: #FBF7F0; color: #241F2E; -webkit-font-smoothing: antialiased; }
   * { box-sizing: border-box; }
+  button, input, select, textarea { font-family: inherit; }
   a { color: #6B3FA0; }
   a:hover { color: #52307C; }
   input, textarea, select, button { font-family: inherit; color: inherit; font-size: inherit; }
@@ -35,6 +37,13 @@
   .w-lift { transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s; }
   .w-lift:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(36,31,46,.10); }
   @media (prefers-reduced-motion: reduce) { .w-ping, .w-modal, .w-scrim { animation: none; } }
+  @keyframes w-deal { 0% { opacity:0; transform: translateY(40px) scale(.8) rotate(-6deg) } 60% { opacity:1; transform: translateY(-6px) scale(1.02) rotate(1deg) } 100% { transform:none } }
+  .w-deal { animation: w-deal .6s cubic-bezier(.2,.8,.25,1) both; }
+  .w-fan { transition: translate .35s cubic-bezier(.22,1,.36,1), box-shadow .35s; }
+  .w-fan:hover, .w-fan:focus-visible { translate: 0 -22px; z-index: 20 !important; box-shadow: 0 26px 50px rgba(0,0,0,.5) !important; }
+  .w-tilt { transition: transform .35s cubic-bezier(.22,1,.36,1); }
+  .w-tilt:hover { transform: rotate(-4deg) translateY(-4px); }
+  @media (prefers-reduced-motion: reduce) { .w-deal { animation: none; } }
   @keyframes w-spin { to { transform: rotate(360deg) } }
   .w-page { animation: w-rise .4s cubic-bezier(.22,1,.36,1) both; }
   .w-orbit { animation: w-spin 140s linear infinite; }
@@ -50,7 +59,7 @@
   @media (prefers-reduced-motion: reduce) { .w-page, .w-orbit { animation: none !important; } html { scroll-behavior: auto; } }
 </style>
 </helmet>
-<div style="min-height:100vh;display:flex;flex-direction:column;background:#FBF7F0;color:#241F2E;font-family:'Hanken Grotesk', 'Noto Sans Gujarati', 'Noto Sans Devanagari', system-ui, sans-serif;font-size:16px;line-height:1.55">
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#FBF7F0;color:#241F2E;font-family:'Figtree', 'Noto Sans Gujarati', 'Noto Sans Devanagari', system-ui, sans-serif;font-size:16px;line-height:1.55">
 <sc-if value="{{ showSample }}" hint-placeholder-val="{{ true }}">
 <div style="background:#241F2E;color:#E2D9CB;font-size:13px;text-align:center;padding:7px 16px;line-height:1.4">Preview build. Every maker shown here is a composite sample record, not a real person.</div>
 </sc-if>
@@ -58,7 +67,7 @@
   <div style="max-width:1440px;margin:0 auto;padding:12px clamp(16px,2.4vw,32px);display:flex;align-items:center;gap:16px">
     <a href="#/" aria-label="Karigar home" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#241F2E;flex-shrink:0">
       <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" style="display:block"><circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle><circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle><circle cx="12" cy="12" r="4.6" fill="none" stroke="#A81C24" stroke-width="2.2"></circle><circle cx="12" cy="12" r="1.9" fill="#6B3FA0"></circle></svg>
-      <span style="font-family:'Bricolage Grotesque', system-ui, sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em">Karigar</span>
+      <span style="font-family:'Newsreader', system-ui, sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em">Karigar</span>
     </a>
     <nav class="w-nav" aria-label="Main" style="display:flex;gap:2px;margin-left:16px;flex:1">
       <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
@@ -85,10 +94,10 @@
     <div class="w-hero" style="background:#241F2E;border-radius:30px;padding:clamp(22px,3.4vw,48px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,3vw,56px);align-items:center;overflow:hidden;position:relative">
       <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
         <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">Karigar · The Ludo Mandala</div>
-        <h1 style="margin:0;font-family:'Bricolage Grotesque', system-ui, sans-serif;font-weight:600;font-size:clamp(38px,5.2vw,68px);line-height:1;letter-spacing:-.03em;color:#FBF7F0;text-wrap:balance">Every craft has a story. The maker should be the one telling it.</h1>
+        <h1 style="margin:0;font-family:'Newsreader', system-ui, sans-serif;font-weight:600;font-size:clamp(38px,5.2vw,68px);line-height:1;letter-spacing:-.015em;color:#FBF7F0;text-wrap:balance">Every craft has a story. The maker should be the one telling it.</h1>
         <p style="margin:0;max-width:50ch;font-size:clamp(16px,1.4vw,18px);line-height:1.6;color:#CFC8DA;text-wrap:pretty">Karigar gives artisans a simple board of questions about their craft, their place and the people who taught them. They answer in their own voice and language, then decide, story by story, who gets to hear it.</p>
         <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
-          <a href="#/makers" style="display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;background:#F0B23C;color:#241F2E;text-decoration:none;font-weight:700;font-size:16px;min-height:54px;box-sizing:border-box;box-shadow:0 6px 20px rgba(240,178,60,.3)">Meet the makers <span aria-hidden="true">→</span></a>
+          <a href="#/makers" style="display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;background:#F0B23C;color:#241F2E;text-decoration:none;font-weight:600;font-size:16px;min-height:54px;box-sizing:border-box;box-shadow:0 6px 20px rgba(240,178,60,.3)">Meet the makers <span aria-hidden="true">→</span></a>
           <a href="#/how" style="display:inline-flex;align-items:center;padding:14px 22px;border-radius:999px;border:1.5px solid rgba(251,247,240,.28);color:#FBF7F0;text-decoration:none;font-weight:600;font-size:15px;min-height:54px;box-sizing:border-box">How Karigar works</a>
         </div>
         <button onClick="{{ bOpenFirst }}" style="align-self:flex-start;margin-top:6px;display:inline-flex;align-items:center;gap:12px;background:rgba(251,247,240,.06);border:1px solid rgba(251,247,240,.14);border-radius:999px;padding:10px 16px 10px 12px;color:#E9E3F0;font-size:14px;cursor:pointer;font-family:inherit">
@@ -98,14 +107,16 @@
       </div>
       <div class="w-hero-board" style="position:relative;width:100%;max-width:min(500px,68vh);aspect-ratio:1;justify-self:center">
         <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block" aria-hidden="true">
-          <circle cx="60" cy="60" r="59" fill="#2E2839"></circle>
+          <circle cx="60" cy="60" r="57.6" fill="#FBF7F0"></circle>
             <circle cx="60" cy="60" r="21" fill="none" stroke="#B98BE0" stroke-width="6"></circle>
             <circle cx="60" cy="60" r="27.6" fill="none" stroke="#6FC9B8" stroke-width="6"></circle>
             <circle cx="60" cy="60" r="34.2" fill="none" stroke="#A81C24" stroke-width="6"></circle>
             <circle cx="60" cy="60" r="40.8" fill="none" stroke="#C06A5F" stroke-width="6"></circle>
             <circle cx="60" cy="60" r="47.4" fill="none" stroke="#6D9DC5" stroke-width="6"></circle>
             <circle cx="60" cy="60" r="54" fill="none" stroke="#F0B23C" stroke-width="6"></circle>
-          <circle cx="60" cy="60" r="15" fill="#FBF7F0"></circle>
+          <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+          <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+          <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ bDash }}" transform="rotate(-90 60 60)"></circle>
         </svg>
         <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none" aria-hidden="true">
           <defs>
@@ -116,15 +127,16 @@
               <path id="wh-culture" d="M 31.47 22.14 A 47.4 47.4 0 0 1 88.53 22.14" fill="none"></path>
               <path id="wh-pride" d="M 27.50 16.87 A 54 54 0 0 1 92.50 16.87" fill="none"></path>
           </defs>
-            <text font-size="3.3" font-weight="700" fill="#3A1F57" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-craft" startOffset="50%">MY CRAFT</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#12443C" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-place" startOffset="50%">PLACE</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-lineage" startOffset="50%">LINEAGE</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#3E1611" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-material" startOffset="50%">MATERIAL &amp; TOOLS</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#13304A" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-culture" startOffset="50%">CULTURAL MEANING</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#4D3302" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh-pride" startOffset="50%">PRIDE &amp; STAKE</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#3A1F57" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh-craft" startOffset="50%">My Craft</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#12443C" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh-place" startOffset="50%">Place</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh-lineage" startOffset="50%">Legacy</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#3E1611" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh-material" startOffset="50%">Material &amp; Tools</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#13304A" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh-culture" startOffset="50%">Cultural Meaning</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#4D3302" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh-pride" startOffset="50%">Pride &amp; Stake</textPath></text>
         </svg>
         <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:22%">
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-size:clamp(13px,1.5vw,18px);font-weight:700;line-height:1.05;color:#241F2E">Mandala<br>board</div>
+          <div style="font-family:'Newsreader', serif;font-weight:600;font-size:clamp(22px,3.6vw,34px);line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ bOpened }}</div>
+          <div style="font-size:clamp(9px,1.3vw,11px);color:#8C8499;margin-top:3px">of {{ bTotal }}</div>
         </div>
         <sc-for list="{{ bDots }}" as="d" hint-placeholder-count="0">
           <button type="button" class="w-dot" title="{{ d.label }}" onClick="{{ d.pick }}" aria-label="{{ d.label }}" aria-pressed="{{ d.on }}" style="{{ d.style }}"></button>
@@ -135,44 +147,63 @@
 
   <section style="max-width:1440px;margin:0 auto;padding:0 clamp(16px,2.4vw,32px)">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));border-top:1px solid #EBE3D6;border-bottom:1px solid #EBE3D6">
-      <div style="padding:26px 24px 26px 0;display:flex;flex-direction:column;gap:6px"><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px">Private until they say so</div><div style="color:#6F6880;font-size:15px">Every new story starts in the maker’s own archive. Publishing is a choice, never a default.</div></div>
-      <div style="padding:26px 24px;display:flex;flex-direction:column;gap:6px;border-left:1px solid #EBE3D6"><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px">Credited, every time</div><div style="color:#6F6880;font-size:15px">The maker’s name, as they chose it, travels with every story, image and share.</div></div>
-      <div style="padding:26px 0 26px 24px;display:flex;flex-direction:column;gap:6px;border-left:1px solid #EBE3D6"><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px">Reached through Karigar</div><div style="color:#6F6880;font-size:15px">No phone numbers, no addresses. Visitors send a request; the maker decides.</div></div>
+      <div style="padding:26px 24px 26px 0;display:flex;flex-direction:column;gap:6px"><div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:20px">Private until they say so</div><div style="color:#6F6880;font-size:15px">Every new story starts in the maker’s own archive. Publishing is a choice, never a default.</div></div>
+      <div style="padding:26px 24px;display:flex;flex-direction:column;gap:6px;border-left:1px solid #EBE3D6"><div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:20px">Credited, every time</div><div style="color:#6F6880;font-size:15px">The maker’s name, as they chose it, travels with every story, image and share.</div></div>
+      <div style="padding:26px 0 26px 24px;display:flex;flex-direction:column;gap:6px;border-left:1px solid #EBE3D6"><div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:20px">Reached through Karigar</div><div style="color:#6F6880;font-size:15px">No phone numbers, no addresses. Visitors send a request; the maker decides.</div></div>
     </div>
   </section>
 
   <section style="max-width:1440px;margin:0 auto;padding:96px clamp(16px,2.4vw,32px) 0">
     <div style="display:flex;flex-direction:column;gap:12px;max-width:760px">
       <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">How a story is made</div>
-      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;line-height:1.05;text-wrap:balance">From a conversation on the floor to a page the maker controls.</h2>
+      <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">From a conversation on the floor to a page the maker controls.</h2>
     </div>
     <div style="margin-top:36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
       <div class="w-lift" style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:12px;position:relative">
-        <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:#B98BE0;color:#3A1F57;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:17px">1</span><span style="flex:1;height:2px;background:linear-gradient(90deg, #B98BE0, rgba(0,0,0,0))"></span></div>
-        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px;letter-spacing:-.01em;line-height:1.15">A facilitator brings the board</div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:#B98BE0;color:#3A1F57;display:flex;align-items:center;justify-content:center;font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:17px">1</span><span style="flex:1;height:2px;background:linear-gradient(90deg, #B98BE0, rgba(0,0,0,0))"></span></div>
+        <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:22px;letter-spacing:-.01em;line-height:1.15">A facilitator brings the board</div>
         <p style="margin:0;color:#4A4356;font-size:15.5px;line-height:1.6;text-wrap:pretty">Someone from a local NGO or cooperative sits with the artisan at home or in the workshop. There are no forms, only the board and a phone.</p>
       </div>
       <div class="w-lift" style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:12px;position:relative">
-        <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:#6FC9B8;color:#12443C;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:17px">2</span><span style="flex:1;height:2px;background:linear-gradient(90deg, #6FC9B8, rgba(0,0,0,0))"></span></div>
-        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px;letter-spacing:-.01em;line-height:1.15">The artisan answers out loud</div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:#6FC9B8;color:#12443C;display:flex;align-items:center;justify-content:center;font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:17px">2</span><span style="flex:1;height:2px;background:linear-gradient(90deg, #6FC9B8, rgba(0,0,0,0))"></span></div>
+        <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:22px;letter-spacing:-.01em;line-height:1.15">The artisan answers out loud</div>
         <p style="margin:0;color:#4A4356;font-size:15.5px;line-height:1.6;text-wrap:pretty">Each dot is a question card. They answer by voice, in Gujarati, Marathi, Hindi or whatever they speak. Any card can be skipped and come back to later.</p>
       </div>
       <div class="w-lift" style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:12px;position:relative">
-        <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:#A81C24;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:17px">3</span><span style="flex:1;height:2px;background:linear-gradient(90deg, #A81C24, rgba(0,0,0,0))"></span></div>
-        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px;letter-spacing:-.01em;line-height:1.15">Karigar drafts, they correct</div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:#A81C24;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:17px">3</span><span style="flex:1;height:2px;background:linear-gradient(90deg, #A81C24, rgba(0,0,0,0))"></span></div>
+        <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:22px;letter-spacing:-.01em;line-height:1.15">Karigar drafts, they correct</div>
         <p style="margin:0;color:#4A4356;font-size:15.5px;line-height:1.6;text-wrap:pretty">Their answers become a draft story in their own words. Nothing gets polished into someone else’s voice, and every line can be changed.</p>
       </div>
       <div class="w-lift" style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:12px;position:relative">
-        <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:#F0B23C;color:#4D3302;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:17px">4</span><span style="flex:1;height:2px;background:linear-gradient(90deg, #F0B23C, rgba(0,0,0,0))"></span></div>
-        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px;letter-spacing:-.01em;line-height:1.15">They choose who sees it</div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:50%;background:#F0B23C;color:#4D3302;display:flex;align-items:center;justify-content:center;font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:17px">4</span><span style="flex:1;height:2px;background:linear-gradient(90deg, #F0B23C, rgba(0,0,0,0))"></span></div>
+        <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:22px;letter-spacing:-.01em;line-height:1.15">They choose who sees it</div>
         <p style="margin:0;color:#4A4356;font-size:15.5px;line-height:1.6;text-wrap:pretty">Only me, people I approve, anyone with the link, or everyone. It is set for each story and can be changed in one tap at any time.</p>
       </div>
     </div>
   </section>
 
   <section style="max-width:1440px;margin:0 auto;padding:96px clamp(16px,2.4vw,32px) 0">
+    
+  <div class="w-split" style="background:#241F2E;border-radius:32px;padding:clamp(24px,4vw,56px);display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:center;color:#FBF7F0;overflow:hidden">
+      <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+        <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">The Craft Voice Kit</div>
+        <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">Six decks of cards. Each one is a ring of the board.</h2>
+        <p style="margin:0;color:#CFC8DA;font-size:17px;line-height:1.6;max-width:46ch;text-wrap:pretty">The board comes with printed cards, in English and Hindi. The artisan draws a card, the facilitator reads it aloud, and the artisan answers in their own words. Draw one to see what they are asked.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+          <button onClick="{{ kitDraw }}" style="display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;background:#F0B23C;color:#241F2E;border:0;font-weight:600;font-size:16px;min-height:52px;cursor:pointer;font-family:inherit">Draw a card</button>
+          <a href="#/kit" style="display:inline-flex;align-items:center;padding:13px 22px;border-radius:999px;border:1.5px solid rgba(251,247,240,.28);color:#FBF7F0;text-decoration:none;font-weight:600;font-size:15px;min-height:52px;box-sizing:border-box">Explore the kit →</a>
+        </div>
+      </div><div style="position:relative;height:clamp(280px,30vw,400px);min-width:0">
+        <sc-for list="{{ kitFan }}" as="f" hint-placeholder-count="0">
+          <button type="button" class="w-fan" onClick="{{ f.open }}" aria-label="Open the {{ f.name }} deck" style="{{ f.style }}"><img src="{{ f.cover }}" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>
+        </sc-for>
+      </div>
+      
+    </div></section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:96px clamp(16px,2.4vw,32px) 0">
     <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
-      <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Makers</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;line-height:1.05;text-wrap:balance">Meet the people behind the work</h2><p style="margin:0;color:#4A4356;font-size:17px;text-wrap:pretty">Some makers share everything, some share nothing. The dark tiles are real people who use Karigar privately. We show only that they exist.</p></div>
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Makers</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">Meet the people behind the work</h2><p style="margin:0;color:#4A4356;font-size:17px;text-wrap:pretty">Some makers share everything, some share nothing. The dark tiles are real people who use Karigar privately. We show only that they exist.</p></div>
       <a href="#/makers" style="font-weight:600;text-decoration:none">Browse all makers →</a>
     </div>
     <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px">
@@ -182,7 +213,7 @@
             <sc-if value="{{ m.hasPhoto }}" hint-placeholder-val="{{ false }}"><img src="{{ m.photo }}" alt="{{ m.photoAlt }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></sc-if>
             <div style="position:absolute;left:0;right:0;bottom:0;padding:72px 18px 18px;background:linear-gradient(to top, rgba(20,16,28,.92), rgba(20,16,28,.55) 55%, rgba(20,16,28,0));display:flex;flex-direction:column;gap:5px">
               <span style="align-self:flex-start;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:#FFFFFF;color:{{ m.ink }}">{{ m.craft }}</span>
-              <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px;letter-spacing:-.01em">{{ m.name }}</span>
+              <span style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:22px;letter-spacing:-.01em">{{ m.name }}</span>
               <span style="font-size:14px;color:#ECE6F2">{{ m.place }}</span>
             </div>
           </a>
@@ -193,7 +224,7 @@
             <div style="display:flex;flex-direction:column;gap:10px">
               <div style="display:flex;gap:5px" aria-hidden="true"><span style="width:8px;height:8px;border-radius:50%;background:#B98BE0"></span><span style="width:8px;height:8px;border-radius:50%;background:#6FC9B8"></span><span style="width:8px;height:8px;border-radius:50%;background:#A81C24"></span><span style="width:8px;height:8px;border-radius:50%;background:#C06A5F"></span><span style="width:8px;height:8px;border-radius:50%;background:#6D9DC5"></span><span style="width:8px;height:8px;border-radius:50%;background:#F0B23C"></span></div>
               <div aria-label="Name hidden" style="width:68%;height:20px;border-radius:6px;background:rgba(251,247,240,.22);filter:blur(3px)"></div>
-              <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:19px">A {{ m.craft }} maker</span>
+              <span style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:19px">A {{ m.craft }} maker</span>
               <span style="font-size:14px;color:#C4BCD1">{{ m.region }}</span>
               <span style="font-size:14px;color:#A9A1B6;line-height:1.45">{{ m.note }}</span>
             </div>
@@ -206,7 +237,7 @@
 
   <section style="max-width:1440px;margin:0 auto;padding:96px clamp(16px,2.4vw,32px) 0">
     <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
-      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Newly published</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;line-height:1.05;text-wrap:balance">Stories, in the maker’s voice</h2></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Newly published</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">Stories, in the maker’s voice</h2></div>
       <a href="#/makers" style="font-weight:600;text-decoration:none">All stories →</a>
     </div>
     <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
@@ -214,7 +245,7 @@
         <a href="{{ x.href }}" class="w-lift w-tile" style="display:flex;flex-direction:column;gap:14px;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:24px;overflow:hidden">
           <sc-if value="{{ x.hasPhoto }}" hint-placeholder-val="{{ false }}"><div style="margin:-24px -24px 4px;height:190px;overflow:hidden;background:{{ x.tint }}"><img src="{{ x.photo }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div></sc-if>
           <div style="display:flex;justify-content:space-between;gap:10px;font-size:13px;align-items:center"><span style="display:inline-flex;align-items:center;gap:7px;font-weight:600;color:{{ x.ink }}"><span style="width:9px;height:9px;border-radius:50%;background:{{ x.ringColor }}"></span>{{ x.ring }}</span><span style="color:#8C8499">{{ x.date }}</span></div>
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.015em;text-wrap:balance">{{ x.title }}</div>
+          <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.015em;text-wrap:balance">{{ x.title }}</div>
           <sc-if value="{{ x.hasOrig }}"><div style="font-size:16px;color:#6F6880">{{ x.origTitle }}</div></sc-if>
           <p style="margin:0;color:#4A4356;font-size:15px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">{{ x.excerpt }}</p>
           <div style="margin-top:auto;padding-top:12px;border-top:1px solid #F2EDE4;font-size:14px;color:#6F6880"><b style="color:#241F2E;font-weight:600">{{ x.maker }}</b> · {{ x.craft }}</div>
@@ -225,7 +256,7 @@
 
   <section style="max-width:1440px;margin:0 auto;padding:96px clamp(16px,2.4vw,32px) 0">
     <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
-      <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">In their words</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.025em;line-height:1.05;text-wrap:balance">What people say about Karigar</h2></div>
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">In their words</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">What people say about Karigar</h2></div>
       <div role="tablist" aria-label="Who is speaking" style="display:flex;gap:4px;padding:4px;border-radius:999px;background:#F2EDE4">
         <button role="tab" aria-selected="{{ tmOrgOn }}" onClick="{{ tmShowOrg }}" style="border:0;border-radius:999px;padding:10px 18px;font-weight:600;font-size:15px;cursor:pointer;min-height:44px;font-family:inherit;{{ tmOrgStyle }}">Organisations</button>
         <button role="tab" aria-selected="{{ tmArtOn }}" onClick="{{ tmShowArt }}" style="border:0;border-radius:999px;padding:10px 18px;font-weight:600;font-size:15px;cursor:pointer;min-height:44px;font-family:inherit;{{ tmArtStyle }}">Artisans</button>
@@ -234,7 +265,7 @@
     <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px">
       <sc-for list="{{ tmList }}" as="t" hint-placeholder-count="0">
         <figure class="w-lift" style="margin:0;background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:18px">
-          <span aria-hidden="true" style="font-family:'Bricolage Grotesque', sans-serif;font-size:54px;line-height:.6;color:{{ t.color }};height:24px">“</span>
+          <span aria-hidden="true" style="font-family:'Newsreader', Georgia, serif;font-size:54px;line-height:.6;color:{{ t.color }};height:24px">“</span>
           <blockquote style="margin:0;font-size:17px;line-height:1.6;color:#241F2E;text-wrap:pretty">{{ t.text }}</blockquote>
           <figcaption style="margin-top:auto;display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #F2EDE4">
             <sc-if value="{{ t.hasPhoto }}" hint-placeholder-val="{{ false }}"><img src="{{ t.photo }}" loading="lazy" alt="" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none"></sc-if>
@@ -251,14 +282,14 @@
     <div style="background:#F2EDE4;border-radius:32px;padding:clamp(28px,5vw,64px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
       <div style="display:flex;flex-direction:column;gap:16px">
         <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Principles</div>
-        <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.025em;line-height:1.05;text-wrap:balance">Eleven rules, written as things you can check.</h2>
+        <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">Eleven rules, written as things you can check.</h2>
         <p style="margin:0;color:#4A4356">They are not values on a wall. Each one is a test the platform has to pass.</p>
         <a href="#/principles" style="align-self:flex-start;margin-top:8px;display:inline-flex;padding:13px 22px;border-radius:999px;background:#241F2E;color:#FBF7F0;text-decoration:none;font-weight:600">Read all eleven</a>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
         <sc-for list="{{ principlesShort }}" as="p" hint-placeholder-count="4">
           <div style="background:#FBF7F0;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:8px">
-            <span style="font-family:'Bricolage Grotesque', sans-serif;font-size:14px;font-weight:600;color:#6B3FA0">{{ p.n }}</span>
+            <span style="font-family:'Newsreader', Georgia, serif;font-size:14px;font-weight:600;color:#6B3FA0">{{ p.n }}</span>
             <div style="font-weight:600;font-size:17px">{{ p.t }}</div>
             <div style="color:#6F6880;font-size:15px;line-height:1.5">{{ p.d }}</div>
           </div>
@@ -268,20 +299,20 @@
   </section>
 
   <section style="max-width:1440px;margin:0 auto;padding:96px clamp(16px,2.4vw,32px) 0">
-    <h2 style="margin:0 0 28px;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.025em">Where do you come in?</h2>
+    <h2 style="margin:0 0 28px;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.012em">Where do you come in?</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
       <div style="border:1.5px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;background:#fff">
-        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">I make craft</div>
+        <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px">I make craft</div>
         <p style="margin:0;color:#6F6880;flex:1">Open your Karigar app with the card your facilitator gave you, or manage what is on your public page.</p>
         <a href="#/signin" style="align-self:flex-start;font-weight:600;text-decoration:none">Artisan sign in →</a>
       </div>
       <div style="border:1.5px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;background:#fff">
-        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">I run sessions with artisans</div>
+        <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px">I run sessions with artisans</div>
         <p style="margin:0;color:#6F6880;flex:1">NGOs, cooperatives and field teams use the facilitator console to run card sessions and hand each artisan their own app.</p>
         <a href="#/orgs" style="align-self:flex-start;font-weight:600;text-decoration:none">For organisations →</a>
       </div>
       <div style="border:1.5px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;background:#fff">
-        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">I want to work with a maker</div>
+        <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px">I want to work with a maker</div>
         <p style="margin:0;color:#6F6880;flex:1">Buyers, press, researchers and museums: read their stories, respect their terms, and send a request through Karigar.</p>
         <a href="#/makers" style="align-self:flex-start;font-weight:600;text-decoration:none">Find a maker →</a>
       </div>
@@ -291,7 +322,7 @@
 </sc-if>
 <sc-if value="{{ isMakers }}">
 <div class="w-page" style="max-width:1440px;margin:0 auto;padding:56px clamp(16px,2.4vw,32px) 0">
-  <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(38px,5vw,64px);letter-spacing:-.03em;line-height:1">Makers &amp; stories</h1>
+  <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(38px,5vw,64px);letter-spacing:-.015em;line-height:1">Makers &amp; stories</h1>
   <p style="margin:14px 0 0;color:#4A4356;font-size:18px;max-width:640px">Browse and search. There is no feed and no ranking — makers are listed alphabetically, stories by the date they were published.</p>
   <div style="margin-top:28px;display:flex;flex-direction:column;gap:14px;padding:18px;background:#fff;border:1px solid #EBE3D6;border-radius:20px">
     <label style="display:flex;align-items:center;gap:10px;background:#FBF7F0;border:1.5px solid #EBE3D6;border-radius:14px;padding:0 14px">
@@ -326,7 +357,7 @@
             <sc-if value="{{ m.isCollective }}"><span style="position:absolute;right:12px;top:12px;font-size:12px;font-weight:600;padding:4px 9px;border-radius:999px;background:#fff;color:{{ m.ink }}">Collective</span></sc-if>
           </div>
           <div style="padding:18px 20px 20px;display:flex;flex-direction:column;gap:6px;flex:1">
-            <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px">{{ m.name }}</div>
+            <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:20px">{{ m.name }}</div>
             <sc-if value="{{ m.local }}"><div style="color:#6F6880;font-size:15px">{{ m.local }}</div></sc-if>
             <div style="color:#4A4356;font-size:15px">{{ m.craft }} · {{ m.place }}</div>
             <div style="margin-top:auto;padding-top:10px;display:flex;justify-content:space-between;gap:8px;font-size:13px;color:#8C8499"><span>{{ m.langs }}</span><span>{{ m.storyNote }}</span></div>
@@ -334,13 +365,13 @@
         </a>
       </sc-for>
     </div>
-    <div style="margin-top:40px;display:flex;flex-direction:column;gap:6px"><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px">Also on Karigar, privately</div><p style="margin:0;color:#6F6880;font-size:15px;max-width:640px">These makers have chosen not to publish. We show their craft and region so you know they exist. Their names, stories and contact stay with them.</p></div>
+    <div style="margin-top:40px;display:flex;flex-direction:column;gap:6px"><div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:22px">Also on Karigar, privately</div><p style="margin:0;color:#6F6880;font-size:15px;max-width:640px">These makers have chosen not to publish. We show their craft and region so you know they exist. Their names, stories and contact stay with them.</p></div>
     <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
       <sc-for list="{{ privateTiles }}" as="m" hint-placeholder-count="3">
         <div style="background:#2E2839;color:#FBF7F0;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:10px">
           <span style="align-self:flex-start;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px;background:rgba(251,247,240,.1);color:#F0B23C"><svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true"><rect x="1" y="5.5" width="9" height="7" rx="1.5" fill="currentColor"></rect><path d="M3 5.5V4a2.5 2.5 0 0 1 5 0v1.5" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>Private by choice</span>
           <div aria-label="Name hidden" style="width:60%;height:18px;border-radius:6px;background:rgba(251,247,240,.22);filter:blur(3px);margin-top:6px"></div>
-          <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:19px">A {{ m.craft }} maker · {{ m.region }}</span>
+          <span style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:19px">A {{ m.craft }} maker · {{ m.region }}</span>
           <span style="font-size:14px;color:#A9A1B6">{{ m.note }}</span>
         </div>
       </sc-for>
@@ -352,7 +383,7 @@
       <sc-for list="{{ browseStories }}" as="x">
         <a href="{{ x.href }}" style="display:flex;flex-direction:column;gap:12px;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:24px;border-top:6px solid {{ x.ringColor }}">
           <div style="display:flex;justify-content:space-between;gap:10px;font-size:13px"><span style="font-weight:600;color:{{ x.ink }}">{{ x.ring }}</span><span style="color:#8C8499">{{ x.date }}</span></div>
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:23px;line-height:1.15;text-wrap:balance">{{ x.title }}</div>
+          <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:23px;line-height:1.15;text-wrap:balance">{{ x.title }}</div>
           <sc-if value="{{ x.hasOrig }}"><div style="font-size:16px;color:#6F6880">{{ x.origTitle }}</div></sc-if>
           <p style="margin:0;color:#4A4356;font-size:15px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">{{ x.excerpt }}</p>
           <div style="margin-top:auto;padding-top:12px;border-top:1px solid #F2EDE4;font-size:14px;color:#6F6880;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span><b style="color:#241F2E;font-weight:600">{{ x.maker }}</b> · {{ x.craft }}</span><span>{{ x.langs }}</span></div>
@@ -373,7 +404,7 @@
       <div style="max-width:1440px;margin:0 auto;padding:40px clamp(16px,2.4vw,32px) 48px;position:relative;display:flex;flex-direction:column;gap:18px">
         <a href="#/makers" style="font-size:15px;font-weight:600;text-decoration:none;color:{{ mk.ink }}">← All makers</a>
         <div style="font-size:clamp(28px,3.4vw,40px);font-weight:600;color:{{ mk.ink }}">{{ mk.craftLocal }}</div>
-        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(40px,6vw,76px);letter-spacing:-.035em;line-height:.98">{{ mk.name }}</h1>
+        <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(40px,6vw,76px);letter-spacing:-.035em;line-height:.98">{{ mk.name }}</h1>
         <sc-if value="{{ mk.local }}"><div style="font-size:22px;color:#4A4356">{{ mk.local }}</div></sc-if>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
           <span style="padding:7px 13px;border-radius:999px;background:#fff;font-size:14px;font-weight:500">{{ mk.craft }}</span>
@@ -385,16 +416,16 @@
     </section>
     <section style="max-width:1440px;margin:0 auto;padding:48px clamp(16px,2.4vw,32px) 0;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr);gap:48px;align-items:start" class="w-split">
       <div style="display:flex;flex-direction:column;gap:36px">
-        <blockquote style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:500;font-size:clamp(22px,2.4vw,30px);line-height:1.3;letter-spacing:-.01em;text-wrap:pretty;border-left:0">“{{ mk.about }}”</blockquote>
+        <blockquote style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:500;font-size:clamp(22px,2.4vw,30px);line-height:1.3;letter-spacing:-.01em;text-wrap:pretty;border-left:0">“{{ mk.about }}”</blockquote>
         <sc-if value="{{ mk.hasMembers }}"><div style="padding:18px 20px;background:#fff;border:1px solid #EBE3D6;border-radius:16px;font-size:15px"><b>Members:</b> {{ mk.members }}. Stories from this page are credited to the collective.</div></sc-if>
         <div style="display:flex;flex-direction:column;gap:16px">
-          <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:28px">Stories</h2>
+          <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:28px">Stories</h2>
           <sc-for list="{{ mkStories }}" as="x">
             <a href="{{ x.href }}" style="display:grid;grid-template-columns:6px minmax(0,1fr);gap:20px;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px 24px 22px 0;overflow:hidden">
               <span style="background:{{ x.ringColor }};border-radius:0 4px 4px 0"></span>
               <span style="display:flex;flex-direction:column;gap:8px">
                 <span style="display:flex;justify-content:space-between;gap:10px;font-size:13px"><b style="color:{{ x.ink }};font-weight:600">{{ x.ring }} · {{ x.card }}</b><span style="color:#8C8499">{{ x.date }}</span></span>
-                <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:23px;line-height:1.15">{{ x.title }}</span>
+                <span style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:23px;line-height:1.15">{{ x.title }}</span>
                 <span style="color:#4A4356;font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ x.excerpt }}</span>
                 <span style="font-size:13px;color:#8C8499">{{ x.langs }}</span>
               </span>
@@ -405,7 +436,7 @@
       </div>
       <aside style="position:sticky;top:96px;display:flex;flex-direction:column;gap:14px">
         <div style="background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:14px">
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:21px">Get in touch</div>
+          <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:21px">Get in touch</div>
           <sc-if value="{{ mk.contactOpen }}">
             <p style="margin:0;color:#6F6880;font-size:15px">Send a request through Karigar. {{ mk.first }} reads it in {{ mk.primaryLang }} and decides whether to reply. Contact details are never shown here.</p>
             <a href="{{ mk.contactHref }}" style="display:flex;justify-content:center;padding:14px 20px;border-radius:999px;background:#6B3FA0;color:#fff;text-decoration:none;font-weight:600">Send a request</a>
@@ -416,7 +447,7 @@
         </div>
         <div style="background:#F2EDE4;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px;font-size:15px">
           <div style="font-weight:600">How to credit</div>
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-size:17px">{{ mk.credit }}</div>
+          <div style="font-family:'Newsreader', Georgia, serif;font-size:17px">{{ mk.credit }}</div>
           <div style="color:#6F6880;font-size:14px">Each story also carries its own reuse terms.</div>
         </div>
         <sc-if value="{{ mk.hasCollective }}"><a href="{{ mk.collectiveHref }}" style="padding:18px 22px;border:1px solid #EBE3D6;border-radius:18px;text-decoration:none;color:#241F2E;background:#fff;font-size:15px">Member of <b>{{ mk.collectiveName }}</b> →</a></sc-if>
@@ -424,7 +455,7 @@
     </section>
   </sc-if>
   <sc-if value="{{ mkMissing }}">
-    <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-size:40px">This page isn’t available</h1><p style="margin:0;color:#6F6880">The maker may have made it private or removed it. That is always their choice.</p><a href="#/makers" style="font-weight:600">Browse makers</a></div>
+    <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-size:40px">This page isn’t available</h1><p style="margin:0;color:#6F6880">The maker may have made it private or removed it. That is always their choice.</p><a href="#/makers" style="font-weight:600">Browse makers</a></div>
   </sc-if>
 </div>
 </sc-if>
@@ -440,7 +471,7 @@
           <span style="color:#8C8499">{{ st.card }} · Published {{ st.date }}</span>
           <sc-if value="{{ st.isLink }}"><span style="padding:6px 12px;border-radius:999px;background:#FFF6E3;color:#8A5D05;font-weight:600">Shared by link · not listed</span></sc-if>
         </div>
-        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(38px,5.4vw,68px);letter-spacing:-.03em;line-height:1.02;text-wrap:balance">{{ st.title }}</h1>
+        <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(38px,5.4vw,68px);letter-spacing:-.015em;line-height:1.02;text-wrap:balance">{{ st.title }}</h1>
         <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
           <sc-if value="{{ st.multiLang }}">
             <sc-for list="{{ st.langTabs }}" as="t"><button onClick="{{ t.pick }}" style="padding:9px 15px;border-radius:999px;border:1.5px solid;cursor:pointer;font-size:14px;font-weight:500;min-height:42px;{{ t.style }}">{{ t.label }}</button></sc-for>
@@ -470,7 +501,7 @@
       <aside style="position:sticky;top:96px;display:flex;flex-direction:column;gap:14px">
         <div style="background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px">
           <div style="font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8C8499">Reuse terms</div>
-          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:15px;padding:5px 10px;border-radius:8px;background:#241F2E;color:#FBF7F0">{{ st.rightsCode }}</span><span style="font-weight:600;font-size:17px">{{ st.rightsLabel }}</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:15px;padding:5px 10px;border-radius:8px;background:#241F2E;color:#FBF7F0">{{ st.rightsCode }}</span><span style="font-weight:600;font-size:17px">{{ st.rightsLabel }}</span></div>
           <p style="margin:0;color:#4A4356;font-size:15px">{{ st.rightsDesc }}</p>
           <div style="font-size:14px;color:#6F6880;padding-top:10px;border-top:1px solid #F2EDE4">Not licensed for AI training or image generation. This page tells crawlers so.</div>
           <button onClick="{{ share }}" style="padding:13px 18px;border-radius:999px;border:0;background:#241F2E;color:#FBF7F0;font-weight:600;cursor:pointer;min-height:46px">{{ shareLabel }}</button>
@@ -483,12 +514,12 @@
     </article>
     <sc-if value="{{ stHasMore }}">
       <section style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0">
-        <h2 style="margin:0 0 20px;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:28px">More from {{ st.maker }}</h2>
+        <h2 style="margin:0 0 20px;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:28px">More from {{ st.maker }}</h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
           <sc-for list="{{ st.more }}" as="x">
             <a href="{{ x.href }}" style="display:flex;flex-direction:column;gap:10px;text-decoration:none;color:#241F2E;background:#fff;border:1px solid #EBE3D6;border-radius:22px;padding:22px;border-top:6px solid {{ x.ringColor }}">
               <span style="font-size:13px;font-weight:600;color:{{ x.ink }}">{{ x.ring }}</span>
-              <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px;line-height:1.15">{{ x.title }}</span>
+              <span style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:22px;line-height:1.15">{{ x.title }}</span>
               <span style="color:#4A4356;font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ x.excerpt }}</span>
             </a>
           </sc-for>
@@ -497,7 +528,7 @@
     </sc-if>
   </sc-if>
   <sc-if value="{{ stMissing }}">
-    <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-size:40px">This story isn’t available</h1><p style="margin:0;color:#6F6880">The maker may have made it private. When a story is closed, it closes for everyone at once.</p><a href="#/makers" style="font-weight:600">Browse stories</a></div>
+    <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-size:40px">This story isn’t available</h1><p style="margin:0;color:#6F6880">The maker may have made it private. When a story is closed, it closes for everyone at once.</p><a href="#/makers" style="font-weight:600">Browse stories</a></div>
   </sc-if>
 </div>
 </sc-if>
@@ -508,7 +539,7 @@
     <sc-if value="{{ cmForm }}">
       <div style="margin-top:20px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);gap:48px;align-items:start" class="w-split">
         <form onSubmit="{{ submitContact }}" novalidate="" style="display:flex;flex-direction:column;gap:24px">
-          <div><h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(34px,4.4vw,52px);letter-spacing:-.03em;line-height:1.04">Send {{ cm.first }} a request</h1>
+          <div><h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(34px,4.4vw,52px);letter-spacing:-.015em;line-height:1.04">Send {{ cm.first }} a request</h1>
           <p style="margin:12px 0 0;color:#4A4356;font-size:17px">Be clear about who you are and what you want. That is what they will decide on.</p></div>
           <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px">
             <legend style="font-weight:600;margin-bottom:10px">What is this about?</legend>
@@ -525,7 +556,7 @@
           <button type="submit" style="align-self:flex-start;padding:15px 26px;border-radius:999px;border:0;background:#6B3FA0;color:#fff;font-weight:600;font-size:16px;cursor:pointer;min-height:50px">Send request</button>
         </form>
         <aside style="background:#F2EDE4;border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:16px;position:sticky;top:96px">
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:21px">What happens next</div>
+          <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:21px">What happens next</div>
           <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:12px;color:#4A4356;font-size:15px">
             <li>{{ cm.first }} sees your request in {{ cm.lang }}, and can listen to it.</li>
             <li>They can accept, decline, or not reply. Not replying is a normal answer.</li>
@@ -538,19 +569,19 @@
     <sc-if value="{{ cfDone }}">
       <div style="margin-top:28px;max-width:680px;background:#fff;border:1px solid #EBE3D6;border-radius:28px;padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:16px">
         <div style="width:52px;height:52px;border-radius:50%;background:#E6F6F2;color:#1F5F54;display:flex;align-items:center;justify-content:center;font-size:24px">✓</div>
-        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:36px;letter-spacing:-.02em">Request sent</h1>
+        <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:36px;letter-spacing:-.01em">Request sent</h1>
         <p style="margin:0;color:#4A4356;font-size:17px">{{ cm.first }} will see it in {{ cm.lang }}. If they accept, you will get an email from Karigar. If you hear nothing within 30 days, the request has closed — please don’t chase it elsewhere.</p>
         <a href="{{ cm.href }}" style="align-self:flex-start;font-weight:600">Back to {{ cm.name }}</a>
       </div>
     </sc-if>
     <sc-if value="{{ cmClosed }}">
       <div style="margin-top:28px;max-width:680px;background:#F2EDE4;border-radius:28px;padding:40px;display:flex;flex-direction:column;gap:12px">
-        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px">{{ cm.first }} isn’t taking requests right now</h1>
+        <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:34px">{{ cm.first }} isn’t taking requests right now</h1>
         <p style="margin:0;color:#4A4356">They have closed contact for a while. You are welcome to read their stories in the meantime.</p>
       </div>
     </sc-if>
   </sc-if>
-  <sc-if value="{{ cmMissing }}"><div style="padding:80px 0;text-align:center"><h1 style="font-family:'Bricolage Grotesque', sans-serif">This maker isn’t available</h1><a href="#/makers">Browse makers</a></div></sc-if>
+  <sc-if value="{{ cmMissing }}"><div style="padding:80px 0;text-align:center"><h1 style="font-family:'Newsreader', Georgia, serif">This maker isn’t available</h1><a href="#/makers">Browse makers</a></div></sc-if>
 </div>
 </sc-if>
 
@@ -560,11 +591,11 @@
     <div class="w-hero" style="background:#241F2E;border-radius:30px;padding:clamp(22px,3.4vw,48px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,3vw,56px);align-items:center">
       <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
         <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">How it works</div>
-        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(36px,4.8vw,62px);letter-spacing:-.03em;line-height:1;color:#FBF7F0;text-wrap:balance">From a card on the floor to a story the maker owns.</h1>
+        <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(36px,4.8vw,62px);letter-spacing:-.015em;line-height:1;color:#FBF7F0;text-wrap:balance">From a card on the floor to a story the maker owns.</h1>
         <p style="margin:0;color:#CFC8DA;font-size:17px;line-height:1.6;max-width:50ch;text-wrap:pretty">Four steps, and the artisan holds the pen at every one. Tap a dot on the board to see the questions they answer.</p>
         <div role="tablist" aria-label="Steps" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:4px">
           <sc-for list="{{ hwSteps }}" as="s" hint-placeholder-count="4">
-            <button role="tab" aria-selected="{{ s.on }}" onClick="{{ s.pick }}" style="{{ s.style }}"><span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:15px">{{ s.n }}</span><span style="font-size:12.5px;line-height:1.25">{{ s.short }}</span></button>
+            <button role="tab" aria-selected="{{ s.on }}" onClick="{{ s.pick }}" style="{{ s.style }}"><span style="font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:15px">{{ s.n }}</span><span style="font-size:12.5px;line-height:1.25">{{ s.short }}</span></button>
           </sc-for>
         </div>
         <div style="background:#FBF7F0;color:#241F2E;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px;min-height:220px;box-sizing:border-box">
@@ -572,21 +603,23 @@
             <span style="font-size:13px;font-weight:700;padding:5px 11px;border-radius:999px;background:{{ hwCur.soft }};color:{{ hwCur.ink }}">Step {{ hwCur.n }} of 4 · {{ hwCur.who }}</span>
             <button onClick="{{ hwNext }}" aria-label="Next step" style="width:40px;height:40px;border-radius:50%;border:1px solid #EBE3D6;background:#FFFFFF;cursor:pointer;font-size:15px;color:#241F2E">→</button>
           </div>
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(22px,2.4vw,28px);line-height:1.1;letter-spacing:-.015em">{{ hwCur.t }}</div>
+          <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(22px,2.4vw,28px);line-height:1.1;letter-spacing:-.015em">{{ hwCur.t }}</div>
           <p style="margin:0;color:#4A4356;font-size:15.5px;line-height:1.6">{{ hwCur.d }}</p>
           <div style="margin-top:auto;display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ hwCur.tags }}" as="g"><span style="font-size:13px;padding:5px 10px;border-radius:999px;background:#FFFFFF;border:1px solid #EBE3D6;color:#4A4356">{{ g }}</span></sc-for></div>
         </div>
       </div>
       <div class="w-hero-board" style="position:relative;width:100%;max-width:min(480px,66vh);aspect-ratio:1;justify-self:center">
         <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">
-          <circle cx="60" cy="60" r="59" fill="#2E2839"></circle>
+          <circle cx="60" cy="60" r="57.6" fill="#FBF7F0"></circle>
           <circle cx="60" cy="60" r="21" fill="none" stroke="#B98BE0" stroke-width="6"></circle>
           <circle cx="60" cy="60" r="27.6" fill="none" stroke="#6FC9B8" stroke-width="6"></circle>
           <circle cx="60" cy="60" r="34.2" fill="none" stroke="#A81C24" stroke-width="6"></circle>
           <circle cx="60" cy="60" r="40.8" fill="none" stroke="#C06A5F" stroke-width="6"></circle>
           <circle cx="60" cy="60" r="47.4" fill="none" stroke="#6D9DC5" stroke-width="6"></circle>
           <circle cx="60" cy="60" r="54" fill="none" stroke="#F0B23C" stroke-width="6"></circle>
-          <circle cx="60" cy="60" r="15" fill="#FBF7F0"></circle>
+          <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+          <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+          <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ bDash }}" transform="rotate(-90 60 60)"></circle>
         </svg>
         <svg viewBox="0 0 120 120" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none" aria-hidden="true">
           <defs>
@@ -597,15 +630,16 @@
               <path id="wh2-culture" d="M 31.47 22.14 A 47.4 47.4 0 0 1 88.53 22.14" fill="none"></path>
               <path id="wh2-pride" d="M 27.50 16.87 A 54 54 0 0 1 92.50 16.87" fill="none"></path>
           </defs>
-            <text font-size="3.3" font-weight="700" fill="#3A1F57" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh2-craft" startOffset="50%">MY CRAFT</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#12443C" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh2-place" startOffset="50%">PLACE</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh2-lineage" startOffset="50%">LINEAGE</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#3E1611" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh2-material" startOffset="50%">MATERIAL &amp; TOOLS</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#13304A" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh2-culture" startOffset="50%">CULTURAL MEANING</textPath></text>
-            <text font-size="3.3" font-weight="700" fill="#4D3302" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Hanken Grotesk, sans-serif"><textPath href="#wh2-pride" startOffset="50%">PRIDE &amp; STAKE</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#3A1F57" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh2-craft" startOffset="50%">My Craft</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#12443C" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh2-place" startOffset="50%">Place</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh2-lineage" startOffset="50%">Legacy</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#3E1611" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh2-material" startOffset="50%">Material &amp; Tools</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#13304A" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh2-culture" startOffset="50%">Cultural Meaning</textPath></text>
+            <text font-size="3.3" font-weight="700" fill="#4D3302" text-anchor="middle" dominant-baseline="central" letter-spacing="0.12" font-family="Figtree, sans-serif"><textPath href="#wh2-pride" startOffset="50%">Pride &amp; Stake</textPath></text>
         </svg>
         <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:24%">
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-size:clamp(12px,1.4vw,17px);font-weight:700;line-height:1.05;color:#241F2E">Mandala<br>board</div>
+          <div style="font-family:'Newsreader', serif;font-weight:600;font-size:clamp(22px,3.6vw,34px);line-height:1;color:#6B3FA0;font-variant-numeric:tabular-nums">{{ bOpened }}</div>
+          <div style="font-size:clamp(9px,1.3vw,11px);color:#8C8499;margin-top:3px">of {{ bTotal }}</div>
         </div>
         <sc-for list="{{ bDots }}" as="d" hint-placeholder-count="0">
           <button type="button" class="w-dot" title="{{ d.label }}" onClick="{{ d.pick }}" aria-label="{{ d.label }}" style="{{ d.style }}"></button>
@@ -614,7 +648,7 @@
     </div>
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0">
-    <div style="display:flex;flex-direction:column;gap:10px;max-width:760px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Six rings, inside out</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.025em;line-height:1.05;text-wrap:balance">The board moves from the craft itself out to what it means.</h2></div>
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:760px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Six rings, inside out</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">The board moves from the craft itself out to what it means.</h2></div>
     <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
       <sc-for list="{{ hwRings }}" as="r" hint-placeholder-count="6">
         <div class="w-lift" style="background:#FFFFFF;border:1px solid #EBE3D6;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:10px;border-top:5px solid {{ r.color }}">
@@ -626,7 +660,7 @@
     </div>
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:88px clamp(16px,2.4vw,32px) 0">
-    <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.025em">Four ways to share a story</h2>
+    <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.012em">Four ways to share a story</h2>
     <p style="margin:12px 0 0;color:#4A4356;max-width:640px;font-size:17px">Set per story, and within a story per detail — a maker can publish how they work while keeping their village and their material source private. Every story starts as “Only me”.</p>
     <div style="margin-top:28px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600;color:#6F6880"><span>Fewest people</span><span style="flex:1;height:3px;border-radius:3px;background:linear-gradient(90deg,#4A4356,#2C5476,#8A5D05,#1F5F54)"></span><span>Everyone</span></div>
     <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
@@ -641,7 +675,7 @@
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:88px clamp(16px,2.4vw,32px) 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px" class="w-split">
     <div style="display:flex;flex-direction:column;gap:14px">
-      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.025em">Consent is never one checkbox</h2>
+      <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.012em">Consent is never one checkbox</h2>
       <p style="margin:0;color:#4A4356;font-size:17px">A photo taken for a workshop is not available for a campaign, an archive or AI training. Each purpose gets its own record, and anyone can ask Karigar: who agreed, to what, when, in what language, and is it still current?</p>
     </div>
     <div style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:24px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 18px;font-size:15px">
@@ -656,12 +690,103 @@
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:88px clamp(16px,2.4vw,32px) 0">
     <div style="background:#241F2E;color:#FBF7F0;border-radius:32px;padding:clamp(28px,5vw,56px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:36px" class="w-split">
-      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.4vw,42px);letter-spacing:-.025em;line-height:1.05">What Karigar is not</h2>
+      <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.4vw,42px);letter-spacing:-.012em;line-height:1.05">What Karigar is not</h2>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;color:#C4BCD1">
         <div><b style="color:#FBF7F0;display:block;margin-bottom:4px">Not a marketplace</b>Nothing is sold here. Buyers send requests, makers decide.</div>
         <div><b style="color:#FBF7F0;display:block;margin-bottom:4px">Not a social network</b>No feed, no followers, no likes, no view counts.</div>
         <div><b style="color:#FBF7F0;display:block;margin-bottom:4px">Not a portfolio host</b>Stories come from the maker’s own record, with context and terms attached.</div>
         <div><b style="color:#FBF7F0;display:block;margin-bottom:4px">Not a data source</b>No artisan content is used for training or marketing without separate consent.</div>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isKit }}">
+<div class="w-page">
+  <section style="max-width:1440px;margin:0 auto;padding:clamp(16px,2.4vw,28px) clamp(16px,2.4vw,32px) 0">
+    <div class="w-hero" style="background:#241F2E;border-radius:30px;padding:clamp(22px,3.4vw,48px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,3vw,56px);align-items:center;overflow:hidden">
+      <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+        <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">The Craft Voice Kit</div>
+        <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(36px,4.8vw,62px);letter-spacing:-.015em;line-height:1;color:#FBF7F0;text-wrap:balance">Cards an artisan can hold. Questions they answer out loud.</h1>
+        <p style="margin:0;color:#CFC8DA;font-size:17px;line-height:1.6;max-width:50ch;text-wrap:pretty">One board and six theme decks, plus reflection cards and small story cards for the end of a session. Everything is printed in English and Hindi. Every answer the artisan gives goes into their own Karigar record.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+          <button onClick="{{ kitDraw }}" style="display:inline-flex;align-items:center;padding:14px 24px;border-radius:999px;background:#F0B23C;color:#241F2E;border:0;font-weight:600;font-size:16px;min-height:52px;cursor:pointer;font-family:inherit">Draw a card</button>
+          <button onClick="{{ kitToPrint }}" style="display:inline-flex;align-items:center;padding:13px 22px;border-radius:999px;border:1.5px solid rgba(251,247,240,.28);background:transparent;color:#FBF7F0;font-weight:600;font-size:15px;min-height:52px;cursor:pointer;font-family:inherit">Print the kit</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;min-width:0">
+        <img src="/cards/box-theme.png" alt="The Theme Cards box, with the mandala on its front" class="w-tilt" style="width:min(320px,70%);border-radius:14px;box-shadow:0 30px 70px rgba(0,0,0,.5);transform:rotate(4deg)">
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:760px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">How a session uses the kit</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">Start at the centre of the board and work outwards.</h2></div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+      <div style="background:#FFFFFF;border:1px solid #EBE3D6;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:28px;color:#B98BE0">1</span><b style="font-size:17px">Lay out the board</b><span style="color:#4A4356;font-size:15px;line-height:1.55">Read the consent script aloud first. Then put each deck beside its ring.</span></div>
+      <div style="background:#FFFFFF;border:1px solid #EBE3D6;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:28px;color:#6FC9B8">2</span><b style="font-size:17px">Draw from one deck</b><span style="color:#4A4356;font-size:15px;line-height:1.55">Each deck has three themes with three prompts each. Begin with My Craft.</span></div>
+      <div style="background:#FFFFFF;border:1px solid #EBE3D6;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:28px;color:#A81C24">3</span><b style="font-size:17px">Answer out loud</b><span style="color:#4A4356;font-size:15px;line-height:1.55">The prompt in quotes helps if the question feels too big. Any card can be skipped.</span></div>
+      <div style="background:#FFFFFF;border:1px solid #EBE3D6;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:28px;color:#F0B23C">4</span><b style="font-size:17px">Close with reflection</b><span style="color:#4A4356;font-size:15px;line-height:1.55">Name one strength, one concern, what may be shared, and one hope for the future.</span></div>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:760px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">Theme cards</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.012em;line-height:1.05">Six decks, nine prompts each</h2></div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr));gap:16px">
+      <sc-for list="{{ kitDecks }}" as="k" hint-placeholder-count="0">
+        <div style="background:{{ k.bg }};border-radius:24px;padding:20px;display:grid;grid-template-columns:clamp(96px,10vw,128px) minmax(0,1fr);gap:20px;align-items:start;color:{{ k.ink }}">
+          <button type="button" onClick="{{ k.open }}" class="w-tilt" aria-label="Open the {{ k.name }} deck" style="padding:0;border:0;background:none;cursor:pointer;border-radius:10px;overflow:hidden;box-shadow:0 12px 26px rgba(36,31,46,.25);aspect-ratio:.615;display:block;width:100%"><img src="{{ k.cover }}" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></button>
+          <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+            <div style="font-family:'Literata', Georgia, serif;font-weight:700;font-size:23px;line-height:1.1">{{ k.name }}</div>
+            <p style="margin:0;font-size:14.5px;line-height:1.55;color:#241F2E;text-wrap:pretty">{{ k.intro }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ k.groups }}" as="g" hint-placeholder-count="0"><span style="font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:#FFFFFF;color:{{ k.ink }}">{{ g }}</span></sc-for></div>
+            <button type="button" onClick="{{ k.open }}" style="align-self:flex-start;margin-top:2px;background:none;border:0;padding:6px 0;color:{{ k.ink }};font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit">Open the deck →</button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:760px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#3B5A24">Reflection cards</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.012em;line-height:1.05">Four cards to close a session</h2><p style="margin:0;color:#4A4356;font-size:16px">Used after the board, so the artisan ends on their own terms, not the facilitator's.</p></div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:14px">
+      <sc-for list="{{ kitReflect }}" as="r" hint-placeholder-count="0">
+        <div style="background:#D6EBD9;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px;color:#3B5A24">
+          <img src="{{ r.cover }}" loading="lazy" alt="{{ r.name }} reflection card" class="w-tilt" style="width:44%;align-self:flex-start;border-radius:8px;box-shadow:0 10px 22px rgba(36,31,46,.22)">
+          <div style="font-family:'Literata', Georgia, serif;font-weight:700;font-size:18px;line-height:1.25;color:#241F2E">{{ r.q }}</div>
+          <div style="border-left:2px solid #3B5A24;padding-left:10px;font-family:'Literata', Georgia, serif;font-size:14.5px;color:#241F2E">“{{ r.hint }}”</div>
+          <span style="font-size:13.5px;color:#3B5A24;line-height:1.5;margin-top:auto">{{ r.does }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:760px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#262C5E">Small story cards</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.012em;line-height:1.05">For when an answer wants to become a story</h2><p style="margin:0;color:#4A4356;font-size:16px">One real moment, told the way the artisan remembers it. These often become the first stories a maker publishes.</p></div>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px">
+      <sc-for list="{{ kitStory }}" as="c" hint-placeholder-count="0">
+        <div class="w-lift" style="background:#FBF1E1;border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:12px;color:#262C5E;min-height:220px;box-sizing:border-box">
+          <span style="font-family:'Literata', Georgia, serif;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase">Small story card · {{ c.code }}</span>
+          <div style="font-family:'Literata', Georgia, serif;font-weight:700;font-size:21px;line-height:1.22">{{ c.q }}</div>
+          <div style="border-left:2px solid #262C5E;padding-left:10px;font-family:'Literata', Georgia, serif;font-size:15px;color:#241F2E;line-height:1.5">“{{ c.hint }}”</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="kit-print" style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0">
+    <div style="background:#F2EDE4;border-radius:30px;padding:clamp(22px,4vw,48px);display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:760px"><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.4vw,40px);letter-spacing:-.012em;line-height:1.05">Print your own kit</h2><p style="margin:0;color:#4A4356;font-size:16px">Print-ready A3 sheets with crop marks. Print the front and back of each deck on the same sheet, double-sided, and cut along the marks. Partner organisations can ask us for printed sets.</p></div>
+      <div style="display:flex;flex-direction:column;background:#FFFFFF;border-radius:20px;overflow:hidden">
+        <sc-for list="{{ kitPrint }}" as="p" hint-placeholder-count="0">
+          <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid #F2EDE4" class="w-split">
+            <span style="display:flex;flex-direction:column"><b style="font-size:16px">{{ p.name }}</b><span style="font-size:13px;color:#8C8499">{{ p.note }}</span></span>
+            <span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-size:13px;color:#6F6880;width:56px">English</span><a href="{{ p.enFront }}" download="" style="font-size:14px;font-weight:600">Front</a><a href="{{ p.enBack }}" download="" style="font-size:14px;font-weight:600">Back</a></span>
+            <span style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span style="font-size:13px;color:#6F6880;width:56px">हिन्दी</span><a href="{{ p.hiFront }}" download="" style="font-size:14px;font-weight:600">Front</a><a href="{{ p.hiBack }}" download="" style="font-size:14px;font-weight:600">Back</a></span>
+          </div>
+        </sc-for>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;padding:14px 18px;font-size:14px"><b>Also</b><a href="/kit/print/story-sheet-1.svg" download="" style="font-weight:600">Small story cards (sheet 1)</a><a href="/kit/print/story-sheet-2.svg" download="" style="font-weight:600">Small story cards (sheet 2)</a><a href="/kit/print/box-theme-cards.svg" download="" style="font-weight:600">Theme cards box</a><a href="/kit/print/box-reflection-cards.svg" download="" style="font-weight:600">Reflection cards box</a></div>
       </div>
     </div>
   </section>
@@ -674,7 +799,7 @@
     <div class="w-hero" style="background:#241F2E;border-radius:30px;padding:clamp(22px,3.4vw,48px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,3vw,56px);align-items:center">
       <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
         <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">Principles &amp; governance</div>
-        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(36px,4.8vw,62px);letter-spacing:-.03em;line-height:1;color:#FBF7F0;text-wrap:balance">Artisan-owned has to mean something you can check.</h1>
+        <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(36px,4.8vw,62px);letter-spacing:-.015em;line-height:1;color:#FBF7F0;text-wrap:balance">Artisan-owned has to mean something you can check.</h1>
         <p style="margin:0;color:#CFC8DA;font-size:17px;line-height:1.6;max-width:48ch">There are eleven principles, and each one comes with a test you can try on this website yourself. Pick a number on the wheel.</p>
         <div style="background:#FBF7F0;color:#241F2E;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px;min-height:250px;box-sizing:border-box">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
@@ -684,7 +809,7 @@
               <button onClick="{{ pNext }}" aria-label="Next principle" style="width:40px;height:40px;border-radius:50%;border:1px solid #EBE3D6;background:#FFFFFF;cursor:pointer;font-size:15px;color:#241F2E">→</button>
             </div>
           </div>
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(22px,2.4vw,28px);line-height:1.1;letter-spacing:-.015em">{{ pCur.t }}</div>
+          <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(22px,2.4vw,28px);line-height:1.1;letter-spacing:-.015em">{{ pCur.t }}</div>
           <p style="margin:0;color:#4A4356;font-size:15.5px;line-height:1.55">{{ pCur.d }}</p>
           <div style="margin-top:auto;display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:{{ pCur.soft }}"><span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:{{ pCur.ink }};white-space:nowrap;padding-top:2px">Try it</span><span style="font-size:15px;color:#241F2E;line-height:1.5">{{ pCur.check }}</span></div>
         </div>
@@ -697,10 +822,12 @@
           <circle cx="60" cy="60" r="34.2" fill="none" stroke="#A81C24" stroke-width="2.5" opacity=".55"></circle>
           <circle cx="60" cy="60" r="40.8" fill="none" stroke="#C06A5F" stroke-width="2.5" opacity=".55"></circle>
           <circle cx="60" cy="60" r="47.4" fill="none" stroke="#6D9DC5" stroke-width="2.5" opacity=".55"></circle>
-          <circle cx="60" cy="60" r="15" fill="#FBF7F0"></circle>
+          <circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle>
+          <circle cx="60" cy="60" r="15" fill="none" stroke="#F2EDE4" stroke-width="2.4"></circle>
+          <circle cx="60" cy="60" r="15" fill="none" stroke="#6B3FA0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="{{ bDash }}" transform="rotate(-90 60 60)"></circle>
         </svg>
         <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">
-          <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;font-size:clamp(22px,3vw,34px);line-height:1;color:#241F2E">{{ pCur.n }}</div>
+          <div style="font-family:'Newsreader', Georgia, serif;font-weight:700;font-size:clamp(22px,3vw,34px);line-height:1;color:#241F2E">{{ pCur.n }}</div>
           <div style="font-size:10.5px;color:#6F6880;margin-top:2px">of 11</div>
         </div>
         <sc-for list="{{ pWheel }}" as="w" hint-placeholder-count="0">
@@ -710,7 +837,7 @@
     </div>
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:56px clamp(16px,2.4vw,32px) 0">
-    <h2 style="margin:0 0 20px;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(26px,3vw,36px);letter-spacing:-.02em">All eleven, with their tests</h2>
+    <h2 style="margin:0 0 20px;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(26px,3vw,36px);letter-spacing:-.01em">All eleven, with their tests</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
       <sc-for list="{{ pCards }}" as="p" hint-placeholder-count="11">
         <button type="button" onClick="{{ p.pick }}" class="w-lift" style="text-align:left;font-family:inherit;color:#241F2E;cursor:pointer;background:#FFFFFF;border:1px solid #EBE3D6;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px">
@@ -723,13 +850,13 @@
   </section>
   <section id="rights" style="max-width:1440px;margin:0 auto;padding:88px clamp(16px,2.4vw,32px) 0;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
     <div style="display:flex;flex-direction:column;gap:14px">
-      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.025em">Rights vocabulary</h2>
+      <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.012em">Rights vocabulary</h2>
       <p style="margin:0;color:#4A4356">Every story carries one of these statements. It is a fixed list kept by the council — not free text — so it can be read by people and machines alike.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px">
       <sc-for list="{{ rightsList }}" as="r" hint-placeholder-count="5">
         <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:start;padding:18px 20px;background:#fff;border:1px solid #EBE3D6;border-radius:16px">
-          <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:700;padding:5px 0;border-radius:8px;background:#241F2E;color:#FBF7F0;text-align:center;font-size:14px">{{ r.code }}</span>
+          <span style="font-family:'Newsreader', Georgia, serif;font-weight:700;padding:5px 0;border-radius:8px;background:#241F2E;color:#FBF7F0;text-align:center;font-size:14px">{{ r.code }}</span>
           <div><b>{{ r.label }}</b><div style="color:#6F6880;font-size:15px">{{ r.desc }}</div></div>
         </div>
       </sc-for>
@@ -738,7 +865,7 @@
   <section id="council" style="max-width:1440px;margin:0 auto;padding:88px clamp(16px,2.4vw,32px) 0">
     <div style="display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px" class="w-split">
       <div style="display:flex;flex-direction:column;gap:14px">
-        <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.025em">The council decides</h2>
+        <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.012em">The council decides</h2>
         <p style="margin:0;color:#4A4356">A rotating council of artisans, local facilitators and translators, with legal, safety, accessibility and IP advisers. It sets data rules, the rights vocabulary, story standards, partner criteria and safeguarding — and its decisions change the platform’s settings directly.</p>
         <p style="margin:0;color:#8C8499;font-size:14px">The council is being constituted. The entries shown are the first proposals.</p>
       </div>
@@ -755,7 +882,7 @@
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:88px clamp(16px,2.4vw,32px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
     <div style="background:#F2EDE4;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px">
-      <h3 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">Data commitments</h3>
+      <h3 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px">Data commitments</h3>
       <ul style="margin:0;padding-left:20px;color:#4A4356;display:flex;flex-direction:column;gap:8px">
         <li>Deleted from live systems within 7 days, and from backups within 35 days.</li>
         <li>Full export in open formats — media at original size, consent and boundary records included.</li>
@@ -764,11 +891,11 @@
       </ul>
     </div>
     <div style="background:#F2EDE4;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px">
-      <h3 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">What we can’t promise</h3>
+      <h3 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px">What we can’t promise</h3>
       <p style="margin:0;color:#4A4356">Credit lines, rights data and “no AI” instructions are built into every page and image. A determined person can still strip them. Karigar makes correct credit the default and stripping it a deliberate act — it cannot make copying impossible.</p>
     </div>
     <div id="report" style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px">
-      <h3 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">Report material about you</h3>
+      <h3 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px">Report material about you</h3>
       <sc-if value="{{ tdForm }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ submitTd }}" novalidate="" style="display:flex;flex-direction:column;gap:10px">
           <p style="margin:0;color:#6F6880;font-size:15px">If another account has published something about you or your community, tell us. The council’s safeguarding group reviews every report.</p>
@@ -790,11 +917,11 @@
     <div class="w-hero" style="background:#241F2E;border-radius:30px;padding:clamp(22px,3.4vw,48px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,3vw,56px);align-items:center">
       <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
         <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#F0B23C">For organisations</div>
-        <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(36px,4.8vw,62px);letter-spacing:-.03em;line-height:1;color:#FBF7F0;text-wrap:balance">Facilitate the session. Then step back.</h1>
+        <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(36px,4.8vw,62px);letter-spacing:-.015em;line-height:1;color:#FBF7F0;text-wrap:balance">Facilitate the session. Then step back.</h1>
         <p style="margin:0;color:#CFC8DA;font-size:17px;line-height:1.6;max-width:50ch;text-wrap:pretty">The facilitator console helps NGOs, cooperatives and field teams run Karigar card sessions, turn recordings into an artisan’s own record, and hand it over. What happens after that belongs to the artisan.</p>
         <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
-          <a href="#/signin" style="display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;background:#F0B23C;color:#241F2E;text-decoration:none;font-weight:700;font-size:16px;min-height:54px;box-sizing:border-box">Sign in to the console <span aria-hidden="true">→</span></a>
-          <a href="#/orgs/request" style="display:inline-flex;align-items:center;padding:14px 22px;border-radius:999px;border:1.5px solid rgba(251,247,240,.28);color:#FBF7F0;text-decoration:none;font-weight:600;font-size:15px;min-height:54px;box-sizing:border-box">Request an account</a>
+          <a href="#/signin" style="display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;background:#F0B23C;color:#241F2E;text-decoration:none;font-weight:600;font-size:16px;min-height:54px;box-sizing:border-box">Sign in to the console <span aria-hidden="true">→</span></a>
+          <a href="#request" style="display:inline-flex;align-items:center;padding:14px 22px;border-radius:999px;border:1.5px solid rgba(251,247,240,.28);color:#FBF7F0;text-decoration:none;font-weight:600;font-size:15px;min-height:54px;box-sizing:border-box">Request an account</a>
         </div>
       </div>
       <div style="background:#FBF7F0;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:6px;color:#241F2E">
@@ -824,7 +951,7 @@
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:56px clamp(16px,2.4vw,32px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
     <div style="background:#E6F6F2;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px">
-      <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px;color:#1F5F54">Your organisation can</div>
+      <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px;color:#1F5F54">Your organisation can</div>
       <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;color:#241F2E">
           <li style="display:flex;gap:10px;align-items:flex-start"><span aria-hidden="true" style="width:22px;height:22px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px;background:#6FC9B8;color:#12443C">✓</span><span>Create artisan records and run card sessions</span></li>
           <li style="display:flex;gap:10px;align-items:flex-start"><span aria-hidden="true" style="width:22px;height:22px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px;background:#6FC9B8;color:#12443C">✓</span><span>Upload recordings and session notes</span></li>
@@ -834,7 +961,7 @@
       </ul>
     </div>
     <div style="background:#FBEAE8;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px">
-      <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px;color:#7A1319">Your organisation cannot</div>
+      <div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px;color:#7A1319">Your organisation cannot</div>
       <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;color:#241F2E">
           <li style="display:flex;gap:10px;align-items:flex-start"><span aria-hidden="true" style="width:22px;height:22px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px;background:#A81C24;color:#FFFFFF">×</span><span>Publish, edit or take down anything for an artisan</span></li>
           <li style="display:flex;gap:10px;align-items:flex-start"><span aria-hidden="true" style="width:22px;height:22px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px;background:#A81C24;color:#FFFFFF">×</span><span>See an artisan’s private archive or practice conversations</span></li>
@@ -845,7 +972,7 @@
     </div>
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0">
-    <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">From the field</div><h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.025em;line-height:1.05;text-wrap:balance">Organisations already running sessions</h2></div>
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:720px"><div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B3FA0">From the field</div><h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.012em;line-height:1.05;text-wrap:balance">Organisations already running sessions</h2></div>
     <div style="margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px">
       <sc-for list="{{ orgTesti }}" as="t" hint-placeholder-count="0">
         <figure class="w-lift" style="margin:0;background:#FFFFFF;border:1px solid #EBE3D6;border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:16px;border-top:5px solid {{ t.color }}">
@@ -857,13 +984,13 @@
   </section>
   <section style="max-width:1440px;margin:0 auto;padding:72px clamp(16px,2.4vw,32px) 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start" class="w-split">
     <div style="display:flex;flex-direction:column;gap:16px">
-      <h2 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.025em">Before a first session</h2>
+      <h2 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.012em">Before a first session</h2>
       <p style="margin:0;color:#4A4356">Read the consent script aloud, in the artisan’s language, before the cards come out. It includes one line facilitators often skip:</p>
-      <blockquote style="margin:0;padding:20px 22px;background:#fff;border:1px solid #EBE3D6;border-radius:18px;font-family:'Bricolage Grotesque', sans-serif;font-size:19px;line-height:1.4">“When you practise conversations in your app, what you say is processed by Google’s Gemini service to write the replies. It is not published, and you can delete it.”</blockquote>
+      <blockquote style="margin:0;padding:20px 22px;background:#fff;border:1px solid #EBE3D6;border-radius:18px;font-family:'Newsreader', Georgia, serif;font-size:19px;line-height:1.4">“When you practise conversations in your app, what you say is processed by Google’s Gemini service to write the replies. It is not published, and you can delete it.”</blockquote>
       <p style="margin:0;color:#6F6880;font-size:15px">Then confirm the artisan has the app working on their own phone before you leave.</p>
     </div>
     <div id="request" style="background:#fff;border:1px solid #EBE3D6;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px">
-      <h3 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px">Request an organisation account</h3>
+      <h3 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px">Request an organisation account</h3>
       <sc-if value="{{ oaForm }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ submitOa }}" novalidate="" style="display:flex;flex-direction:column;gap:12px">
           <label style="display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:15px">Your name<input value="{{ oa.name }}" onChange="{{ setOaName }}" autocomplete="name" style="font-weight:400;padding:12px 14px;border-radius:12px;border:1.5px solid #E2D9CB;background:#fff"></label>
@@ -882,7 +1009,7 @@
 
 <sc-if value="{{ isSignin }}">
 <div class="w-page" style="max-width:560px;margin:0 auto;padding:56px 20px 0">
-  <h1 style="margin:0;text-align:center;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(36px,5vw,52px);letter-spacing:-.03em">Sign in</h1>
+  <h1 style="margin:0;text-align:center;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:clamp(36px,5vw,52px);letter-spacing:-.015em">Sign in</h1>
   <div role="tablist" style="margin:28px auto 0;display:grid;grid-template-columns:1fr 1fr;padding:4px;background:#F2EDE4;border-radius:999px">
     <button role="tab" onClick="{{ pickArt }}" style="padding:12px;border:0;border-radius:999px;font-weight:600;cursor:pointer;min-height:46px;{{ artTabStyle }}">I’m an artisan</button>
     <button role="tab" onClick="{{ pickOrg }}" style="padding:12px;border:0;border-radius:999px;font-weight:600;cursor:pointer;min-height:46px;{{ orgTabStyle }}">Organisation</button>
@@ -916,20 +1043,20 @@
       <label style="display:flex;flex-direction:column;gap:6px;font-weight:600">Password<input type="password" value="{{ orgPass }}" onChange="{{ setOrgPass }}" autocomplete="current-password" style="font-weight:400;padding:13px 14px;border-radius:14px;border:1.5px solid #E2D9CB;background:#fff"></label>
       <sc-if value="{{ orgErr }}"><div role="alert" style="color:#A81C24;font-size:14px">{{ orgErr }}</div></sc-if>
       <button type="submit" disabled="{{ orgBusy }}" style="margin-top:4px;padding:15px;border-radius:999px;border:0;background:#241F2E;color:#FBF7F0;font-weight:600;font-size:16px;cursor:pointer;min-height:50px">Sign in to the console</button>
-      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:14px"><a href="#/orgs">Request an account</a><a href="{{ consoleUrl }}">Open the console</a></div>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:14px"><a href="#/orgs">Request an account</a><a href="{{ consoleUrl }}">Open the console</a><a href="{{ appPreviewUrl }}">Preview the artisan app</a></div>
     </form>
   </sc-if>
 </div>
 </sc-if>
 
 <sc-if value="{{ isNotFound }}">
-  <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-size:44px">Page not found</h1><a href="#/" style="font-weight:600">Go home</a></div>
+  <div style="max-width:720px;margin:0 auto;padding:96px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center"><h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-size:44px">Page not found</h1><a href="#/" style="font-weight:600">Go home</a></div>
 </sc-if>
 <sc-if value="{{ isStudio }}">
 <div class="w-page" style="max-width:1440px;margin:0 auto;padding:32px clamp(16px,2.4vw,32px) 0">
   <sc-if value="{{ isDeleted }}">
     <div style="max-width:640px;margin:48px auto;background:#fff;border:1px solid #EBE3D6;border-radius:28px;padding:40px;display:flex;flex-direction:column;gap:14px">
-      <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-size:34px">Your account is deleted</h1>
+      <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-size:34px">Your account is deleted</h1>
       <p style="margin:0;color:#4A4356">Your page, stories and requests are gone from Karigar’s live systems. Backups clear within 35 days. Nothing was kept for research.</p>
       <button onClick="{{ restore }}" style="align-self:flex-start;padding:12px 20px;border-radius:999px;border:1.5px solid #DDD4C6;background:#fff;font-weight:600;cursor:pointer">Restore the sample record</button>
     </div>
@@ -938,7 +1065,7 @@
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-bottom:24px;border-bottom:1px solid #EBE3D6">
       <div style="display:flex;align-items:center;gap:14px">
         <div style="width:52px;height:52px;border-radius:50%;background:#E6F6F2;border:2px solid #6FC9B8;display:flex;align-items:center;justify-content:center;font-weight:600;color:#1F5F54;font-size:20px">ર</div>
-        <div><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:22px">{{ me.name }}</div><div style="color:#6F6880;font-size:15px">{{ me.local }} · {{ me.craft }}</div></div>
+        <div><div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:22px">{{ me.name }}</div><div style="color:#6F6880;font-size:15px">{{ me.local }} · {{ me.craft }}</div></div>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
         <div style="display:flex;padding:3px;background:#F2EDE4;border-radius:999px" role="group" aria-label="Language">
@@ -954,7 +1081,7 @@
       </nav>
       <div style="min-width:0">
         <sc-if value="{{ sStories }}" hint-placeholder-val="{{ true }}">
-          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.stories }}</h1>
+          <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:34px;letter-spacing:-.01em">{{ L.stories }}</h1>
           <p style="margin:8px 0 22px;color:#6F6880">{{ L.storiesSub }}</p>
           <div style="display:flex;flex-direction:column;gap:12px">
             <sc-for list="{{ myStories }}" as="x" hint-placeholder-count="3">
@@ -962,7 +1089,7 @@
                 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-start">
                   <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
                     <span style="font-size:13px;font-weight:600;color:#8C8499;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:{{ x.ringColor }}"></span>{{ x.ring }}</span>
-                    <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:21px;line-height:1.2">{{ x.title }}</span>
+                    <span style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:21px;line-height:1.2">{{ x.title }}</span>
                   </div>
                   <span style="padding:6px 12px;border-radius:999px;font-weight:600;font-size:14px;color:{{ x.tierColor }};background:{{ x.tierBg }};white-space:nowrap">{{ x.tierLabel }}</span>
                 </div>
@@ -990,7 +1117,7 @@
         </sc-if>
 
         <sc-if value="{{ sRequests }}">
-          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.requests }}</h1>
+          <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:34px;letter-spacing:-.01em">{{ L.requests }}</h1>
           <p style="margin:8px 0 18px;color:#6F6880">{{ L.reqSub }}</p>
           <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:20px;padding:14px;border-radius:16px;background:#F2EDE4">
             <span style="font-weight:600;font-size:15px;margin-right:4px">Requests are</span>
@@ -1018,7 +1145,7 @@
         </sc-if>
 
         <sc-if value="{{ sPartners }}">
-          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.partners }}</h1>
+          <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:34px;letter-spacing:-.01em">{{ L.partners }}</h1>
           <p style="margin:8px 0 22px;color:#6F6880">{{ L.partSub }}</p>
           <sc-for list="{{ partners }}" as="p">
             <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:20px 22px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
@@ -1030,7 +1157,7 @@
         </sc-if>
 
         <sc-if value="{{ sProfile }}">
-          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.profile }}</h1>
+          <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:34px;letter-spacing:-.01em">{{ L.profile }}</h1>
           <p style="margin:8px 0 22px;color:#6F6880">{{ L.profSub }}</p>
           <div style="display:flex;flex-direction:column;gap:16px">
             <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:12px">
@@ -1047,7 +1174,7 @@
         </sc-if>
 
         <sc-if value="{{ sData }}">
-          <h1 style="margin:0;font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:34px;letter-spacing:-.02em">{{ L.data }}</h1>
+          <h1 style="margin:0;font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:34px;letter-spacing:-.01em">{{ L.data }}</h1>
           <p style="margin:8px 0 22px;color:#6F6880">{{ L.dataSub }}</p>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
             <div style="background:#fff;border:1px solid #EBE3D6;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px">
@@ -1083,7 +1210,7 @@
   <div onClick="{{ closeSheet }}" style="position:fixed;inset:0;background:rgba(36,31,46,.45);z-index:70"></div>
   <div class="w-sheet" role="dialog" aria-modal="true" aria-label="Who can see this" style="position:fixed;top:24px;right:24px;bottom:24px;width:min(560px,calc(100vw - 48px));z-index:80;background:#FBF7F0;border-radius:28px;box-shadow:0 24px 60px rgba(36,31,46,.25);overflow:auto;padding:28px;display:flex;flex-direction:column;gap:22px">
     <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
-      <div><div style="font-size:13px;color:#8C8499;font-weight:600">{{ L.who }}</div><div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:24px;line-height:1.2">{{ sh.title }}</div></div>
+      <div><div style="font-size:13px;color:#8C8499;font-weight:600">{{ L.who }}</div><div style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:24px;line-height:1.2">{{ sh.title }}</div></div>
       <button onClick="{{ closeSheet }}" aria-label="Close" style="width:44px;height:44px;flex-shrink:0;border-radius:50%;border:1.5px solid #DDD4C6;background:#fff;cursor:pointer;font-size:18px">×</button>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px">
@@ -1131,31 +1258,31 @@
 </sc-if>
 </sc-if>
 <sc-if value="{{ bOpen }}">
-  <div role="dialog" aria-modal="true" aria-label="Question card" style="position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px">
-    <div class="w-scrim" onClick="{{ bClose }}" style="position:absolute;inset:0;background:rgba(24,20,32,.6);backdrop-filter:blur(6px)"></div>
-    <div class="w-modal" style="position:relative;width:100%;max-width:460px;background:#FBF7F0;border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.35)">
-      <div style="background:{{ bCard.color }};padding:20px 22px 60px;display:flex;justify-content:space-between;align-items:center;gap:12px">
-        <span style="display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:{{ bCard.onColor }}">{{ bCard.ringLabel }} ring</span>
-        <button onClick="{{ bClose }}" aria-label="Close" style="width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.9);cursor:pointer;font-size:20px;line-height:1;color:#241F2E">×</button>
-      </div>
-      <div style="margin:-44px 16px 0;background:#FFFFFF;border-radius:22px;padding:24px;box-shadow:0 12px 30px rgba(36,31,46,.12);position:relative;display:flex;flex-direction:column;gap:14px">
-        <span style="font-size:13px;color:#8C8499">Card {{ bCard.n }} of {{ bCard.of }} on this ring</span>
-        <div style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:clamp(24px,4vw,30px);line-height:1.15;letter-spacing:-.015em;text-wrap:balance">{{ bCard.q }}</div>
-        <p style="margin:0;color:#4A4356;font-size:15px;line-height:1.6;text-wrap:pretty">{{ bCard.why }}</p>
-      </div>
-      <div style="padding:18px 22px 22px;display:flex;flex-direction:column;gap:16px">
-        <div style="display:flex;flex-wrap:wrap;gap:6px">
-          <span style="font-size:13px;padding:6px 11px;border-radius:999px;background:#FFFFFF;border:1px solid #EBE3D6;color:#4A4356">Answered by voice, in any language</span>
-          <span style="font-size:13px;padding:6px 11px;border-radius:999px;background:#FFFFFF;border:1px solid #EBE3D6;color:#4A4356">Can be skipped</span>
-          <span style="font-size:13px;padding:6px 11px;border-radius:999px;background:{{ bCard.soft }};color:{{ bCard.ink }};font-weight:600">Private until the maker publishes</span>
+  <div role="dialog" aria-modal="true" aria-label="Question card" style="position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px">
+    <div class="w-scrim" onClick="{{ bClose }}" style="position:absolute;inset:0;background:rgba(24,20,32,.74);backdrop-filter:blur(6px)"></div>
+    <button onClick="{{ bClose }}" aria-label="Close" style="position:absolute;top:16px;right:16px;width:46px;height:46px;border-radius:50%;border:0;background:rgba(251,247,240,.92);cursor:pointer;font-size:22px;line-height:1;color:#241F2E">×</button>
+    <div class="w-deal" style="position:relative;width:min(340px,80vw,calc((100vh - 180px) * .615));container-type:inline-size;aspect-ratio:.615;perspective:1600px">
+      <div onClick="{{ bTurn }}" style="position:absolute;inset:0;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.22,1,.36,1);cursor:pointer;transform:{{ bCard.rot }}">
+        <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.45)">
+          <img src="{{ bCard.cover }}" loading="lazy" alt="{{ bCard.deck }} theme card" style="width:100%;height:100%;object-fit:cover;display:block">
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-          <button onClick="{{ bPrev }}" style="padding:11px 16px;border-radius:999px;border:1.5px solid #DDD4C6;background:#FFFFFF;cursor:pointer;font-weight:600;font-size:14px;min-height:44px;font-family:inherit;color:#241F2E">← Previous</button>
-          <span style="font-size:13px;color:#8C8499">{{ bCard.idx }} / {{ bTotal }}</span>
-          <button onClick="{{ bNext }}" style="padding:11px 18px;border-radius:999px;border:0;background:#241F2E;color:#FBF7F0;cursor:pointer;font-weight:600;font-size:14px;min-height:44px;font-family:inherit">Next card →</button>
+        <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);border-radius:18px;background:{{ bCard.bg }};color:{{ bCard.ink }};padding:7cqw 6.5cqw;display:flex;flex-direction:column;gap:4.5cqw;box-shadow:0 30px 70px rgba(0,0,0,.45);box-sizing:border-box;overflow:hidden">
+          <div style="font-family:'Literata', Georgia, serif;font-size:max(9px,3.3cqw);font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.4">{{ bCard.group }}</div>
+          <div style="font-family:'Literata', Georgia, serif;font-weight:700;font-size:max(14px,7.2cqw);line-height:1.2;text-wrap:balance">{{ bCard.q }}</div>
+          <div style="border-left:2px solid {{ bCard.ink }};padding-left:12px;font-family:'Literata', Georgia, serif;font-size:max(11.5px,4.6cqw);line-height:1.45;color:#241F2E">“{{ bCard.hint }}”</div>
+          <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:10px">
+            <span style="font-size:max(10px,3.5cqw);line-height:1.4;font-weight:600">{{ bCard.deck }}<br><span style="font-weight:400;color:#4A4356">Card {{ bCard.n }} of {{ bCard.of }}</span></span>
+            <span style="width:10.5cqw;height:10.5cqw;flex:none;border-radius:4px;background:{{ bCard.ink }};color:{{ bCard.bg }};display:flex;align-items:center;justify-content:center;font-family:'Literata', Georgia, serif;font-weight:700;font-size:15px">{{ bCard.gi }}</span>
+          </div>
         </div>
       </div>
     </div>
+    <div style="position:relative;display:flex;align-items:center;gap:8px">
+      <button onClick="{{ bPrev }}" aria-label="Previous card" style="width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(251,247,240,.3);background:transparent;color:#FBF7F0;cursor:pointer;font-size:17px">←</button>
+      <button onClick="{{ bTurn }}" style="padding:0 22px;height:48px;border-radius:999px;border:0;background:#FBF7F0;color:#241F2E;cursor:pointer;font-weight:600;font-size:15px;font-family:inherit;min-width:150px">{{ bCard.turnLabel }}</button>
+      <button onClick="{{ bNext }}" aria-label="Next card" style="width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(251,247,240,.3);background:transparent;color:#FBF7F0;cursor:pointer;font-size:17px">→</button>
+    </div>
+    <p style="position:relative;margin:0;font-size:13.5px;color:#CFC8DA;text-align:center;max-width:44ch">Answered out loud, in the artisan’s own language. Any card can be skipped. Card {{ bCard.idx }} of {{ bTotal }} on the board.</p>
   </div>
 </sc-if>
 </main>
@@ -1167,7 +1294,7 @@
     <div style="display:flex;flex-direction:column;gap:14px;grid-column:span 1">
       <div style="display:flex;align-items:center;gap:10px">
         <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.6" fill="none" stroke="#F0B23C" stroke-width="2.2"></circle><circle cx="12" cy="12" r="7.6" fill="none" stroke="#6D9DC5" stroke-width="2.2"></circle><circle cx="12" cy="12" r="4.6" fill="none" stroke="#E0646B" stroke-width="2.2"></circle><circle cx="12" cy="12" r="1.9" fill="#B98BE0"></circle></svg>
-        <span style="font-family:'Bricolage Grotesque', sans-serif;font-weight:600;font-size:20px;color:#FBF7F0">Karigar</span>
+        <span style="font-family:'Newsreader', Georgia, serif;font-weight:600;font-size:20px;color:#FBF7F0">Karigar</span>
       </div>
       <p style="margin:0;font-size:15px;line-height:1.6;color:#C4BCD1;max-width:300px;text-wrap:pretty">Craft stories, owned by the people who make the craft. Not a marketplace, not a social network.</p>
     </div>
@@ -1175,6 +1302,7 @@
       <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8C8499">Explore</div>
       <a href="#/makers" style="color:#FBF7F0;text-decoration:none">Makers &amp; stories</a>
       <a href="#/how" style="color:#FBF7F0;text-decoration:none">How it works</a>
+      <a href="#/kit" style="color:#FBF7F0;text-decoration:none">The kit</a>
       <a href="#/principles" style="color:#FBF7F0;text-decoration:none">Principles</a>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px">
@@ -1201,7 +1329,7 @@
 class Component extends DCLogic {
   state = {
     route: 'home', param: '', menu: false,
-    q: '', fCraft: 'All', fRegion: 'All', fLang: 'All', btab: 'makers', bSel: 0, bOpen: false, tmTab: 'org', pSel: 0, hwSel: 0,
+    q: '', fCraft: 'All', fRegion: 'All', fLang: 'All', btab: 'makers', bSel: 0, bOpen: false, bFlip: false, bSeen: {}, tmTab: 'org', pSel: 0, hwSel: 0,
     stLang: null, speaking: false, shared: false, embed: false,
     cf: { cat: '', name: '', org: '', email: '', purpose: '' }, cfTried: false, cfDone: false,
     sTab: 'org', orgEmail: '', orgPass: '', orgErr: '', orgBusy: false, code: '', artErr: '',
@@ -1228,7 +1356,7 @@ class Component extends DCLogic {
     };
     boot();
   }
-  componentWillUnmount() { window.removeEventListener('hashchange', this._hc); window.removeEventListener('keydown', this._kd); clearTimeout(this._boot); try { speechSynthesis.cancel(); } catch (e) {} }
+  componentWillUnmount() { clearTimeout(this._ft); window.removeEventListener('hashchange', this._hc); window.removeEventListener('keydown', this._kd); clearTimeout(this._boot); try { speechSynthesis.cancel(); } catch (e) {} }
 
   readRoute(first) {
     const raw = window.location.hash || '';
@@ -1314,18 +1442,52 @@ class Component extends DCLogic {
     this.flash('Your record has been downloaded.');
   }
 
+  openCard(i) {
+    clearTimeout(this._ft);
+    this.setState({ bSel: i, bOpen: true, bFlip: false });
+    this._ft = setTimeout(() => this.setState(s => ({ bFlip: true, bSeen: { ...s.bSeen, [i]: 1 } })), 700);
+  }
+
+  stepCard(d) {
+    const B = this.K.GBOARD.cards, cur = this.state.bSel, i = (cur + d + B.length) % B.length;
+    if (B[i][0] !== B[cur][0]) return this.openCard(i);
+    clearTimeout(this._ft);
+    this.setState(s => ({ bSel: i, bFlip: true, bSeen: { ...s.bSeen, [i]: 1 } }));
+  }
+
   boardVals() {
-    const K = this.K, G = K.GBOARD, B = G.cards, sel = this.state.bSel, rr = { craft: 21, place: 27.6, lineage: 34.2, material: 40.8, culture: 47.4, pride: 54 };
-    const onC = { craft: '#3A1F57', place: '#12443C', lineage: '#FFFFFF', material: '#3E1611', culture: '#13304A', pride: '#4D3302' };
+    const K = this.K, B = K.GBOARD.cards, T = K.THEMES, sel = this.state.bSel, seen = this.state.bSeen || {}, open = this.state.bOpen;
+    const rr = { craft: 21, place: 27.6, lineage: 34.2, material: 40.8, culture: 47.4, pride: 54 };
     const dots = [];
-    Object.keys(rr).forEach(rk => { const items = B.map((c, i) => ({ c, i })).filter(o => o.c[0] === rk), n = items.length, rp = rr[rk] / 120 * 100, R = K.RINGS[rk];
-      items.forEach((o, j) => { const rad = (-50 + (j + 0.5) * (280 / n)) * Math.PI / 180, on = this.state.bOpen && o.i === sel, size = on ? 22 : 16;
-        dots.push({ label: R.label + ': ' + o.c[1], on, pick: () => this.setState({ bSel: o.i, bOpen: true }),
-          style: 'position:absolute;left:' + (50 + rp * Math.cos(rad)).toFixed(2) + '%;top:' + (50 + rp * Math.sin(rad)).toFixed(2) + '%;transform:translate(-50%,-50%);width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + (on ? '#241F2E' : '#FFFFFF') + ';border:3px solid ' + (on ? '#FFFFFF' : R.ink) + ';padding:0;cursor:pointer;box-sizing:border-box;transition:transform .18s cubic-bezier(.22,1,.36,1);box-shadow:0 2px 6px rgba(0,0,0,.25)' }); }); });
-    const c = B[sel] || B[0], rk = c[0], R = K.RINGS[rk], ringCards = B.filter(x => x[0] === rk), n = B.slice(0, sel + 1).filter(x => x[0] === rk).length;
-    const go = d => this.setState({ bSel: (sel + d + B.length) % B.length, bOpen: true }); this._bgo = go;
-    return { bDots: dots, bTotal: B.length, bOpen: this.state.bOpen, bOpenFirst: () => this.setState({ bSel: 0, bOpen: true }), bClose: () => this.setState({ bOpen: false }), bPrev: () => go(-1), bNext: () => go(1),
-      bCard: { ringLabel: R.label, soft: R.soft, ink: R.ink, color: R.color, onColor: onC[rk], q: c[1], why: G.why[rk], n, of: ringCards.length, idx: sel + 1 } };
+    Object.keys(rr).forEach(rk => {
+      const items = B.map((c, i) => ({ c, i })).filter(o => o.c[0] === rk), n = items.length, rp = rr[rk] / 120 * 100, R = K.RINGS[rk];
+      items.forEach((o, j) => {
+        const rad = (-50 + (j + 0.5) * (280 / n)) * Math.PI / 180, on = open && o.i === sel, has = !!seen[o.i], size = on ? 21 : 15;
+        const bg = on ? '#241F2E' : has ? '#FFFFFF' : 'rgba(255,255,255,.42)';
+        const bd = on ? '3px solid #FFFFFF' : has ? '3px solid ' + R.ink : '2px solid rgba(255,255,255,.9)';
+        dots.push({ label: R.label + ': ' + o.c[1], on, pick: () => this.openCard(o.i),
+          style: 'position:absolute;left:' + (50 + rp * Math.cos(rad)).toFixed(2) + '%;top:' + (50 + rp * Math.sin(rad)).toFixed(2) + '%;transform:translate(-50%,-50%);width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + bg + ';border:' + bd + ';padding:0;cursor:pointer;box-sizing:border-box;transition:transform .18s cubic-bezier(.22,1,.36,1);box-shadow:' + (on ? '0 0 0 5px rgba(36,31,46,.16)' : '0 1px 3px rgba(0,0,0,.18)') });
+      });
+    });
+    const c = B[sel] || B[0], th = T.find(t => t.ring === c[0]) || T[0], ringCards = B.filter(x => x[0] === c[0]), n = B.slice(0, sel + 1).filter(x => x[0] === c[0]).length;
+    const opened = Object.keys(seen).length, circ = 2 * Math.PI * 15;
+    this._bgo = d => this.stepCard(d);
+    return { bDots: dots, bTotal: B.length, bOpened: opened, bDash: (opened / B.length * circ).toFixed(2) + ' ' + circ.toFixed(2), bOpen: open,
+      bOpenFirst: () => this.openCard(0), bClose: () => { clearTimeout(this._ft); this.setState({ bOpen: false }); }, bPrev: () => this.stepCard(-1), bNext: () => this.stepCard(1),
+      bTurn: () => { clearTimeout(this._ft); this.setState(s => ({ bFlip: !s.bFlip, bSeen: { ...s.bSeen, [s.bSel]: 1 } })); },
+      bCard: { deck: th.name, cover: th.cover, bg: th.bg, ink: th.ink, group: c[3], gi: c[4], q: c[1], hint: c[2], n, of: ringCards.length, idx: sel + 1,
+        rot: this.state.bFlip ? 'rotateY(180deg)' : 'rotateY(0deg)', turnLabel: this.state.bFlip ? 'Show the deck' : 'Turn the card over' } };
+  }
+
+  kitVals() {
+    const K = this.K, T = K.THEMES, B = K.GBOARD.cards, n = T.length, first = rk => Math.max(0, B.findIndex(x => x[0] === rk));
+    const fan = T.map((t, i) => { const a = (i - (n - 1) / 2) * 10;
+      return { cover: t.cover, name: t.name, open: () => this.openCard(first(t.ring)),
+        style: 'position:absolute;left:50%;bottom:2%;width:clamp(104px,12vw,168px);aspect-ratio:.615;margin-left:calc(clamp(104px,12vw,168px) / -2);padding:0;border:0;background:none;cursor:pointer;border-radius:12px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.4);transform-origin:50% 150%;transform:rotate(' + a + 'deg);z-index:' + i }; });
+    const decks = T.map(t => ({ name: t.name, cover: t.cover, bg: t.bg, ink: t.ink, intro: t.intro, groups: t.groups.map(g => g.name), open: () => this.openCard(first(t.ring)) }));
+    return { kitFan: fan, kitDecks: decks, kitReflect: K.REFLECT.cards, kitStory: K.STORYCARDS.cards, kitPrint: K.PRINT,
+      kitDraw: () => this.openCard(Math.floor(Math.random() * B.length)),
+      kitToPrint: () => { const el = document.getElementById('kit-print'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); } };
   }
 
   homeVals() {
@@ -1352,7 +1514,7 @@ class Component extends DCLogic {
     const steps = S.map((s, i) => { const R = K.RINGS[s.rk], on = i === sel; return { n: i + 1, short: s.short, on, pick: () => this.setState({ hwSel: i }),
       style: 'display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;padding:10px 12px;border-radius:14px;cursor:pointer;font-family:inherit;min-height:56px;border:1.5px solid ' + (on ? R.color : 'rgba(251,247,240,.16)') + ';background:' + (on ? R.color : 'transparent') + ';color:' + (on ? (s.rk === 'lineage' ? '#FFFFFF' : '#241F2E') : '#E9E3F0') }; });
     const c = S[sel], R = K.RINGS[c.rk];
-    const B = K.GBOARD.cards, rings = ['craft', 'place', 'lineage', 'material', 'culture', 'pride'].map(rk => { const RR = K.RINGS[rk]; return { label: RR.label, color: RR.color, ink: RR.ink, why: K.GBOARD.why[rk], count: B.filter(x => x[0] === rk).length, open: () => this.setState({ bSel: B.findIndex(x => x[0] === rk), bOpen: true }) }; });
+    const B = K.GBOARD.cards, rings = ['craft', 'place', 'lineage', 'material', 'culture', 'pride'].map(rk => { const RR = K.RINGS[rk]; return { label: RR.label, color: RR.color, ink: RR.ink, why: K.GBOARD.why[rk], count: B.filter(x => x[0] === rk).length, open: () => this.openCard(B.findIndex(x => x[0] === rk)) }; });
     const orgTesti = K.TESTI.org.map(t => { const RR = K.RINGS[t.ring]; return { text: t.text, who: t.who, role: t.role + ', ' + t.org, initials: t.who.split(' ').map(w => w[0]).join(''), soft: RR.soft, ink: RR.ink, color: RR.color }; });
     return { hwSteps: steps, hwCur: { n: sel + 1, t: c.t, d: c.d, who: c.who, tags: c.tags, soft: R.soft, ink: R.ink }, hwNext: () => this.setState({ hwSel: (sel + 1) % 4 }), hwRings: rings, orgTesti };
   }
@@ -1375,19 +1537,19 @@ class Component extends DCLogic {
     const flags = {
       isStudio: route === 'studio', isPublicChrome: route !== 'studio',
       isHome: route === 'home', isMakers: route === 'makers', isMaker: route === 'maker', isStory: route === 'story', isContact: route === 'contact',
-      isHow: route === 'how', isPrinciples: route === 'principles', isOrgs: route === 'orgs', isSignin: route === 'signin',
-      isNotFound: !['home', 'makers', 'maker', 'story', 'contact', 'how', 'principles', 'orgs', 'signin', 'studio'].includes(route)
+      isHow: route === 'how', isPrinciples: route === 'principles', isKit: route === 'kit', isOrgs: route === 'orgs', isSignin: route === 'signin',
+      isNotFound: !['home', 'makers', 'maker', 'story', 'contact', 'how', 'kit', 'principles', 'orgs', 'signin', 'studio'].includes(route)
     };
     const consoleUrl = this.props.consoleUrl || '/console';
     // the deployed public address (lib/origin.js), handed in by the runtime; this page's own address otherwise
     const appOrigin = (this.props.appOrigin || window.location.origin).replace(/\/+$/, '');
-    const navDefs = [['makers', 'Makers & stories'], ['how', 'How it works'], ['principles', 'Principles'], ['orgs', 'For organisations']];
+    const navDefs = [['makers', 'Makers & stories'], ['how', 'How it works'], ['kit', 'The kit'], ['principles', 'Principles'], ['orgs', 'For organisations']];
     const navItems = navDefs.map(([r, label]) => {
       const on = route === r || (r === 'makers' && (route === 'maker' || route === 'story' || route === 'contact'));
       return { href: '#/' + r, label, color: on ? '#52307C' : '#4A4356', bg: on ? '#F1E9FA' : 'transparent' };
     });
     const base = { ...flags, navItems, showSample: this.props.sampleNotice !== false, menu: s.menu, toggleMenu: () => this.setState({ menu: !s.menu }),
-      toast: s.toast, hasToast: !!s.toast, consoleUrl, ready: !!s.db, studioDemo: !!this.props.studioDemo };
+      toast: s.toast, hasToast: !!s.toast, consoleUrl, appPreviewUrl: consoleUrl + '#app', ready: !!s.db, studioDemo: !!this.props.studioDemo };
     if (!s.db || !K) return base;
     const db = s.db; const live = !db.deleted; const chip = this.chip.bind(this);
 
@@ -1513,7 +1675,7 @@ class Component extends DCLogic {
     const td = s.td; const tdBad = !td.name.trim() || !td.link.trim() || td.what.trim().length < 10;
 
     return { ...base,
-      ...this.boardVals(), ...this.homeVals(), ...this.principleVals(), ...this.howVals(),
+      ...this.boardVals(), ...this.homeVals(), ...this.principleVals(), ...this.howVals(), ...this.kitVals(),
       essay: K.ESSAY, voices: K.VOICES.filter(v => makersAll.some(m => m.id === v.maker)).map(v => { const m = this.maker(v.maker); return { ...v, maker: m.isCollective ? m.name : m.name.split(' ')[0], href: '#/maker/' + m.id }; }),
       homeMakers: sorted.filter(m => !m.isCollective).slice(0, 4).map(m => this.makerCard(m)),
       homeStories: [...pubStories].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3).map(x => this.storyCard(x)),
@@ -1560,9 +1722,10 @@ class Component extends DCLogic {
         this.setState({ orgBusy: true, orgErr: '' });
         this.props.signIn(s.orgEmail.trim(), s.orgPass).then(() => { window.location.href = consoleUrl; },
           err => this.setState({ orgBusy: false, orgErr: err && err.status && err.status < 500 ? err.message : 'Could not reach Karigar. Check the connection and try again.' })); },
+      // Handover tokens are case-sensitive (base64url), so the code is kept exactly as typed; a pasted link works too.
       code: s.code, setCode: e => this.setState({ code: e.target.value, artErr: '' }), artErr: s.artErr,
       openApp: e => { if (e && e.preventDefault) e.preventDefault(); const raw = s.code.trim(); const tok = (raw.match(/\/k\/([A-Za-z0-9_-]+)/) || [, raw])[1];
-        if (!/^[A-Za-z0-9_-]{8,64}$/.test(tok)) { this.setState({ artErr: 'Type the code printed under the QR on your card.' }); return; } window.location.href = appOrigin + '/k/' + tok; },
+        if (!/^[A-Za-z0-9_-]{8,64}$/.test(tok)) { this.setState({ artErr: 'Type the code printed under the QR on your card.' }); return; } window.location.href = consoleUrl + '#k=' + tok; },
 
       oa, setOaName: e => this.setState({ oa: { ...s.oa, name: e.target.value } }), setOaOrg: e => this.setState({ oa: { ...s.oa, org: e.target.value } }),
       setOaEmail: e => this.setState({ oa: { ...s.oa, email: e.target.value } }), setOaRegion: e => this.setState({ oa: { ...s.oa, region: e.target.value } }),
