@@ -87,7 +87,7 @@ export const SCHEMA = [
 ];
 
 export const SAMPLE = {
-  artisan_name: 'Rehmatbai Khatri (composite record — not a real individual)',
+  artisan_name: 'Meena Khatri (composite record — not a real individual)',
   craft_name_local: 'bandhej',
   craft_region: 'Bhuj taluka, Kutch, Gujarat',
   practice_span: 'tying since about the age of nine; thirty-eight years now',
@@ -96,7 +96,7 @@ export const SAMPLE = {
   place_change: 'Piped water arrived and the old dyeing wells are mostly closed or brackish. After the 2001 earthquake the family workshop was rebuilt in concrete, which holds heat differently. Bhuj has grown out to the edge of the yard, so terrace drying now competes with dust from the road.',
   emotion_about_place_change: '"I am not sad about the pipe. I am tired of explaining to buyers why the same red is not the same red."',
   teacher_name_relation: 'Her mother Jenab, and an aunt by marriage who tied faster than anyone she has seen since.',
-  teaching_memory: 'She was given a corner of a cotton odhani and told to fill it while the women worked the middle. Her mother did not correct the pattern — she pressed Rehmatbai\'s thumbnail down harder onto the cloth and moved on. "The nail does the work, not the thread." She undid her own first row twice before anyone noticed.',
+  teaching_memory: 'She was given a corner of a cotton odhani and told to fill it while the women worked the middle. Her mother did not correct the pattern — she pressed Meena\'s thumbnail down harder onto the cloth and moved on. "The nail does the work, not the thread." She undid her own first row twice before anyone noticed.',
   remembered_phrase_gesture: '"Naakhun thi" — with the nail. Said as a correction, always with a tap on the back of the hand rather than an explanation.',
   family_generations: 'Four generations she can name. Her mother and grandmother tied; her father and brothers dyed. Of her three children, one daughter ties competently and does not want to do it for money; her son manages orders and photography and does not tie.',
   transmission_strength: 'Tying itself. Any girl in the lane can pick up basic bheendi in a season, and the fine work still passes hand to hand at the same speed it always did.',
@@ -135,7 +135,7 @@ export const SAMPLE = {
   desired_continuity: 'The nail. "If it is not tied by nail it is something else, and it can have another name."',
   learning_story: 'Early on she tied a whole cotton piece while it was too dry because she wanted to finish before dark. The knots looked right. After dyeing, every dot had a pale halo where the thread had not held. Her father looked at it once and put it in the seconds pile without saying anything. She says she learned the drag test that evening, from the ruined cloth rather than from anyone telling her.',
   emotional_story: 'The morning after her mother died, the women in the lane came and sat in the yard and tied. Nobody had ordered anything. They opened an old cotton piece that had been half-tied for months and finished it. She still has it, undyed.',
-  clarification_story: 'A design student asked her how long a piece takes and she said eleven days. The student wrote down eleven days as a selling point. Rehmatbai says the number is meaningless on its own — eleven days is four women, a specific pattern band, one drying window, and a decision not to rush a wedding piece. "If you only write the days, you make it sound like we are slow."',
+  clarification_story: 'A design student asked her how long a piece takes and she said eleven days. The student wrote down eleven days as a selling point. Meena says the number is meaningless on its own — eleven days is four women, a specific pattern band, one drying window, and a decision not to rush a wedding piece. "If you only write the days, you make it sound like we are slow."',
   outsider_misunderstanding: 'That slowness is the value. And that natural dye equals authentic — she uses both and considers the tying to be the craft.'
 };
 
@@ -147,7 +147,7 @@ export const SAMPLES = [
     id: 'p-bandhani', lang: 'gu', cluster: 'Bandhani · Bhuj, Kutch',
     approved: true, openedDaysAgo: 2, rooms: { brand: 6, genz: 4, social: 3, exhibition: 1 },
     record: {
-      artisan_name: 'રહેમતબાઈ ખત્રી',
+      artisan_name: 'મીના ખત્રી',
       craft_name_local: 'બાંધણી',
       craft_region: 'ભુજ તાલુકો, કચ્છ',
       practice_span: 'નવ વર્ષની ઉંમરથી બાંધું છું — આડત્રીસ વર્ષ થયાં',
@@ -195,7 +195,7 @@ export const SAMPLES = [
     id: 'p-dhokra', lang: 'hi', cluster: 'Dhokra casting · Bastar, Chhattisgarh',
     approved: false, openedDaysAgo: 11, rooms: { brand: 2, ngo: 1 },
     record: {
-      artisan_name: 'सुखराम विश्वकर्मा',
+      artisan_name: 'राजू राम',
       craft_name_local: 'ढोकरा ढलाई',
       craft_region: 'कोंडागांव, बस्तर, छत्तीसगढ़',
       practice_span: 'बाईस साल',
@@ -224,7 +224,7 @@ export const SAMPLES = [
     id: 'p-paithani', lang: 'mr', cluster: 'Paithani weaving · Yeola, Nashik',
     approved: true, openedDaysAgo: 5, rooms: { genz: 5, social: 4, brand: 2 },
     record: {
-      artisan_name: 'सुनंदा भालेराव',
+      artisan_name: 'आशा मोरे',
       craft_name_local: 'पैठणी विणकाम',
       craft_region: 'येवला, नाशिक',
       practice_span: 'सोळाव्या वर्षापासून — एकोणतीस वर्षं',
@@ -257,7 +257,7 @@ export const SAMPLES = [
     id: 'p-longpi', lang: 'en', cluster: 'Longpi pottery · Ukhrul, Manipur',
     approved: false, openedDaysAgo: null, rooms: {},
     record: {
-      artisan_name: 'Ngalengnam Shaiza (composite record)',
+      artisan_name: 'Lily Shaiza (composite record)',
       craft_name_local: 'Longpi ham (black stone pottery)',
       craft_region: 'Longpi Kajui, Ukhrul, Manipur',
       practice_span: 'fourteen years',
@@ -420,7 +420,7 @@ export const HUB = [
 export const SAMPLE_NAMES = {
   "p-bandhani": {
     "en": {
-      "name": "Rehmatbai Khatri",
+      "name": "Meena Khatri",
       "craft": "Bandhani",
       "region": "Bhuj taluka, Kutch"
     },
@@ -430,7 +430,7 @@ export const SAMPLE_NAMES = {
       "region": "भुज तालुका, कच्छ"
     },
     "gu": {
-      "name": "રહેમતબાઈ ખત્રી",
+      "name": "મીના ખત્રી",
       "craft": "બાંધણી",
       "region": "ભુજ તાલુકો, કચ્છ"
     },
@@ -442,12 +442,12 @@ export const SAMPLE_NAMES = {
   },
   "p-dhokra": {
     "en": {
-      "name": "Sukhram Vishwakarma",
+      "name": "Raju Ram",
       "craft": "Dhokra casting",
       "region": "Kondagaon, Bastar, Chhattisgarh"
     },
     "hi": {
-      "name": "सुखराम विश्वकर्मा",
+      "name": "राजू राम",
       "craft": "ढोकरा ढलाई",
       "region": "कोंडागांव, बस्तर, छत्तीसगढ़"
     },
@@ -457,19 +457,19 @@ export const SAMPLE_NAMES = {
       "region": "કોંડાગાંવ, બસ્તર, છત્તીસગઢ"
     },
     "mr": {
-      "name": "सुखराम विश्वकर्मा",
+      "name": "राजू राम",
       "craft": "ढोकरा ओतकाम",
       "region": "कोंडागाव, बस्तर, छत्तीसगड"
     }
   },
   "p-paithani": {
     "en": {
-      "name": "Sunanda Bhalerao",
+      "name": "Asha More",
       "craft": "Paithani weaving",
       "region": "Yeola, Nashik"
     },
     "hi": {
-      "name": "सुनंदा भालेराव",
+      "name": "आशा मोरे",
       "craft": "पैठणी बुनाई",
       "region": "येवला, नासिक"
     },
@@ -479,14 +479,14 @@ export const SAMPLE_NAMES = {
       "region": "યેવલા, નાશિક"
     },
     "mr": {
-      "name": "सुनंदा भालेराव",
+      "name": "आशा मोरे",
       "craft": "पैठणी विणकाम",
       "region": "येवला, नाशिक"
     }
   },
   "p-longpi": {
     "en": {
-      "name": "Ngalengnam Shaiza",
+      "name": "Lily Shaiza",
       "craft": "Longpi ham (black stone pottery)",
       "region": "Longpi Kajui, Ukhrul, Manipur"
     },
