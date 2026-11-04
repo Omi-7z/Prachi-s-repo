@@ -1569,7 +1569,8 @@ class Component extends DCLogic {
       // Translations and names cached on this phone are kept only while the profile they were
       // made from is unchanged.
       if (mine.trSig && mine.trSig === this.trSig(p)) {
-        p.translations = mine.translations || {};
+        // this phone's copies, on top of whatever the server has saved
+        p.translations = { ...(p.translations || {}), ...(mine.translations || {}) };
         const sig = this.idSig(p);
         if (mine.names && mine.names.sig === sig) p.names = { ...(p.names && p.names.sig === sig ? p.names : {}), ...mine.names };
       }

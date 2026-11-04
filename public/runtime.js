@@ -246,7 +246,7 @@ const status = (() => {
 })();
 
 // The facilitator-editable part of a profile; a change here is what triggers a save.
-const EDITABLE = ['record', 'sources', 'lang', 'recordLang', 'names', 'custom', 'links', 'analysis', 'checked', 'sessionNote', 'origin', 'approved', 'cluster'];
+const EDITABLE = ['record', 'sources', 'lang', 'recordLang', 'names', 'translations', 'custom', 'links', 'analysis', 'checked', 'sessionNote', 'origin', 'approved', 'cluster'];
 const signature = p => JSON.stringify(EDITABLE.map(k => p[k] === undefined ? null : p[k]));
 // "Create an empty profile" opens a blank board; it reaches the server with its first answer,
 // so opening New and leaving does not leave an empty profile behind.

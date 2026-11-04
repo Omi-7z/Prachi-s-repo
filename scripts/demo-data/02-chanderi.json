@@ -1,0 +1,92 @@
+{
+  "id": "dv-demo-02",
+  "lang": "hi",
+  "cluster": "Chanderi weaving · Ashoknagar, Madhya Pradesh",
+  "status": "complete",
+  "names": {
+    "en": { "name": "Rafiq Ansari", "craft": "Chanderi bunai", "region": "Chanderi, Ashoknagar, Madhya Pradesh" },
+    "hi": { "name": "रफ़ीक़ अंसारी", "craft": "चंदेरी बुनाई", "region": "चंदेरी, अशोकनगर, मध्य प्रदेश" },
+    "gu": { "name": "રફીક અંસારી", "craft": "ચંદેરી વણાટ", "region": "ચંદેરી, અશોકનગર, મધ્ય પ્રદેશ" },
+    "mr": { "name": "रफीक अन्सारी", "craft": "चंदेरी विणकाम", "region": "चंदेरी, अशोकनगर, मध्य प्रदेश" },
+    "bn": { "name": "রফিক আনসারি", "craft": "চান্দেরি বুনন", "region": "চান্দেরি, অশোকনগর, মধ্যপ্রদেশ" },
+    "ta": { "name": "ரஃபீக் அன்சாரி", "craft": "சந்தேரி நெசவு", "region": "சந்தேரி, அசோக்நகர், மத்தியப் பிரதேசம்" },
+    "kn": { "name": "ರಫೀಕ್ ಅನ್ಸಾರಿ", "craft": "ಚಂದೇರಿ ನೇಯ್ಗೆ", "region": "ಚಂದೇರಿ, ಅಶೋಕನಗರ, ಮಧ್ಯಪ್ರದೇಶ" }
+  },
+  "record": {
+    "artisan_name": "रफ़ीक़ अंसारी",
+    "craft_name_local": "चंदेरी बुनाई",
+    "craft_region": "चंदेरी, अशोकनगर, मध्य प्रदेश",
+    "practice_span": "चौदह साल की उम्र से करघे पर हूँ, छत्तीस साल हो गए।",
+    "local_belonging_phrase": "“चंदेरी का कपड़ा चंदेरी की गलियों में बुना जाता है। यहाँ हर तीसरे घर से करघे की आवाज़ आती है।”",
+    "ecological_input": "बरसात की नमी में धागा कम टूटता है, इसलिए महीन ताना उसी मौसम में चढ़ाते हैं। गर्मी में करघा गड्ढे में रखने से ठंडक बनी रहती है।",
+    "place_change": "अब बिजली आई तो पावरलूम भी आए। पुराने गड्ढे वाले करघे कम हुए, और किले के आसपास दुकानें और सैलानी बढ़ गए।",
+    "emotion_about_place_change": "“सैलानी आते हैं तो अच्छा लगता है। पर वे दुकान से ख़रीदकर चले जाते हैं, करघा देखने कोई नहीं आता।”",
+    "teacher_name_relation": "मेरे वालिद, अब्दुल करीम अंसारी। बूटी का हुनर मेरी फूफी से सीखा।",
+    "teaching_memory": "एक दिन वालिद ने मेरे बुने थान को खिड़की की धूप के सामने उठाया और बोले, “देख, कहाँ रोशनी अटकती है।” एक पतली लकीर दिखी। उन्होंने कुछ नहीं कहा, बस थान वापस रख दिया।",
+    "remembered_phrase_gesture": "“धागा चिल्लाता नहीं, टूट जाता है।” कहते हुए वे ताने पर हथेली फेरते थे।",
+    "family_generations": "दादा और वालिद बुनकर थे। मैं और मेरा भाई बुनते हैं। बेटी सना डिज़ाइन बनाती है, बेटा भोपाल में पढ़ रहा है।",
+    "transmission_strength": "सादी बुनाई और नाल्फेरा घर में ही सीख जाते हैं। बच्चे रोज़ देखते हैं।",
+    "transmission_weakness": "पुरानी अशर्फ़ी बूटी और महीन किनारी। इनके पूरे नमूने अब दो-तीन बुज़ुर्गों के पास ही बचे हैं।",
+    "teaching_difficulty": "सीखने में दो-तीन साल लगते हैं और मज़दूरी कम है। लड़के शहर की नौकरी को ज़्यादा भरोसे का मानते हैं।",
+    "primary_material": "रेशमी ताना, महीन सूती बाना और बूटियों के लिए ज़री।",
+    "material_origin": "रेशम बेंगलुरु से, सूत कोयंबटूर से और ज़री सूरत से आती है। मास्टर वीवर के ज़रिए मिलती है।",
+    "first_contact": "बचपन में नली भरने बैठता था। ऊँगलियों पर रेशम की चिकनाहट और माँड़ की महक आज भी याद है।",
+    "material_special": "ताना बहुत महीन है और माँड़ हल्का। इसी से कपड़े में वह पारदर्शिता और चमक आती है, जो चंदेरी की पहचान है।",
+    "material_in_hands": "अच्छा ताना हाथ के नीचे हल्का सा गूँजता है। धागा बिना खिंचे सीधा रहे तो समझो बुनाई चलेगी।",
+    "material_feels_wrong": "धागे पर रोएँ उठें, या ताना एक तरफ़ ढीला लगे, या करघे की आवाज़ बदल जाए।",
+    "correction_action": "बुनाई रोक देता हूँ। ताने पर हल्का माँड़ लगाता हूँ, और ढीले धागे एक-एक कर कसता हूँ। जल्दबाज़ी से पूरा थान ख़राब होता है।",
+    "material_change_gain": "अच्छा रेशमी धागा अब आसानी से मिलता है। रंग भी पक्के हुए हैं, ग्राहकों की शिकायत कम हुई।",
+    "material_change_loss": "असली ज़री महँगी हो गई, अब नकली ज़री चलती है। देसी सूत की वह नरमी भी नहीं रही।",
+    "occasion_of_use": "शादी, ईद, तीज। शहरों में दफ़्तर और समारोह के लिए भी साड़ी पहनी जाती है।",
+    "sensory_scene": "शादी की शाम, लोबान की ख़ुशबू, ढोलक की आवाज़, और बूढ़ी औरतें पल्लू की बूटियाँ उँगली से छूकर गिनती हैं।",
+    "remembered_community_phrase": "“चंदेरी की साड़ी हवा पहनती है।” मेरी अम्मी यही कहती थीं।",
+    "special_vs_everyday": "रोज़ के लिए सादा कपड़ा और छोटी बूटी। दुल्हन की साड़ी में हाथ की ज़री बूटी, जिसमें डेढ़ महीना लगता है।",
+    "special_object_rule": "दुल्हन के जोड़े का ताना शुक्रवार की नमाज़ के बाद चढ़ाते हैं। उस करघे पर उस दिन दूसरा काम नहीं करते।",
+    "not_for_sale_example": "वालिद के हाथ के बने पुराने बूटी के नक्शे। ये किसी कंपनी को नहीं देता।",
+    "why_protected": "ये घर की पूँजी है। नक्शा एक बार बाहर गया तो अगले महीने पावरलूम पर छप जाता है।",
+    "safer_alternative": "सना के बनाए नए नमूने, और सादे थान। उनकी तस्वीरें और बुनाई का वीडियो दिखा सकता हूँ।",
+    "pride_moment": "दिल्ली की एक कारीगर मेले में बुज़ुर्ग महिला ने अपनी शादी की साड़ी दिखाई। वह मेरे दादा की बुनी थी। उसकी किनारी मैं पहचान गया।",
+    "recognition_by_others": "उस महिला ने पहचान दी, और हमारे मोहल्ले के उस्तादों ने, जो अब मुझसे ताना चढ़वाने आते हैं।",
+    "loss_if_stopped": "महीन ताना बुनने का हाथ चला जाएगा। चंदेरी का नाम तो रहेगा, कपड़ा मशीन का होगा।",
+    "key_stakeholder_of_loss": "इस मोहल्ले के करघे पर जीने वाले परिवार, ख़ासकर वे औरतें जो नली और बूटी का काम करती हैं।",
+    "change_in_lifetime": "पहले मास्टर वीवर ही सब तय करते थे। अब कुछ बुनकर ख़ुद ऑनलाइन बेचने लगे हैं, पर बहुत कम।",
+    "artisan_initiated_change": "मैंने बेटी को करघे के साथ डिज़ाइन सीखने भेजा। अब हमारे अपने नमूने बनते हैं, और तीन परिवारों के साथ सीधा ऑर्डर लेते हैं।",
+    "desired_keep": "हथकरघा, हाथ की बूटी, और मोहल्ले में साथ बैठकर काम करने का तरीका।",
+    "desired_let_go": "मास्टर वीवर पर पूरी निर्भरता, और यह सोच कि बेटियाँ बस नली भरेंगी।",
+    "strength_anchor": "ताना चढ़ाने में मेरा हाथ साफ़ है। सबसे महीन धागा भी बिना टूटे चढ़ा लेता हूँ, और आवाज़ से करघे की गड़बड़ पकड़ लेता हूँ।",
+    "concern_anchor": "पावरलूम का कपड़ा चंदेरी कहकर बिक रहा है। असली-नकली का फ़र्क ग्राहक को कौन समझाएगा?",
+    "shareable_content": "बुनाई का तरीका, करघा, मेरा नाम, सना के नए नमूने।",
+    "private_content": "वालिद के नक्शे, और हमारी मज़दूरी का हिसाब व मास्टर वीवर से लेन-देन।",
+    "desired_change": "सीधे दुकानों से ऑर्डर मिले, और हर साड़ी पर बुनकर का नाम लिखा हो।",
+    "desired_continuity": "चंदेरी की साड़ी हथकरघे पर ही बुनी जाएगी, चाहे दाम कुछ भी हों।",
+    "learning_story": "एक बार जल्दी में बरसात से पहले सूखा ताना चढ़ा दिया। तीसरे दिन सौ धागे टूटे। पूरा हफ़्ता गया। तब से ताने को हाथ लगाकर ही फ़ैसला करता हूँ, कैलेंडर देखकर नहीं।",
+    "emotional_story": "वालिद के इंतक़ाल के बाद उनका करघा दो महीने बंद रहा। जिस दिन पहली बार चलाया, उसकी आवाज़ सुनकर अम्मी रसोई से बाहर आ गईं। कुछ बोली नहीं, बस खड़ी रहीं।",
+    "clarification_story": "एक ख़रीदार ने कहा, इतनी पतली है, कमज़ोर होगी। मैंने उसे पचास साल पुरानी साड़ी दिखाई जो अब भी पहनी जाती है। महीन होना कमज़ोर होना नहीं है।",
+    "outsider_misunderstanding": "लोग सोचते हैं चंदेरी बस एक डिज़ाइन है। असल में यह ताने की महीनता और हाथ का काम है।"
+  },
+  "analysis": {
+    "communication_profile": "Rafiq speaks through sound and light: a loom's noise, a thread line against a window. He has a dry, quiet style and his sayings carry a lot. He is clear about the economics of master weavers but careful when naming them. Long explanations come easily; short pitches do not yet.",
+    "strengths": [
+      { "title": "Diagnoses by ear", "detail": "He hears a fault in the loom's sound before it shows in the cloth." },
+      { "title": "Sets the finest warp", "detail": "Other weavers in the neighbourhood now ask him to set theirs." },
+      { "title": "Answers doubt with proof", "detail": "He met 'too thin to last' by showing a fifty-year-old sari still in use." }
+    ],
+    "gaps": [
+      { "title": "A short answer on real versus powerloom", "detail": "He has the knowledge and is still shaping it into something a shopper can check in a minute." },
+      { "title": "Selling without a go-between", "detail": "He wants direct orders and has had little practice at talking terms with a shop." },
+      { "title": "Crediting his daughter's design work", "detail": "He values Sana's designs and rarely mentions them first when describing the business." }
+    ],
+    "recommended_segments": [
+      { "id": "brand", "label": "Brand or shop owner", "why": "He wants direct orders with the weaver's name on each sari." },
+      { "id": "genz", "label": "Young customer online", "why": "His loom sounds and light test would carry well in short videos." },
+      { "id": "exhibition", "label": "Exhibition visitor", "why": "His fifty-year-old sari story persuades people in person." }
+    ],
+    "vocabulary": ["ताना", "बाना", "बूटी", "नाल्फेरा", "अशर्फ़ी बूटी", "माँड़"],
+    "care_notes": [
+      "His father's motif drawings are not for sharing or photographing.",
+      "Wages and dealings with master weavers are private. Do not raise them in front of a buyer."
+    ],
+    "artisan_summary_local": "आप करघे की आवाज़ से ही गड़बड़ पहचान लेते हैं। सबसे महीन ताना आपके हाथ से बिना टूटे चढ़ता है। “कमज़ोर है” सुनकर आपने पचास साल पुरानी साड़ी दिखाई, यही आपका जवाब है। अब असली और पावरलूम का फ़र्क एक मिनट में बताने का अभ्यास करते हैं।",
+    "artisan_summary_en": "You can tell a fault from the sound of the loom alone. The finest warp goes on under your hands without breaking. When told the cloth looks weak, you showed a fifty-year-old sari, and that is your answer. Next, let's practise explaining real versus powerloom in one minute."
+  }
+}

@@ -30,6 +30,10 @@ Instrument Sans (headings and body) and Newsreader (italic accents) from Google 
 
 Design exports arrive as whole files. Strip the injected `data-omelette` lines, take the design, and put the server wiring back wherever the design simulates it (localStorage profiles, `publish()`, `routeLink()`, `hosted()`, the website's mocked pilot forms and code entry, the console's mocked sign-in screens and sample organisation name). The design's `style-hover` attribute is handled in `runtime.js`. Ring keys are stable data: the "Lineage" ring is labelled "Legacy" on screen, but its key stays `lineage` — never migrate stored data for a label change.
 
+## Translations
+
+Card answers are stored in the language they were recorded in. Translations made by the model are saved on the profile (`artisan_profiles.translations`), and are cleared when the answers change, so a language is only paid for once. The artisan's phone also keeps its own copies.
+
 ## Local testing
 
 `npm run dev` (see `scripts/dev-server.js`) needs `DATABASE_URL` and `SESSION_SECRET`; `ANTHROPIC_API_KEY` for model calls. Create a sign-in with `npm run facilitator`.
