@@ -18,16 +18,17 @@ Read `HANDOFF.md` (decisions and invariants) and `ARCHITECTURE.md` (schema, rout
 ## Assets
 
 - Card artwork: `public/cards/` (`craft.png`, `place.png`, `lineage.png`, `material.png`, `culture.png`, `pride.png`, `r-*.png`, `box-theme.png`).
+- Logo: `public/karigar-logo.svg` (also the favicon). App icons rendered from it: `public/icons/karigar-*.png`. `/icons/` is served as immutable, so a changed icon needs a new file name, not an overwrite.
 - Printable kit: `public/kit/print/` (theme decks and reflection cards, front/back, English and Hindi, plus story sheets and box wraps). Committed as plain files: no single file is over ~3 MB.
 - Reference images with root-relative paths (`/cards/…`, `/kit/print/…`) so they resolve on `/`, `/console` and `/k/<token>` alike.
 
 ## Fonts
 
-Newsreader (headings) and Figtree (body) from Google Fonts, plus Noto Sans for Indic scripts. `karigar-i18n.js` still names the older font families in its language table; the console's `langOf()` maps them to Figtree/Newsreader at runtime, so leave that file as the design exports it.
+Instrument Sans (headings and body) and Newsreader (italic accents) from Google Fonts, plus Noto Sans for Indic scripts. `karigar-i18n.js` still names the older font families in its language table; the console's `langOf()` maps them to Instrument Sans at runtime, so leave that file as the design exports it.
 
 ## Design syncs
 
-Design exports arrive as whole files. Strip the injected `data-omelette` lines, take the design, and put the server wiring back wherever the design simulates it (localStorage profiles, `publish()`, `routeLink()`, `hosted()`, the website's mocked sign-in, account request and code entry). Ring keys are stable data: the "Lineage" ring is labelled "Legacy" on screen, but its key stays `lineage` — never migrate stored data for a label change.
+Design exports arrive as whole files. Strip the injected `data-omelette` lines, take the design, and put the server wiring back wherever the design simulates it (localStorage profiles, `publish()`, `routeLink()`, `hosted()`, the website's mocked pilot forms and code entry, the console's mocked sign-in screens and sample organisation name). The design's `style-hover` attribute is handled in `runtime.js`. Ring keys are stable data: the "Lineage" ring is labelled "Legacy" on screen, but its key stays `lineage` — never migrate stored data for a label change.
 
 ## Local testing
 

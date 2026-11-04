@@ -70,6 +70,21 @@ function propName(tag, name, type) {
   return name;
 }
 
+// The designs write hover styles as style-hover="…". Inline styles win over a stylesheet, so each
+// distinct value becomes one class whose declarations are !important.
+const hoverClasses = new Map();
+function hoverClass(css) {
+  if (!hoverClasses.has(css)) {
+    const name = `dc-h${hoverClasses.size}`;
+    const rules = css.split(';').map(d => d.trim()).filter(Boolean).map(d => `${d} !important`).join(';');
+    const el = document.createElement('style');
+    el.textContent = `.${name}:hover{${rules}}`;
+    document.head.appendChild(el);
+    hoverClasses.set(css, name);
+  }
+  return hoverClasses.get(css);
+}
+
 function compile(node) {
   if (node.nodeType === Node.TEXT_NODE) {
     const get = parseValue(node.nodeValue);
@@ -99,11 +114,14 @@ function compile(node) {
 
   const type = node.getAttribute('type');
   const attrs = [...node.attributes]
-    .filter(a => !a.name.startsWith('hint-'))
+    .filter(a => !a.name.startsWith('hint-') && a.name !== 'style-hover')
     .map(a => [propName(tag, a.name, type), parseValue(a.value)]);
+  const hover = node.getAttribute('style-hover');
+  const hoverName = hover ? hoverClass(hover) : '';
   return scope => {
     const props = {};
     for (const [name, get] of attrs) props[name] = get(scope);
+    if (hoverName) props.class = props.class ? `${props.class} ${hoverName}` : hoverName;
     return h(tag, props, renderKids(scope));
   };
 }
@@ -215,14 +233,14 @@ function installModel(token) {
 const status = (() => {
   const el = document.createElement('div');
   el.setAttribute('role', 'status');
-  el.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:90;background:#241F2E;color:#fff;border-radius:999px;padding:7px 13px;font:600 12.5px/1.2 "Figtree",system-ui,sans-serif;box-shadow:0 4px 14px rgba(36,31,46,.2);opacity:0;transition:opacity .2s;pointer-events:none';
+  el.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:90;background:#10292d;color:#fff;border-radius:999px;padding:7px 13px;font:600 12.5px/1.2 "Instrument Sans",system-ui,sans-serif;box-shadow:0 4px 14px rgba(16,41,45,.2);opacity:0;transition:opacity .2s;pointer-events:none';
   document.body.appendChild(el);
   let timer;
   return (text, sticky) => {
     clearTimeout(timer);
     el.textContent = text;
     el.style.opacity = text ? '1' : '0';
-    el.style.background = sticky ? '#A81C24' : '#241F2E';
+    el.style.background = sticky ? '#A81C24' : '#10292d';
     if (text && !sticky) timer = setTimeout(() => { el.style.opacity = '0'; }, 1400);
   };
 })();
@@ -348,14 +366,16 @@ function message(title, body) {
 const SIGNUP_PREFILL = 'karigar-signup-prefill';
 
 // Sign in, or create an account when sign-up is open. Resolves once a session exists.
-// The website's "Request an account" opens this at /console#signup, with its answers filled in.
+// The website's pilot forms open this at /console#signup, with their answers filled in. The website's
+// "Artisan app" link (/console#app) opens on the artisan's card code rather than the sign-in.
 async function loginForm() {
   let signup = { open: false, needsCode: false };
   try { signup = await api('/api/signup'); } catch { /* older server: sign-in only */ }
   return new Promise(resolve => {
     const show = which => {
       mount.innerHTML = '';
-      mount.appendChild(document.getElementById(which).content.cloneNode(true));
+      mount.appendChild(document.getElementById('signin-shell').content.cloneNode(true));
+      mount.querySelector('[data-slot]').appendChild(document.getElementById(which).content.cloneNode(true));
       const form = mount.querySelector('form');
       const err = mount.querySelector('[data-error]');
       const link = mount.querySelector('[data-signup-link]');
@@ -374,6 +394,14 @@ async function loginForm() {
         e.preventDefault();
         err.textContent = '';
         const body = Object.fromEntries(new FormData(form));
+        if (which === 'artisan') {
+          // Tokens are case-sensitive, so the code is kept as typed; a pasted link works too.
+          const raw = String(body.card || '').trim();
+          const tok = (raw.match(/\/k\/([A-Za-z0-9_-]+)/) || [, raw])[1];
+          if (/^[A-Za-z0-9_-]{8,64}$/.test(tok)) location.replace('/k/' + tok);
+          else err.textContent = 'Type the code printed under the QR on your card.';
+          return;
+        }
         form.querySelector('button').disabled = true;
         try {
           await api(which === 'signup' ? '/api/signup' : '/api/session', { method: 'POST', body });
@@ -385,7 +413,7 @@ async function loginForm() {
         }
       });
     };
-    show(signup.open && location.hash === '#signup' ? 'signup' : 'login');
+    show(signup.open && location.hash === '#signup' ? 'signup' : /^#app\b/.test(location.hash) ? 'artisan' : 'login');
   });
 }
 
@@ -434,14 +462,13 @@ async function bootArtisan() {
   return { mode: 'artisan', token, profile, standalone };
 }
 
-// The website: public pages, plus the organisation sign-in, which opens a real console session.
+// The website: public pages. Its sign-in links go to the console, which holds the real session.
 async function mainSite() {
   const comp = await loadComponent('/site.dc');
   // the deployed public address (lib/origin.js), stamped on the page at build time
   const stamped = document.body.dataset.appOrigin || '';
   const appOrigin = /^https?:\/\/[^/\s]+$/.test(stamped) ? stamped : location.origin;
-  const signIn = (email, password) => api('/api/session', { method: 'POST', body: { email, password } });
-  // "Request an account" is the console's own sign-up. What was typed here is carried over in
+  // The pilot request is the console's own sign-up. What was typed here is carried over in
   // this tab's sessionStorage (never the URL), and the password is chosen there.
   const requestAccount = async ({ name, org, email }) => {
     const { open } = await api('/api/signup');
@@ -449,7 +476,7 @@ async function mainSite() {
     try { sessionStorage.setItem(SIGNUP_PREFILL, JSON.stringify({ name, org, email })); } catch { /* private mode: the form starts empty */ }
     location.href = '/console#signup';
   };
-  const instance = new comp.Component({ consoleUrl: '/console', appOrigin, sampleNotice: true, signIn, requestAccount });
+  const instance = new comp.Component({ consoleUrl: '/console', siteUrl: '/', appOrigin, requestAccount });
   instance._template = comp.template;
   mount.innerHTML = '';
   instance._render();
@@ -471,7 +498,10 @@ async function main() {
   // Handover links use the public production address from the server, never this tab's own
   // address, which may be a login-protected per-deployment URL.
   const appOrigin = (boot.session && boot.session.appOrigin) || location.origin;
-  instance = new comp.Component({ appOrigin, model: 'claude-sonnet-4-5', boot, store });
+  // The rail and greeting show the signed-in account, never the design's sample organisation.
+  const orgName = boot.session && boot.session.org && boot.session.org.name;
+  const coordinatorName = boot.session && boot.session.facilitator && String(boot.session.facilitator.name || '').trim().split(/\s+/)[0];
+  instance = new comp.Component({ appOrigin, model: 'claude-sonnet-4-5', boot, store, orgName, coordinatorName });
   instance._template = comp.template;
   mount.innerHTML = '';
   instance._render();

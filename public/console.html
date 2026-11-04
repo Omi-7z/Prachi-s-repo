@@ -4,64 +4,114 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Karigar · Organisation</title>
-<meta name="theme-color" content="#FBF7F0">
+<meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex">
-<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="icon" href="/karigar-logo.svg" type="image/svg+xml">
+<link rel="icon" href="/icons/karigar-192.png" type="image/png">
 <link rel="modulepreload" href="/vendor/preact.mjs">
 <style>
-  body { margin: 0; background: #FBF7F0; color: #241F2E; font-family: "Figtree", system-ui, sans-serif; }
+  body { margin: 0; background: #ffffff; color: #10292d; font-family: "Instrument Sans", system-ui, sans-serif; }
   .k-boot { max-width: 30rem; margin: 18vh auto 0; padding: 0 20px; text-align: center; }
   .k-boot h1 { font-size: 24px; font-weight: 600; margin: 0 0 10px; }
-  .k-boot p { font-size: 16px; line-height: 1.6; color: #6F6880; margin: 0; }
-  .k-login { max-width: 380px; margin: 12vh auto 0; padding: 28px 24px; background: #fff; border-radius: 24px; box-shadow: 0 1px 3px rgba(36,31,46,.05), 0 8px 24px rgba(36,31,46,.06); }
-  .k-login h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; letter-spacing: -.01em; }
-  .k-login p { margin: 0 0 20px; color: #6F6880; font-size: 14.5px; line-height: 1.6; }
-  .k-login label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 6px; }
-  .k-login input { width: 100%; box-sizing: border-box; background: #fff; border: 1.5px solid #EBE3D6; border-radius: 14px; font: inherit; font-size: 16px; padding: 12px 14px; outline: none; }
-  .k-login input:focus { border-color: #6B3FA0; box-shadow: 0 0 0 4px #F1E9FA; }
-  .k-login button { margin-top: 22px; width: 100%; min-height: 46px; background: #6B3FA0; color: #fff; border: 0; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
-  .k-login button:disabled { opacity: .6; }
-  .k-login .k-switch { margin: 18px 0 0; text-align: center; font-size: 14px; }
-  .k-login [data-error] { color: #A81C24; font-size: 13.5px; margin-top: 12px; min-height: 1em; }
-  .k-home { display: block; max-width: 380px; margin: 0 auto; padding: 16px 24px 0; font-size: 13.5px; font-weight: 600; color: #6F6880; text-decoration: none; }
+  .k-boot p { font-size: 16px; line-height: 1.6; color: #5f6b69; margin: 0; }
+  .k-signin { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); min-height: 100vh; }
+  .k-signin-art { background: #0c2f35; color: #eef2ec; padding: clamp(28px,5vw,64px); display: flex; flex-direction: column; justify-content: space-between; gap: 32px; position: relative; overflow: hidden; }
+  .k-signin-eyebrow { font-size: 14px; color: #93aaa6; display: flex; align-items: center; gap: 10px; }
+  .k-signin-eyebrow span { width: 24px; height: 1px; background: #d9c98a; }
+  .k-signin-copy { display: flex; flex-direction: column; gap: 18px; position: relative; z-index: 1; }
+  .k-signin-copy h1 { margin: 0; font-weight: 500; font-size: clamp(34px,4vw,56px); line-height: 1; letter-spacing: -.035em; }
+  .k-signin-copy em { font-family: "Newsreader", Georgia, serif; font-weight: 400; color: #d9c98a; }
+  .k-signin-copy p { margin: 0; font-size: 16.5px; line-height: 1.6; color: #b9c8c4; max-width: 42ch; }
+  .k-signin-mark { position: absolute; right: -90px; bottom: -90px; width: min(440px,60%); }
+  .k-signin-quote { margin: 0; max-width: 46%; position: relative; z-index: 1; }
+  .k-signin-quote blockquote { margin: 0; font-family: "Newsreader", Georgia, serif; font-size: 19px; line-height: 1.45; }
+  .k-signin-quote figcaption { margin-top: 8px; font-size: 13.5px; color: #93aaa6; }
+  .k-signin-side { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: clamp(24px,5vw,64px); background: #ffffff; }
+  .k-login { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 18px; }
+  .k-login h2 { margin: 0; font-weight: 500; font-size: 32px; letter-spacing: -.03em; }
+  .k-login .k-lead { margin: -12px 0 0; font-size: 15px; line-height: 1.5; color: #5f6b69; }
+  .k-sf { display: flex; flex-direction: column; gap: 6px; }
+  .k-sf[hidden] { display: none; }
+  .k-sf label { font-size: 14px; font-weight: 600; color: #10292d; }
+  .k-sf small { font-size: 13px; line-height: 1.5; color: #75817e; }
+  .k-sf input { width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 14px; border: 1px solid #d5d3c8; background: #f9f8f4; font: inherit; font-size: 16px; color: #10292d; outline: none; }
+  .k-sf input:focus { border-color: #10292d; box-shadow: 0 0 0 4px #ebe9fb; }
+  .k-primary { padding: 15px 24px; border-radius: 999px; border: 0; background: #10292d; color: #f5f4ee; font: inherit; font-weight: 500; font-size: 16px; cursor: pointer; min-height: 52px; }
+  .k-primary:disabled { opacity: .6; }
+  .k-or { display: flex; align-items: center; gap: 12px; color: #75817e; font-size: 13px; }
+  .k-or::before, .k-or::after { content: ""; flex: 1; height: 1px; background: #e2e0d6; }
+  .k-secondary { display: block; box-sizing: border-box; text-align: center; padding: 14px 22px; border-radius: 999px; border: 1px solid #e2e0d6; background: #ffffff; color: #10292d; font-weight: 500; font-size: 15.5px; min-height: 50px; text-decoration: none; }
+  .k-note { margin: 0; font-size: 13px; line-height: 1.5; color: #75817e; }
+  .k-note[hidden] { display: none; }
+  .k-note a { color: #10292d; font-weight: 600; }
+  .k-login [data-error] { color: #a3443d; font-size: 14px; }
+  .k-login [data-error]:empty { display: none; }
+  .k-home { width: 100%; max-width: 420px; font-size: 13.5px; font-weight: 500; color: #5f6b69; text-decoration: none; }
+  @media (max-width: 860px) {
+    .k-signin { grid-template-columns: minmax(0,1fr); }
+    .k-signin-art { min-height: 240px; }
+    .k-signin-quote { max-width: 52%; font-size: 16px; }
+    .k-signin-quote blockquote { font-size: 16px; }
+    .k-signin-mark { width: 200px; right: -70px; bottom: -70px; }
+  }
 </style>
 </head>
 <body data-mode="console">
 <div id="app"><div class="k-boot"><p>Karigar</p></div></div>
+<template id="signin-shell">
+  <div class="k-signin">
+    <div class="k-signin-art">
+      <div class="k-signin-eyebrow"><span></span>Organisation console</div>
+      <div class="k-signin-copy">
+        <h1>Every story stays <em>with its maker.</em></h1>
+        <p>Sign in to run sessions, follow each artisan’s board and answer partner requests.</p>
+      </div>
+      <figure class="k-signin-quote"><blockquote>“Now the women correct the drafts before anything goes out.”</blockquote><figcaption>Meera Joshi · Field coordinator</figcaption></figure>
+      <svg class="k-signin-mark" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="57.6" fill="#FBF7F0"></circle><circle cx="60" cy="60" r="21" fill="none" stroke="#B98BE0" stroke-width="6"></circle><circle cx="60" cy="60" r="27.6" fill="none" stroke="#6FC9B8" stroke-width="6"></circle><circle cx="60" cy="60" r="34.2" fill="none" stroke="#A81C24" stroke-width="6"></circle><circle cx="60" cy="60" r="40.8" fill="none" stroke="#C06A5F" stroke-width="6"></circle><circle cx="60" cy="60" r="47.4" fill="none" stroke="#6D9DC5" stroke-width="6"></circle><circle cx="60" cy="60" r="54" fill="none" stroke="#F0B23C" stroke-width="6"></circle><circle cx="60" cy="60" r="17.4" fill="#FFFFFF"></circle></svg>
+    </div>
+    <div class="k-signin-side">
+      <a class="k-home" href="/">← Website</a>
+      <div data-slot style="display:contents"></div>
+    </div>
+  </div>
+</template>
 <template id="login">
-  <a class="k-home" href="/">← Karigar website</a>
   <form class="k-login" autocomplete="on">
-    <h1>Karigar</h1>
-    <p>Sign in with your organisation account.</p>
-    <label for="k-email">Email</label>
-    <input id="k-email" name="email" type="email" autocomplete="username" required>
-    <label for="k-password">Password</label>
-    <input id="k-password" name="password" type="password" autocomplete="current-password" required>
-    <button type="submit">Sign in</button>
-    <div data-error aria-live="polite"></div>
-    <p class="k-switch" data-signup-link hidden>New here? <a href="#" data-to="signup">Create an account</a></p>
+    <h2>Sign in</h2>
+    <p class="k-lead">Use the account your coordinator set up.</p>
+    <div class="k-sf"><label for="k-email">Work email</label><input id="k-email" name="email" type="email" autocomplete="username" placeholder="you@organisation.org" required></div>
+    <div class="k-sf"><label for="k-password">Password</label><input id="k-password" name="password" type="password" autocomplete="current-password" required><small>Forgot it? Ask your coordinator.</small></div>
+    <div data-error role="alert"></div>
+    <button class="k-primary" type="submit">Sign in to the console</button>
+    <div class="k-or">or</div>
+    <a class="k-secondary" href="#" data-to="artisan">I’m an artisan · open the app</a>
+    <p class="k-note">New organisation? <a href="/#/organisations">Request a pilot</a>.</p>
+    <p class="k-note" data-signup-link hidden>New here? <a href="#" data-to="signup">Create an account</a>.</p>
   </form>
 </template>
 <template id="signup">
-  <a class="k-home" href="/">← Karigar website</a>
   <form class="k-login" autocomplete="on">
-    <h1>Create an account</h1>
-    <p>For facilitators and organisations. Artisans do not need one — they use the link you give them.</p>
-    <label for="k-org">Organisation</label>
-    <input id="k-org" name="org" autocomplete="organization" required>
-    <label for="k-name">Your name</label>
-    <input id="k-name" name="name" autocomplete="name" required>
-    <label for="k-email2">Email</label>
-    <input id="k-email2" name="email" type="email" autocomplete="username" required>
-    <label for="k-password2">Password (10+ characters)</label>
-    <input id="k-password2" name="password" type="password" autocomplete="new-password" minlength="10" required>
-    <div data-code hidden>
-      <label for="k-code">Sign-up code</label>
-      <input id="k-code" name="code" autocomplete="off">
-    </div>
-    <button type="submit">Create account</button>
-    <div data-error aria-live="polite"></div>
-    <p class="k-switch">Already have an account? <a href="#" data-to="login">Sign in</a></p>
+    <h2>Create an account</h2>
+    <p class="k-lead">For facilitators and organisations. Artisans do not need one — they use the link you give them.</p>
+    <div class="k-sf"><label for="k-org">Organisation</label><input id="k-org" name="org" autocomplete="organization" required></div>
+    <div class="k-sf"><label for="k-name">Your name</label><input id="k-name" name="name" autocomplete="name" required></div>
+    <div class="k-sf"><label for="k-email2">Work email</label><input id="k-email2" name="email" type="email" autocomplete="username" required></div>
+    <div class="k-sf"><label for="k-password2">Password (10+ characters)</label><input id="k-password2" name="password" type="password" autocomplete="new-password" minlength="10" required></div>
+    <div class="k-sf" data-code hidden><label for="k-code">Sign-up code</label><input id="k-code" name="code" autocomplete="off"></div>
+    <div data-error role="alert"></div>
+    <button class="k-primary" type="submit">Create account</button>
+    <p class="k-note">Already have an account? <a href="#" data-to="login">Sign in</a>.</p>
+  </form>
+</template>
+<template id="artisan">
+  <form class="k-login" autocomplete="off" data-artisan>
+    <h2>Open your board</h2>
+    <p class="k-lead">No account needed. नमस्ते · નમસ્તે · Namaste</p>
+    <div class="k-sf"><label for="k-card">The code on your card</label><input id="k-card" name="card" autocomplete="off" placeholder="the letters after /k/ in your link" required><small>It’s printed under the QR. You can also scan the QR with your phone camera.</small></div>
+    <div data-error role="alert"></div>
+    <button class="k-primary" type="submit">Open my board</button>
+    <p class="k-note">No card yet? Your facilitator will give you one at your first session.</p>
+    <p class="k-note"><a href="#" data-to="login">I’m from an organisation →</a></p>
   </form>
 </template>
 <script type="module" src="/runtime.js?v=__KARIGAR_BUILD__"></script>
