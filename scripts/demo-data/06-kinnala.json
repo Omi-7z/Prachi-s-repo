@@ -1,0 +1,92 @@
+{
+  "id": "dv-demo-06",
+  "lang": "kn",
+  "cluster": "Kinnala toys · Koppal, Karnataka",
+  "status": "complete",
+  "names": {
+    "en": { "name": "Shankarappa Chitragar", "craft": "Kinnala kale", "region": "Kinnala, Koppal, Karnataka" },
+    "hi": { "name": "शंकरप्पा चित्रगार", "craft": "किन्नाल कला", "region": "किन्नाल, कोप्पल, कर्नाटक" },
+    "gu": { "name": "શંકરપ્પા ચિત્રગાર", "craft": "કિન્નાલ કલા", "region": "કિન્નાલ, કોપ્પલ, કર્ણાટક" },
+    "mr": { "name": "शंकरप्पा चित्रगार", "craft": "किन्नाळ कला", "region": "किन्नाळ, कोप्पळ, कर्नाटक" },
+    "bn": { "name": "শঙ্করাপ্পা চিত্রগার", "craft": "কিন্নাল কলা", "region": "কিন্নাল, কোপ্পাল, কর্ণাটক" },
+    "ta": { "name": "சங்கரப்பா சித்ரகார்", "craft": "கின்னாளா கலை", "region": "கின்னாளா, கொப்பள், கர்நாடகா" },
+    "kn": { "name": "ಶಂಕರಪ್ಪ ಚಿತ್ರಗಾರ", "craft": "ಕಿನ್ನಾಳ ಕಲೆ", "region": "ಕಿನ್ನಾಳ, ಕೊಪ್ಪಳ, ಕರ್ನಾಟಕ" }
+  },
+  "record": {
+    "artisan_name": "ಶಂಕರಪ್ಪ ಚಿತ್ರಗಾರ",
+    "craft_name_local": "ಕಿನ್ನಾಳ ಕಲೆ",
+    "craft_region": "ಕಿನ್ನಾಳ, ಕೊಪ್ಪಳ, ಕರ್ನಾಟಕ",
+    "practice_span": "ಹನ್ನೊಂದು ವರ್ಷದಿಂದ ಅಪ್ಪನ ಜೊತೆ ಕೆಲಸ. ಈಗ ನಲವತ್ತೈದು ವರ್ಷ ಆಯಿತು.",
+    "local_belonging_phrase": "“ಕಿನ್ನಾಳದ ಗೊಂಬೆಗೆ ಕಿನ್ನಾಳದ ಹೆಸರೇ ಗುರುತು. ನಮ್ಮ ಹಿರಿಯರು ಹಂಪಿಯ ಕಾಲದಿಂದ ಇದೇ ಕೆಲಸ ಮಾಡಿದವರು ಅಂತ ಹೇಳ್ತಾರೆ.”",
+    "ecological_input": "ಹಗುರವಾದ ಮೃದು ಮರ ಸುತ್ತಲಿನ ಬೆಟ್ಟಗಳಿಂದ ಸಿಗುತ್ತಿತ್ತು. ಹುಣಸೆ ಬೀಜದ ಅಂಟು ಮತ್ತು ಒಣ ಬಿಸಿಲು ಗೊಂಬೆ ಒಣಗಲು ಸಹಾಯ ಮಾಡುತ್ತವೆ.",
+    "place_change": "ಮರ ಕಡಿಯಲು ಈಗ ಅನುಮತಿ ಬೇಕು, ಬೆಟ್ಟಗಳಲ್ಲಿ ಮರ ಕಡಿಮೆಯಾಗಿದೆ. ಗಣಿಗಾರಿಕೆಯಿಂದ ಧೂಳು ಹೆಚ್ಚಿದೆ, ಹುಡುಗರು ಬೆಂಗಳೂರಿಗೆ ಹೋಗ್ತಾರೆ.",
+    "emotion_about_place_change": "“ಮರ ಇಲ್ಲದಿದ್ರೆ ಗೊಂಬೆ ಎಲ್ಲಿಂದ? ಮರ ನೆಡೋಕೂ ನಾವೇ ಹೋಗ್ಬೇಕು ಅನ್ಸುತ್ತೆ.”",
+    "teacher_name_relation": "ನನ್ನ ಅಪ್ಪ ಹನುಮಪ್ಪ ಚಿತ್ರಗಾರ. ಬಣ್ಣದ ಕೆಲಸ ನನ್ನ ಚಿಕ್ಕಮ್ಮ ಕಲಿಸಿದರು.",
+    "teaching_memory": "ಅಪ್ಪ ನನ್ನ ಕೆತ್ತಿದ ಕುದುರೆ ಕೈಗೆ ತಗೊಂಡು, ಕಣ್ಣು ಮುಚ್ಚಿ ಮುಟ್ಟಿ ನೋಡಿದರು. “ಕುದುರೆ ಓಡ್ತಿಲ್ಲ” ಅಂದರು. ಕತ್ತು ಸ್ವಲ್ಪ ಬಗ್ಗಿಸಿದ ಮೇಲೆ ನಕ್ಕರು.",
+    "remembered_phrase_gesture": "“ಗೊಂಬೆಗೆ ಜೀವ ಕಣ್ಣಲ್ಲಿ.” ಹೇಳುವಾಗ ಅಪ್ಪ ಸಣ್ಣ ಕುಂಚವನ್ನು ಎರಡು ಬೆರಳಲ್ಲಿ ಎತ್ತಿ ಹಿಡಿಯುತ್ತಿದ್ದರು.",
+    "family_generations": "ಅಜ್ಜ, ಅಪ್ಪ, ನಾನು. ನನ್ನ ಮಗ ಮಂಜುನಾಥ ಕೆತ್ತನೆ ಮಾಡ್ತಾನೆ, ಸೊಸೆ ಲಕ್ಷ್ಮಿ ಬಣ್ಣ ಹಾಕ್ತಾಳೆ. ಮೊಮ್ಮಗ ಶಾಲೆಗೆ ಹೋಗ್ತಾನೆ.",
+    "transmission_strength": "ಸಣ್ಣ ಗೊಂಬೆ, ಹಕ್ಕಿ, ಹಣ್ಣುಗಳ ಕೆಲಸ ಮನೆಯ ಮಕ್ಕಳು ಬೇಗ ಕಲಿಯುತ್ತಾರೆ.",
+    "transmission_weakness": "ಜಾತ್ರೆಯ ದೊಡ್ಡ ದೇವರ ಮೂರ್ತಿಗಳು ಮತ್ತು ಕೀಟ್ಟಾ ಹಚ್ಚುವ ಹಳೆಯ ವಿಧಾನ. ಈಗ ಅದಕ್ಕೆ ಹೆಚ್ಚು ಬೇಡಿಕೆ ಇಲ್ಲ.",
+    "teaching_difficulty": "ಪ್ಲಾಸ್ಟಿಕ್ ಆಟಿಕೆ ಅಗ್ಗ. ಕಲಿಯಲು ವರ್ಷಗಳು ಬೇಕು, ಸಂಬಳ ಖಚಿತ ಇಲ್ಲ, ಹಾಗಾಗಿ ಹುಡುಗರು ಬರೋದಿಲ್ಲ.",
+    "primary_material": "ಹಗುರ ಮೃದು ಮರ, ಹುಣಸೆ ಬೀಜದ ಅಂಟು, ಕೀಟ್ಟಾ (ಮರದ ಪುಡಿ ಮತ್ತು ಅಂಟಿನ ಮಿಶ್ರಣ), ಬಣ್ಣಗಳು.",
+    "material_origin": "ಮರ ಕೊಪ್ಪಳ ಮತ್ತು ಹತ್ತಿರದ ಬೆಟ್ಟಗಳಿಂದ. ಹುಣಸೆ ಬೀಜ ಊರಿನಿಂದ. ಬಣ್ಣ ಹೊಸಪೇಟೆ ಮಾರುಕಟ್ಟೆಯಿಂದ.",
+    "first_contact": "ಅಪ್ಪನ ಪಕ್ಕ ಕುಳಿತು ಹುಣಸೆ ಬೀಜ ಕುಟ್ಟುತ್ತಿದ್ದೆ. ಆ ಅಂಟಿನ ಹುಳಿ ವಾಸನೆ ಇನ್ನೂ ನೆನಪಿದೆ.",
+    "material_special": "ಈ ಮರ ಹಗುರ, ಕೆತ್ತಲು ಮೃದು. ಹಾಗಾಗಿ ದೊಡ್ಡ ಮೂರ್ತಿಯನ್ನೂ ಒಬ್ಬರು ಹೊರಬಹುದು. ಕೀಟ್ಟಾದಿಂದ ಮೇಲ್ಮೈ ನಯವಾಗುತ್ತದೆ.",
+    "material_in_hands": "ಒಳ್ಳೆಯ ಮರ ಉಳಿಯ ಕೆಳಗೆ ಸಣ್ಣ ಸಿಪ್ಪೆ ಬಿಡುತ್ತದೆ. ಒಡೆಯುವುದಿಲ್ಲ. ಕೀಟ್ಟಾ ಬೆರಳಿಗೆ ಅಂಟಿದರೂ ಸುಲಭವಾಗಿ ಬಿಡುತ್ತದೆ.",
+    "material_feels_wrong": "ಹಸಿ ಮರ ಉಳಿಗೆ ಅಂಟುತ್ತದೆ, ಒಣಗಿದ ಮೇಲೆ ಬಿರುಕು ಬಿಡುತ್ತದೆ. ಕೀಟ್ಟಾ ಒಣಗಿ ಪುಡಿಯಾದರೆ ಅಂಟು ಕಡಿಮೆ.",
+    "correction_action": "ಹಸಿ ಮರವನ್ನು ನೆರಳಿನಲ್ಲಿ ತಿಂಗಳುಗಟ್ಟಲೆ ಒಣಗಿಸ್ತೀನಿ. ಬಿರುಕು ಬಂದರೆ ಕೀಟ್ಟಾ ತುಂಬಿ ಸುಣ್ಣದ ಲೇಪ ಕೊಡ್ತೀನಿ.",
+    "material_change_gain": "ಅಕ್ರಿಲಿಕ್ ಬಣ್ಣ ಪ್ರಕಾಶಮಾನವಾಗಿದೆ, ಬೇಗ ಒಣಗುತ್ತದೆ, ಕಾಲ ಉಳಿಯುತ್ತದೆ. ಹೊರಗಿನ ಗ್ರಾಹಕರು ಇಷ್ಟಪಡ್ತಾರೆ.",
+    "material_change_loss": "ಕಲ್ಲು ಮತ್ತು ಗಿಡಗಳಿಂದ ಮಾಡಿದ ಹಳೆಯ ಬಣ್ಣದ ಮೃದು ಹೊಳಪು ಹೋಯಿತು. ಅದನ್ನು ಮಾಡಲು ಗೊತ್ತಿರುವವರೂ ಕಡಿಮೆ.",
+    "occasion_of_use": "ಊರ ಜಾತ್ರೆ ಮತ್ತು ದೇವರ ಉತ್ಸವಕ್ಕೆ ಮೂರ್ತಿಗಳು. ನವರಾತ್ರಿಯ ಗೊಂಬೆ ಪಟ್ಟಕ್ಕೂ ಗೊಂಬೆಗಳು.",
+    "sensory_scene": "ಜಾತ್ರೆಯ ರಾತ್ರಿ ಹಲಗೆ ಸದ್ದು, ಕರ್ಪೂರದ ವಾಸನೆ, ದೀಪದ ಬೆಳಕಿನಲ್ಲಿ ಗೊಂಬೆಯ ಕಣ್ಣು ಮಿನುಗುವುದು.",
+    "remembered_community_phrase": "“ಕಿನ್ನಾಳದವರ ಗೊಂಬೆ ಮನೆಗೆ ಬಂದ್ರೆ ಮಗು ಅಳೋದಿಲ್ಲ.” ನನ್ನ ಅಜ್ಜಿ ಹೀಗೆ ಹೇಳ್ತಿದ್ದರು.",
+    "special_vs_everyday": "ದಿನದ ಆಟಿಕೆ ಮತ್ತು ಹಣ್ಣಿನ ಗೊಂಬೆ ಯಾರಿಗೂ ಮಾರಬಹುದು. ಜಾತ್ರೆಯ ದೇವರ ಮೂರ್ತಿ ಊರಿನ ಕೋರಿಕೆಯಂತೆಯೇ ಮಾಡುತ್ತೇವೆ.",
+    "special_object_rule": "ದೇವರ ಮೂರ್ತಿ ಮಾಡುವಾಗ ಉಪವಾಸ, ಕಣ್ಣು ಬರೆಯುವುದು ಕೊನೆಯ ದಿನ. ಅದು ಮುಗಿದ ಮೇಲೆ ಮೂರ್ತಿ ಮನೆಯಲ್ಲಿ ಇಡುವುದಿಲ್ಲ.",
+    "not_for_sale_example": "ಊರ ಜಾತ್ರೆಗೆ ಮಾಡುವ ದೇವಿಯ ಮೂರ್ತಿ, ಮತ್ತು ಅಜ್ಜನ ಕಾಲದ ಹಳೆಯ ಬಣ್ಣದ ಪಾಕ.",
+    "why_protected": "ಮೂರ್ತಿ ಊರಿನದು, ನನ್ನದಲ್ಲ. ಪಾಕ ನಮ್ಮ ಮನೆಯ ಗುರುತು. ಅದು ಹೊರಗೆ ಹೋದರೆ ನಮ್ಮ ಕೆಲಸಕ್ಕೆ ಬೆಲೆ ಇರುವುದಿಲ್ಲ.",
+    "safer_alternative": "ಹಕ್ಕಿ, ಕುದುರೆ, ದಶಾವತಾರ ಗೊಂಬೆಗಳ ಕೆಲಸ. ಅವುಗಳ ಫೋಟೋ ಮತ್ತು ಕೆತ್ತನೆಯ ವಿಡಿಯೋ ತೋರಿಸಬಹುದು.",
+    "pride_moment": "ಹಂಪಿ ಉತ್ಸವದಲ್ಲಿ ಒಬ್ಬ ಮಗು ನನ್ನ ಗೊಂಬೆ ಬಿಟ್ಟು ಹೋಗೋದೇ ಇಲ್ಲ ಅಂತ ಹಠ ಮಾಡಿತು. ಪಕ್ಕದಲ್ಲಿ ಪ್ಲಾಸ್ಟಿಕ್ ಆಟಿಕೆ ಇತ್ತು.",
+    "recognition_by_others": "ಊರಿನ ಹಿರಿಯರು ಜಾತ್ರೆಯ ಮೂರ್ತಿಯ ಕಣ್ಣು ಬರೆಯಲು ನನ್ನನ್ನೇ ಕರೆದರು. ಅದಕ್ಕಿಂತ ದೊಡ್ಡ ಗೌರವವಿಲ್ಲ.",
+    "loss_if_stopped": "ಹಗುರ ಮರದ ಕೆತ್ತನೆ ಮತ್ತು ಕೀಟ್ಟಾ ವಿಧಾನ ಹೋಗುತ್ತವೆ. ಊರಿಗೆ ತನ್ನ ಹೆಸರೇ ಹೋದಂತೆ.",
+    "key_stakeholder_of_loss": "ಕಿನ್ನಾಳದ ಚಿತ್ರಗಾರ ಕುಟುಂಬಗಳು, ಮತ್ತು ಜಾತ್ರೆಗೆ ಮೂರ್ತಿ ಬೇಕಾಗುವ ಸುತ್ತಲಿನ ಊರುಗಳು.",
+    "change_in_lifetime": "ಮೊದಲು ಜಾತ್ರೆ ಕೆಲಸ ಹೆಚ್ಚು ಇತ್ತು. ಈಗ ಸಣ್ಣ ಉಡುಗೊರೆ ಗೊಂಬೆಗಳು, ಮತ್ತು ಸರ್ಕಾರಿ ಮೇಳಗಳ ಮೂಲಕ ಮಾರಾಟ.",
+    "artisan_initiated_change": "ನಾನು ಸೊಸೆಗೆ ಕೆತ್ತನೆ ಕಲಿಸಿದೆ, ಹೊಸ ಸಣ್ಣ ಪಕ್ಷಿ ಸೆಟ್ ಮಾಡಿದೆ. ಶಾಲೆಯ ಮಕ್ಕಳನ್ನು ಕಾರ್ಯಾಗಾರಕ್ಕೂ ಕರೆಯುತ್ತಿದ್ದೇನೆ.",
+    "desired_keep": "ಕೈ ಕೆತ್ತನೆ, ಕೀಟ್ಟಾ ವಿಧಾನ, ಜಾತ್ರೆಯ ಮೂರ್ತಿಯ ನಿಯಮಗಳು.",
+    "desired_let_go": "ಮೇಳದ ನಂತರ ತಿಂಗಳುಗಟ್ಟಲೆ ಹಣಕ್ಕೆ ಕಾಯುವುದು, ಮತ್ತು ಹೆಂಗಸರು ಬಣ್ಣ ಮಾತ್ರ ಹಾಕಬೇಕೆಂಬ ಯೋಚನೆ.",
+    "strength_anchor": "ಗೊಂಬೆಯ ಕಣ್ಣು ಬರೆಯುವುದರಲ್ಲಿ ನನ್ನ ಕೈ ಗಟ್ಟಿ. ಮರ ಮುಟ್ಟಿದರೆ ಅದು ಸರಿಯೇ ಇಲ್ಲವೇ ಅಂತ ಗೊತ್ತಾಗುತ್ತೆ.",
+    "concern_anchor": "ಒಳ್ಳೆಯ ಮರ ಸಿಗುವುದು ಕಷ್ಟವಾಗ್ತಿದೆ, ಮತ್ತು ಕೆಲಸ ಕಲಿಯಲು ಹೊಸ ಹುಡುಗರು ಬರುತ್ತಿಲ್ಲ.",
+    "shareable_content": "ಕೆತ್ತನೆ ವಿಧಾನ, ಪಕ್ಷಿ ಸೆಟ್, ನನ್ನ ಹೆಸರು, ಮಕ್ಕಳ ಕಾರ್ಯಾಗಾರ.",
+    "private_content": "ಹಳೆಯ ಬಣ್ಣದ ಪಾಕ, ಜಾತ್ರೆಯ ಮೂರ್ತಿಯ ವಿಧಿಗಳು, ಊರಿನ ಒಳಗಿನ ವಿಷಯಗಳು.",
+    "desired_change": "ಮರಕ್ಕೆ ಸುಲಭ ಅನುಮತಿ, ಮತ್ತು ಶಾಲೆಗಳು ಪ್ಲಾಸ್ಟಿಕ್ ಬದಲು ಮರದ ಆಟಿಕೆಗೆ ಕೇಳುವುದು.",
+    "desired_continuity": "ಜಾತ್ರೆಯ ಮೂರ್ತಿ ಊರಲ್ಲೇ, ಕೈಯಿಂದಲೇ, ಹಳೆಯ ನಿಯಮದಂತೆ ಮಾಡಲಾಗುತ್ತದೆ.",
+    "learning_story": "ಒಮ್ಮೆ ಆತುರದಲ್ಲಿ ಹಸಿ ಮರದಲ್ಲಿ ಐವತ್ತು ಗೊಂಬೆ ಮಾಡಿದೆ. ದೆಹಲಿಯ ಚಳಿಯಲ್ಲಿ ಎಲ್ಲಾ ಬಿರುಕು ಬಿಟ್ಟವು. ಹಣ ವಾಪಸ್ ಕೊಟ್ಟೆ. ಈಗ ಮರ ಒಣಗದೆ ಉಳಿ ಎತ್ತುವುದಿಲ್ಲ.",
+    "emotional_story": "ಅಪ್ಪ ಕೊನೆಯ ವರ್ಷ ಕೈ ನಡುಗುತ್ತಿತ್ತು. ಜಾತ್ರೆ ಮೂರ್ತಿಗೆ ನನಗೆ ಕುಂಚ ಕೊಟ್ಟರು. ನಾನು ಕಣ್ಣು ಬರೆದಾಗ ಅವರು ಎದ್ದು ನಿಂತು ನಮಸ್ಕಾರ ಮಾಡಿದರು.",
+    "clarification_story": "ಒಬ್ಬರು ಕೇಳಿದರು, ಒಂದು ಹಕ್ಕಿಗೆ ಇಷ್ಟು ಬೆಲೆಯಾ? ನಾನು ಅವರಿಗೆ ಎತ್ತಲು ಕೊಟ್ಟೆ. “ಇಷ್ಟು ಹಗುರ?” ಅಂದರು. ಆ ಹಗುರ ಬರೋಕೆ ಆರು ತಿಂಗಳು ಮರ ಒಣಗಬೇಕು ಅಂತ ಹೇಳಿದೆ.",
+    "outsider_misunderstanding": "ಇದು ಮಕ್ಕಳ ಆಟಿಕೆ ಮಾತ್ರ ಅಂತ ಜನ ತಿಳಿದಿದ್ದಾರೆ. ಇದೇ ಕೈಗಳು ಜಾತ್ರೆಯ ದೇವಿಯ ಮೂರ್ತಿಯನ್ನೂ ಮಾಡುತ್ತವೆ."
+  },
+  "analysis": {
+    "communication_profile": "Shankarappa is playful and direct, and he tends to answer a question by putting a piece in your hand. He reads material by touch and describes it with confidence. He carries real pride about being asked to paint the festival figure's eyes. Forms, permissions and delayed payments frustrate him, and he speaks more briefly about them.",
+    "strengths": [
+      { "title": "Painting the eyes", "detail": "Village elders ask him alone to paint the eyes of the festival figure." },
+      { "title": "Lets the object argue", "detail": "He answers price questions by handing over a bird and asking people to feel how light it is." },
+      { "title": "Widening the workshop", "detail": "He taught carving to his daughter-in-law and has started school workshops." }
+    ],
+    "gaps": [
+      { "title": "Payment terms", "detail": "He dislikes waiting months after fairs and has not yet rehearsed asking for better terms." },
+      { "title": "Beyond 'just a toy'", "detail": "He knows the wider tradition and needs a short way to explain it to first-time buyers." },
+      { "title": "Requests to officials", "detail": "He needs words for asking about wood permits clearly and calmly." }
+    ],
+    "recommended_segments": [
+      { "id": "brand", "label": "Toy brand or shop", "why": "He wants schools and shops to choose wood over plastic, with fair payment times." },
+      { "id": "ngo", "label": "NGO or school programme", "why": "His workshops for children are a clear starting point." },
+      { "id": "genz", "label": "Young customer online", "why": "The new bird set and hand-in-the-palm lightness are easy to show." }
+    ],
+    "vocabulary": ["ಕೀಟ್ಟಾ", "ಜಾತ್ರೆ", "ಚಿತ್ರಗಾರ", "ಉಳಿ", "ಹುಣಸೆ ಅಂಟು"],
+    "care_notes": [
+      "The old colour recipe and the festival figure's rites are not to be recorded or shared.",
+      "Village matters mentioned in the session stay inside the village."
+    ],
+    "artisan_summary_local": "ಗೊಂಬೆಯ ಕಣ್ಣು ಬರೆಯುವುದರಲ್ಲಿ ನಿಮ್ಮ ಕೈ ಗಟ್ಟಿ. ಮರ ಮುಟ್ಟಿಯೇ ನೀವು ಅದರ ಗುಣ ಹೇಳಬಲ್ಲಿರಿ. ಗೊಂಬೆಯನ್ನು ಕೈಗೆ ಕೊಟ್ಟು ಬೆಲೆಯನ್ನು ನೀವು ಸರಳವಾಗಿ ವಿವರಿಸುತ್ತೀರಿ. ಈಗ ಹಣ ಬೇಗ ಸಿಗುವ ಷರತ್ತುಗಳ ಬಗ್ಗೆ ಮಾತನಾಡುವುದನ್ನು ಅಭ್ಯಾಸ ಮಾಡೋಣ.",
+    "artisan_summary_en": "Your hand is steady when you paint a figure's eyes. You can tell the quality of wood just by touching it. You explain your price simply by placing a toy in someone's hand. Next, let's practise talking about terms that get you paid sooner."
+  }
+}

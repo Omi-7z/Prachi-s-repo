@@ -1,0 +1,1 @@
+ALTER TABLE "artisan_profiles" ADD COLUMN "translations" jsonb;
