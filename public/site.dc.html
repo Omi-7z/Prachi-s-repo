@@ -53,6 +53,9 @@
     .t-hide-m { display: none !important; }
     .t-sticky { position: relative !important; top: 0 !important; }
   }
+  @media (max-width: 600px) {
+    .t-split-m { grid-template-columns: minmax(0,1fr) !important; }
+  }
   @media (min-width: 981px) { .t-show-m { display: none !important; } }
   @media (prefers-reduced-motion: reduce) {
     .t-rise > span, .t-fade, .t-wave, .t-ping { animation: none; }
@@ -334,7 +337,7 @@
         <sc-for list="{{ kitFan }}" as="k" hint-placeholder-count="0"><button type="button" class="t-card" onClick="{{ k.open }}" aria-label="{{ k.label }}" style="{{ k.st }}"></button></sc-for>
       </div>
     </div>
-    <div data-rv="" class="t-lift" style="grid-column:span 7;background:#10292d;color:#eef2ec;border-radius:26px;padding:26px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;min-height:340px;overflow:hidden">
+    <div data-rv="" class="t-lift t-split-m" style="grid-column:span 7;background:#10292d;color:#eef2ec;border-radius:26px;padding:26px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;min-height:340px;overflow:hidden">
       <div style="display:flex;flex-direction:column;gap:14px">
         <span style="font-size:14px;color:#93aaa6">02 · The Mandala board</span>
         <b style="font-size:25px;font-weight:500;letter-spacing:-.02em;line-height:1.15">The artisan draws a card and answers out loud, in their own language.</b>

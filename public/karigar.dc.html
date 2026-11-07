@@ -33,7 +33,26 @@
   /* The rail holds language, sign-out and the website link on wide screens. On phones the rail is
      hidden, so the facilitator's top bar stays for them. */
   @media (min-width: 881px) { .k-top-org { display: none !important; } }
-  @media (max-width: 880px) { .k-top { flex-wrap: wrap; } }
+  @media (max-width: 880px) {
+    .k-top { flex-wrap: wrap; row-gap: 8px !important; }
+    .k-top button, .k-top a { white-space: nowrap; }
+    .k-top-actions { width: 100%; }
+    .k-top-sides { flex: 1; min-width: 0; }
+    .k-top-sides > button { flex: 1; }
+    body { overflow-x: clip; }
+  }
+  @media (max-width: 560px) {
+    .k-seg { flex-wrap: nowrap !important; width: 100%; box-sizing: border-box; }
+    .k-seg > button { flex: 1 1 auto; white-space: nowrap; padding-left: 8px !important; padding-right: 8px !important; }
+    .k-attn { grid-template-columns: 36px minmax(0,1fr) !important; row-gap: 8px !important; }
+    .k-attn > button { grid-column: 2; justify-self: start; }
+    /* Phone top bar: logo and Sign out on the first row, the side switch and language on the second. */
+    .k-top-actions { display: contents !important; }
+    .k-top-brand { order: 0; }
+    .k-top-out { order: 1; margin-left: auto; padding: 8px 12px !important; }
+    .k-top-sides { order: 2; flex: 1 1 auto; }
+    .k-top select[data-role="uilang"] { order: 3; }
+  }
   @media (max-width: 760px) {
     .k-hero { grid-template-columns: minmax(0,1fr) !important; }
     .k-hero-board { order: -1; max-width: min(440px, 70vw) !important; }
@@ -95,13 +114,13 @@
 
   <sc-if value="{{ showTopHeader }}" hint-placeholder-val="{{ false }}">
   <header class="{{ topHeaderClass }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(245,244,238,.92);backdrop-filter:blur(10px);border-bottom:1px solid #e2e0d6;position:sticky;top:0;z-index:50">
-    <div style="display:flex;align-items:center;gap:10px;min-width:0">
+    <div class="k-top-brand" style="display:flex;align-items:center;gap:10px;min-width:0">
       <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" style="flex:none;display:block"><path d="M16.10 2.38A10.8 10.8 0 1 0 17.55 20.74" fill="none" stroke="#F0B23C" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.47 4.79A9.55 9.55 0 1 0 18.30 18.39" fill="none" stroke="#5B8AB5" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.21 6.20A8.35 8.35 0 1 0 17.96 16.91" fill="none" stroke="#DC5A3C" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.80 7.47A7.2 7.2 0 1 0 17.37 15.71" fill="none" stroke="#8A2034" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.22 8.62A6.05 6.05 0 1 0 16.49 14.93" fill="none" stroke="#9BC7A8" stroke-width="0.82" stroke-linecap="round"></path><path d="M15.60 9.85A4.9 4.9 0 1 0 15.57 14.22" fill="none" stroke="#D9C4E4" stroke-width="0.82" stroke-linecap="round"></path><circle cx="18.14" cy="3.73" r="0.87" fill="#F0B23C"></circle><circle cx="19.55" cy="5.14" r="0.83" fill="#F0B23C"></circle><circle cx="20.66" cy="6.80" r="0.78" fill="#F0B23C"></circle><circle cx="21.46" cy="8.63" r="0.72" fill="#F0B23C"></circle><circle cx="21.91" cy="10.57" r="0.68" fill="#F0B23C"></circle><circle cx="21.99" cy="12.57" r="0.64" fill="#F0B23C"></circle><circle cx="21.70" cy="14.54" r="0.59" fill="#F0B23C"></circle><circle cx="21.05" cy="16.43" r="0.55" fill="#F0B23C"></circle><circle cx="20.07" cy="18.16" r="0.49" fill="#F0B23C"></circle><circle cx="18.78" cy="19.69" r="0.45" fill="#F0B23C"></circle></svg>
       <span style="font-weight:600;font-size:18px;letter-spacing:-.02em">Karigar</span>
       <a href="/" style="font-size:13px;font-weight:500;color:#10292d;text-decoration:none;padding:7px 12px;border-radius:999px;border:1px solid #e2e0d6;background:#ffffff;white-space:nowrap">← Website</a>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <div style="display:flex;background:#eeede6;border-radius:999px;padding:3px">
+    <div class="k-top-actions" style="display:flex;align-items:center;gap:8px">
+      <div class="k-top-sides" style="display:flex;background:#eeede6;border-radius:999px;padding:3px">
         <sc-for list="{{ sides }}" as="x" hint-placeholder-count="2">
           <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
         </sc-for>
@@ -112,7 +131,7 @@
             <option value="{{ l.code }}">{{ l.label }}</option>
           </sc-for>
         </select>
-        <button type="button" onClick="{{ signOutOrg }}" class="k-press" style="border:1px solid #e2e0d6;background:#ffffff;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:500;cursor:pointer;min-height:40px;color:#10292d">Sign out</button>
+        <button type="button" onClick="{{ signOutOrg }}" class="k-press k-top-out" style="border:1px solid #e2e0d6;background:#ffffff;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:500;cursor:pointer;min-height:40px;color:#10292d">Sign out</button>
       </sc-if>
       <sc-if value="{{ canSignOut }}" hint-placeholder-val="{{ false }}">
         <button type="button" onClick="{{ signOut }}" class="k-press" style="border:0;background:transparent;color:#8C8499;font-size:13px;font-weight:600;cursor:pointer;min-height:40px;padding:8px 6px">Sign out</button>
@@ -210,7 +229,7 @@
                 <sc-if value="{{ hasAttention }}" hint-placeholder-val="{{ true }}">
                   <div style="display:flex;flex-direction:column">
                     <sc-for list="{{ attention }}" as="x" hint-placeholder-count="3">
-                      <div style="display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #f0efe8">
+                      <div class="k-attn" style="display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #f0efe8">
                         <span style="width:36px;height:36px;border-radius:50%;background:{{ x.bg }};color:{{ x.ink }};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">{{ x.ini }}</span>
                         <div style="min-width:0"><div style="font-weight:600;font-size:14.5px">{{ x.who }}</div><div style="font-size:13.5px;line-height:1.45;color:#5f6b69">{{ x.issue }}</div></div>
                         <button type="button" onClick="{{ x.act }}" class="k-press" style="background:#ffffff;color:#10292d;border:1px solid #d5d3c8;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;min-height:40px;white-space:nowrap">{{ x.cta }} →</button>
@@ -274,7 +293,7 @@
                 <h1 style="margin:0 0 3px;font-family:{{ displayFont }};font-weight:600;font-size:27px;letter-spacing:-.015em">{{ activeName }}</h1>
                 <p style="margin:0;font-size:13.5px;color:#5f6b69">{{ activeSub }}</p>
               </div>
-              <div style="display:flex;gap:6px;background:#eeede6;border-radius:999px;padding:4px;flex-wrap:wrap">
+              <div class="k-seg" style="display:flex;gap:6px;background:#eeede6;border-radius:999px;padding:4px;flex-wrap:wrap">
                 <sc-for list="{{ boardTabs }}" as="x" hint-placeholder-count="4">
                   <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
                 </sc-for>
@@ -673,7 +692,7 @@
 
             <div class="k-split" style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start">
               <div>
-                <div style="display:flex;gap:6px;background:#eeede6;border-radius:999px;padding:4px;margin-bottom:18px;flex-wrap:wrap">
+                <div class="k-seg" style="display:flex;gap:6px;background:#eeede6;border-radius:999px;padding:4px;margin-bottom:18px;flex-wrap:wrap">
                   <sc-for list="{{ intakeTabs }}" as="x" hint-placeholder-count="3">
                     <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
                   </sc-for>
