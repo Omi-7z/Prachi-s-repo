@@ -48,6 +48,10 @@
       "destination": "/api/artisan-page?t=:token"
     },
     {
+      "source": "/app",
+      "destination": "/api/artisan-page?app=1"
+    },
+    {
       "source": "/org",
       "destination": "/console"
     },

@@ -1,10 +1,10 @@
 // Karigar service worker.
 //
-// It serves the artisan app only (/k/<token>): the shell is precached so an artisan's board
+// It serves the artisan app only (/k/<token> and the /app sign-in): the shell is precached so an artisan's board
 // opens without internet. The facilitator platform at / and /org is online-only and is never
 // intercepted, so it can never be replaced by a cached artisan page. Model calls and every
 // other /api request always go to the network.
-const VERSION = 'karigar-v6';
+const VERSION = 'karigar-v7';
 // /k/shell is the artisan page with no valid token: the plain app shell, used offline
 const SHELL_PAGE = '/k/shell';
 const SHELL = [
@@ -35,7 +35,7 @@ self.addEventListener('fetch', event => {
 
   if (req.mode === 'navigate') {
     // only the artisan app works offline; every other page goes straight to the network
-    if (!url.pathname.startsWith('/k/')) return;
+    if (!url.pathname.startsWith('/k/') && url.pathname !== '/app') return;
     // network first so a fresh profile is picked up; this artisan's last copy, then the plain
     // shell, as the offline fallback
     event.respondWith(

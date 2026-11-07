@@ -12,7 +12,7 @@ The goal is pride, not marketing copy. Artisans often lose confidence when new m
 | --- | --- | --- |
 | **Website** | Public, prospective partner organisations | Explains the toolkit and invites organisations to run a pilot. |
 | **Organisation console** | Facilitators and programme staff | Brings in session records, analyses them, hands over to artisans and tracks results. |
-| **Artisan app** | The artisan | A private practice space on their phone, opened from a link. Nothing to install from a store, no account. |
+| **Artisan app** | The artisan | A private practice space on their phone, opened from a link. Nothing to install from a store; the artisan signs in with a username and password their facilitator sets up. |
 
 All three share one record: the artisan's **mandala board**.
 

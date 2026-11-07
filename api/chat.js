@@ -19,9 +19,10 @@
 // Swapping providers is an env var. The request and response shape never changes, so the
 // front end does not care which one is live.
 //
-// Callers must be a signed-in facilitator or hold a live handover token. A free tier is
+// Callers must be a signed-in facilitator, a signed-in artisan, or hold a live handover token. A free tier is
 // metered per day, so an open proxy would let anyone burn the organisation's quota.
 import { currentFacilitator, resolveToken } from '../lib/auth.js';
+import { currentArtisan } from '../lib/artisan-auth.js';
 import { json, route } from '../lib/http.js';
 
 const PROVIDER = (process.env.PROVIDER || 'demo').toLowerCase();
@@ -35,7 +36,7 @@ const MAX_INPUT_CHARS = 60000;
 async function allowed(req) {
   const token = req.headers.get('x-karigar-token');
   if (token) return (await resolveToken(token)).status === 200;
-  return !!(await currentFacilitator(req));
+  return !!(await currentFacilitator(req)) || !!(await currentArtisan(req));
 }
 
 // Self-check for facilitators: open /api/chat?test=1 (one call) or ?test=2 (a practice-shaped

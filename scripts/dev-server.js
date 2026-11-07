@@ -66,6 +66,7 @@ createServer(async (req, res) => {
   // mirrors the vercel.json rewrite: /k/<token> is rendered by a function
   const k = url.pathname.match(/^\/k\/([^/]+)\/?$/);
   if (k) { url.pathname = '/api/artisan-page'; url.searchParams.set('t', k[1]); }
+  if (/^\/app\/?$/.test(url.pathname)) { url.pathname = '/api/artisan-page'; url.searchParams.set('app', '1'); }
   // mirrors the vercel.json redirects: old console links on "/"
   if (url.pathname === '/' && (url.searchParams.has('src') || url.searchParams.has('org'))) {
     res.writeHead(308, { location: '/console' + url.search }).end();

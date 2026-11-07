@@ -8,11 +8,13 @@ Read `HANDOFF.md` (decisions and invariants) and `ARCHITECTURE.md` (schema, rout
 | --- | --- | --- |
 | `/` | Karigar Ecosystem website (public) | `public/index.html` shell → `public/site.dc.html` |
 | `/console` | Karigar Ecosystem console (facilitators, sign-in required) | `public/console.html` shell → `public/karigar.dc.html` |
-| `/k/:token` | The artisan's own app, no login | `api/artisan-page.js` → `public/artisan.html` → `public/karigar.dc.html` |
+| `/app` | The artisan app's sign-in (username and password the facilitator sets) | `api/artisan-page.js?app=1` → `public/artisan.html` → `public/karigar.dc.html` |
+| `/k/:token` | The artisan's own app from their link, no sign-in | `api/artisan-page.js` → `public/artisan.html` → `public/karigar.dc.html` |
 
 `public/runtime.js` renders both `.dc.html` designs and bridges them to the server: real auth (`/api/session`, `/api/signup`), the database-backed profiles API (`/api/profiles`), handover links issued by the server (`lib/origin.js` for the public address), and `window.claude` → `/api/chat`.
 
-- Website links into the console keep their hash: `/console#k=<code>` (artisan code entry; `runtime.js` sends it on to `/k/<code>`) and `/console#app` (the facilitator's preview of the artisan app).
+- Artisan sign-in: `api/artisan/{login,logout,session}.js`, `lib/artisan-auth.js` (signed httpOnly cookie `karigar_artisan`, scrypt passwords like facilitators', failed attempts rate-limited in `login_attempts`). Facilitators set or reset it on the board's Handover tab (`POST /api/profiles/:id` with `set-login` / `clear-login`). A new password or a revoked link ends the artisan's sessions.
+- Old links keep working: `/console#k=<code>` goes to `/k/<code>`, and `/console#app` when signed out goes to `/app`.
 - The console's "← Website" link goes to `/`.
 
 ## Assets
