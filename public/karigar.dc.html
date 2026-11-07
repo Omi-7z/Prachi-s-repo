@@ -291,7 +291,7 @@
 </div>
 </sc-if>
 <label style="display:flex;align-items:center;gap:8px;margin:0 0 3px;max-width:520px;border-bottom:1.5px dashed #d5d3c8;padding-bottom:2px">
-<input value="{{ titleVal }}" onChange="{{ setTitle }}" placeholder="Untitled · type the artisan or session name" aria-label="Session name" style="flex:1;min-width:0;border:0;outline:none;background:transparent;padding:0;font-family:{{ displayFont }};font-weight:600;font-size:27px;letter-spacing:-.015em;color:#10292d">
+<input value="{{ titleVal }}" onChange="{{ setTitle }}" placeholder="Add Artisan Name" aria-label="Session name" style="flex:1;min-width:0;border:0;outline:none;background:transparent;padding:0;font-family:{{ displayFont }};font-weight:600;font-size:27px;letter-spacing:-.015em;color:#10292d">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#75817e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13.5 6.5l4 4"></path></svg>
 </label>
                 <p style="margin:0;font-size:13.5px;color:#5f6b69">{{ activeSub }}</p>
@@ -2481,11 +2481,11 @@ ${this.groundRules()}`;
         const rad = deg * Math.PI / 180;
         const has = !!(rec[c.key] || '').trim();
         const on = s.selectedKey === c.key;
-        const size = on ? 21 : 15;
+        const size = on ? 22 : has ? 17 : 13;
         const radius = c.hub ? '5px' : '50%';
         const col = c.hub ? c.color : r.ink;
-        const bg = on ? '#10292d' : has ? (c.hub ? c.color : '#FFFFFF') : 'rgba(255,255,255,.42)';
-        const bd = on ? '3px solid #fff' : c.own ? `2.5px dashed ${has ? col : '#fff'}` : has ? `3px solid ${col}` : '2px solid rgba(255,255,255,.9)';
+        const bg = on ? '#10292d' : has ? col : 'transparent';
+        const bd = on ? '3px solid #fff' : has ? '2.5px solid #fff' : c.own ? '2px dashed rgba(255,255,255,.95)' : '2px solid rgba(255,255,255,.95)';
         boardDots.push({
           title: c.own ? c.label : fLabel(c.key, c.label),
           pick: () => this.setState({ selectedKey: c.key }),
@@ -2837,7 +2837,7 @@ ${this.groundRules()}`;
       uiFont: uiL.font, brandName: 'Karigar',
       ringOptions, ringOnlyOptions, connectRows, deckProgress,
       sessionComplete: allCards.length > 0 && filled === allCards.length,
-      orgPopOpen: !!selCard && s.side === 'org' && s.orgView === 'board' && s.boardTab === 'board',
+      orgPopOpen: !!selCard && s.side === 'org' && (s.orgView === 'board' || (s.orgView === 'new' && s.intake === 'manual')) && s.boardTab === 'board',
       appPopOpen: !!selCard && s.side === 'artisan' && (s.appView === 'home' || s.appView === 'board'),
       pop, closePop: () => this.setState({ selectedKey: null }),
       prevGroup: () => stepGroup(-1), nextGroup: () => stepGroup(1),
