@@ -11,10 +11,12 @@ const build = (process.env.VERCEL_GIT_COMMIT_SHA || process.env.VERCEL_DEPLOYMEN
 const shell = (await readFile(new URL('../public/artisan.html', import.meta.url), 'utf8')).replaceAll('__KARIGAR_BUILD__', build);
 
 export async function GET(req) {
-  const t = new URL(req.url).searchParams.get('t') || '';
-  // Tokens are URL-safe base64; anything else never reaches the HTML.
-  const html = /^[A-Za-z0-9_-]{8,64}$/.test(t)
-    ? shell.replace('href="/manifest.webmanifest"', `href="/api/manifest?t=${t}"`)
+  const q = new URL(req.url).searchParams;
+  const t = q.get('t') || '';
+  // Tokens are URL-safe base64; anything else never reaches the HTML. /app (the username and
+  // password sign-in) gets a manifest that opens /app.
+  const html = q.get('app') === '1' ? shell.replace('href="/manifest.webmanifest"', 'href="/api/manifest?app=1"')
+    : /^[A-Za-z0-9_-]{8,64}$/.test(t) ? shell.replace('href="/manifest.webmanifest"', `href="/api/manifest?t=${t}"`)
     : shell;
   return new Response(html, {
     headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' }

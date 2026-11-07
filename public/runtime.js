@@ -333,23 +333,46 @@ function consoleStore(initial, onServerProfile) {
       }
     },
     practice() { /* the facilitator's preview of the artisan app is not practice */ },
+    // The artisan's /app username and password. Errors carry the server's message for the form.
+    async setLogin(id, { username, password }) {
+      const { profile } = await api(`/api/profiles/${encodeURIComponent(id)}`, { method: 'POST', body: { action: 'set-login', username, password } });
+      onServerProfile(profile);
+      return profile;
+    },
+    async clearLogin(id) {
+      const { profile } = await api(`/api/profiles/${encodeURIComponent(id)}`, { method: 'POST', body: { action: 'clear-login' } });
+      onServerProfile(profile);
+      return profile;
+    },
     signOut: async () => { await api('/api/session', { method: 'DELETE' }); location.href = '/console'; },
     local: safeStore
   };
 }
 
-function artisanStore(token) {
+// The artisan app, opened from a /k/<token> link or signed in at /app. boot.token is this phone's
+// key for its own caches either way; boot.linkToken is the real link token, when there is one.
+function artisanStore(boot) {
   return {
     mode: 'artisan',
-    token,
+    token: boot.token,
     sync() { /* the artisan never edits the profile */ },
     action() {},
     practice(segment) {
-      api('/api/practice', { method: 'POST', body: { token, segment } }).catch(() => { /* counts are best-effort */ });
+      api('/api/practice', { method: 'POST', body: { token: boot.linkToken || undefined, segment } }).catch(() => { /* counts are best-effort */ });
+    },
+    login: (username, password) => api('/api/artisan/login', { method: 'POST', body: { username, password } }),
+    // Back to the sign-in screen. Practice history stays on this phone for when they sign in again,
+    // but the cached board is removed, so it is not readable offline after logging out.
+    async logout() {
+      try { await api('/api/artisan/logout', { method: 'POST', body: {} }); } catch { /* offline: the cookie expires on its own */ }
+      try { localStorage.removeItem(SESSION_CACHE); if (boot.linkToken) localStorage.removeItem(`karigar-profile:${boot.linkToken}`); } catch { /* ignore */ }
+      location.replace('/app');
     },
     local: safeStore
   };
 }
+
+const SESSION_CACHE = 'karigar-profile:session';
 
 // ── boot ───────────────────────────────────────────────────────────────────
 
@@ -366,9 +389,10 @@ function message(title, body) {
 const SIGNUP_PREFILL = 'karigar-signup-prefill';
 
 // Sign in, or create an account when sign-up is open. Resolves once a session exists.
-// The website's pilot forms open this at /console#signup, with their answers filled in. The website's
-// "Artisan app" link (/console#app) opens on the artisan's card code rather than the sign-in.
+// The website's pilot forms open this at /console#signup, with their answers filled in. Artisans
+// sign in at /app; an old "/console#app" link from before that goes there.
 async function loginForm() {
+  if (/^#app\b/.test(location.hash)) { location.replace('/app'); return new Promise(() => {}); }
   let signup = { open: false, needsCode: false };
   try { signup = await api('/api/signup'); } catch { /* older server: sign-in only */ }
   return new Promise(resolve => {
@@ -394,14 +418,6 @@ async function loginForm() {
         e.preventDefault();
         err.textContent = '';
         const body = Object.fromEntries(new FormData(form));
-        if (which === 'artisan') {
-          // Tokens are case-sensitive, so the code is kept as typed; a pasted link works too.
-          const raw = String(body.card || '').trim();
-          const tok = (raw.match(/\/k\/([A-Za-z0-9_-]+)/) || [, raw])[1];
-          if (/^[A-Za-z0-9_-]{8,64}$/.test(tok)) location.replace('/k/' + tok);
-          else err.textContent = 'Type the code printed under the QR on your card.';
-          return;
-        }
         form.querySelector('button').disabled = true;
         try {
           await api(which === 'signup' ? '/api/signup' : '/api/session', { method: 'POST', body });
@@ -413,7 +429,7 @@ async function loginForm() {
         }
       });
     };
-    show(signup.open && location.hash === '#signup' ? 'signup' : /^#app\b/.test(location.hash) ? 'artisan' : 'login');
+    show(signup.open && location.hash === '#signup' ? 'signup' : 'login');
   });
 }
 
@@ -433,14 +449,34 @@ async function bootConsole() {
 async function bootArtisan() {
   const m = location.pathname.match(/^\/k\/([A-Za-z0-9_-]+)/);
   let token = m && m[1];
-  if (!token) {
-    message('Karigar', 'Open the link your facilitator gave you.');
+  const appRoute = /^\/app\/?$/.test(location.pathname);
+  if (!token && !appRoute) {
+    message('Karigar', 'Open the link your facilitator gave you, or sign in at /app.');
     return null;
   }
-  // Android installs from the manifest's start_url, so it must carry this artisan's link.
+  // Android installs from the manifest's start_url, so it must carry this artisan's link (or /app).
   const link = document.querySelector('link[rel="manifest"]');
-  if (link) link.href = `/api/manifest?t=${encodeURIComponent(token)}`;
+  if (link) link.href = token ? `/api/manifest?t=${encodeURIComponent(token)}` : '/api/manifest?app=1';
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+  const standaloneNow = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+  if (appRoute) {
+    // Signed in with a username and password (an httpOnly cookie), or the sign-in screen.
+    let profile;
+    try {
+      ({ profile } = await api('/api/artisan/session'));
+      safeStore.set(SESSION_CACHE, profile);
+    } catch (e) {
+      if (e.status === 401) {
+        try { localStorage.removeItem(SESSION_CACHE); } catch { /* ignore */ }
+        return { mode: 'artisan', token: null, needsLogin: true };
+      }
+      profile = safeStore.get(SESSION_CACHE);
+      if (!profile) return { mode: 'artisan', token: null, linkError: 'offline' };
+    }
+    installModel(null);
+    return { mode: 'artisan', token: `s-${profile.id}`, linkToken: null, profile, standalone: standaloneNow };
+  }
 
   const cacheKey = `karigar-profile:${token}`;
   let profile;
@@ -451,15 +487,14 @@ async function bootArtisan() {
     // The app's own link screen explains these in the phone's language.
     if (e.status === 410 || e.status === 404) {
       try { localStorage.removeItem(cacheKey); } catch { /* ignore */ }
-      return { mode: 'artisan', token, linkError: e.status === 410 ? 'revoked' : 'notfound' };
+      return { mode: 'artisan', token, linkToken: token, linkError: e.status === 410 ? 'revoked' : 'notfound' };
     }
     // Offline: the board summary is the offline surface. Practice needs the network.
     profile = safeStore.get(cacheKey);
-    if (!profile) return { mode: 'artisan', token, linkError: 'offline' };
+    if (!profile) return { mode: 'artisan', token, linkToken: token, linkError: 'offline' };
   }
   installModel(token);
-  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  return { mode: 'artisan', token, profile, standalone };
+  return { mode: 'artisan', token, linkToken: token, profile, standalone: standaloneNow };
 }
 
 // The website: public pages. Its sign-in links go to the console, which holds the real session.
@@ -476,7 +511,7 @@ async function mainSite() {
     try { sessionStorage.setItem(SIGNUP_PREFILL, JSON.stringify({ name, org, email })); } catch { /* private mode: the form starts empty */ }
     location.href = '/console#signup';
   };
-  const instance = new comp.Component({ consoleUrl: '/console', siteUrl: '/', appOrigin, requestAccount });
+  const instance = new comp.Component({ consoleUrl: '/console', siteUrl: '/', appUrl: '/app', appOrigin, requestAccount });
   instance._template = comp.template;
   mount.innerHTML = '';
   instance._render();
@@ -494,7 +529,7 @@ async function main() {
   if (!boot) return;
   let instance;
   const onServerProfile = p => instance.mergeServerProfile(p);
-  const store = boot.mode === 'console' ? consoleStore(boot.profiles, onServerProfile) : artisanStore(boot.token);
+  const store = boot.mode === 'console' ? consoleStore(boot.profiles, onServerProfile) : artisanStore(boot);
   // Handover links use the public production address from the server, never this tab's own
   // address, which may be a login-protected per-deployment URL.
   const appOrigin = (boot.session && boot.session.appOrigin) || location.origin;

@@ -1,9 +1,10 @@
 // One profile, scoped to the signed-in facilitator's organisation.
 //   PUT    save the editable parts (creates the profile and its first handover link if new)
 //   POST   { action: 'revoke' | 'restore' | 'new-link' | 'reset-practice' }
+//          { action: 'set-login', username, password } | { action: 'clear-login' }   the artisan's /app sign-in
 //   DELETE remove the profile; its link stops working immediately
 import { currentFacilitator } from '../../lib/auth.js';
-import { saveProfile, deleteProfile, profileAction, validId } from '../../lib/profiles.js';
+import { saveProfile, deleteProfile, profileAction, setArtisanLogin, clearArtisanLogin, validId } from '../../lib/profiles.js';
 import { json, readJson, route } from '../../lib/http.js';
 
 const idOf = req => decodeURIComponent(new URL(req.url).pathname.split('/').filter(Boolean).pop() || '');
@@ -22,8 +23,11 @@ export const PUT = withFacilitator(async (req, fac, id) => {
 });
 
 export const POST = withFacilitator(async (req, fac, id) => {
-  const { action } = await readJson(req);
-  const profile = await profileAction(fac.orgId, id, action);
+  const body = await readJson(req);
+  const { action } = body;
+  const profile = action === 'set-login' ? await setArtisanLogin(fac.orgId, id, body)
+    : action === 'clear-login' ? await clearArtisanLogin(fac.orgId, id)
+    : await profileAction(fac.orgId, id, action);
   return profile ? json({ profile }) : json({ error: 'not found' }, 404);
 });
 
