@@ -13,7 +13,7 @@ Read `HANDOFF.md` (decisions and invariants) and `ARCHITECTURE.md` (schema, rout
 
 `public/runtime.js` renders both `.dc.html` designs and bridges them to the server: real auth (`/api/session`, `/api/signup`), the database-backed profiles API (`/api/profiles`), handover links issued by the server (`lib/origin.js` for the public address), and `window.claude` → `/api/chat`.
 
-- Artisan sign-in: `api/artisan/{login,logout,session}.js`, `lib/artisan-auth.js` (signed httpOnly cookie `karigar_artisan`, scrypt passwords like facilitators', failed attempts rate-limited in `login_attempts`). Facilitators set or reset it on the board's Handover tab (`POST /api/profiles/:id` with `set-login` / `clear-login`). A new password or a revoked link ends the artisan's sessions.
+- Artisan sign-in: `api/artisan/[id].js` (login, logout, session in one function), `lib/artisan-auth.js` (signed httpOnly cookie `karigar_artisan`, scrypt passwords like facilitators', failed attempts rate-limited in `login_attempts`). Facilitators set or reset it on the board's Handover tab (`POST /api/profiles/:id` with `set-login` / `clear-login`). A new password or a revoked link ends the artisan's sessions.
 - Old links keep working: `/console#k=<code>` goes to `/k/<code>`, and `/console#app` when signed out goes to `/app`.
 - The console's "← Website" link goes to `/`.
 
@@ -35,6 +35,10 @@ Design exports arrive as whole files. Strip the injected `data-omelette` lines, 
 ## Translations
 
 Card answers are stored in the language they were recorded in. Translations made by the model are saved on the profile (`artisan_profiles.translations`), and are cleared when the answers change, so a language is only paid for once. The artisan's phone also keeps its own copies.
+
+## Vercel limits
+
+The Hobby plan allows at most 12 serverless functions per deployment, and every file in `api/` is one. A deploy over the limit fails outright. Add a route to an existing file (see `api/artisan/[id].js`) rather than a new file. Count: `find api -name '*.js' | wc -l`.
 
 ## Local testing
 
