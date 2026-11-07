@@ -29,6 +29,13 @@
       "when": 1794030681740,
       "tag": "0003_artisan_login",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794068005119,
+      "tag": "0004_profile_title",
+      "breakpoints": true
     }
   ]
 }

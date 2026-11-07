@@ -246,11 +246,11 @@ const status = (() => {
 })();
 
 // The facilitator-editable part of a profile; a change here is what triggers a save.
-const EDITABLE = ['record', 'sources', 'lang', 'recordLang', 'names', 'translations', 'custom', 'links', 'analysis', 'checked', 'sessionNote', 'origin', 'approved', 'cluster'];
+const EDITABLE = ['record', 'sources', 'lang', 'recordLang', 'title', 'names', 'translations', 'custom', 'links', 'analysis', 'checked', 'sessionNote', 'origin', 'approved', 'cluster'];
 const signature = p => JSON.stringify(EDITABLE.map(k => p[k] === undefined ? null : p[k]));
 // "Create an empty profile" opens a blank board; it reaches the server with its first answer,
 // so opening New and leaving does not leave an empty profile behind.
-const blankDraft = p => !Object.values(p.record || {}).some(v => String(v || '').trim()) && !(p.custom || []).length && !p.sessionNote && !p.analysis;
+const blankDraft = p => !Object.values(p.record || {}).some(v => String(v || '').trim()) && !String(p.title || '').trim() && !(p.custom || []).length && !p.sessionNote && !p.analysis;
 
 function consoleStore(initial, onServerProfile) {
   const saved = new Map(initial.map(p => [p.id, signature(p)]));
@@ -361,6 +361,10 @@ function artisanStore(boot) {
       api('/api/practice', { method: 'POST', body: { token: boot.linkToken || undefined, segment } }).catch(() => { /* counts are best-effort */ });
     },
     login: (username, password) => api('/api/artisan/login', { method: 'POST', body: { username, password } }),
+    // the app language the artisan picks is saved to their profile, so it follows them to another phone
+    setLang(lang) {
+      api('/api/artisan/lang', { method: 'POST', body: { lang, token: boot.linkToken || undefined } }).catch(() => { /* offline: kept on this phone */ });
+    },
     // Back to the sign-in screen. Practice history stays on this phone for when they sign in again,
     // but the cached board is removed, so it is not readable offline after logging out.
     async logout() {

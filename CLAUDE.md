@@ -13,7 +13,8 @@ Read `HANDOFF.md` (decisions and invariants) and `ARCHITECTURE.md` (schema, rout
 
 `public/runtime.js` renders both `.dc.html` designs and bridges them to the server: real auth (`/api/session`, `/api/signup`), the database-backed profiles API (`/api/profiles`), handover links issued by the server (`lib/origin.js` for the public address), and `window.claude` → `/api/chat`.
 
-- Artisan sign-in: `api/artisan/[id].js` (login, logout, session in one function), `lib/artisan-auth.js` (signed httpOnly cookie `karigar_artisan`, scrypt passwords like facilitators', failed attempts rate-limited in `login_attempts`). Facilitators set or reset it on the board's Handover tab (`POST /api/profiles/:id` with `set-login` / `clear-login`). A new password or a revoked link ends the artisan's sessions.
+- Artisan sign-in: `api/artisan/[id].js` (login, logout, session in one function), `lib/artisan-auth.js` (signed httpOnly cookie `karigar_artisan`, scrypt passwords like facilitators', failed attempts rate-limited in `login_attempts`). Facilitators set or reset it on the board's Handover tab (`POST /api/profiles/:id` with `set-login` / `clear-login`). A new password or a revoked link ends the artisan's sessions. The artisan's own app language is saved through `POST /api/artisan/lang`, the only profile field an artisan writes.
+- The console has no artisan-app preview: facilitators never see practice conversations, which are not stored on the server at all (only counts in `practice_events`).
 - Old links keep working: `/console#k=<code>` goes to `/k/<code>`, and `/console#app` when signed out goes to `/app`.
 - The console's "← Website" link goes to `/`.
 

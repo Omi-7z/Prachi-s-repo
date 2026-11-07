@@ -120,11 +120,6 @@
       <a href="/" style="font-size:13px;font-weight:500;color:#10292d;text-decoration:none;padding:7px 12px;border-radius:999px;border:1px solid #e2e0d6;background:#ffffff;white-space:nowrap">← Website</a>
     </div>
     <div class="k-top-actions" style="display:flex;align-items:center;gap:8px">
-      <div class="k-top-sides" style="display:flex;background:#eeede6;border-radius:999px;padding:3px">
-        <sc-for list="{{ sides }}" as="x" hint-placeholder-count="2">
-          <button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button>
-        </sc-for>
-      </div>
       <sc-if value="{{ isOrg }}" hint-placeholder-val="{{ true }}">
         <select class="k-field" data-role="uilang" value="{{ uiLang }}" onChange="{{ setUiLang }}" style="width:auto;padding:8px 10px;font-size:13.5px;border-radius:999px;min-height:40px">
           <sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7">
@@ -169,7 +164,6 @@
           </sc-for>
         </div>
         <div style="margin-top:auto;padding-top:18px;display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;background:#eeede6;border-radius:999px;padding:3px"><sc-for list="{{ sides }}" as="x" hint-placeholder-count="2"><button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }};flex:1">{{ x.label }}</button></sc-for></div>
           <select class="k-field" data-role="uilang" aria-label="Console language" value="{{ uiLang }}" onChange="{{ setUiLang }}" style="padding:9px 12px;font-size:13.5px;border-radius:12px;min-height:40px"><sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7"><option value="{{ l.code }}">{{ l.label }}</option></sc-for></select>
           <div style="display:flex;gap:6px"><a href="/" style="flex:1;text-align:center;font-size:13px;font-weight:500;color:#10292d;text-decoration:none;padding:9px;border-radius:999px;border:1px solid #e2e0d6;background:#ffffff">← Website</a><button type="button" onClick="{{ signOutOrg }}" class="k-press" style="flex:1;border:1px solid #e2e0d6;background:#ffffff;border-radius:999px;padding:9px;font-size:13px;font-weight:500;cursor:pointer;color:#10292d">Sign out</button></div>
         </div>
@@ -289,8 +283,17 @@
         <sc-if value="{{ vBoard }}" hint-placeholder-val="{{ false }}">
           <section class="k-rise">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px">
-              <div style="min-width:0">
-                <h1 style="margin:0 0 3px;font-family:{{ displayFont }};font-weight:600;font-size:27px;letter-spacing:-.015em">{{ activeName }}</h1>
+              <div style="min-width:0;flex:1 1 320px">
+<sc-if value="{{ inNewManual }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px">
+<h2 style="margin:0;font-family:{{ displayFont }};font-weight:600;font-size:22px;letter-spacing:-.015em">{{ t.newTitle }}</h2>
+<div style="display:flex;gap:6px;background:#eeede6;border-radius:999px;padding:4px;flex-wrap:wrap;align-self:flex-start"><sc-for list="{{ intakeTabs }}" as="x" hint-placeholder-count="3"><button type="button" onClick="{{ x.go }}" class="k-press" style="{{ x.style }}">{{ x.label }}</button></sc-for></div>
+</div>
+</sc-if>
+<label style="display:flex;align-items:center;gap:8px;margin:0 0 3px;max-width:520px;border-bottom:1.5px dashed #d5d3c8;padding-bottom:2px">
+<input value="{{ titleVal }}" onChange="{{ setTitle }}" placeholder="Untitled · type the artisan or session name" aria-label="Session name" style="flex:1;min-width:0;border:0;outline:none;background:transparent;padding:0;font-family:{{ displayFont }};font-weight:600;font-size:27px;letter-spacing:-.015em;color:#10292d">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#75817e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13.5 6.5l4 4"></path></svg>
+</label>
                 <p style="margin:0;font-size:13.5px;color:#5f6b69">{{ activeSub }}</p>
               </div>
               <div class="k-seg" style="display:flex;gap:6px;background:#eeede6;border-radius:999px;padding:4px;flex-wrap:wrap">
@@ -559,8 +562,7 @@
                   </sc-if>
                   <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:16px">
                     <button type="button" onClick="{{ copyLink }}" class="k-press" style="background:#fff;border:1.5px solid #e2e0d6;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:46px">{{ copyLabel }}</button>
-                    <button type="button" onClick="{{ openAsArtisan }}" class="k-press" style="background:#10292d;color:#fff;border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:46px">{{ t.openApp }} →</button>
-                  </div>
+                                      </div>
                 </div>
                 <sc-if value="{{ login.show }}" hint-placeholder-val="{{ true }}">
                 <div style="background:#fff;border-radius:22px;padding:22px;border:1px solid #e2e0d6">
@@ -713,9 +715,7 @@
                   <textarea readOnly="{{ orgTrRO }}" class="k-field" rows="14" placeholder="{{ pasteHint }}" value="{{ transcript }}" onChange="{{ setTranscript }}" style="min-height:300px;resize:vertical;font-size:14px;font-family:{{ recordFont }}"></textarea>
                 </sc-if>
 
-                <sc-if value="{{ intakeManual }}" hint-placeholder-val="{{ false }}">
-                  <button type="button" onClick="{{ newProfile }}" class="k-press" style="background:#10292d;color:#fff;border:0;border-radius:999px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;min-height:50px">{{ t.emptyProfile }}</button>
-                </sc-if>
+                
 
                 <sc-if value="{{ canExtract }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px">
@@ -831,7 +831,7 @@
   <sc-if value="{{ artSignin }}" hint-placeholder-val="{{ false }}">
     <div class="k-stage" style="flex:1;display:flex;justify-content:center;padding:22px 16px 30px">
       <div style="width:100%;max-width:412px;background:#f5f4ee;border:1px solid #e2e0d6;border-radius:30px;box-shadow:0 18px 50px rgba(16,41,45,.1);overflow:hidden;display:flex;flex-direction:column;min-height:min(760px,calc(100vh - 120px))">
-        <div style="background:#f6f1e7;color:#10292d;padding:28px 24px 26px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;border-bottom:1px solid #e6dfd0">
+        <div style="background:#f6f1e7;color:#10292d;padding:28px 24px 26px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;border-bottom:1px solid #e6dfd0"><div style="align-self:stretch;display:flex;justify-content:flex-start"><a href="/" style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:#10292d;text-decoration:none;padding:9px 14px;border-radius:999px;border:1px solid #e2e0d6;background:#ffffff;min-height:40px">← Back to website</a></div>
           <div style="display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px;display:block"><path d="M16.10 2.38A10.8 10.8 0 1 0 17.55 20.74" fill="none" stroke="#F0B23C" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.47 4.79A9.55 9.55 0 1 0 18.30 18.39" fill="none" stroke="#5B8AB5" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.21 6.20A8.35 8.35 0 1 0 17.96 16.91" fill="none" stroke="#DC5A3C" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.80 7.47A7.2 7.2 0 1 0 17.37 15.71" fill="none" stroke="#8A2034" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.22 8.62A6.05 6.05 0 1 0 16.49 14.93" fill="none" stroke="#9BC7A8" stroke-width="0.82" stroke-linecap="round"></path><path d="M15.60 9.85A4.9 4.9 0 1 0 15.57 14.22" fill="none" stroke="#D9C4E4" stroke-width="0.82" stroke-linecap="round"></path><circle cx="18.14" cy="3.73" r="0.87" fill="#F0B23C"></circle><circle cx="19.55" cy="5.14" r="0.83" fill="#F0B23C"></circle><circle cx="20.66" cy="6.80" r="0.78" fill="#F0B23C"></circle><circle cx="21.46" cy="8.63" r="0.72" fill="#F0B23C"></circle><circle cx="21.91" cy="10.57" r="0.68" fill="#F0B23C"></circle><circle cx="21.99" cy="12.57" r="0.64" fill="#F0B23C"></circle><circle cx="21.70" cy="14.54" r="0.59" fill="#F0B23C"></circle><circle cx="21.05" cy="16.43" r="0.55" fill="#F0B23C"></circle><circle cx="20.07" cy="18.16" r="0.49" fill="#F0B23C"></circle><circle cx="18.78" cy="19.69" r="0.45" fill="#F0B23C"></circle></svg><span style="font-family:'Instrument Sans', sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Karigar</span></div>
           <svg viewBox="0 0 24 24" aria-hidden="true" style="width:120px;height:120px;display:block"><path d="M16.10 2.38A10.8 10.8 0 1 0 17.55 20.74" fill="none" stroke="#F0B23C" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.47 4.79A9.55 9.55 0 1 0 18.30 18.39" fill="none" stroke="#5B8AB5" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.21 6.20A8.35 8.35 0 1 0 17.96 16.91" fill="none" stroke="#DC5A3C" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.80 7.47A7.2 7.2 0 1 0 17.37 15.71" fill="none" stroke="#8A2034" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.22 8.62A6.05 6.05 0 1 0 16.49 14.93" fill="none" stroke="#9BC7A8" stroke-width="0.82" stroke-linecap="round"></path><path d="M15.60 9.85A4.9 4.9 0 1 0 15.57 14.22" fill="none" stroke="#D9C4E4" stroke-width="0.82" stroke-linecap="round"></path><circle cx="18.14" cy="3.73" r="0.87" fill="#F0B23C"></circle><circle cx="19.55" cy="5.14" r="0.83" fill="#F0B23C"></circle><circle cx="20.66" cy="6.80" r="0.78" fill="#F0B23C"></circle><circle cx="21.46" cy="8.63" r="0.72" fill="#F0B23C"></circle><circle cx="21.91" cy="10.57" r="0.68" fill="#F0B23C"></circle><circle cx="21.99" cy="12.57" r="0.64" fill="#F0B23C"></circle><circle cx="21.70" cy="14.54" r="0.59" fill="#F0B23C"></circle><circle cx="21.05" cy="16.43" r="0.55" fill="#F0B23C"></circle><circle cx="20.07" cy="18.16" r="0.49" fill="#F0B23C"></circle><circle cx="18.78" cy="19.69" r="0.45" fill="#F0B23C"></circle></svg>
           <div style="display:flex;flex-direction:column;gap:8px;align-items:center"><div style="font-size:15px;color:#5f6b69">नमस्ते · નમસ્તે · Namaste</div>
@@ -926,7 +926,7 @@
               <div style="display:flex;align-items:center;gap:8px"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" style="display:block;flex:none"><path d="M16.10 2.38A10.8 10.8 0 1 0 17.55 20.74" fill="none" stroke="#F0B23C" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.47 4.79A9.55 9.55 0 1 0 18.30 18.39" fill="none" stroke="#5B8AB5" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.21 6.20A8.35 8.35 0 1 0 17.96 16.91" fill="none" stroke="#DC5A3C" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.80 7.47A7.2 7.2 0 1 0 17.37 15.71" fill="none" stroke="#8A2034" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.22 8.62A6.05 6.05 0 1 0 16.49 14.93" fill="none" stroke="#9BC7A8" stroke-width="0.82" stroke-linecap="round"></path><path d="M15.60 9.85A4.9 4.9 0 1 0 15.57 14.22" fill="none" stroke="#D9C4E4" stroke-width="0.82" stroke-linecap="round"></path><circle cx="18.14" cy="3.73" r="0.87" fill="#F0B23C"></circle><circle cx="19.55" cy="5.14" r="0.83" fill="#F0B23C"></circle><circle cx="20.66" cy="6.80" r="0.78" fill="#F0B23C"></circle><circle cx="21.46" cy="8.63" r="0.72" fill="#F0B23C"></circle><circle cx="21.91" cy="10.57" r="0.68" fill="#F0B23C"></circle><circle cx="21.99" cy="12.57" r="0.64" fill="#F0B23C"></circle><circle cx="21.70" cy="14.54" r="0.59" fill="#F0B23C"></circle><circle cx="21.05" cy="16.43" r="0.55" fill="#F0B23C"></circle><circle cx="20.07" cy="18.16" r="0.49" fill="#F0B23C"></circle><circle cx="18.78" cy="19.69" r="0.45" fill="#F0B23C"></circle></svg><span style="font-weight:600;font-size:17px;letter-spacing:-.02em;color:#10292d">Karigar</span></div>
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
                 <div><div style="font-size:14px;color:#75817e;font-family:{{ recordFont }}">{{ t.greeting }}</div><h2 style="margin:2px 0 0;font-family:{{ recordDisplay }};font-weight:600;font-size:28px;letter-spacing:-.02em;line-height:1.1">{{ activeName }}</h2></div>
-                <button type="button" onClick="{{ goProfile }}" aria-label="{{ t.profileTitle }}" class="k-press" style="padding:9px 14px;border-radius:999px;background:#ffffff;border:1px solid #e2e0d6;cursor:pointer;font-weight:600;font-size:14px;color:#10292d;min-height:44px;font-family:{{ recordFont }}">{{ initials }}</button>
+                <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><select data-role="applang" aria-label="{{ t.setLanguage }}" value="{{ appLang }}" onChange="{{ setAppLang }}" class="k-press" style="appearance:none;-webkit-appearance:none;min-height:44px;max-width:120px;padding:9px 30px 9px 14px;border-radius:999px;border:1px solid #e2e0d6;background:#ffffff url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2310292d' stroke-width='1.5'/%3E%3C/svg%3E&quot;) no-repeat right 12px center;font-weight:600;font-size:14px;color:#10292d;cursor:pointer;font-family:{{ recordFont }}"><sc-for list="{{ langOptions }}" as="l" hint-placeholder-count="7"><option value="{{ l.code }}">{{ l.label }}</option></sc-for></select><button type="button" onClick="{{ goProfile }}" aria-label="{{ t.profileTitle }}" class="k-press" style="padding:9px 14px;border-radius:999px;background:#ffffff;border:1px solid #e2e0d6;cursor:pointer;font-weight:600;font-size:14px;color:#10292d;min-height:44px;font-family:{{ recordFont }}">{{ initials }}</button></div>
               </div>
               <button type="button" onClick="{{ goMyBoard }}" class="k-press" style="width:100%;text-align:left;background:#ffffff;border:1px solid #ece6da;border-radius:24px;padding:16px;display:grid;grid-template-columns:112px minmax(0,1fr);gap:14px;align-items:center;cursor:pointer;color:#10292d">
                 <span style="position:relative;width:112px;aspect-ratio:1;display:block">
@@ -1096,8 +1096,7 @@
                   </sc-for>
                 </div>
               </div>
-              <button type="button" onClick="{{ goInstall }}" class="k-press" style="display:flex;justify-content:space-between;align-items:center;width:100%;background:transparent;border:0;border-bottom:1px solid #eeede6;padding:14px 0;min-height:52px;font-size:15px;font-weight:600;cursor:pointer;text-align:left;font-family:{{ recordFont }};color:#10292d"><span>{{ t.setInstall }}</span><span style="color:#b9c8c4">›</span></button>
-              <button type="button" onClick="{{ clearHistory }}" class="k-press" style="display:flex;justify-content:space-between;align-items:center;width:100%;background:transparent;border:0;padding:14px 0;min-height:52px;font-size:15px;font-weight:600;cursor:pointer;text-align:left;font-family:{{ recordFont }};color:#A81C24"><span>{{ clearLabel }}</span></button>
+                            <button type="button" onClick="{{ clearHistory }}" class="k-press" style="display:flex;justify-content:space-between;align-items:center;width:100%;background:transparent;border:0;padding:14px 0;min-height:52px;font-size:15px;font-weight:600;cursor:pointer;text-align:left;font-family:{{ recordFont }};color:#A81C24"><span>{{ clearLabel }}</span></button>
             </div>
 
             <sc-if value="{{ canLogOut }}" hint-placeholder-val="{{ true }}">
@@ -1642,7 +1641,7 @@ class Component extends DCLogic {
       this.setState({
         ready: true, side: 'artisan', linkMode: true, profiles: [p], activeId: p.id,
         history: store.local.get(`karigar-history:${boot.token}`) || {},
-        appView: boot.standalone || seenInstall ? 'home' : 'install'
+        appView: boot.linkToken && !boot.standalone && !seenInstall ? 'install' : 'home'
       });
       store.local.set('karigar-install-seen', true);
       return;
@@ -1668,8 +1667,7 @@ class Component extends DCLogic {
       if (profiles.some(p => !p.token)) setTimeout(() => this.persist({ profiles }), 0);
       // The website's "Preview the artisan app" opens /console#app: the facilitator's preview of the
       // app for the profile in hand. (/console#k=<code> never reaches here — runtime.js sends it to /k/<code>.)
-      if (typeof window !== 'undefined' && /^#app\b/.test(window.location.hash || '') && activeId) {
-        this.setState({ side: 'artisan', appView: 'install' });
+      if (typeof window !== 'undefined' && /^#app\b/.test(window.location.hash || '')) {
         window.history.replaceState(null, '', window.location.pathname + window.location.search);
       }
     }
@@ -1982,9 +1980,9 @@ Reply with a single JSON object and nothing else.`;
     if (typeof document !== 'undefined') {
       const el = document.querySelector('select[data-role="uilang"]');
       if (el && el.value !== this.state.uiLang) el.value = this.state.uiLang;
-      const ap = document.querySelector('select[data-role="applang"]');
+      const aps = document.querySelectorAll('select[data-role="applang"]');
       const cur = this.active();
-      if (ap && cur && ap.value !== cur.lang) ap.value = cur.lang;
+      aps.forEach(ap => { if (cur && ap.value !== cur.lang) ap.value = cur.lang; });
     }
   }
 
@@ -2434,7 +2432,7 @@ ${this.groundRules()}`;
     const filled = allCards.filter(c => (rec[c.key] || '').trim()).length;
     const viewLang = s.side === 'artisan' ? appLangCode : s.uiLang;
     const idOf = p => this.idText(p, viewLang);
-    const nameOf = p => (idOf(p).name || t.untitled || 'Untitled').split('(')[0].trim();
+    const nameOf = p => ((p.title || '').trim() || idOf(p).name || t.untitled || 'Untitled').split('(')[0].trim();
     const ringName = id => (I && I.RING_NAMES[id] && (I.RING_NAMES[id][s.side === 'artisan' ? appLangCode : s.uiLang] || I.RING_NAMES[id].en)) || id;
     const hubTitle = code => { const k = I && I.HUB_TITLE_KEY[code]; return (k && t[k]) || code; };
     // Card deck text follows the console language; falls back to the printed English deck.
@@ -2755,7 +2753,7 @@ ${this.groundRules()}`;
       uiLang: s.uiLang,
       setUiLang: e => { const v = e.target.value; this.setState({ uiLang: v }); this.persist({ uiLang: v }); },
       appLang: aLang,
-      setAppLang: e => { const v = e.target.value; this.setState({ translateError: false }); this.patchActive(p => ({ ...p, lang: v })); },
+      setAppLang: e => { const v = e.target.value; this.setState({ translateError: false }); this.patchActive(p => ({ ...p, lang: v })); const st = this.props.store; if (st && st.mode === 'artisan' && st.setLang) st.setLang(v); },
       sides: [{ id: 'org', label: t.org }, { id: 'artisan', label: t.artisanApp }].map(x => ({
         label: x.label,
         go: () => this.setState({ side: x.id }),
@@ -2798,7 +2796,8 @@ ${this.groundRules()}`;
         return {
           name: nameOf(p), craft: idOf(p).craft || p.cluster || '—',
           dot: !c.complete ? '#A81C24' : !p.analysis ? '#F0B23C' : p.approved ? '#6FC9B8' : '#6D9DC5',
-          ini: firstGraphemes(nameOf(p) || '?'),
+          // initials come from the artisan's name, not the session title
+          ini: firstGraphemes(idOf(p).name || nameOf(p) || '?'),
           bg: ['#F5E4F6', '#E2F2EF', '#FBE8E8', '#F9E8E4', '#E6EEF8', '#FCEFD2'][(nameOf(p) || '').length % 6], ink: ['#5B2A6B', '#1D5B54', '#7E1418', '#8A3A32', '#1E4A7C', '#8A6410'][(nameOf(p) || '').length % 6],
           prog: (() => { const D = this.DATA; const tot = D ? D.SCHEMA.filter(g => g.deck === 'theme').reduce((n, g) => n + g.fields.length, 0) : 0; return tot ? c.theme + '/' + tot : ''; })(),
           open: () => this.setState({ activeId: p.id, orgView: 'board', boardTab: 'board', selectedKey: null }),
@@ -2806,7 +2805,7 @@ ${this.groundRules()}`;
         };
       }),
 
-      vOverview: s.orgView === 'overview', vBoard: s.orgView === 'board' && !!a, vArtisans: s.orgView === 'artisans', vNew: s.orgView === 'new',
+      vOverview: s.orgView === 'overview', vBoard: (s.orgView === 'board' || (s.orgView === 'new' && s.intake === 'manual')) && !!a, inNewManual: s.orgView === 'new' && s.intake === 'manual', vArtisans: s.orgView === 'artisans', vNew: s.orgView === 'new' && s.intake !== 'manual',
       goNew: () => this.setState({ orgView: 'new', intake: 'upload', transcript: '', fileName: '', audioPending: false, extractError: '' }),
       goHandover: () => this.setState({ boardTab: 'handover' }),
 
@@ -2829,7 +2828,7 @@ ${this.groundRules()}`;
         ]
       })),
 
-      activeName: a ? nameOf(a) : '', activeSub: a ? ([idOf(a).craft, idOf(a).region].filter(Boolean).join(' · ') || a.cluster || '') : '',
+      activeName: a ? nameOf(a) : '', titleVal: a ? (a.title != null ? a.title : (idOf(a).name || '')) : '', setTitle: e => { const v = e.target.value; this.patchActive(p => ({ ...p, title: v })); }, activeSub: a ? ([idOf(a).craft, idOf(a).region].filter(Boolean).join(' · ') || a.cluster || '') : '',
       filledCount: filled, totalCount: allCards.length,
       boardTabs, tabBoard: s.boardTab === 'board', tabList: s.boardTab === 'list', tabAnalysis: s.boardTab === 'analysis', tabHandover: s.boardTab === 'handover',
       ringArcs, ringLegend, boardDots, heroRings, heroDots, heroDash: (() => { const c = 2 * Math.PI * 15, f = heroCov.length ? heroCov.reduce((x, y) => x + y, 0) / heroCov.length : 0; return (f * c).toFixed(2) + ' ' + c.toFixed(2); })(), ringText,
@@ -2991,7 +2990,7 @@ ${this.groundRules()}`;
       }),
 
       intakeTabs: [{ id: 'upload', label: t.tabUpload }, { id: 'paste', label: t.tabPaste }, { id: 'manual', label: t.tabManual }].map(x => ({
-        label: x.label, go: () => this.setState({ intake: x.id }),
+        label: x.label, go: () => x.id === 'manual' ? this._manual() : this.setState({ intake: x.id }),
         style: `border:0;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:40px;background:${s.intake === x.id ? '#fff' : 'transparent'};color:${s.intake === x.id ? '#10292d' : '#75817e'};box-shadow:${s.intake === x.id ? '0 1px 3px rgba(16,41,45,.1)' : 'none'};font-family:${uiL.font}`
       })),
       intakeUpload: s.intake === 'upload', intakePaste: s.intake === 'paste', intakeManual: s.intake === 'manual',
@@ -3005,7 +3004,18 @@ ${this.groundRules()}`;
       canExtract: !s.extracting && (s.transcript || '').trim().length > 40 && s.intake !== 'manual',
       extract: this.extract, extracting: s.extracting, extractError: s.extractError,
       newLang: s.newLang, setNewLang: e => this.setState({ newLang: e.target.value }),
-      newProfile: () => {
+      // "Type it myself" opens the board inline on the New page. One draft per visit: going back to
+      // that tab reopens it, so switching tabs never piles up empty "Untitled" profiles. The draft
+      // reaches the server with its first answer or title (runtime.js skips blank drafts).
+      _manualFn: this._manual = () => {
+        const d = s.draftId && s.profiles.find(p => p.id === s.draftId);
+        if (d) { this.setState({ intake: 'manual', activeId: d.id, selectedKey: null, boardTab: 'board' }); return; }
+        const id = this.newId();
+        const profiles = [...s.profiles, { id, token: null, autoLang: true, record: blank(), lang: s.newLang, recordLang: s.newLang, analysis: null, checked: {}, approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 }];
+        this.setState({ profiles, activeId: id, draftId: id, intake: 'manual', boardTab: 'board', selectedKey: null });
+        this.persist({ profiles, activeId: id });
+      },
+      newProfile: this._np = () => {
         const id = this.newId();
         const profiles = [...s.profiles, { id, token: null, autoLang: true, record: blank(), lang: s.newLang, recordLang: s.newLang, analysis: null, checked: {}, approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 }];
         this.setState({ profiles, activeId: id, orgView: 'board', boardTab: 'board', selectedKey: null });
