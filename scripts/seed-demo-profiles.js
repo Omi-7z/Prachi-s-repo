@@ -51,7 +51,8 @@ for (const d of demos) {
     if (missing.length) throw new Error(`${d.id}: missing answers ${missing}`);
   }
   const { profile } = await call(d.id, 'PUT', {
-    record: r, sources: {}, lang: d.lang, recordLang: d.lang, cluster: d.cluster,
+    // lang is what the answers were recorded in; appLang, when set, is the language the artisan's app opens in
+    record: r, sources: {}, lang: d.appLang || d.lang, recordLang: d.lang, cluster: d.cluster,
     names: { sig: [r.artisan_name, r.craft_name_local, r.craft_region].join('|'), ...d.names },
     analysis: d.analysis,
     translations: { en: { record: en, custom: {}, summary: (d.analysis && d.analysis.artisan_summary_en) || '', vocabulary: (d.analysis && d.analysis.vocabulary) || [], partial: false } },
