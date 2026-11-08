@@ -150,6 +150,15 @@ function normaliseTurns(raw) {
 // retired model makes every call fail. GEMINI_MODEL sets the first model tried.
 const GEMINI_FALLBACKS = ['gemini-flash-lite-latest', 'gemini-3.5-flash', 'gemini-3.5-flash-lite'];
 const GEMINI_THINKING_HEADROOM = 4096;
+// A free-tier model can hang for the whole of the function's 60 seconds, and Vercel then ends the
+// request before the next model gets a turn. So each attempt has its own limit, and all of them
+// together stay inside that 60. Practice replies are short: skip a stuck model quickly. Longer
+// jobs (extraction, analysis) really can take a while, so the first model gets most of the time.
+const GEMINI_DEADLINE_MS = 55000;
+const SHORT_REPLY_TOKENS = 900;
+const SHORT_ATTEMPT_MS = 13000;
+const LONG_ATTEMPT_MS = 40000;
+const MIN_ATTEMPT_MS = 3000;
 
 async function gemini(system, messages, maxTokens) {
   const key = process.env.GEMINI_API_KEY;
@@ -158,13 +167,19 @@ async function gemini(system, messages, maxTokens) {
   // day. When one is used up (429), unknown (404), overloaded (5xx) or returns nothing, the
   // next one is tried, so a practice session keeps going instead of stopping mid-conversation.
   const chain = [...new Set([process.env.GEMINI_MODEL || 'gemini-flash-latest', ...GEMINI_FALLBACKS])];
+  const deadline = Date.now() + GEMINI_DEADLINE_MS;
+  const attemptMs = maxTokens <= SHORT_REPLY_TOKENS ? SHORT_ATTEMPT_MS : LONG_ATTEMPT_MS;
   let last;
   for (const model of chain) {
+    const remaining = deadline - Date.now();
+    if (remaining < MIN_ATTEMPT_MS) break;
     try {
-      return await geminiCall(model, key, system, messages, maxTokens);
+      return await geminiCall(model, key, system, messages, maxTokens, Math.min(attemptMs, remaining));
     } catch (err) {
       last = err;
-      if (!(err.status === 429 || err.status === 404 || err.status >= 500 || err.reason === 'empty')) throw err;
+      const timedOut = err.name === 'TimeoutError' || err.name === 'AbortError';
+      if (timedOut) console.error('chat attempt timed out', model);
+      if (!(timedOut || err.status === 429 || err.status === 404 || err.status >= 500 || err.reason === 'empty')) throw err;
     }
   }
   // Optional last resort on a different provider's free tier.
@@ -178,11 +193,12 @@ async function gemini(system, messages, maxTokens) {
   throw last;
 }
 
-async function geminiCall(model, key, system, messages, maxTokens) {
+async function geminiCall(model, key, system, messages, maxTokens, timeoutMs) {
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
     {
       method: 'POST',
+      signal: AbortSignal.timeout(timeoutMs),
       // header rather than ?key= so the key never lands in request logs
       headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
