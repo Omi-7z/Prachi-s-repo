@@ -5,13 +5,41 @@
   "cluster": "Warli painting · Dahanu, Palghar, Maharashtra",
   "status": "complete",
   "names": {
-    "en": { "name": "Sunita Bhoir", "craft": "Warli chitrakala", "region": "Dahanu, Palghar, Maharashtra" },
-    "hi": { "name": "सुनीता भोईर", "craft": "वारली चित्रकला", "region": "डहाणू, पालघर, महाराष्ट्र" },
-    "gu": { "name": "સુનિતા ભોઈર", "craft": "વારલી ચિત્રકલા", "region": "ડહાણુ, પાલઘર, મહારાષ્ટ્ર" },
-    "mr": { "name": "सुनीता भोईर", "craft": "वारली चित्रकला", "region": "डहाणू, पालघर, महाराष्ट्र" },
-    "bn": { "name": "সুনীতা ভোইর", "craft": "ওয়ারলি চিত্রকলা", "region": "ডাহানু, পালঘর, মহারাষ্ট্র" },
-    "ta": { "name": "சுனிதா போய்ர்", "craft": "வார்லி ஓவியம்", "region": "தஹானு, பால்கர், மகாராஷ்டிரா" },
-    "kn": { "name": "ಸುನೀತಾ ಭೋಯಿರ್", "craft": "ವಾರ್ಲಿ ಚಿತ್ರಕಲೆ", "region": "ಡಹಾಣು, ಪಾಲಘರ್, ಮಹಾರಾಷ್ಟ್ರ" }
+    "en": {
+      "name": "Sunita Bhoir",
+      "craft": "Warli chitrakala",
+      "region": "Dahanu, Palghar, Maharashtra"
+    },
+    "hi": {
+      "name": "सुनीता भोईर",
+      "craft": "वारली चित्रकला",
+      "region": "डहाणू, पालघर, महाराष्ट्र"
+    },
+    "gu": {
+      "name": "સુનિતા ભોઈર",
+      "craft": "વારલી ચિત્રકલા",
+      "region": "ડહાણુ, પાલઘર, મહારાષ્ટ્ર"
+    },
+    "mr": {
+      "name": "सुनीता भोईर",
+      "craft": "वारली चित्रकला",
+      "region": "डहाणू, पालघर, महाराष्ट्र"
+    },
+    "bn": {
+      "name": "সুনীতা ভোইর",
+      "craft": "ওয়ারলি চিত্রকলা",
+      "region": "ডাহানু, পালঘর, মহারাষ্ট্র"
+    },
+    "ta": {
+      "name": "சுனிதா போய்ர்",
+      "craft": "வார்லி ஓவியம்",
+      "region": "தஹானு, பால்கர், மகாராஷ்டிரா"
+    },
+    "kn": {
+      "name": "ಸುನೀತಾ ಭೋಯಿರ್",
+      "craft": "ವಾರ್ಲಿ ಚಿತ್ರಕಲೆ",
+      "region": "ಡಹಾಣು, ಪಾಲಘರ್, ಮಹಾರಾಷ್ಟ್ರ"
+    }
   },
   "record": {
     "artisan_name": "सुनीता भोईर",
@@ -26,21 +54,15 @@
     "teaching_memory": "आजीने मला भिंतीसमोर बसवलं. मी माणूस काढला, ती म्हणाली, “याला काम काय आहे?” मी पुन्हा काढला, हातात नांगर दिला. तेव्हा ती हसली.",
     "remembered_phrase_gesture": "“आधी गोल, मग काम.” हे म्हणत ती काडीने हवेतच वर्तुळ फिरवायची.",
     "family_generations": "आजी आणि आई चित्र काढायच्या. मी आणि माझी बहीण काढतो. माझी मुलगी प्रिया शाळेत शिकते, सुट्टीत काढते. आता माझा भाऊही कागदावर काढतो.",
-    "transmission_strength": "तारपा नाच आणि शेताची चित्रं मुलं पटकन शिकतात, कारण ती रोज पाहतात.",
-    "transmission_weakness": "लग्नाच्या चौकाचे नियम आणि त्याबरोबरची गाणी. ती जाणणाऱ्या सवाष्णी आता थोड्याच राहिल्या.",
+    "transmission_strength": "तारपा नाच आणि शेताची चित्रं मुलं पटकन शिकतात, कारण ती रोज पाहतात.\n\nलग्नाच्या चौकाचे नियम आणि त्याबरोबरची गाणी. ती जाणणाऱ्या सवाष्णी आता थोड्याच राहिल्या.",
     "teaching_difficulty": "मुलांची शाळा आणि कामासाठी शहरात जाणं. शिवाय बाजाराला जे पटकन विकतं, तेच ती शिकू पाहतात.",
-    "primary_material": "तांदळाचं पीठ, शेण, तांबडी माती, बांबूची काडी. विक्रीसाठी कॅनव्हास किंवा कागद.",
-    "material_origin": "तांदूळ, माती आणि शेण गावातलंच. बांबू जंगलातून. कागद आणि रंग डहाणूच्या बाजारातून.",
+    "primary_material": "तांदळाचं पीठ, शेण, तांबडी माती, बांबूची काडी. विक्रीसाठी कॅनव्हास किंवा कागद.\n\nतांदूळ, माती आणि शेण गावातलंच. बांबू जंगलातून. कागद आणि रंग डहाणूच्या बाजारातून.",
     "first_contact": "सणाच्या आधी आईबरोबर भिंत सारवायचे. हाताला लागलेला शेणाचा थंडावा अजून आठवतो.",
     "material_special": "तांदळाचा पांढरा रंग भिंतीशी एकरूप होतो. तो चमकत नाही, पण आमच्या घरातल्या मंद उजेडात उठून दिसतो.",
     "material_in_hands": "पीठ पाण्यात कालवलं की काडीवरून एकसारखं उतरायला हवं. बरोबर असेल तर रेषा स्वतःच चालते.",
-    "material_feels_wrong": "रंग खूप पातळ असला की ओघळतो. घट्ट असला की काडीला चिकटतो आणि रेषा तुटते.",
     "correction_action": "थोडं पाणी किंवा पीठ घालून आधी बोटाच्या नखावर रेषा ओढून बघते. मगच भिंतीला हात लावते.",
-    "material_change_gain": "कागद आणि अॅक्रिलिकमुळे चित्र बाहेर गेलं. विकता येतं आणि पावसात खराब होत नाही.",
-    "material_change_loss": "अॅक्रिलिकची चमक खोटी वाटते. भिंतीबरोबर सणाचा आणि घराचा संबंध तुटतो.",
-    "occasion_of_use": "लग्नात देवचौक, तसंच सण आणि कापणीच्या वेळी घराच्या भिंतीवर.",
-    "sensory_scene": "ओल्या शेणाचा वास, रात्रभर तारपाचा सूर, आणि चुलीच्या उजेडात भिंतीवरचे पांढरे लोक नाचतायत असं वाटतं.",
-    "remembered_community_phrase": "“चौक नाही तर लग्न नाही.” गावातल्या म्हाताऱ्या बायका हे आजही म्हणतात.",
+    "material_change_gain": "कागद आणि अॅक्रिलिकमुळे चित्र बाहेर गेलं. विकता येतं आणि पावसात खराब होत नाही.\n\nअॅक्रिलिकची चमक खोटी वाटते. भिंतीबरोबर सणाचा आणि घराचा संबंध तुटतो.",
+    "occasion_of_use": "लग्नात देवचौक, तसंच सण आणि कापणीच्या वेळी घराच्या भिंतीवर.\n\nओल्या शेणाचा वास, रात्रभर तारपाचा सूर, आणि चुलीच्या उजेडात भिंतीवरचे पांढरे लोक नाचतायत असं वाटतं.",
     "special_vs_everyday": "रोजचं चित्र म्हणजे शेती आणि नाच, ते विकता येतं. लग्नाचा चौक फक्त त्या घरासाठी असतो.",
     "special_object_rule": "चौक सवाष्णीच काढते आणि तो काढताना गाणी म्हणतात. पालघाट देवीचं चित्र तिथेच राहतं.",
     "not_for_sale_example": "लग्नाचा देवचौक आणि पालघाट देवी.",
@@ -52,37 +74,71 @@
     "key_stakeholder_of_loss": "आमची पुढची पिढी, ज्यांना स्वतःची ओळख दुसऱ्याच्या पुस्तकात वाचावी लागेल.",
     "change_in_lifetime": "आधी चित्र विकायचा विचार नव्हता. आता मुलं पैसे कमावतात, पण छापलेल्या ‘वारली’ मगची स्पर्धा आहे.",
     "artisan_initiated_change": "मी गावातल्या मुलींचा शनिवारचा वर्ग सुरू केला, आणि प्रत्येक चित्रामागे गोष्टीचं कार्ड लावायला लागले.",
-    "desired_keep": "तांदळाचा पांढरा रंग, गोल आखणी आणि चौकाचे नियम.",
-    "desired_let_go": "दलालाने ठरवलेला भाव, आणि कमी भावात मोठ्या संख्येने चित्रं काढणं.",
+    "desired_keep": "तांदळाचा पांढरा रंग, गोल आखणी आणि चौकाचे नियम.\n\nदलालाने ठरवलेला भाव, आणि कमी भावात मोठ्या संख्येने चित्रं काढणं.",
     "strength_anchor": "मला प्रत्येक चित्राची गोष्ट सांगता येते, आणि माझी रेषा न थांबता चालते. मुलींना मी शिकवू शकते.",
     "concern_anchor": "आमचं चित्र मग, टी-शर्ट आणि भिंतींवर छापलं जातं, नाव न घेता, एक पैसा न देता.",
-    "shareable_content": "तारपा, शेती, जंगलाची चित्रं, माझं नाव आणि माझ्या वर्गाची माहिती.",
-    "private_content": "लग्नाचा चौक, पालघाट देवी, चौकाची गाणी आणि जमिनीच्या वादाची माहिती.",
-    "desired_change": "वारली वापरणाऱ्या कंपन्यांनी कलाकाराचं नाव द्यावं, आणि गावाला त्याचा मोबदला मिळावा.",
-    "desired_continuity": "चौक विकला जाणार नाही. तो गावात आणि सवाष्णींच्या हातीच राहील.",
+    "shareable_content": "तारपा, शेती, जंगलाची चित्रं, माझं नाव आणि माझ्या वर्गाची माहिती.\n\nलग्नाचा चौक, पालघाट देवी, चौकाची गाणी आणि जमिनीच्या वादाची माहिती.",
+    "desired_change": "वारली वापरणाऱ्या कंपन्यांनी कलाकाराचं नाव द्यावं, आणि गावाला त्याचा मोबदला मिळावा.\n\nचौक विकला जाणार नाही. तो गावात आणि सवाष्णींच्या हातीच राहील.",
     "learning_story": "एका दुकानदारासाठी मी सारखीच शंभर चित्रं काढली. पन्नासाव्या नंतर माणसांना काम उरलं नाही, नुसती रेषा राहिली. आजीचा प्रश्न आठवला. तेव्हापासून दिवसाला ठरावीकच चित्रं काढते.",
     "emotional_story": "आजी गेल्यावर तिच्या घराची भिंत पावसात ढासळली, चौकासकट. आम्ही त्या मातीतूनच पुढच्या वर्षी नवी भिंत सारवली.",
-    "clarification_story": "एक बाई म्हणाल्या, यात काय, नुसते त्रिकोण. मी त्यांना काठी दिली आणि तारपाचा गोल काढायला सांगितला. रेषा चुकली की गोल मोडतो, हे त्यांना लगेच कळलं.",
-    "outsider_misunderstanding": "लोकांना वाटतं वारली म्हणजे सोपी डिझाइन. ती आमची प्रार्थना आणि आमचा इतिहास आहे."
+    "clarification_story": "एक बाई म्हणाल्या, यात काय, नुसते त्रिकोण. मी त्यांना काठी दिली आणि तारपाचा गोल काढायला सांगितला. रेषा चुकली की गोल मोडतो, हे त्यांना लगेच कळलं.\n\nलोकांना वाटतं वारली म्हणजे सोपी डिझाइन. ती आमची प्रार्थना आणि आमचा इतिहास आहे.",
+    "material_spoke": "रंग खूप पातळ असला की ओघळतो. घट्ट असला की काडीला चिकटतो आणि रेषा तुटते.",
+    "use_importance": "“चौक नाही तर लग्न नाही.” गावातल्या म्हाताऱ्या बायका हे आजही म्हणतात."
   },
   "analysis": {
     "communication_profile": "Sunita teaches as she talks, usually by asking a question or handing someone the stick. She draws a firm line between what can be sold and what is sacred, without being asked. Stories come first and prices come later. She speaks with quiet strength about land, and that topic needs care.",
     "strengths": [
-      { "title": "A story for every painting", "detail": "She attaches a story card to each work, and can tell any of them aloud." },
-      { "title": "A clear sacred line", "detail": "She separates the wedding chowk from sellable Tarpa and farm scenes with no hesitation." },
-      { "title": "Trusted at home", "detail": "Knowledgeable village women invited her to draw the wedding chowk, which she values above any prize." }
+      {
+        "title": "A story for every painting",
+        "detail": "She attaches a story card to each work, and can tell any of them aloud."
+      },
+      {
+        "title": "A clear sacred line",
+        "detail": "She separates the wedding chowk from sellable Tarpa and farm scenes with no hesitation."
+      },
+      {
+        "title": "Trusted at home",
+        "detail": "Knowledgeable village women invited her to draw the wedding chowk, which she values above any prize."
+      }
     ],
     "gaps": [
-      { "title": "Asking for credit and payment", "detail": "She feels the injustice of printed copies and is still shaping a direct request to a company." },
-      { "title": "Pricing beyond the middleman", "detail": "She wants to set her own price and has not rehearsed defending it." },
-      { "title": "Saying no without a long explanation", "detail": "She can hold the boundary, and a short version would help with people who push." }
+      {
+        "title": "Asking for credit and payment",
+        "detail": "She feels the injustice of printed copies and is still shaping a direct request to a company."
+      },
+      {
+        "title": "Pricing beyond the middleman",
+        "detail": "She wants to set her own price and has not rehearsed defending it."
+      },
+      {
+        "title": "Saying no without a long explanation",
+        "detail": "She can hold the boundary, and a short version would help with people who push."
+      }
     ],
     "recommended_segments": [
-      { "id": "brand", "label": "Company using Warli", "why": "She wants credit and payment for her community, and this is the hardest talk to practise." },
-      { "id": "ngo", "label": "NGO or museum", "why": "Her Saturday class and clear boundaries suit a respectful partnership." },
-      { "id": "genz", "label": "Young customer online", "why": "Her ‘what is this person's work?’ question would reach young learners well." }
+      {
+        "id": "brand",
+        "label": "Company using Warli",
+        "why": "She wants credit and payment for her community, and this is the hardest talk to practise."
+      },
+      {
+        "id": "ngo",
+        "label": "NGO or museum",
+        "why": "Her Saturday class and clear boundaries suit a respectful partnership."
+      },
+      {
+        "id": "genz",
+        "label": "Young customer online",
+        "why": "Her ‘what is this person's work?’ question would reach young learners well."
+      }
     ],
-    "vocabulary": ["चौक", "तारपा", "सवाष्ण", "पालघाट देवी", "सारवणे"],
+    "vocabulary": [
+      "चौक",
+      "तारपा",
+      "सवाष्ण",
+      "पालघाट देवी",
+      "सारवणे"
+    ],
     "care_notes": [
       "The wedding chowk, Palghat Devi and the chowk songs must never be requested, copied or photographed.",
       "Land disputes were mentioned in confidence. Do not bring them up or use them in any public story."

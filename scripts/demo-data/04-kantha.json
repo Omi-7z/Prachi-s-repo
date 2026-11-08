@@ -4,13 +4,41 @@
   "cluster": "Nakshi Kantha · Bolpur, Birbhum, West Bengal",
   "status": "complete",
   "names": {
-    "en": { "name": "Mitali Das", "craft": "Nakshi Kantha", "region": "Bolpur, Birbhum, West Bengal" },
-    "hi": { "name": "मिताली दास", "craft": "नक्शी कांथा", "region": "बोलपुर, बीरभूम, पश्चिम बंगाल" },
-    "gu": { "name": "મિતાલી દાસ", "craft": "નક્શી કાંથા", "region": "બોલપુર, બીરભૂમ, પશ્ચિમ બંગાળ" },
-    "mr": { "name": "मिताली दास", "craft": "नक्षी कांथा", "region": "बोलपूर, बीरभूम, पश्चिम बंगाल" },
-    "bn": { "name": "মিতালি দাস", "craft": "নকশি কাঁথা", "region": "বোলপুর, বীরভূম, পশ্চিমবঙ্গ" },
-    "ta": { "name": "மிதாலி தாஸ்", "craft": "நக்ஷி காந்தா", "region": "போல்பூர், பீர்பூம், மேற்கு வங்காளம்" },
-    "kn": { "name": "ಮಿತಾಲಿ ದಾಸ್", "craft": "ನಕ್ಷಿ ಕಾಂಥಾ", "region": "ಬೋಲ್ಪುರ, ಬೀರ್ಭೂಮ್, ಪಶ್ಚಿಮ ಬಂಗಾಳ" }
+    "en": {
+      "name": "Mitali Das",
+      "craft": "Nakshi Kantha",
+      "region": "Bolpur, Birbhum, West Bengal"
+    },
+    "hi": {
+      "name": "मिताली दास",
+      "craft": "नक्शी कांथा",
+      "region": "बोलपुर, बीरभूम, पश्चिम बंगाल"
+    },
+    "gu": {
+      "name": "મિતાલી દાસ",
+      "craft": "નક્શી કાંથા",
+      "region": "બોલપુર, બીરભૂમ, પશ્ચિમ બંગાળ"
+    },
+    "mr": {
+      "name": "मिताली दास",
+      "craft": "नक्षी कांथा",
+      "region": "बोलपूर, बीरभूम, पश्चिम बंगाल"
+    },
+    "bn": {
+      "name": "মিতালি দাস",
+      "craft": "নকশি কাঁথা",
+      "region": "বোলপুর, বীরভূম, পশ্চিমবঙ্গ"
+    },
+    "ta": {
+      "name": "மிதாலி தாஸ்",
+      "craft": "நக்ஷி காந்தா",
+      "region": "போல்பூர், பீர்பூம், மேற்கு வங்காளம்"
+    },
+    "kn": {
+      "name": "ಮಿತಾಲಿ ದಾಸ್",
+      "craft": "ನಕ್ಷಿ ಕಾಂಥಾ",
+      "region": "ಬೋಲ್ಪುರ, ಬೀರ್ಭೂಮ್, ಪಶ್ಚಿಮ ಬಂಗಾಳ"
+    }
   },
   "record": {
     "artisan_name": "মিতালি দাস",
@@ -25,21 +53,15 @@
     "teaching_memory": "ঠাকুমা আমার সেলাই উল্টে দেখতেন। সামনের দিক নয়, পিছনটা। বলতেন, “পিছন যদি মিথ্যে বলে, সামনেও বলবে।” তারপর পুরোটা খুলে দিতেন।",
     "remembered_phrase_gesture": "“ফোঁড় ছোট, ধৈর্য বড়।” বলতে বলতে তিনি সুচের ডগা দিয়ে আমার আঙুলে আলতো টোকা দিতেন।",
     "family_generations": "ঠাকুমা, মা, আমি। আমার মেয়ে রিয়া কলকাতায় নার্সিং পড়ে, ছুটিতে এসে সেলাই করে। পুত্রবধূ এখন শিখছে।",
-    "transmission_strength": "রানিং সেলাই আর ছোট নকশা বাড়ির মেয়েরা সহজেই শেখে, আর আমাদের দলে নতুনরাও।",
-    "transmission_weakness": "গল্প-বলা বড় নকশি কাঁথা। একটায় এক বছর লাগে, আর এখন কেউ পুরো একটা করতে চায় না।",
+    "transmission_strength": "রানিং সেলাই আর ছোট নকশা বাড়ির মেয়েরা সহজেই শেখে, আর আমাদের দলে নতুনরাও।\n\nগল্প-বলা বড় নকশি কাঁথা। একটায় এক বছর লাগে, আর এখন কেউ পুরো একটা করতে চায় না।",
     "teaching_difficulty": "দাম আসে দেরিতে, আর হাতের কাজে সময় লাগে অনেক। সংসারের কাজের পরে সন্ধ্যায় চোখের কষ্টও হয়।",
-    "primary_material": "পুরোনো সুতির শাড়ি, রঙিন সুতো, সুচ। এখন বিক্রির জন্য তসর আর নতুন সুতির কাপড়ও।",
-    "material_origin": "পুরোনো শাড়ি ঘর আর পাড়া থেকে। সুতো বোলপুর বাজার থেকে, তসর সোনামুখী আর মুর্শিদাবাদ থেকে।",
+    "primary_material": "পুরোনো সুতির শাড়ি, রঙিন সুতো, সুচ। এখন বিক্রির জন্য তসর আর নতুন সুতির কাপড়ও।\n\nপুরোনো শাড়ি ঘর আর পাড়া থেকে। সুতো বোলপুর বাজার থেকে, তসর সোনামুখী আর মুর্শিদাবাদ থেকে।",
     "first_contact": "ছোটবেলায় মায়ের শাড়ির কাঁথায় ঘুমাতাম। তার গন্ধ আর নরম ভাবটা হাতে লাগলেই মনে পড়ে।",
     "material_special": "ধোয়া পুরোনো শাড়ি এত নরম যে সুচ নিজেই পথ পায়। তিন-চার স্তর একসঙ্গে বসে গেলে কাঁথা গায়ে লেগে থাকে।",
     "material_in_hands": "ভালো কাপড় আঙুলের নিচে ফুলে থাকে, টানে না। সুচ ঢোকার সময় হালকা শব্দ হয়, ফোঁড় সমান পড়ে।",
-    "material_feels_wrong": "কাপড় কুঁচকে এলে, বা সুতো টেনে ধরলে বুঝি স্তর ঠিকমতো বসেনি। নতুন মাড়ের কাপড়েও সুচ আটকায়।",
     "correction_action": "সেলাই খুলে কাঁথা আবার মাটিতে বিছিয়ে হাত দিয়ে সমান করি। নতুন কাপড় হলে আগে দু’বার ধুয়ে নিই।",
-    "material_change_gain": "তসর আর ভালো পাকা রঙে কাজ শহরের লোক পছন্দ করে, দামও ভালো পাই।",
-    "material_change_loss": "পুরোনো শাড়ির সেই স্মৃতি আর থাকে না। নতুন কাপড়ে কাঁথাটা জিনিস হয়, ঘরের মানুষ হয় না।",
-    "occasion_of_use": "শিশু জন্মালে, বিয়েতে উপহার, শীতে গায়ে দেওয়ার জন্য। অতিথির বসার আসন হিসেবেও।",
-    "sensory_scene": "শীতের দুপুর, উঠোনে রোদ, কমলালেবুর খোসার গন্ধ, আর পাঁচ-ছয়জন মেয়ে একসঙ্গে কাঁথা ধরে গল্প করছে।",
-    "remembered_community_phrase": "“মেয়ের বিয়েতে কাঁথা না দিলে মায়ের মন ভরে না।” পাড়ার বড়রা এই কথাই বলতেন।",
+    "material_change_gain": "তসর আর ভালো পাকা রঙে কাজ শহরের লোক পছন্দ করে, দামও ভালো পাই।\n\nপুরোনো শাড়ির সেই স্মৃতি আর থাকে না। নতুন কাপড়ে কাঁথাটা জিনিস হয়, ঘরের মানুষ হয় না।",
+    "occasion_of_use": "শিশু জন্মালে, বিয়েতে উপহার, শীতে গায়ে দেওয়ার জন্য। অতিথির বসার আসন হিসেবেও।\n\nশীতের দুপুর, উঠোনে রোদ, কমলালেবুর খোসার গন্ধ, আর পাঁচ-ছয়জন মেয়ে একসঙ্গে কাঁথা ধরে গল্প করছে।",
     "special_vs_everyday": "রোজের কাঁথা সাদামাটা, কয়েক সপ্তাহে হয়। বিয়ের কাঁথায় পুরো জীবনের গল্প, এক বছর লাগে।",
     "special_object_rule": "নবজাতকের কাঁথা মায়ের পুরোনো শাড়ি দিয়েই হয়। সেটা বাড়ির বাইরে বিক্রি করা হয় না।",
     "not_for_sale_example": "আমার ঠাকুমার হাতের কাঁথা, যাতে তাঁর বিয়ের গল্প সেলাই করা আছে।",
@@ -51,37 +73,71 @@
     "key_stakeholder_of_loss": "গ্রামের মেয়েরা, যাদের কাছে এটাই নিজের রোজগার আর নিজের কথা বলার পথ।",
     "change_in_lifetime": "আগে কাঁথা শুধু ঘরের জন্য। এখন আমাদের রোজগার, আর মেয়েরা নিজের নামে ব্যাংকে টাকা রাখে।",
     "artisan_initiated_change": "আমি পনেরো জনের দল করেছি। দাম আমরা একসঙ্গে ঠিক করি, আর প্রতিটি কাঁথায় যে সেলাই করেছে তার নাম থাকে।",
-    "desired_keep": "ছোট সমান ফোঁড়, গল্প-বলা নকশা, আর একসঙ্গে বসে কাজ।",
-    "desired_let_go": "কম দামে তাড়াহুড়োর বড় অর্ডার, আর এই ধারণা যে মেয়েদের কাজের দাম কম।",
+    "desired_keep": "ছোট সমান ফোঁড়, গল্প-বলা নকশা, আর একসঙ্গে বসে কাজ।\n\nকম দামে তাড়াহুড়োর বড় অর্ডার, আর এই ধারণা যে মেয়েদের কাজের দাম কম।",
     "strength_anchor": "আমার পিছনের সেলাই সামনের মতোই পরিষ্কার। আর আমি একটি নকশায় পুরো গল্প বলতে পারি, যে গল্প আমার দল মিলে এগিয়ে নিয়ে যায়।",
     "concern_anchor": "মেশিনে করা ‘কাঁথা স্টিচ’ কম দামে বাজার ভরে দিচ্ছে, আর চোখের জোর কমায় বড় কাজ কঠিন হচ্ছে।",
-    "shareable_content": "সেলাইয়ের পদ্ধতি, দলের কথা, বিক্রির কাঁথার গল্প, আর আমার নাম।",
-    "private_content": "ঠাকুমার কাঁথার ছবি, পারিবারিক গল্প, আর দলের মেয়েদের ব্যক্তিগত ও টাকার কথা।",
-    "desired_change": "বড় কাঁথার জন্য আগাম টাকা, যাতে এক বছরের কাজে কেউ পিছিয়ে না যায়।",
-    "desired_continuity": "সব সেলাই হাতেই হবে, আর যে সেলাই করেছে তার নাম কাঁথায় থাকবে।",
+    "shareable_content": "সেলাইয়ের পদ্ধতি, দলের কথা, বিক্রির কাঁথার গল্প, আর আমার নাম।\n\nঠাকুমার কাঁথার ছবি, পারিবারিক গল্প, আর দলের মেয়েদের ব্যক্তিগত ও টাকার কথা।",
+    "desired_change": "বড় কাঁথার জন্য আগাম টাকা, যাতে এক বছরের কাজে কেউ পিছিয়ে না যায়।\n\nসব সেলাই হাতেই হবে, আর যে সেলাই করেছে তার নাম কাঁথায় থাকবে।",
     "learning_story": "একবার মাড়-না-ধোয়া নতুন কাপড়ে পুরো একটা কাঁথা করেছিলাম। প্রথম ধোয়ায় সব কুঁচকে গেল। দু’মাসের কাজ গেল। সেই থেকে নতুন কাপড় দু’বার না ধুয়ে সুচ ধরি না।",
     "emotional_story": "আমার মা অসুস্থ হলে তাঁর শাড়ি দিয়ে কাঁথা বানালাম। তিনি সেটা গায়ে দিয়েই চলে গেলেন। সেটা এখন রিয়ার কাছে আছে, সে হোস্টেলে নিয়ে গেছে।",
-    "clarification_story": "এক ক্রেতা বললেন, পিছনটা কেউ তো দেখবে না, এত সময় কেন? আমি ওঁকে কাঁথাটা গায়ে দিতে বললাম। পিছনটাই তো গায়ে লাগে।",
-    "outsider_misunderstanding": "অনেকে ভাবেন কাঁথা মানে গরিবের জোড়াতালি। আসলে এটা মেয়েদের লেখা জীবন, আর খুব হিসেবি কাজ।"
+    "clarification_story": "এক ক্রেতা বললেন, পিছনটা কেউ তো দেখবে না, এত সময় কেন? আমি ওঁকে কাঁথাটা গায়ে দিতে বললাম। পিছনটাই তো গায়ে লাগে।\n\nঅনেকে ভাবেন কাঁথা মানে গরিবের জোড়াতালি। আসলে এটা মেয়েদের লেখা জীবন, আর খুব হিসেবি কাজ।",
+    "material_spoke": "কাপড় কুঁচকে এলে, বা সুতো টেনে ধরলে বুঝি স্তর ঠিকমতো বসেনি। নতুন মাড়ের কাপড়েও সুচ আটকায়।",
+    "use_importance": "“মেয়ের বিয়েতে কাঁথা না দিলে মায়ের মন ভরে না।” পাড়ার বড়রা এই কথাই বলতেন।"
   },
   "analysis": {
     "communication_profile": "Mitali speaks warmly and in images, and her answers often turn on one physical detail, such as the back of the stitch. She talks readily about women's earnings and names. Family memories come up easily, and she knows which of them she will not share. Money conversations are comfortable inside the group and less so with outside buyers.",
     "strengths": [
-      { "title": "The back is as clean as the front", "detail": "A senior artist turned her work over at Poush Mela and approved it from the back." },
-      { "title": "Names on the work", "detail": "Each kantha from her group of fifteen carries the name of the woman who stitched it." },
-      { "title": "Answers with touch", "detail": "She answered 'nobody sees the back' by asking the buyer to wrap up in it." }
+      {
+        "title": "The back is as clean as the front",
+        "detail": "A senior artist turned her work over at Poush Mela and approved it from the back."
+      },
+      {
+        "title": "Names on the work",
+        "detail": "Each kantha from her group of fifteen carries the name of the woman who stitched it."
+      },
+      {
+        "title": "Answers with touch",
+        "detail": "She answered 'nobody sees the back' by asking the buyer to wrap up in it."
+      }
     ],
     "gaps": [
-      { "title": "Asking for an advance", "detail": "A year of work needs money up front, and she has yet to practise asking for it." },
-      { "title": "Machine-stitched copies", "detail": "She can feel the difference and needs a short way to help a buyer see it." },
-      { "title": "Pricing a whole year", "detail": "She has not yet put the months of a story kantha into a figure she says aloud." }
+      {
+        "title": "Asking for an advance",
+        "detail": "A year of work needs money up front, and she has yet to practise asking for it."
+      },
+      {
+        "title": "Machine-stitched copies",
+        "detail": "She can feel the difference and needs a short way to help a buyer see it."
+      },
+      {
+        "title": "Pricing a whole year",
+        "detail": "She has not yet put the months of a story kantha into a figure she says aloud."
+      }
     ],
     "recommended_segments": [
-      { "id": "social", "label": "Social enterprise", "why": "Her group's shared pricing and named work suit a fair-terms partner." },
-      { "id": "brand", "label": "Brand or buyer", "why": "She needs practice at asking for advances on large pieces." },
-      { "id": "exhibition", "label": "Exhibition visitor", "why": "Her turn-it-over and wrap-it-round moments work face to face." }
+      {
+        "id": "social",
+        "label": "Social enterprise",
+        "why": "Her group's shared pricing and named work suit a fair-terms partner."
+      },
+      {
+        "id": "brand",
+        "label": "Brand or buyer",
+        "why": "She needs practice at asking for advances on large pieces."
+      },
+      {
+        "id": "exhibition",
+        "label": "Exhibition visitor",
+        "why": "Her turn-it-over and wrap-it-round moments work face to face."
+      }
     ],
-    "vocabulary": ["নকশি কাঁথা", "ফোঁড়", "রানিং সেলাই", "তসর", "পৌষমেলা"],
+    "vocabulary": [
+      "নকশি কাঁথা",
+      "ফোঁড়",
+      "রানিং সেলাই",
+      "তসর",
+      "পৌষমেলা"
+    ],
     "care_notes": [
       "Her grandmother's kantha and family stories are private. Do not request photographs of them.",
       "The story of her mother's last days is hers to tell. Do not retell it in any marketing."

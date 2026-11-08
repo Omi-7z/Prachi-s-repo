@@ -4,13 +4,41 @@
   "cluster": "Tangaliya weaving · Surendranagar, Gujarat",
   "status": "complete",
   "names": {
-    "en": { "name": "Hansaben Dangasia", "craft": "Tangaliya", "region": "Surendranagar, Gujarat" },
-    "hi": { "name": "हंसाबेन डांगसिया", "craft": "टांगलिया", "region": "सुरेंद्रनगर, गुजरात" },
-    "gu": { "name": "હંસાબેન ડાંગસિયા", "craft": "ટાંગલિયા", "region": "સુરેન્દ્રનગર, ગુજરાત" },
-    "mr": { "name": "हंसाबेन डांगसिया", "craft": "टांगलिया", "region": "सुरेंद्रनगर, गुजरात" },
-    "bn": { "name": "হংসাবেন ডাংসিয়া", "craft": "টাঙ্গলিয়া", "region": "সুরেন্দ্রনগর, গুজরাট" },
-    "ta": { "name": "ஹன்சாபென் டாங்சியா", "craft": "டாங்கலியா", "region": "சுரேந்திரநகர், குஜராத்" },
-    "kn": { "name": "ಹಂಸಾಬೆನ್ ಡಾಂಗಸಿಯಾ", "craft": "ಟಾಂಗಲಿಯಾ", "region": "ಸುರೇಂದ್ರನಗರ, ಗುಜರಾತ್" }
+    "en": {
+      "name": "Hansaben Dangasia",
+      "craft": "Tangaliya",
+      "region": "Surendranagar, Gujarat"
+    },
+    "hi": {
+      "name": "हंसाबेन डांगसिया",
+      "craft": "टांगलिया",
+      "region": "सुरेंद्रनगर, गुजरात"
+    },
+    "gu": {
+      "name": "હંસાબેન ડાંગસિયા",
+      "craft": "ટાંગલિયા",
+      "region": "સુરેન્દ્રનગર, ગુજરાત"
+    },
+    "mr": {
+      "name": "हंसाबेन डांगसिया",
+      "craft": "टांगलिया",
+      "region": "सुरेंद्रनगर, गुजरात"
+    },
+    "bn": {
+      "name": "হংসাবেন ডাংসিয়া",
+      "craft": "টাঙ্গলিয়া",
+      "region": "সুরেন্দ্রনগর, গুজরাট"
+    },
+    "ta": {
+      "name": "ஹன்சாபென் டாங்சியா",
+      "craft": "டாங்கலியா",
+      "region": "சுரேந்திரநகர், குஜராத்"
+    },
+    "kn": {
+      "name": "ಹಂಸಾಬೆನ್ ಡಾಂಗಸಿಯಾ",
+      "craft": "ಟಾಂಗಲಿಯಾ",
+      "region": "ಸುರೇಂದ್ರನಗರ, ಗುಜರಾತ್"
+    }
   },
   "record": {
     "artisan_name": "હંસાબેન ડાંગસિયા",
@@ -25,21 +53,15 @@
     "teaching_memory": "પહેલી શાલમાં મારી એક હાર ત્રાંસી ગઈ. સસરાએ એ ઉખેડી નહીં. કહ્યું, “આખી શાલ પૂરી કર, પછી એ હાર રોજ જોજે.” આજ સુધી મારી હાર ત્રાંસી નથી ગઈ.",
     "remembered_phrase_gesture": "“દાણો બોલે છે.” એ એક આંગળીથી દાણા પર હળવો ટકોરો મારતા, કસાયેલો હોય તો જ આગળ વધતા.",
     "family_generations": "સસરા અને એમના પિતા વણતા. હું અને મારા પતિ વણીએ છીએ. મારી દીકરી કોમલ દાણા બાંધે છે, દીકરો સુરતમાં નોકરી કરે છે.",
-    "transmission_strength": "દાણાની ગાંઠ ઘરની બધી સ્ત્રીઓ જાણે છે. દીકરીઓ નાનપણથી જોતાં જોતાં શીખી જાય છે.",
-    "transmission_weakness": "જૂની ભાત, ખાસ કરીને લોબડીની ભાતોનો હિસાબ. એ ક્યાંય લખેલો નથી અને મોટા ભાગનો વડીલોના માથામાં જ રહી ગયો.",
+    "transmission_strength": "દાણાની ગાંઠ ઘરની બધી સ્ત્રીઓ જાણે છે. દીકરીઓ નાનપણથી જોતાં જોતાં શીખી જાય છે.\n\nજૂની ભાત, ખાસ કરીને લોબડીની ભાતોનો હિસાબ. એ ક્યાંય લખેલો નથી અને મોટા ભાગનો વડીલોના માથામાં જ રહી ગયો.",
     "teaching_difficulty": "એક શાલમાં અઠવાડિયાં જાય અને પૈસા મહિને મળે. યુવાનોને રોજનું મહેનતાણું જોઈએ, એટલે શીખવા બેસતા નથી.",
-    "primary_material": "ઘેટાંનું ઊન, સુતરાઉ દોરો અને ઝીણા દાણા માટે વિરોધી રંગનો દોરો.",
-    "material_origin": "ઊન પહેલાં ગામના માલધારી પાસેથી આવતું, હવે અમદાવાદ અને પાણીપતથી. સૂતર સુરેન્દ્રનગર બજારમાંથી.",
+    "primary_material": "ઘેટાંનું ઊન, સુતરાઉ દોરો અને ઝીણા દાણા માટે વિરોધી રંગનો દોરો.\n\nઊન પહેલાં ગામના માલધારી પાસેથી આવતું, હવે અમદાવાદ અને પાણીપતથી. સૂતર સુરેન્દ્રનગર બજારમાંથી.",
     "first_contact": "માં તાણો ભરતી ત્યારે હું દોરાનાં કોકડાં પકડીને બેસતી. સાત વર્ષે પહેલી વાર ઊનની વાસ યાદ રહી ગઈ.",
     "material_special": "દાણો વણાટમાં જ બંધાય છે, ઉપરથી ભરેલો નથી. એટલે શાલ બંને બાજુથી વાપરી શકાય અને દાણો ખરે નહીં.",
     "material_in_hands": "સારો દોરો ખેંચતાં હળવો પાછો ખેંચાય. દાણો બાંધતી વખતે આંગળીને જરા ચોંટે તો જ એ બેસે.",
-    "material_feels_wrong": "દોરો સુકાઈને કચકચ અવાજ કરે અથવા ગાંઠ પછી ફૂલી જાય, ત્યારે ખબર પડે કે કંઈક ખોટું છે.",
     "correction_action": "દોરાને રાતભર ભીના કપડામાં વીંટાળી દઉં. ગાંઠ ફૂલી હોય તો ખોલીને ફરી વળ ચડાવું, ઉતાવળ નહીં.",
-    "material_change_gain": "રેશમી અને સુતરાઉ દોરાથી હળવી શાલ બને છે, શહેરના ગ્રાહકોને ગમે છે અને ઉનાળામાં પણ વેચાય છે.",
-    "material_change_loss": "ગામના ઊનની ગરમી અને વાસ ગઈ. બજારનું ઊન સુંવાળું છે, પણ વર્ષો સુધી ટકતું નથી.",
-    "occasion_of_use": "ભરવાડ સ્ત્રીઓની લોબડી, લગ્નમાં ભેટ તરીકે અપાય. સીમંત અને વાર-તહેવારે પણ પહેરાય.",
-    "sensory_scene": "લગ્નમાં ઢોલ વાગે, ઘીની સુગંધ આવે, અને કાળી લોબડી પર સફેદ દાણા સાંજના તડકામાં ચમકે.",
-    "remembered_community_phrase": "“લોબડી જોઈને ખબર પડે કે કન્યા કયા ગામની છે.” મારી સાસુ આ કહેતાં.",
+    "material_change_gain": "રેશમી અને સુતરાઉ દોરાથી હળવી શાલ બને છે, શહેરના ગ્રાહકોને ગમે છે અને ઉનાળામાં પણ વેચાય છે.\n\nગામના ઊનની ગરમી અને વાસ ગઈ. બજારનું ઊન સુંવાળું છે, પણ વર્ષો સુધી ટકતું નથી.",
+    "occasion_of_use": "ભરવાડ સ્ત્રીઓની લોબડી, લગ્નમાં ભેટ તરીકે અપાય. સીમંત અને વાર-તહેવારે પણ પહેરાય.\n\nલગ્નમાં ઢોલ વાગે, ઘીની સુગંધ આવે, અને કાળી લોબડી પર સફેદ દાણા સાંજના તડકામાં ચમકે.",
     "special_vs_everyday": "રોજ પહેરવાની લોબડી સાદી હોય. કન્યાની લોબડીમાં દાણા એટલા ઝીણા કે એક મહિનો જાય.",
     "special_object_rule": "કન્યાની લોબડી પર વણતાં પહેલાં ગોળ વહેંચીએ. એ વણતી વખતે કાળો તાણો વચ્ચે કાપતા નથી.",
     "not_for_sale_example": "કુટુંબની ‘ઢોલી’ ભાતવાળી લોબડી, જે ફક્ત અમારા સમાજની કન્યા માટે જ વણાય છે.",
@@ -51,37 +73,71 @@
     "key_stakeholder_of_loss": "અમારા સમાજની દીકરીઓ અને ભરવાડ પરિવારો, જેમની ઓળખ આ કપડામાં છે.",
     "change_in_lifetime": "મારા નાનપણમાં આખું ફળિયું વણતું. આજે ગણ્યાં ઘર જ બાકી છે, પણ હવે કામને નામ મળ્યું છે.",
     "artisan_initiated_change": "મેં દસ બહેનોનું જૂથ બનાવ્યું, અને સ્ત્રીઓ પણ હવે શાળ પર બેસે છે. પહેલાં દાણા જ બાંધતી.",
-    "desired_keep": "હાથથી બાંધેલો દાણો, અને કન્યાની લોબડીની જૂની ભાત.",
-    "desired_let_go": "ઉધાર પર વેચવાની રીત, અને એ માન્યતા કે શાળ પર ફક્ત પુરુષ જ બેસી શકે.",
+    "desired_keep": "હાથથી બાંધેલો દાણો, અને કન્યાની લોબડીની જૂની ભાત.\n\nઉધાર પર વેચવાની રીત, અને એ માન્યતા કે શાળ પર ફક્ત પુરુષ જ બેસી શકે.",
     "strength_anchor": "દાણા ગણ્યા વગર ભાતની ગણતરી આંગળીમાં રાખી શકું છું. દસ બહેનોને એક જ માપની શાલ વણતાં કરી શકું છું.",
     "concern_anchor": "પાવરલૂમની છાપેલી નકલ ટાંગલિયાના નામે અડધા ભાવે વેચાય છે, અને ગ્રાહક ફરક ઓળખતો નથી.",
-    "shareable_content": "દાણાની રીત, અમારા જૂથની વાત, નવી ભાતના ફોટા અને મારું નામ.",
-    "private_content": "કન્યાની લોબડીની ભાતનો હિસાબ, અને જૂથનાં દેવાની વિગતો.",
-    "desired_change": "સીધો ઓર્ડર મળે અને અડધી રકમ પહેલાં મળે, જેથી ઊન માટે ઉધાર ન લેવું પડે.",
-    "desired_continuity": "દાણો હાથથી જ બંધાશે. એમાં કોઈ સમાધાન નહીં.",
+    "shareable_content": "દાણાની રીત, અમારા જૂથની વાત, નવી ભાતના ફોટા અને મારું નામ.\n\nકન્યાની લોબડીની ભાતનો હિસાબ, અને જૂથનાં દેવાની વિગતો.",
+    "desired_change": "સીધો ઓર્ડર મળે અને અડધી રકમ પહેલાં મળે, જેથી ઊન માટે ઉધાર ન લેવું પડે.\n\nદાણો હાથથી જ બંધાશે. એમાં કોઈ સમાધાન નહીં.",
     "learning_story": "મોટો ઓર્ડર હતો, અને મેં ઉતાવળમાં દાણા ઢીલા બાંધ્યા. ધોયા પછી અડધા ખરી ગયા. પૈસા પાછા આપ્યા, અને એ દિવસથી દરેક શાલનો એક ખૂણો ધોઈને જોઉં છું.",
     "emotional_story": "સસરા છેલ્લે ખાટલામાં હતા. મેં શાલ એમના હાથમાં આપી. આંખે ઓછું દેખાતું, પણ આંગળીથી દાણા ફંફોસીને બોલ્યા, “હવે વાંધો નથી.”",
-    "clarification_story": "એક ગ્રાહકે પૂછ્યું, આ તો ભરતકામ છે ને? મેં એમને શાળ પર બેસાડ્યા. બે દાણા બાંધતાં એમને દસ મિનિટ લાગી, પછી ભાવ વિશે પૂછ્યું નહીં.",
-    "outsider_misunderstanding": "લોકો માને છે કે દાણા ઉપરથી ભરેલા છે, અથવા આ ફક્ત જૂની પરંપરા છે. એ તો રોજનું ગણિત છે."
+    "clarification_story": "એક ગ્રાહકે પૂછ્યું, આ તો ભરતકામ છે ને? મેં એમને શાળ પર બેસાડ્યા. બે દાણા બાંધતાં એમને દસ મિનિટ લાગી, પછી ભાવ વિશે પૂછ્યું નહીં.\n\nલોકો માને છે કે દાણા ઉપરથી ભરેલા છે, અથવા આ ફક્ત જૂની પરંપરા છે. એ તો રોજનું ગણિત છે.",
+    "material_spoke": "દોરો સુકાઈને કચકચ અવાજ કરે અથવા ગાંઠ પછી ફૂલી જાય, ત્યારે ખબર પડે કે કંઈક ખોટું છે.",
+    "use_importance": "“લોબડી જોઈને ખબર પડે કે કન્યા કયા ગામની છે.” મારી સાસુ આ કહેતાં."
   },
   "analysis": {
     "communication_profile": "Hansaben explains her work through counting and touch, and she is most at ease when she can put a shawl in someone's hands. She tells sharp, short stories with a clear turn, usually a mistake and what it taught her. She names her own leadership of the women's group plainly. She is less practised at putting numbers on her time when a buyer questions a price.",
     "strengths": [
-      { "title": "Holds a pattern in her fingers", "detail": "She keeps a design's count in her hands, without counting dots aloud, and brings ten women to one standard." },
-      { "title": "Proves quality by showing", "detail": "She puts customers at the loom, as in the story of the two dots that took ten minutes." },
-      { "title": "Changed who may weave", "detail": "She started the group that brought women from tying dots onto the loom itself." }
+      {
+        "title": "Holds a pattern in her fingers",
+        "detail": "She keeps a design's count in her hands, without counting dots aloud, and brings ten women to one standard."
+      },
+      {
+        "title": "Proves quality by showing",
+        "detail": "She puts customers at the loom, as in the story of the two dots that took ten minutes."
+      },
+      {
+        "title": "Changed who may weave",
+        "detail": "She started the group that brought women from tying dots onto the loom itself."
+      }
     ],
     "gaps": [
-      { "title": "Stating the price of her time", "detail": "She shows the labour well but has not yet practised giving the weeks-to-rupees sum in one sentence." },
-      { "title": "Naming the fake", "detail": "She knows powerloom prints undercut her, and is still finding words a buyer can use to tell them apart." },
-      { "title": "Advance payment terms", "detail": "She wants half the money up front, and has not yet rehearsed asking for it." }
+      {
+        "title": "Stating the price of her time",
+        "detail": "She shows the labour well but has not yet practised giving the weeks-to-rupees sum in one sentence."
+      },
+      {
+        "title": "Naming the fake",
+        "detail": "She knows powerloom prints undercut her, and is still finding words a buyer can use to tell them apart."
+      },
+      {
+        "title": "Advance payment terms",
+        "detail": "She wants half the money up front, and has not yet rehearsed asking for it."
+      }
     ],
     "recommended_segments": [
-      { "id": "brand", "label": "Brand or buyer", "why": "Her main wish is direct orders with an advance, so she needs practice at that exact conversation." },
-      { "id": "exhibition", "label": "Exhibition visitor", "why": "Her reversible shawl and the dots-at-the-loom story work well face to face." },
-      { "id": "social", "label": "Social enterprise", "why": "Her group of ten women is a natural fit for fair-terms partnerships." }
+      {
+        "id": "brand",
+        "label": "Brand or buyer",
+        "why": "Her main wish is direct orders with an advance, so she needs practice at that exact conversation."
+      },
+      {
+        "id": "exhibition",
+        "label": "Exhibition visitor",
+        "why": "Her reversible shawl and the dots-at-the-loom story work well face to face."
+      },
+      {
+        "id": "social",
+        "label": "Social enterprise",
+        "why": "Her group of ten women is a natural fit for fair-terms partnerships."
+      }
     ],
-    "vocabulary": ["દાણો", "ટાંગલિયા", "લોબડી", "તાણો", "શાળ"],
+    "vocabulary": [
+      "દાણો",
+      "ટાંગલિયા",
+      "લોબડી",
+      "તાણો",
+      "શાળ"
+    ],
     "care_notes": [
       "The bride's lobadi pattern and its count are private. Never ask to photograph or document them.",
       "The group's debts were shared in confidence and are not for any partner conversation."

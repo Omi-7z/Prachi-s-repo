@@ -8,81 +8,122 @@ export const DECKS = [
 ];
 
 export const SCHEMA = [
-  { deck: 'theme', code: 'Identity', layer: 'Identity', title: 'Who and what', ask: 'Session header. Names, craft term, how long in practice.', fields: [
+  { deck: 'header', code: 'Header', layer: 'Identity', title: 'Who and what', ask: 'Session header. Not a card on the board.', fields: [
     { key: 'artisan_name', label: 'Name (as they want it used)', rows: 1, hint: 'or "anonymous, 40s, Bhuj"' },
-    { key: 'craft_name_local', label: 'What they call the craft', rows: 1, hint: 'the local word, not the market word' },
-    { key: 'craft_region', label: 'Region', rows: 1, hint: '' },
     { key: 'practice_span', label: 'Years in practice', rows: 1, hint: '' }
   ]},
-  { deck: 'theme', code: 'Place 1–3', layer: 'Place', title: 'Place', ask: 'Where the craft belongs, what the land and water give it, and how the place has changed.', fields: [
-    { key: 'local_belonging_phrase', label: 'Local belonging phrase', rows: 2, hint: 'how they say the craft belongs here' },
-    { key: 'ecological_input', label: 'What land / water give', rows: 3, hint: 'water quality, plants, soil, seasons' },
-    { key: 'place_change', label: 'How the place has changed', rows: 3, hint: 'roads, weather, access, water table' },
-    { key: 'emotion_about_place_change', label: 'Their reaction to that change', rows: 2, hint: 'in their words' }
+  { deck: 'theme', ring: 'craft', code: 'craft-1', card: 1, layer: "craft", title: "How you describe your craft", ask: "How you name your craft, its motifs and colours, and the part you do best.", fields: [
+    { key: 'craft_name_local', label: "What do you call this craft in your own language?", rows: 3, hint: "How would you explain it to someone who has never seen it?" },
+    { key: 'craft_description', label: "How do you usually describe your craft?", rows: 3, hint: "What do you say about it to people around you, like buyers or children?" },
+    { key: 'craft_distinct', label: "What makes this craft different?", rows: 3, hint: "What is one thing that sets it apart from other work around you?" }
   ]},
-  { deck: 'theme', code: 'Lineage 1–3', layer: 'Transmission', title: 'Legacy', ask: 'Who taught them, how the craft moves between generations, and where transmission holds or breaks.', fields: [
-    { key: 'teacher_name_relation', label: 'Who first taught them', rows: 1, hint: 'name and relation' },
-    { key: 'teaching_memory', label: 'One teaching memory', rows: 3, hint: 'a scene, not a summary' },
-    { key: 'remembered_phrase_gesture', label: 'Phrase or gesture passed down', rows: 2, hint: '' },
-    { key: 'family_generations', label: 'Family chain', rows: 2, hint: 'who before, who after' },
-    { key: 'transmission_strength', label: 'Where transmission feels strong', rows: 2, hint: '' },
-    { key: 'transmission_weakness', label: 'Where it feels weak', rows: 2, hint: '' },
-    { key: 'teaching_difficulty', label: 'What makes teaching hard', rows: 2, hint: 'time, money, competing work, interest' }
+  { deck: 'theme', ring: 'craft', code: 'craft-2', card: 2, layer: "craft", title: "Motifs and colours", ask: "How you name your craft, its motifs and colours, and the part you do best.", fields: [
+    { key: 'motif_meaning', label: "Name a motif you often make. What does it mean to you?", rows: 3, hint: "Which colours feel most true to this craft, and why?" },
+    { key: 'motif_story', label: "The story of one motif", rows: 3, hint: "Think of one real piece with this motif. What did people say or feel about it?" },
+    { key: 'colour_change', label: "Have the colours changed over time?", rows: 3, hint: "If yes, what changed, and what has stayed the same?" }
   ]},
-  { deck: 'theme', code: 'Material 1–3', layer: 'Material intelligence', title: 'Material', ask: 'What they work with, how it behaves in the hands, and how it has changed.', fields: [
-    { key: 'primary_material', label: 'Main materials', rows: 2, hint: '' },
-    { key: 'material_origin', label: 'Where they come from', rows: 2, hint: '' },
-    { key: 'first_contact', label: 'First contact with the material', rows: 2, hint: '' },
-    { key: 'material_special', label: 'What makes it special', rows: 2, hint: 'their judgment, not a spec sheet' },
-    { key: 'material_in_hands', label: 'How it behaves in the hands', rows: 3, hint: 'tactile signals' },
-    { key: 'material_feels_wrong', label: 'When it "feels wrong"', rows: 2, hint: '' },
-    { key: 'correction_action', label: 'What they do next', rows: 2, hint: 'the correction' },
-    { key: 'material_change_gain', label: 'Change: what was gained', rows: 2, hint: '' },
-    { key: 'material_change_loss', label: 'Change: what was lost', rows: 2, hint: '' }
+  { deck: 'theme', ring: 'craft', code: 'craft-3', card: 3, layer: "craft", title: "Specialisation and living practice", ask: "How you name your craft, its motifs and colours, and the part you do best.", fields: [
+    { key: 'specialisation', label: "Which part of this craft are you best at?", rows: 3, hint: "What have you or your group added, changed or invented in it?" },
+    { key: 'known_for', label: "What do people come to you for?", rows: 3, hint: "What do they ask you to do because you do it best?" },
+    { key: 'craft_keep_change', label: "What would you keep, and what would you change?", rows: 3, hint: "From the changes you have seen, name one of each." }
   ]},
-  { deck: 'theme', code: 'Culture 1–3', layer: 'Community + boundary', title: 'Cultural meaning', ask: 'When the craft appears in life, what is special versus everyday, and what is not for sale.', fields: [
-    { key: 'occasion_of_use', label: 'When it appears in life', rows: 2, hint: '' },
-    { key: 'sensory_scene', label: 'Sensory detail of that occasion', rows: 3, hint: 'sound, smell, light, crowd' },
-    { key: 'remembered_community_phrase', label: 'What people said about it', rows: 2, hint: 'a remembered line' },
-    { key: 'special_vs_everyday', label: 'Special versus everyday use', rows: 2, hint: '' },
-    { key: 'special_object_rule', label: 'Rules around special objects', rows: 2, hint: '' },
-    { key: 'not_for_sale_example', label: 'What is not for sale', rows: 2, hint: '' },
-    { key: 'why_protected', label: 'Why it stays protected', rows: 2, hint: '' },
-    { key: 'safer_alternative', label: 'What can be shared instead', rows: 2, hint: 'the artisan-approved substitute' }
+  { deck: 'theme', ring: 'place', code: 'place-1', card: 1, layer: "place", title: "Where the craft belongs", ask: "Where the craft belongs, what the land and water give it, and how the place has changed.", fields: [
+    { key: 'craft_region', label: "Where does this craft come from?", rows: 3, hint: "Which place or region do people connect with this craft?" },
+    { key: 'local_belonging_phrase', label: "How is it said in your local language?", rows: 3, hint: "When people say where this craft is from, what words do they use?" },
+    { key: 'place_belonging_feeling', label: "Feeling of belonging to this place", rows: 3, hint: "When you say it belongs here, what about this place makes you proud?" }
   ]},
-  { deck: 'theme', code: 'Pride 1–3', layer: 'Pride, loss, change', title: 'Pride & stakes', ask: 'What they are proud of, what would be lost, and how the craft has changed in their lifetime.', fields: [
-    { key: 'pride_moment', label: 'A moment of pride', rows: 3, hint: '' },
-    { key: 'recognition_by_others', label: 'Who recognised it', rows: 2, hint: '' },
-    { key: 'loss_if_stopped', label: 'What would be lost if it stopped', rows: 2, hint: '' },
-    { key: 'key_stakeholder_of_loss', label: 'Who would feel that loss most', rows: 2, hint: '' },
-    { key: 'change_in_lifetime', label: 'Change in their lifetime', rows: 3, hint: '' },
-    { key: 'artisan_initiated_change', label: 'Change they started themselves', rows: 2, hint: 'their own agency' },
-    { key: 'desired_keep', label: 'What should be kept', rows: 2, hint: '' },
-    { key: 'desired_let_go', label: 'What can be let go', rows: 2, hint: '' }
+  { deck: 'theme', ring: 'place', code: 'place-2', card: 2, layer: "place", title: "What the place gives", ask: "Where the craft belongs, what the land and water give it, and how the place has changed.", fields: [
+    { key: 'ecological_input', label: "What does this place give to the craft?", rows: 3, hint: "What from its soil, water or plants do you use? Give one example." },
+    { key: 'place_use_moment', label: "One moment of using it", rows: 3, hint: "Tell us about a day you used this thing from the place in your work." },
+    { key: 'place_missing', label: "What changes if it is missing?", rows: 3, hint: "If it is not available, what do you have to do differently?" }
+  ]},
+  { deck: 'theme', ring: 'place', code: 'place-3', card: 3, layer: "place", title: "How the place has changed", ask: "Where the craft belongs, what the land and water give it, and how the place has changed.", fields: [
+    { key: 'place_change', label: "How has this place changed?", rows: 3, hint: "Since you began this craft, has the water, land, weather or roads changed? Name one change that affected your work." },
+    { key: 'place_before_after', label: "Before and after", rows: 3, hint: "How was your work before this change, and how is it now?" },
+    { key: 'emotion_about_place_change', label: "Your first feeling about the change", rows: 3, hint: "What do you feel first: worry, relief, anger, joy or something else? Why?" }
+  ]},
+  { deck: 'theme', ring: 'lineage', code: 'lineage-1', card: 1, layer: "lineage", title: "Who taught you", ask: "Who taught you, how the craft moves between generations, and how teaching happens now.", fields: [
+    { key: 'teacher_name_relation', label: "Who first taught you this craft?", rows: 3, hint: "Who are they, and how are they related to you?" },
+    { key: 'teaching_memory', label: "One teaching memory", rows: 3, hint: "Tell us about one day they were teaching you that you still remember clearly." },
+    { key: 'remembered_phrase_gesture', label: "What they said or did that stayed with you", rows: 3, hint: "Is there one thing they said or did that you still remember when you work today?" }
+  ]},
+  { deck: 'theme', ring: 'lineage', code: 'lineage-2', card: 2, layer: "lineage", title: "The chain across generations", ask: "Who taught you, how the craft moves between generations, and how teaching happens now.", fields: [
+    { key: 'family_generations', label: "How many generations in your family have done this work, including you?", rows: 3, hint: "Who did it before you, and who is doing it after you?" },
+    { key: 'family_line', label: "How would you draw your craft family as a line?", rows: 3, hint: "For example: grandfather → father → me → my daughter." },
+    { key: 'transmission_strength', label: "Where does the chain feel strong or weak?", rows: 3, hint: "Who holds the craft strongly now, and where is it becoming weak?" }
+  ]},
+  { deck: 'theme', ring: 'lineage', code: 'lineage-3', card: 3, layer: "lineage", title: "How teaching happens", ask: "Who taught you, how the craft moves between generations, and how teaching happens now.", fields: [
+    { key: 'teaching_practice', label: "How do you usually teach this craft?", rows: 3, hint: "Describe one real moment when you were teaching, or trying to teach, this work." },
+    { key: 'teaching_scene', label: "Picture that moment", rows: 3, hint: "Where were you sitting or standing, and what were your hands doing?" },
+    { key: 'teaching_difficulty', label: "One difficulty in teaching", rows: 3, hint: "What made it hard to teach: time, money, other work, or their interest?" }
+  ]},
+  { deck: 'theme', ring: 'material', code: 'material-1', card: 1, layer: "material", title: "What you work with", ask: "What you work with, how it behaves in your hands, and how it has changed.", fields: [
+    { key: 'primary_material', label: "Which materials do you work with most?", rows: 3, hint: "Name one, and tell us where it comes from: a field, market, forest, river or somewhere else." },
+    { key: 'first_contact', label: "Your first time with this material", rows: 3, hint: "Do you remember when you first worked with it? Tell us a little about that time." },
+    { key: 'material_special', label: "What makes this material different?", rows: 3, hint: "Compared to others you have used, what is special about this one?" }
+  ]},
+  { deck: 'theme', ring: 'material', code: 'material-2', card: 2, layer: "material", title: "Material behaviour", ask: "What you work with, how it behaves in your hands, and how it has changed.", fields: [
+    { key: 'material_in_hands', label: "How does this material behave in your hands?", rows: 3, hint: "Think of one you use a lot. What do you notice or check with your hands?" },
+    { key: 'material_spoke', label: "A moment the material ‘spoke’ to you", rows: 3, hint: "When did your hands tell you ‘this is right’ or ‘this is wrong’?" },
+    { key: 'correction_action', label: "What do you do when it feels wrong?", rows: 3, hint: "When it does not feel right in your hands, what is your next step?" },
+    { key: 'piece_time', label: "How long does one piece take to finish?", rows: 3, hint: "Is there a part you should never rush? What changes when you must work faster?", bonus: true }
+  ]},
+  { deck: 'theme', ring: 'material', code: 'material-3', card: 3, layer: "material", title: "When the material changed", ask: "What you work with, how it behaves in your hands, and how it has changed.", fields: [
+    { key: 'material_change', label: "Have the materials changed since you began, or since your elders’ time?", rows: 3, hint: "Name one change in material that affected your work." },
+    { key: 'material_change_reason', label: "Why did this change happen?", rows: 3, hint: "In your view, what was the reason?" },
+    { key: 'material_change_gain', label: "What was gained, and what was lost?", rows: 3, hint: "Because of this change, what became easier and what became harder?" }
+  ]},
+  { deck: 'theme', ring: 'culture', code: 'culture-1', card: 1, layer: "culture", title: "When your craft appears in life", ask: "When the craft appears in life, what is special versus everyday, and what is not for sale.", fields: [
+    { key: 'occasion_of_use', label: "How do your family or community use things made with this craft?", rows: 3, hint: "" },
+    { key: 'use_importance', label: "Why are these things important to use?", rows: 3, hint: "Name a few cultural or social reasons. Why do they matter to you, your home or your community?" },
+    { key: 'use_feelings', label: "Your feelings about these things", rows: 3, hint: "Pride, attachment, devotion, fulfilment or something else?" }
+  ]},
+  { deck: 'theme', ring: 'culture', code: 'culture-2', card: 2, layer: "culture", title: "Special and everyday", ask: "When the craft appears in life, what is special versus everyday, and what is not for sale.", fields: [
+    { key: 'special_vs_everyday', label: "Is anything from this craft kept only for special days?", rows: 3, hint: "If yes, tell us about one such thing." },
+    { key: 'special_object_rule', label: "Are there rules around using it?", rows: 3, hint: "Who can touch it, when does it come out, and where is it kept?" },
+    { key: 'special_missing', label: "How would it feel if it were missing?", rows: 3, hint: "If it was not there on that special day, what would change for people?" }
+  ]},
+  { deck: 'theme', ring: 'culture', code: 'culture-3', card: 3, layer: "culture", title: "What is not for sale", ask: "When the craft appears in life, what is special versus everyday, and what is not for sale.", fields: [
+    { key: 'not_for_sale_example', label: "Is there a design, motif or use that should not be sold or shown to outsiders?", rows: 3, hint: "Share one example and why you feel that way." },
+    { key: 'why_protected', label: "Why is this boundary important?", rows: 3, hint: "Why should it stay within the family or community?" },
+    { key: 'safer_alternative', label: "What could you share with outsiders instead?", rows: 3, hint: "What kind of design or story are you comfortable sharing?" }
+  ]},
+  { deck: 'theme', ring: 'pride', code: 'pride-1', card: 1, layer: "pride", title: "What makes you proud", ask: "What makes you proud, what would be lost, and how the craft has changed in your lifetime.", fields: [
+    { key: 'pride_source', label: "What makes you proud of this craft, or your work in it?", rows: 3, hint: "" },
+    { key: 'pride_moment', label: "A moment when that pride was visible", rows: 3, hint: "Tell us about one moment when you felt this pride very strongly." },
+    { key: 'recognition_by_others', label: "Who shared that pride with you?", rows: 3, hint: "Did anyone notice or say something that you still remember?" }
+  ]},
+  { deck: 'theme', ring: 'pride', code: 'pride-2', card: 2, layer: "pride", title: "What would be lost", ask: "What makes you proud, what would be lost, and how the craft has changed in your lifetime.", fields: [
+    { key: 'loss_if_stopped', label: "If you had to stop this craft, what would be lost for you, your family or community?", rows: 3, hint: "" },
+    { key: 'loss_picture', label: "Picture that loss", rows: 3, hint: "Imagine one day without this craft. What would be different?" },
+    { key: 'key_stakeholder_of_loss', label: "Who would feel that loss most?", rows: 3, hint: "You, someone in your family, or the whole community?" },
+    { key: 'craft_hours', label: "On a normal day, how many hours go into this craft, including small tasks?", rows: 3, hint: "When time is tight, like before a delivery or festival, what changes, and what do you feel you lose?", bonus: true }
+  ]},
+  { deck: 'theme', ring: 'pride', code: 'pride-3', card: 3, layer: "pride", title: "How your craft has changed", ask: "What makes you proud, what would be lost, and how the craft has changed in your lifetime.", fields: [
+    { key: 'change_in_lifetime', label: "How has this craft changed in your lifetime?", rows: 3, hint: "Tell us about one change you have seen." },
+    { key: 'artisan_initiated_change', label: "A change you or other artisans started", rows: 3, hint: "Did you or artisans around you decide to make a change yourselves? Tell us about it." },
+    { key: 'desired_keep', label: "What would you keep, and what would you let go?", rows: 3, hint: "From all the changes you have seen, name one of each." }
   ]},
   { deck: 'reflection', code: 'R1', layer: 'Positive anchor', title: 'Strength', ask: 'What feels strongest in the craft right now.', fields: [
-    { key: 'strength_anchor', label: 'Strength', rows: 4, hint: '' }
+    { key: 'strength_anchor', label: "From everything you shared today, what feels strongest in your craft right now?", rows: 4, hint: "Tell us one thing that is going well." }
   ]},
   { deck: 'reflection', code: 'R2', layer: 'Risk tag', title: 'Concern', ask: 'What worries them most. Reported, not dramatised.', fields: [
-    { key: 'concern_anchor', label: 'Concern', rows: 4, hint: '' }
+    { key: 'concern_anchor', label: "From everything you have shared, what worries you most about this craft?", rows: 4, hint: "Tell us one concern that feels important." }
   ]},
   { deck: 'reflection', code: 'R3', layer: 'Boundary', title: 'Sharing & boundaries', ask: 'What can be shared, and what should stay inside the family or community.', fields: [
-    { key: 'shareable_content', label: 'Explicitly shareable', rows: 3, hint: '' },
-    { key: 'private_content', label: 'Keep private or abstract', rows: 3, hint: 'the agent honours this per the posture setting' }
+    { key: 'shareable_content', label: "What are you happy to share with outsiders, and what would you keep within your family or community?", rows: 4, hint: "Name one thing to share and one thing to keep private." }
   ]},
   { deck: 'reflection', code: 'R4', layer: 'Future', title: 'Future', ask: 'One desired change and one non-negotiable continuity.', fields: [
-    { key: 'desired_change', label: 'Desired change', rows: 3, hint: '' },
-    { key: 'desired_continuity', label: 'Non-negotiable continuity', rows: 3, hint: '' }
+    { key: 'desired_change', label: "What is one change you would like to see in this craft, and one thing you want to keep as it is?", rows: 4, hint: "Name one change and one thing to keep." }
   ]},
   { deck: 'story', code: 'SS1', layer: 'Story', title: 'A moment that taught you something', ask: 'Learning through a real incident rather than abstraction.', fields: [
-    { key: 'learning_story', label: 'The moment', rows: 7, hint: 'keep it as told' }
+    { key: 'learning_story', label: "Tell us about one moment in this craft that taught you something important.", rows: 4, hint: "What happened in that moment? What did you learn from it?" }
   ]},
   { deck: 'story', code: 'SS2', layer: 'Story', title: 'A moment that stayed with you', ask: 'A meaningful emotional memory.', fields: [
-    { key: 'emotional_story', label: 'The moment', rows: 7, hint: '' }
+    { key: 'emotional_story', label: "Tell us about one moment in this craft that has stayed with you.", rows: 4, hint: "Why has it stayed with you? How do you feel when you remember it now?" }
   ]},
   { deck: 'story', code: 'SS3', layer: 'Story', title: 'A moment you want others to understand', ask: 'A clarifying story that answers how outsiders get it wrong.', fields: [
-    { key: 'clarification_story', label: 'The moment', rows: 6, hint: '' },
-    { key: 'outsider_misunderstanding', label: 'What outsiders get wrong', rows: 3, hint: '' }
+    { key: 'clarification_story', label: "Tell us about one moment from this craft that you wish others understood better.", rows: 4, hint: "Who do you wish understood it better? What do people usually miss in such moments?" }
   ]}
 ];
 
@@ -387,6 +428,21 @@ SAMPLES.forEach(s => {
   Object.keys(add).forEach(k => { if (!(s.record[k] || '').trim()) s.record[k] = add[k]; });
 });
 
+
+// Old answer boxes → the 56 printed questions. Old keys that merged into one question are joined.
+const MERGE = { transmission_strength: ['transmission_strength', 'transmission_weakness'], primary_material: ['primary_material', 'material_origin'], material_spoke: ['material_feels_wrong'], material_change_gain: ['material_change_gain', 'material_change_loss'], occasion_of_use: ['occasion_of_use', 'sensory_scene'], use_importance: ['remembered_community_phrase'], desired_keep: ['desired_keep', 'desired_let_go'], shareable_content: ['shareable_content', 'private_content'], desired_change: ['desired_change', 'desired_continuity'], clarification_story: ['clarification_story', 'outsider_misunderstanding'] };
+const RETIRED = ['transmission_weakness', 'material_origin', 'material_feels_wrong', 'material_change_loss', 'sensory_scene', 'remembered_community_phrase', 'desired_let_go', 'private_content', 'desired_continuity', 'outsider_misunderstanding'];
+export function MIGRATE(rec) {
+  if (!rec || typeof rec !== 'object') return rec;
+  if (!RETIRED.some(k => k in rec)) return rec;
+  const out = { ...rec };
+  Object.keys(MERGE).forEach(k => { const v = MERGE[k].map(o => String(rec[o] || '').trim()).filter(Boolean).join('\n\n'); if (v) out[k] = v; });
+  RETIRED.forEach(k => { delete out[k]; });
+  return out;
+}
+SAMPLES.forEach(s => { s.record = MIGRATE(s.record); });
+SAMPLE.__m = 1; Object.assign(SAMPLE, MIGRATE({ ...SAMPLE })); RETIRED.forEach(k => { delete SAMPLE[k]; }); delete SAMPLE.__m;
+
 export const FIELD_INDEX = (() => {
   const m = {};
   SCHEMA.forEach(g => g.fields.forEach(f => { m[f.key] = { code: g.code, label: f.label, layer: g.layer, deck: g.deck }; }));
@@ -398,12 +454,12 @@ export const ALL_KEYS = Object.keys(FIELD_INDEX);
 // Ring geometry and palette for the mandala board, read off the physical Ludo Mandala.
 // Order is centre → outward, exactly as the board is printed.
 export const RINGS = [
-  { id: 'craft',    code: 'Identity',      label: 'My Craft',         color: '#B98BE0', ink: '#4A2A6B', r: 21.0, purpose: 'How artisans name their own craft, its strengths and their wish for the future.' },
-  { id: 'place',    code: 'Place 1–3',     label: 'Place',            color: '#6FC9B8', ink: '#1F5F54', r: 27.6, purpose: 'Where the craft belongs, and how the place, land and water shape the work.' },
-  { id: 'lineage',  code: 'Lineage 1–3',   label: 'Legacy',           color: '#A81C24', ink: '#7A1319', r: 34.2, purpose: 'Who taught the craft, the generational chain, and where teaching holds or breaks.' },
-  { id: 'material', code: 'Material 1–3',  label: 'Material & Tools', color: '#C06A5F', ink: '#7C3A32', r: 40.8, purpose: 'What materials and tools are used, how they behave in the hands, how they changed.' },
-  { id: 'culture',  code: 'Culture 1–3',   label: 'Cultural Meaning', color: '#6D9DC5', ink: '#2C5476', r: 47.4, purpose: 'How the craft appears in everyday and special life, and what stays within the community.' },
-  { id: 'pride',    code: 'Pride 1–3',     label: 'Pride & Stake',    color: '#F0B23C', ink: '#8A5D05', r: 54.0, purpose: 'What makes artisans proud, what would be lost if the craft stops, and what they accept or refuse.' }
+  { id: 'craft',    code: 'craft',      label: 'My Craft',         color: '#B98BE0', ink: '#4A2A6B', r: 21.0, purpose: 'How artisans name their own craft, its strengths and their wish for the future.' },
+  { id: 'place',    code: 'place',     label: 'Place',            color: '#6FC9B8', ink: '#1F5F54', r: 27.6, purpose: 'Where the craft belongs, and how the place, land and water shape the work.' },
+  { id: 'lineage',  code: 'lineage',   label: 'Legacy',           color: '#A81C24', ink: '#7A1319', r: 34.2, purpose: 'Who taught the craft, the generational chain, and where teaching holds or breaks.' },
+  { id: 'material', code: 'material',  label: 'Material & Tools', color: '#C06A5F', ink: '#7C3A32', r: 40.8, purpose: 'What materials and tools are used, how they behave in the hands, how they changed.' },
+  { id: 'culture',  code: 'culture',   label: 'Cultural Meaning', color: '#6D9DC5', ink: '#2C5476', r: 47.4, purpose: 'How the craft appears in everyday and special life, and what stays within the community.' },
+  { id: 'pride',    code: 'pride',     label: 'Pride & Stake',    color: '#F0B23C', ink: '#8A5D05', r: 54.0, purpose: 'What makes artisans proud, what would be lost if the craft stops, and what they accept or refuse.' }
 ];
 
 export const HUB = [
