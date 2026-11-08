@@ -44,6 +44,10 @@
   ],
   "rewrites": [
     {
+      "source": "/demo/:code",
+      "destination": "/api/session?demo=:code"
+    },
+    {
       "source": "/k/:token",
       "destination": "/api/artisan-page?t=:token"
     },
