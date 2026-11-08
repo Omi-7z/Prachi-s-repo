@@ -44,6 +44,10 @@
   ],
   "rewrites": [
     {
+      "source": "/demo-kit",
+      "destination": "/api/session?kit=1"
+    },
+    {
       "source": "/demo/:code",
       "destination": "/api/session?demo=:code"
     },
