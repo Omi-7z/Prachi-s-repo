@@ -3081,7 +3081,7 @@ ${this.groundRules()}`;
             { label: t.fixRerun, run: () => { this.patchProfile(p.id, x => ({ ...x, analysis: null })); this.setState({ activeId: p.id, orgView: 'board', boardTab: 'analysis' }); setTimeout(this.analyse, 80); } },
             { label: t.fixResetPractice, run: () => this.props.store.action(p.id, 'reset-practice') }
           ],
-          confirming: s.confirmId === p.id, notConfirming: s.confirmId !== p.id,
+          confirming: s.confirmId === p.id, notConfirming: (s.confirmId !== p.id) && p.id !== 'dv-demo-03',
           askDelete: () => this.setState({ confirmId: p.id }),
           cancelDelete: () => this.setState({ confirmId: null }),
           confirmDelete: () => this.setState(st => {

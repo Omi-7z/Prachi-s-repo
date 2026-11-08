@@ -4,7 +4,7 @@
 //          { action: 'set-login', username, password } | { action: 'clear-login' }   the artisan's /app sign-in
 //   DELETE remove the profile; its link stops working immediately
 import { currentFacilitator } from '../../lib/auth.js';
-import { saveProfile, deleteProfile, profileAction, setArtisanLogin, clearArtisanLogin, validId } from '../../lib/profiles.js';
+import { saveProfile, deleteProfile, UNDELETABLE_PROFILES, profileAction, setArtisanLogin, clearArtisanLogin, validId } from '../../lib/profiles.js';
 import { json, readJson, route } from '../../lib/http.js';
 
 const idOf = req => decodeURIComponent(new URL(req.url).pathname.split('/').filter(Boolean).pop() || '');
@@ -34,5 +34,6 @@ export const POST = withFacilitator(async (req, fac, id) => {
 export const DELETE = withFacilitator(async (req, fac, id) => {
   // readJson enforces the JSON content type, which is the CSRF guard for this verb too.
   await readJson(req);
+  if (UNDELETABLE_PROFILES.has(id)) return json({ error: 'protected' }, 403);
   return (await deleteProfile(fac.orgId, id)) ? json({ ok: true }) : json({ error: 'not found' }, 404);
 });
