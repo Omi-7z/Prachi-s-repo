@@ -19,15 +19,17 @@ async function demoLogin(req, code) {
   return new Response(null, { status: 302, headers: { location: back, 'cache-control': 'no-store', 'set-cookie': sessionCookie(rows[0].id) } });
 }
 
-// /demo-kit: for a signed-in facilitator, a printable page of three QR codes — the console
-// (signed in as them, via the demo link), each live artisan app link in their organisation,
-// and the public website.
+// /demo-kit: an open page of three QR codes for presentations — the console (via the demo link),
+// the demo artisan's app link and the public website. It always shows the demo account's links,
+// whoever opens it, so the printed QR codes and this page stay identical. Anyone with this page
+// can sign in to that organisation's console.
+const DEMO_KIT_FACILITATOR = 'f_iJaonq5x04WrMnEg';
 const esc = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 async function demoKit(req) {
-  const fac = await currentFacilitator(req);
   const origin = new URL(req.url).origin;
-  if (!fac) return Response.redirect(origin + '/console', 302);
   const db = getDb();
+  const [fac] = await db.select().from(schema.facilitators).where(eq(schema.facilitators.id, DEMO_KIT_FACILITATOR)).limit(1);
+  if (!fac) return Response.redirect(origin + '/console', 302);
   const profiles = await db.select().from(schema.artisanProfiles).where(eq(schema.artisanProfiles.orgId, fac.orgId));
   const tokens = await db.select().from(schema.handoverTokens);
   const apps = profiles.map(p => ({ p, t: tokens.find(t => t.profileId === p.id && !t.revokedAt) })).filter(x => x.t && x.p.name);
