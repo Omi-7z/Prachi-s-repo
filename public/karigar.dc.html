@@ -884,6 +884,63 @@
           </div>
         </sc-if>
 
+        <sc-if value="{{ zinesOpen }}" hint-placeholder-val="{{ false }}">
+          <div class="k-apop" role="dialog" aria-modal="true" aria-label="{{ zu.title }}" style="position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;background:#FBF7F0;font-family:{{ recordFont }}">
+            <div style="display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid #ece6da;flex:none">
+              <button type="button" onClick="{{ zineBack }}" aria-label="Back" class="k-press" style="border:0;background:#eeede6;border-radius:999px;width:44px;height:44px;font-size:19px;cursor:pointer;flex:none">←</button>
+              <div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#98a29f">{{ zu.head }}</div><div style="font-family:{{ recordDisplay }};font-weight:600;font-size:18px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#10292d">{{ zineHead }}</div></div>
+              <button type="button" onClick="{{ closeZines }}" aria-label="Close" class="k-press" style="border:0;background:transparent;width:44px;height:44px;font-size:22px;cursor:pointer;color:#5f6b69;flex:none">×</button>
+            </div>
+            <sc-if value="{{ zineList }}" hint-placeholder-val="{{ true }}">
+              <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:16px 16px 24px">
+                <p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#4d5c5a;text-wrap:pretty">{{ zu.intro }}</p>
+                <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+                  <sc-for list="{{ zines }}" as="z" hint-placeholder-count="9">
+                    <button type="button" onClick="{{ z.open }}" class="k-press" style="border:0;background:transparent;padding:0;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0">
+                      <img src="{{ z.cover }}" alt="{{ z.title }}" loading="lazy" style="width:100%;aspect-ratio:560/789;object-fit:cover;border-radius:10px;display:block;box-shadow:0 6px 16px rgba(16,41,45,.16)">
+                      <span style="font-size:10.5px;font-weight:700;letter-spacing:.08em;color:#98a29f">{{ z.num }}</span>
+                      <span style="font-size:12.5px;font-weight:600;line-height:1.3;color:#10292d">{{ z.audience }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ zineDetail }}" hint-placeholder-val="{{ false }}">
+              <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:16px 16px 24px;display:flex;flex-direction:column;gap:16px">
+                <div style="flex:none;position:relative;border-radius:16px;overflow:hidden;background:{{ zd.bg }};box-shadow:0 10px 26px rgba(16,41,45,.18)">
+                  <div ref="{{ zineStrip }}" onScroll="{{ zineScroll }}" class="k-scroll" style="display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain">
+                    <sc-for list="{{ zd.pages }}" as="p" hint-placeholder-count="8">
+                      <img src="{{ p.src }}" alt="{{ p.label }}" loading="lazy" draggable="false" style="flex:0 0 100%;width:100%;aspect-ratio:560/789;object-fit:contain;display:block;scroll-snap-align:center;scroll-snap-stop:always">
+                    </sc-for>
+                  </div>
+                  <button type="button" onClick="{{ zinePrev }}" aria-label="Previous page" class="k-press" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:999px;border:0;background:rgba(255,255,255,.92);color:#10292d;font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)">‹</button>
+                  <button type="button" onClick="{{ zineNext }}" aria-label="Next page" class="k-press" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:999px;border:0;background:rgba(255,255,255,.92);color:#10292d;font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)">›</button>
+                </div>
+                <div style="flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <span style="font-size:13px;font-weight:600;color:#5f6b69">{{ zd.pageLabel }}</span>
+                  <div style="display:flex;gap:5px"><sc-for list="{{ zd.dots }}" as="d" hint-placeholder-count="8"><button type="button" onClick="{{ d.go }}" aria-label="{{ d.label }}" style="{{ d.style }}"></button></sc-for></div>
+                </div>
+                <div style="flex:none;display:flex;flex-direction:column;gap:6px">
+                  <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#98a29f">{{ zd.audience }}</div>
+                  <h3 style="margin:0;font-family:{{ recordDisplay }};font-weight:600;font-size:22px;line-height:1.2;color:#10292d;text-wrap:balance">{{ zd.title }}</h3>
+                  <p style="margin:4px 0 0;font-size:15px;line-height:1.55;color:#10292d;font-style:italic;text-wrap:pretty">“{{ zd.question }}”</p>
+                </div>
+                <div style="flex:none;background:#ffffff;border:1px solid #ece6da;border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+                  <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#98a29f">{{ zu.thinking }}</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:7px"><sc-for list="{{ zd.thinking }}" as="q" hint-placeholder-count="4"><span style="font-size:13.5px;line-height:1.35;padding:7px 11px;border-radius:12px;background:#f5f4ee;color:#10292d">{{ q }}</span></sc-for></div>
+                </div>
+                <div style="flex:none;background:#ffffff;border:1px solid #ece6da;border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+                  <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#98a29f">{{ zu.lead }}</div>
+                  <sc-for list="{{ zd.lead }}" as="l" hint-placeholder-count="4"><div style="font-size:14.5px;line-height:1.45;color:#10292d;display:flex;gap:9px"><span style="color:{{ zd.dot }};flex:none">●</span><span>{{ l }}</span></div></sc-for>
+                </div>
+              </div>
+              <div style="flex:none;padding:12px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #ece6da;background:#FBF7F0">
+                <button type="button" onClick="{{ zinePractise }}" class="k-press" style="width:100%;min-height:54px;border:0;border-radius:999px;background:#10292d;color:#ffffff;font-size:16px;font-weight:600;cursor:pointer;font-family:{{ recordFont }}">{{ zu.practise }} {{ zd.short }} →</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
         <sc-if value="{{ aInstall }}" hint-placeholder-val="{{ false }}">
           <div class="k-scroll" style="flex:1;overflow:auto;min-height:0;padding:26px 22px 28px;display:flex;flex-direction:column">
             <svg width="62" height="62" viewBox="0 0 24 24" aria-hidden="true" style="display:block;flex:none"><path d="M16.10 2.38A10.8 10.8 0 1 0 17.55 20.74" fill="none" stroke="#F0B23C" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.47 4.79A9.55 9.55 0 1 0 18.30 18.39" fill="none" stroke="#5B8AB5" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.21 6.20A8.35 8.35 0 1 0 17.96 16.91" fill="none" stroke="#DC5A3C" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.80 7.47A7.2 7.2 0 1 0 17.37 15.71" fill="none" stroke="#8A2034" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.22 8.62A6.05 6.05 0 1 0 16.49 14.93" fill="none" stroke="#9BC7A8" stroke-width="0.82" stroke-linecap="round"></path><path d="M15.60 9.85A4.9 4.9 0 1 0 15.57 14.22" fill="none" stroke="#D9C4E4" stroke-width="0.82" stroke-linecap="round"></path><circle cx="18.14" cy="3.73" r="0.87" fill="#F0B23C"></circle><circle cx="19.55" cy="5.14" r="0.83" fill="#F0B23C"></circle><circle cx="20.66" cy="6.80" r="0.78" fill="#F0B23C"></circle><circle cx="21.46" cy="8.63" r="0.72" fill="#F0B23C"></circle><circle cx="21.91" cy="10.57" r="0.68" fill="#F0B23C"></circle><circle cx="21.99" cy="12.57" r="0.64" fill="#F0B23C"></circle><circle cx="21.70" cy="14.54" r="0.59" fill="#F0B23C"></circle><circle cx="21.05" cy="16.43" r="0.55" fill="#F0B23C"></circle><circle cx="20.07" cy="18.16" r="0.49" fill="#F0B23C"></circle><circle cx="18.78" cy="19.69" r="0.45" fill="#F0B23C"></circle></svg>
@@ -943,6 +1000,11 @@
               <button type="button" onClick="{{ goPractice }}" class="k-press" style="width:100%;background:#10292d;color:#f5f4ee;border:0;border-radius:24px;padding:18px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:16px;box-shadow:0 12px 30px rgba(16,41,45,.22)">
                 <span style="position:relative;width:60px;height:60px;flex:none"><span class="k-ping" style="position:absolute;inset:0;border-radius:50%;background:#6FC9B8;opacity:.35"></span><span style="position:absolute;inset:0;border-radius:50%;background:#6FC9B8;display:flex;align-items:center;justify-content:center"><svg width="20" height="24" viewBox="0 0 18 22" aria-hidden="true"><rect x="5" y="1" width="8" height="13" rx="4" fill="#10292d"></rect><path d="M2 10a7 7 0 0 0 14 0M9 17v4" stroke="#10292d" stroke-width="1.8" fill="none" stroke-linecap="round"></path></svg></span></span>
                 <span style="flex:1;min-width:0;font-family:{{ recordFont }}"><span style="display:block;font-size:13px;color:#93aaa6">{{ t.ctaSub }}</span><span style="display:block;font-family:{{ recordDisplay }};font-weight:600;font-size:20px;line-height:1.25;margin-top:2px">{{ t.ctaTitle }}</span></span>
+              </button>
+              <button type="button" onClick="{{ openZines }}" class="k-press" style="position:relative;width:100%;background:#c4446b;color:#ffffff;border:0;border-radius:24px;padding:14px 16px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:14px;overflow:hidden;box-shadow:0 12px 30px rgba(196,68,107,.3)">
+                <span style="display:flex;flex:none;width:78px;height:62px;position:relative" aria-hidden="true"><img src="/media/zines/z3-0.jpg" alt="" style="position:absolute;left:0;top:6px;width:38px;height:54px;object-fit:cover;border-radius:6px;transform:rotate(-8deg);box-shadow:0 4px 10px rgba(0,0,0,.25)"><img src="/media/zines/z9-0.jpg" alt="" style="position:absolute;left:38px;top:6px;width:38px;height:54px;object-fit:cover;border-radius:6px;transform:rotate(8deg);box-shadow:0 4px 10px rgba(0,0,0,.25)"><img src="/media/zines/z1-0.jpg" alt="" style="position:absolute;left:19px;top:0;width:40px;height:57px;object-fit:cover;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.3)"></span>
+                <span style="flex:1;min-width:0;font-family:{{ recordFont }}"><span style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#e4f25a;color:#3b0f22;border-radius:999px;padding:3px 9px">{{ zu.badge }}</span><span style="display:block;font-family:{{ recordDisplay }};font-weight:600;font-size:19px;line-height:1.2;margin-top:6px">{{ zu.title }}</span><span style="display:block;font-size:13px;line-height:1.4;color:#ffe3ec;margin-top:2px">{{ zu.sub }}</span></span>
+                <span style="flex:none;font-size:22px;color:#e4f25a" aria-hidden="true">›</span>
               </button>
               <div style="display:flex;gap:8px">
                 <sc-for list="{{ homeStats }}" as="k" hint-placeholder-count="3">
@@ -1010,6 +1072,11 @@
             <button type="button" onClick="{{ backHome }}" class="k-press" style="border:0;background:#eeede6;border-radius:999px;width:42px;height:42px;font-size:19px;cursor:pointer;margin-bottom:14px">←</button>
             <h2 style="margin:0 0 4px;font-family:{{ recordDisplay }};font-weight:600;font-size:25px;line-height:1.2">{{ t.practiceWith }}</h2>
             <p style="margin:0 0 18px;font-size:13.5px;line-height:1.6;color:#5f6b69;font-family:{{ recordFont }}">{{ t.practiceHelp }}</p>
+            <div style="margin-bottom:14px"><button type="button" onClick="{{ openZines }}" class="k-press" style="position:relative;width:100%;background:#c4446b;color:#ffffff;border:0;border-radius:24px;padding:14px 16px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:14px;overflow:hidden;box-shadow:0 12px 30px rgba(196,68,107,.3)">
+                <span style="display:flex;flex:none;width:78px;height:62px;position:relative" aria-hidden="true"><img src="/media/zines/z3-0.jpg" alt="" style="position:absolute;left:0;top:6px;width:38px;height:54px;object-fit:cover;border-radius:6px;transform:rotate(-8deg);box-shadow:0 4px 10px rgba(0,0,0,.25)"><img src="/media/zines/z9-0.jpg" alt="" style="position:absolute;left:38px;top:6px;width:38px;height:54px;object-fit:cover;border-radius:6px;transform:rotate(8deg);box-shadow:0 4px 10px rgba(0,0,0,.25)"><img src="/media/zines/z1-0.jpg" alt="" style="position:absolute;left:19px;top:0;width:40px;height:57px;object-fit:cover;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.3)"></span>
+                <span style="flex:1;min-width:0;font-family:{{ recordFont }}"><span style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#e4f25a;color:#3b0f22;border-radius:999px;padding:3px 9px">{{ zu.badge }}</span><span style="display:block;font-family:{{ recordDisplay }};font-weight:600;font-size:19px;line-height:1.2;margin-top:6px">{{ zu.title }}</span><span style="display:block;font-size:13px;line-height:1.4;color:#ffe3ec;margin-top:2px">{{ zu.sub }}</span></span>
+                <span style="flex:none;font-size:22px;color:#e4f25a" aria-hidden="true">›</span>
+              </button></div>
 
             <div style="display:flex;flex-direction:column;gap:9px">
               <sc-for list="{{ segments }}" as="s" hint-placeholder-count="5">
@@ -1302,6 +1369,11 @@
                 <div class="k-card-up" style="position:relative;width:100%;max-height:86%;overflow:auto;background:#fff;border-radius:26px 26px 0 0;padding:10px 18px calc(18px + env(safe-area-inset-bottom));font-family:{{ recordFont }}">
                   <div style="width:40px;height:4px;border-radius:4px;background:#d9d7cc;margin:0 auto 14px"></div>
                   <div style="font-family:{{ recordDisplay }};font-weight:600;font-size:19px;margin-bottom:12px">{{ t.sheetTitle }}</div>
+                  <div style="margin-bottom:10px"><button type="button" onClick="{{ openZines }}" class="k-press" style="position:relative;width:100%;background:#c4446b;color:#ffffff;border:0;border-radius:24px;padding:12px 14px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:14px;overflow:hidden;box-shadow:0 12px 30px rgba(196,68,107,.3)">
+                <span style="display:flex;flex:none;width:78px;height:62px;position:relative" aria-hidden="true"><img src="/media/zines/z3-0.jpg" alt="" style="position:absolute;left:0;top:6px;width:38px;height:54px;object-fit:cover;border-radius:6px;transform:rotate(-8deg);box-shadow:0 4px 10px rgba(0,0,0,.25)"><img src="/media/zines/z9-0.jpg" alt="" style="position:absolute;left:38px;top:6px;width:38px;height:54px;object-fit:cover;border-radius:6px;transform:rotate(8deg);box-shadow:0 4px 10px rgba(0,0,0,.25)"><img src="/media/zines/z1-0.jpg" alt="" style="position:absolute;left:19px;top:0;width:40px;height:57px;object-fit:cover;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.3)"></span>
+                <span style="flex:1;min-width:0;font-family:{{ recordFont }}"><span style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#e4f25a;color:#3b0f22;border-radius:999px;padding:3px 9px">{{ zu.badge }}</span><span style="display:block;font-family:{{ recordDisplay }};font-weight:600;font-size:19px;line-height:1.2;margin-top:6px">{{ zu.title }}</span><span style="display:block;font-size:13px;line-height:1.4;color:#ffe3ec;margin-top:2px">{{ zu.sub }}</span></span>
+                <span style="flex:none;font-size:22px;color:#e4f25a" aria-hidden="true">›</span>
+              </button></div>
                   <div style="display:flex;flex-direction:column;gap:8px">
                     <sc-for list="{{ segments }}" as="p" hint-placeholder-count="5">
                       <button type="button" onClick="{{ p.practise }}" class="k-press" style="display:flex;align-items:center;gap:12px;width:100%;background:#f5f4ee;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;text-align:left;min-height:60px">
@@ -1617,7 +1689,8 @@ class Component extends DCLogic {
       this._bip = e => { e.preventDefault(); this.setState({ installPrompt: e }); };
       window.addEventListener('beforeinstallprompt', this._bip);
     }
-    const [data, i18n] = await Promise.all([import('./karigar-data.js'), import('./karigar-i18n.js')]);
+    const [data, i18n, zmod] = await Promise.all([import('./karigar-data.js'), import('./karigar-i18n.js'), import('./karigar-zines.js').catch(() => ({ ZINES: [], zinePersona: () => '' }))]);
+    this.ZINES = zmod.ZINES || []; this.zinePersona = zmod.zinePersona; this.ZUI = zmod.ZINE_UI || {}; this.zineIn = zmod.zineIn || (z => z);
     this.DATA = data; this.I18N = i18n;
     this.CARDS = this.buildCards(data);
     const boot = this.props.boot;
@@ -2129,7 +2202,12 @@ Reply with a single JSON object and nothing else.`,
     }
   };
 
-  segText(id) { return this.I18N ? this.I18N.SEGMENT_TEXT[id] : null; }
+  zineGo(k) { const n = Math.max(0, Math.min(7, k)); this.setState({ zinePage: n }); const el = this.zStripEl; if (el) el.scrollTo({ left: n * el.clientWidth, behavior: 'smooth' }); }
+
+  segText(id) {
+    if (id && String(id).indexOf('zine-') === 0) { const z = (this.ZINES || []).find(x => x.id === id); if (!z) return null; const label = {}, blurb = {}; ['en', 'hi', 'gu', 'mr', 'bn', 'ta', 'kn'].forEach(l => { const t = this.zineIn(z, l); label[l] = t.audience; blurb[l] = t.title; }); return { label, blurb, persona: this.zinePersona(z) }; }
+    return this.I18N ? this.I18N.SEGMENT_TEXT[id] : null;
+  }
 
   chatSystem() {
     const a = this.active(); const L = this.langOf((a && a.lang) || 'en');
@@ -2166,7 +2244,8 @@ Reply with plain conversational text only.`;
   personaFor(segId, custom) {
     const a = this.active(); const lang = (a && a.lang) || 'en';
     const st = segId ? this.segText(segId) : null;
-    const meta = (segId && SEG_META[segId]) || { icon: '◎', tint: '#eeede6', ink: '#4d5c5a' };
+    const zz = segId && String(segId).indexOf('zine-') === 0 ? (this.ZINES || []).find(x => x.id === segId) : null;
+    const meta = (segId && SEG_META[segId]) || (zz ? { icon: zz.icon, tint: zz.bg, ink: zz.ink } : null) || { icon: '◎', tint: '#eeede6', ink: '#4d5c5a' };
     return { label: st ? (st.label[lang] || st.label.en) : (custom || '—'), labelEn: st ? st.label.en : (custom || 'someone'), ...meta };
   }
 
@@ -3058,6 +3137,21 @@ ${this.groundRules()}`;
         { n: '4', title: t.g4t, body: t.g4b, tint: '#FBE8E8', ink: '#A81C24' }
       ],
       goPractice: this.openChat,
+      zu: (() => { const a = this.active(); const l = (a && a.lang) || 'en'; const U = this.ZUI || {}; return U[l] || U.en || {}; })(),
+      openZines: () => this.setState({ zinesOpen: true, zineSel: null, zinePage: 0, sheetOpen: false }),
+      closeZines: () => this.setState({ zinesOpen: false, zineSel: null }),
+      zineBack: () => s.zineSel == null ? this.setState({ zinesOpen: false }) : this.setState({ zineSel: null, zinePage: 0 }),
+      zinesOpen: !!s.zinesOpen, zineList: !!s.zinesOpen && s.zineSel == null, zineDetail: !!s.zinesOpen && s.zineSel != null,
+      zines: (this.ZINES || []).map((z0, i) => { const a = this.active(), l = (a && a.lang) || 'en', z = this.zineIn(z0, l), U = (this.ZUI || {})[l] || (this.ZUI || {}).en || {}; return { ...z, num: String(U.zine || 'Zine').toUpperCase() + ' ' + String(z.n).padStart(2, '0'), cover: '/media/zines/z' + z.n + '-0.jpg', open: () => { this.setState({ zineSel: i, zinePage: 0 }); setTimeout(() => { if (this.zStripEl) this.zStripEl.scrollLeft = 0; }, 30); } }; }),
+      zineHead: (() => { const a = this.active(), l = (a && a.lang) || 'en', U = (this.ZUI || {})[l] || (this.ZUI || {}).en || {}; return s.zineSel != null && this.ZINES && this.ZINES[s.zineSel] ? this.zineIn(this.ZINES[s.zineSel], l).audience : (U.title || ''); })(),
+      zinePrev: () => this.zineGo((s.zinePage || 0) - 1),
+      zineNext: () => this.zineGo((s.zinePage || 0) + 1),
+      zineStrip: this._zs || (this._zs = el => { this.zStripEl = el; }),
+      zineScroll: e => { const el = e.currentTarget; const k = Math.round(el.scrollLeft / Math.max(1, el.clientWidth)); if (k !== (this.state.zinePage || 0)) this.setState({ zinePage: k }); },
+      zinePractise: () => { const z = this.ZINES && this.ZINES[s.zineSel]; if (!z) return; this.setState({ zinesOpen: false, zineSel: null }); this.openSegment(z.id); },
+      zd: (() => { const a = this.active(), l = (a && a.lang) || 'en', U = (this.ZUI || {})[l] || (this.ZUI || {}).en || {}; const z = s.zineSel != null && this.ZINES && this.ZINES[s.zineSel] ? this.zineIn(this.ZINES[s.zineSel], l) : null; if (!z) return { dots: [], thinking: [], lead: [], pages: [] }; const pg = s.zinePage || 0; const names = U.pages || ['Front', 'Page 1', 'Page 2', 'Page 3', 'Page 4', 'Page 5', 'Page 6', 'Back'];
+        return { ...z, short: z.short || 'this audience', dot: z.bg === '#edeee8' || z.bg === '#bed1f9' ? z.ink : z.bg, pages: names.map((nm, k) => ({ label: nm, src: '/media/zines/z' + z.n + '-' + k + '.jpg' })), pageLabel: names[pg] + ' · ' + (pg + 1) + ' / 8',
+          dots: names.map((nm, k) => ({ label: nm, go: () => this.zineGo(k), style: 'width:' + (k === pg ? 18 : 8) + 'px;height:8px;border-radius:999px;border:0;padding:0;cursor:pointer;background:' + (k === pg ? '#10292d' : '#d5d3c8') })) }; })(),
       goMyBoard: () => this.setState({ appView: 'board' }),
       goProfile: () => this.setState({ appView: 'profile', selectedKey: null }),
       aProfile: s.appView === 'profile',

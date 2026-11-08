@@ -4,12 +4,12 @@
 // opens without internet. The facilitator platform at / and /org is online-only and is never
 // intercepted, so it can never be replaced by a cached artisan page. Model calls and every
 // other /api request always go to the network.
-const VERSION = 'karigar-v7';
+const VERSION = 'karigar-v8';
 // /k/shell is the artisan page with no valid token: the plain app shell, used offline
 const SHELL_PAGE = '/k/shell';
 const SHELL = [
   SHELL_PAGE, '/manifest.webmanifest',
-  '/runtime.js', '/vendor/preact.mjs', '/karigar.dc', '/karigar-data.js', '/karigar-i18n.js',
+  '/runtime.js', '/vendor/preact.mjs', '/karigar.dc', '/karigar-data.js', '/karigar-i18n.js', '/karigar-zines.js',
   '/karigar-logo.svg', '/icons/karigar-192.png', '/icons/karigar-512.png', '/icons/karigar-apple-touch.png'
 ];
 
