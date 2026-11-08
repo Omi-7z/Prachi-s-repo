@@ -51,12 +51,16 @@
   .t-card:hover, .t-card:focus-visible { translate: 0 -10px; box-shadow: 0 22px 40px rgba(16,41,45,.3) !important; z-index: 9; }
   @media (max-width: 980px) {
     .t-2col { grid-template-columns: minmax(0,1fr) !important; }
+    .t-2col > * { grid-column: 1 / -1 !important; }
     .t-hide-m { display: none !important; }
     .t-sticky { position: relative !important; top: 0 !important; }
     .t-op1 { opacity: 1 !important; padding-bottom: 36px !important; }
   }
   @media (max-width: 600px) {
     .t-split-m { grid-template-columns: minmax(0,1fr) !important; }
+  }
+  @media (max-width: 360px) {
+    .t-tier { padding-left: 2px !important; padding-right: 2px !important; font-size: 12.5px !important; }
   }
   @media (min-width: 981px) { .t-show-m { display: none !important; } }
   @media (prefers-reduced-motion: reduce) {
@@ -437,7 +441,7 @@
         <img src="https://images.unsplash.com/photo-1614025000673-edf238aaf5d4?auto=format&amp;fit=crop&amp;w=400&amp;q=70" alt="Meena Khatri" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none">
       </div>
       <div role="radiogroup" aria-label="Who can hear this story" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:4px;border-radius:16px;background:#f5f4ee">
-        <sc-for list="{{ tiers }}" as="t" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{ t.on }}" onClick="{{ t.pick }}" style="border:0;border-radius:12px;padding:10px 6px;font-size:13.5px;font-weight:500;cursor:pointer;min-height:44px;line-height:1.2;transition:background .2s, color .2s;{{ t.st }}">{{ t.l }}</button></sc-for>
+        <sc-for list="{{ tiers }}" as="t" hint-placeholder-count="4"><button type="button" class="t-tier" role="radio" aria-checked="{{ t.on }}" onClick="{{ t.pick }}" style="border:0;border-radius:12px;padding:10px 6px;font-size:13.5px;font-weight:500;cursor:pointer;min-height:44px;line-height:1.2;transition:background .2s, color .2s;{{ t.st }}">{{ t.l }}</button></sc-for>
       </div>
       <div style="display:grid;grid-template-columns:repeat(16,1fr);gap:7px" aria-hidden="true">
         <sc-for list="{{ field }}" as="d" hint-placeholder-count="0"><span style="aspect-ratio:1;border-radius:50%;transition:background .4s, transform .4s;{{ d.st }}"></span></sc-for>
@@ -745,7 +749,7 @@
     </div>
     <div class="t-fade" style="min-width:0;display:flex;justify-content:center"><div style="background:#ffffff;border:1px solid #e2e0d6;border-radius:24px;border-radius:30px;padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:20px;width:100%;max-width:560px;box-shadow:0 30px 60px rgba(16,41,45,.06)">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div><div style="font-size:14px;color:#66726f">Try it · one story</div><div style="font-family:'Newsreader', Georgia, serif;font-size:24px;line-height:1.15;margin-top:4px">“What my mother’s hands taught me”</div></div><img src="https://images.unsplash.com/photo-1614025000673-edf238aaf5d4?auto=format&amp;fit=crop&amp;w=400&amp;q=70" alt="Meena Khatri" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none"></div>
-  <div role="radiogroup" aria-label="Who can hear this story" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:4px;border-radius:16px;background:#f5f4ee"><sc-for list="{{ tiers }}" as="t" hint-placeholder-count="0"><button type="button" role="radio" aria-checked="{{ t.on }}" onClick="{{ t.pick }}" style="border:0;border-radius:12px;padding:10px 6px;font-size:13.5px;font-weight:500;cursor:pointer;min-height:44px;line-height:1.2;transition:background .2s, color .2s;{{ t.st }}">{{ t.l }}</button></sc-for></div>
+  <div role="radiogroup" aria-label="Who can hear this story" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:4px;border-radius:16px;background:#f5f4ee"><sc-for list="{{ tiers }}" as="t" hint-placeholder-count="0"><button type="button" class="t-tier" role="radio" aria-checked="{{ t.on }}" onClick="{{ t.pick }}" style="border:0;border-radius:12px;padding:10px 6px;font-size:13.5px;font-weight:500;cursor:pointer;min-height:44px;line-height:1.2;transition:background .2s, color .2s;{{ t.st }}">{{ t.l }}</button></sc-for></div>
   <div style="display:grid;grid-template-columns:repeat(16,1fr);gap:7px" aria-hidden="true"><sc-for list="{{ field }}" as="d" hint-placeholder-count="0"><span style="aspect-ratio:1;border-radius:50%;transition:background .4s, transform .4s;{{ d.st }}"></span></sc-for></div>
   <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:start;padding-top:18px;border-top:1px solid #eeede6"><div style="font-size:clamp(36px,4vw,50px);font-weight:500;letter-spacing:-.04em;line-height:1">{{ tierCur.who }}</div><div style="display:flex;flex-direction:column;gap:4px"><b style="font-weight:600;font-size:16px">{{ tierCur.head }}</b><span style="font-size:15px;line-height:1.55;color:#4d5c5a">{{ tierCur.d }}</span></div></div></div></div>
   </div>
@@ -938,9 +942,10 @@ class Component extends DCLogic {
     if (!el || !(w > 0)) return;
     const k = el.getAttribute('data-k');
     const v = w / (k === 'stage' ? 1400 : 640), key = k === 'stage' ? '--s' : '--fs';
-    this._sc = this._sc || {};
-    if (this._sc[k] != null && Math.abs(this._sc[k] - v) < 0.0005) return;
-    this._sc[k] = v; el.style.setProperty(key, v.toFixed(4));
+    // Compare with this element's own value: the page rebuilds these when the route changes, and a
+    // new element has no value yet even when the width is the same as last time.
+    if (Math.abs(parseFloat(el.style.getPropertyValue(key)) - v) < 0.0005) return;
+    el.style.setProperty(key, v.toFixed(4));
   }
   _measure() { try { document.querySelectorAll('[data-fm]').forEach(el => { const w = el.clientWidth; if (w > 0) el.style.setProperty('--fs', (w / 640).toFixed(4)); }); } catch (e) {}
     try {
@@ -1163,7 +1168,7 @@ class Component extends DCLogic {
       waveBars: [14, 26, 38, 22, 34, 18, 30, 40, 24, 16, 32, 20, 36, 12].map((h, i) => ({ h, d: (i * 0.08).toFixed(2) })),
       meenaPhoto: P.meena, storyPhoto: U('1705248383815-c6bc07898592', 900),
       ringRows: RL.map((l, i) => ({ l, c: RC[i], n: meenaC[i], w: (meenaC[i] / [9, 9, 9, 10, 9, 10][i] * 100).toFixed(0) + '%' })),
-      kitFan: ['craft', 'place', 'lineage', 'material', 'culture', 'pride'].map((k, i) => ({ label: 'Draw a card from the ' + RL[i] + ' deck', open: () => this.openCard(this._ringStart(i)), st: 'position:absolute;top:calc(50% - 75px);left:calc(50% - 46px + ' + ((i - 2.5) * 52) + 'px);width:92px;height:150px;padding:0;border:0;cursor:pointer;border-radius:9px;background:url(cards/' + k + '.png) center/cover;box-shadow:0 10px 24px rgba(16,41,45,.22);transform:rotate(' + ((i - 2.5) * 6) + 'deg) translateY(' + (Math.abs(i - 2.5) * 6) + 'px)' })),
+      kitFan: ['craft', 'place', 'lineage', 'material', 'culture', 'pride'].map((k, i) => ({ label: 'Draw a card from the ' + RL[i] + ' deck', open: () => this.openCard(this._ringStart(i)), st: 'position:absolute;top:calc(50% - 75px);left:calc(50% - 46px + ' + (i - 2.5) + ' * min(52px, (100vw - 190px) / 5));width:92px;height:150px;padding:0;border:0;cursor:pointer;border-radius:9px;background:url(cards/' + k + '.png) center/cover;box-shadow:0 10px 24px rgba(16,41,45,.22);transform:rotate(' + ((i - 2.5) * 6) + 'deg) translateY(' + (Math.abs(i - 2.5) * 6) + 'px)' })),
       tierRows: [{ l: 'Only me', on: false }, { l: 'People I approve', on: true }, { l: 'Anyone with the link', on: false }, { l: 'Everyone', on: true }].map(t => ({ l: t.l, bg: t.on ? '#ffffff' : 'rgba(255,255,255,.45)', tr: t.on ? '#1e1a44' : 'rgba(30,26,68,.2)', kn: t.on ? 'left:16px' : 'left:2px' })),
       guarantees: [
         { t: 'Private until they publish', d: 'Every recording starts in the artisan’s own archive. Nothing is public by default.', c: '#B98BE0' },
