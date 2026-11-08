@@ -1188,7 +1188,7 @@
                   <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" style="display:block;flex:none"><path d="M16.10 2.38A10.8 10.8 0 1 0 17.55 20.74" fill="none" stroke="#F0B23C" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.47 4.79A9.55 9.55 0 1 0 18.30 18.39" fill="none" stroke="#5B8AB5" stroke-width="0.82" stroke-linecap="round"></path><path d="M17.21 6.20A8.35 8.35 0 1 0 17.96 16.91" fill="none" stroke="#DC5A3C" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.80 7.47A7.2 7.2 0 1 0 17.37 15.71" fill="none" stroke="#8A2034" stroke-width="0.82" stroke-linecap="round"></path><path d="M16.22 8.62A6.05 6.05 0 1 0 16.49 14.93" fill="none" stroke="#9BC7A8" stroke-width="0.82" stroke-linecap="round"></path><path d="M15.60 9.85A4.9 4.9 0 1 0 15.57 14.22" fill="none" stroke="#D9C4E4" stroke-width="0.82" stroke-linecap="round"></path><circle cx="18.14" cy="3.73" r="0.87" fill="#F0B23C"></circle><circle cx="19.55" cy="5.14" r="0.83" fill="#F0B23C"></circle><circle cx="20.66" cy="6.80" r="0.78" fill="#F0B23C"></circle><circle cx="21.46" cy="8.63" r="0.72" fill="#F0B23C"></circle><circle cx="21.91" cy="10.57" r="0.68" fill="#F0B23C"></circle><circle cx="21.99" cy="12.57" r="0.64" fill="#F0B23C"></circle><circle cx="21.70" cy="14.54" r="0.59" fill="#F0B23C"></circle><circle cx="21.05" cy="16.43" r="0.55" fill="#F0B23C"></circle><circle cx="20.07" cy="18.16" r="0.49" fill="#F0B23C"></circle><circle cx="18.78" cy="19.69" r="0.45" fill="#F0B23C"></circle></svg>
                   <div style="min-width:0">
                     <div style="font-weight:700;font-size:15.5px;line-height:1.2;font-family:{{ recordFont }}">{{ t.guideName }}</div>
-                    <div style="font-size:11.5px;color:#75817e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ t.guideSub }}</div>
+                    <div style="font-size:11.5px;color:#5f6b69;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ t.guideSub }}</div>
                   </div>
                 </div>
                 <button type="button" onClick="{{ newChat }}" class="k-press" style="border:1.5px solid #e2e0d6;background:#fff;border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:40px;flex-shrink:0;font-family:{{ recordFont }};color:#10292d">+ {{ t.newChat }}</button>
@@ -1197,7 +1197,7 @@
                 <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:0">
                   <span style="{{ personaBadge }}">{{ personaIcon }}</span>
                   <div style="min-width:0">
-                    <div style="font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#75817e;font-family:{{ recordFont }}">{{ t.practisingWith }}</div>
+                    <div style="font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#5f6b69;font-family:{{ recordFont }}">{{ t.practisingWith }}</div>
                     <div style="font-weight:700;font-size:15px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:{{ recordFont }}">{{ personaName }}</div>
                   </div>
                 </div>
@@ -1271,7 +1271,7 @@
                 <sc-if value="{{ m.isDivider }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex;align-items:center;gap:10px;margin:6px 0;font-family:{{ recordFont }}">
                     <span style="flex:1;height:1px;background:#d9d7cc"></span>
-                    <span style="font-size:11.5px;font-weight:700;color:#75817e;text-align:center">{{ m.text }}</span>
+                    <span style="font-size:11.5px;font-weight:700;color:#5f6b69;text-align:center">{{ m.text }}</span>
                     <span style="flex:1;height:1px;background:#d9d7cc"></span>
                   </div>
                 </sc-if>
@@ -1475,6 +1475,19 @@ const SEG_META = {
   exhibition: { icon: '◐', tint: '#FBE8E8', ink: '#8A3A32' }
 };
 const SEG_ORDER = ['brand', 'genz', 'social', 'ngo', 'exhibition'];
+// A zine's own bg/ink pair is made for its cover. The chat puts tint behind dark text and ink on the
+// light page, so zines need the same kind of pair as SEG_META: a pale tint and a dark ink, in the zine's hue.
+const ZINE_TONE = {
+  'zine-1': { tint: '#FBE7EE', ink: '#8A2347' },
+  'zine-2': { tint: '#E3F0E6', ink: '#1F4D33' },
+  'zine-3': { tint: '#F8E9E1', ink: '#7A3F24' },
+  'zine-4': { tint: '#E4ECFB', ink: '#24479E' },
+  'zine-5': { tint: '#ECEFE6', ink: '#2F5A3C' },
+  'zine-6': { tint: '#F0EAEC', ink: '#54414A' },
+  'zine-7': { tint: '#F3E6F1', ink: '#5C1F53' },
+  'zine-8': { tint: '#FBF0D2', ink: '#6B4E08' },
+  'zine-9': { tint: '#EAE8FB', ink: '#3E3A9E' }
+};
 
 const EN = {
   org: 'Organisation', artisanApp: 'Artisan app',
@@ -2245,7 +2258,7 @@ Reply with plain conversational text only.`;
     const a = this.active(); const lang = (a && a.lang) || 'en';
     const st = segId ? this.segText(segId) : null;
     const zz = segId && String(segId).indexOf('zine-') === 0 ? (this.ZINES || []).find(x => x.id === segId) : null;
-    const meta = (segId && SEG_META[segId]) || (zz ? { icon: zz.icon, tint: zz.bg, ink: zz.ink } : null) || { icon: '◎', tint: '#eeede6', ink: '#4d5c5a' };
+    const meta = (segId && SEG_META[segId]) || (zz && ZINE_TONE[zz.id] ? { icon: zz.icon, ...ZINE_TONE[zz.id] } : null) || { icon: '◎', tint: '#eeede6', ink: '#4d5c5a' };
     return { label: st ? (st.label[lang] || st.label.en) : (custom || '—'), labelEn: st ? st.label.en : (custom || 'someone'), ...meta };
   }
 
@@ -3228,7 +3241,7 @@ ${this.groundRules()}`;
       composerPh: s.mode === 'practice' ? t.replyPh : t.askPh,
       composerStyle: `display:flex;flex-direction:column;gap:4px;border:1.5px solid ${s.mode === 'practice' ? '#10292d' : '#d9d7cc'};border-radius:22px;padding:6px 8px 8px 10px;background:#fff`,
       sendDisabled: !!s.chatBusy || !(s.draft || '').trim(),
-      sendStyle: `margin-left:auto;border:0;background:${(s.draft || '').trim() && !s.chatBusy ? '#10292d' : '#d9d7cc'};color:#fff;border-radius:999px;width:38px;height:38px;font-size:18px;cursor:pointer;flex-shrink:0;transition:background .15s`,
+      sendStyle: `margin-left:auto;border:0;background:${(s.draft || '').trim() && !s.chatBusy ? '#10292d' : '#d9d7cc'};color:${(s.draft || '').trim() && !s.chatBusy ? '#fff' : '#4d5c5a'};border-radius:999px;width:38px;height:38px;font-size:18px;cursor:pointer;flex-shrink:0;transition:background .15s`,
       openSheet: () => this.setState({ sheetOpen: true }), closeSheet: () => this.setState({ sheetOpen: false }), sheetOpen: !!s.sheetOpen,
       newChat: this.newChat, endPractice: this.endPractice,
       chatBusy: s.chatBusy, draft: s.draft,
