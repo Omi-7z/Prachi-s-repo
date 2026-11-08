@@ -1803,7 +1803,11 @@ class Component extends DCLogic {
     const L = this.I18N ? this.I18N.LANGS : [];
     const l = L.find(x => x.code === code) || L[0] || { font: 'sans-serif', display: 'sans-serif', name: 'English' };
     const sw = f => String(f || '').split('Hanken Grotesk').join('Instrument Sans').split('Bricolage Grotesque').join('Instrument Sans');
-    return { ...l, font: sw(l.font), display: sw(l.display) };
+    // Every stack falls back to the Noto families for all the app's scripts, so a Marathi word shown
+    // on an English screen (an artisan's own vocabulary, a name) never depends on the phone's fonts.
+    const IND = "'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Bengali', 'Noto Sans Tamil', 'Noto Sans Kannada'";
+    const withIndic = f => { const add = IND.split(', ').filter(x => !f.includes(x.replace(/'/g, ''))).join(', '); return add ? f.replace(/(,\s*)?(sans-serif|serif)\s*$/, `, ${add}, $2`) : f; };
+    return { ...l, font: withIndic(sw(l.font)), display: withIndic(sw(l.display)) };
   }
   active() { return this.state.profiles.find(p => p.id === this.state.activeId) || null; }
 
@@ -2084,6 +2088,12 @@ Reply with a single JSON object and nothing else.`,
         record[k] = String(val).trim();
         if (v && v.quote) sources[k] = String(v.quote).trim();
       });
+      // Nothing placed means nothing to keep: say so and leave the transcript in the box,
+      // rather than adding an empty, untitled artisan to the list.
+      if (!Object.keys(record).some(k => String(record[k] || '').trim())) {
+        this.setState({ extracting: false, extractError: 'No answers could be matched to the cards. Check the transcript is from a card session, or try a shorter section.' });
+        return;
+      }
       const id = this.newId();
       const profile = { id, token: null, linkVersion: 1, revoked: false, approved: false, openedDaysAgo: null, rooms: {}, record, lang: this.state.newLang, recordLang: (['en', 'hi', 'gu', 'mr', 'bn', 'ta', 'kn'].includes(String(out.source_language || '').trim()) ? String(out.source_language).trim() : this.detectLang(record, this.state.newLang)), analysis: null, checked: {}, sources, sessionNote: out.session_note || '', origin: this.state.fileName || 'pasted transcript', approved: false, openedDaysAgo: null, rooms: {}, revoked: false, linkVersion: 1 };
       const profiles = [...this.state.profiles, profile];
