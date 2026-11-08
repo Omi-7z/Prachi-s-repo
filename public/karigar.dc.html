@@ -800,7 +800,7 @@
                   <div class="k-rise" style="{{ f.boxStyle }}">
                     <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:8px">
                       <span style="{{ f.qStyle }}">Q{{ f.n }}</span>
-                      <span style="font-weight:600;font-size:15px;line-height:1.4;font-family:{{ recordFont }}">{{ f.label }}</span>
+                      <span style="font-weight:600;font-size:15px;line-height:1.4;font-family:{{ recordFont }}">{{ f.label }}</span><sc-if value="{{ f.isBonus }}" hint-placeholder-val="{{ false }}"><span style="flex:none;align-self:flex-start;padding:2px 9px;border-radius:999px;background:#10292d;color:#ffffff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Bonus</span></sc-if>
                     </div>
                     <textarea readOnly="{{ orgTrRO }}" class="k-field" rows="3" placeholder="{{ t.noAnswer }}" value="{{ f.value }}" onChange="{{ f.onChange }}" onFocus="{{ f.pick }}" style="resize:vertical;min-height:76px;font-family:{{ recordFont }};background:#fff"></textarea>
                       <sc-if value="{{ f.hasQuote }}" hint-placeholder-val="{{ false }}">
@@ -1357,7 +1357,7 @@
                   <div class="k-rise" style="{{ f.boxStyle }}">
                     <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:8px">
                       <span style="{{ f.qStyle }}">Q{{ f.n }}</span>
-                      <span style="font-weight:600;font-size:15px;line-height:1.4;font-family:{{ recordFont }}">{{ f.label }}</span>
+                      <span style="font-weight:600;font-size:15px;line-height:1.4;font-family:{{ recordFont }}">{{ f.label }}</span><sc-if value="{{ f.isBonus }}" hint-placeholder-val="{{ false }}"><span style="flex:none;align-self:flex-start;padding:2px 9px;border-radius:999px;background:#10292d;color:#ffffff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Bonus</span></sc-if>
                     </div>
                     <p style="{{ f.readStyle }}">{{ f.readValue }}</p>
                   </div>
@@ -1659,7 +1659,8 @@ class Component extends DCLogic {
       if (!profiles.length && legacy.length && confirm(`Move ${legacy.length} profile(s) saved in this browser into your organisation's account?`)) {
         profiles = legacy.map(p => {
           const { token, editKey, publishedToken, translations, remote, ...rest } = p;
-          return { ...rest, revoked: false, linkVersion: 1, token: null, openedDaysAgo: null, rooms: {} };
+          const M = data.MIGRATE || (x => x);
+          return { ...rest, record: M(rest.record || {}), sources: M(rest.sources || {}), revoked: false, linkVersion: 1, token: null, openedDaysAgo: null, rooms: {} };
         });
       }
       const activeId = profiles.some(p => p.id === local.activeId) ? local.activeId : (profiles[0] ? profiles[0].id : null);
@@ -1778,10 +1779,11 @@ class Component extends DCLogic {
     D.RINGS.forEach(r => { byCode[r.code] = r; });
     const out = [];
     D.SCHEMA.forEach(g => {
-      const ring = byCode[g.code];
+      if (g.deck === 'header') return;
+      const ring = g.ring ? D.RINGS.find(r => r.id === g.ring) : byCode[g.code];
       const hub = D.HUB.find(h => h.code === g.code);
       g.fields.forEach(f => out.push({
-        key: f.key, label: f.label, hint: f.hint, rows: f.rows,
+        key: f.key, label: f.label, hint: f.hint, rows: f.rows, bonus: !!f.bonus, cardNo: g.card || null,
         ask: g.ask, code: g.code, groupTitle: g.title,
         ringId: ring ? ring.id : null, color: ring ? ring.color : (hub ? hub.color : '#10292d'),
         ink: ring ? ring.ink : (hub ? hub.color : '#1c3f44'),
@@ -2566,7 +2568,7 @@ ${this.groundRules()}`;
         deck: deckName[deckOf(selCard)],
         art: ['craft', 'place', 'lineage', 'material', 'culture', 'pride'].includes(placed) ? '/cards/' + placed + '.png' : '', hasArt: ['craft', 'place', 'lineage', 'material', 'culture', 'pride'].includes(placed),
         // Schema codes are facilitator vocabulary; the artisan never sees them.
-        code: selCard.own || s.side === 'artisan' ? '' : selCard.code,
+        code: selCard.own || s.side === 'artisan' ? '' : (selCard.cardNo && selCard.ringId ? ringName(selCard.ringId) + ' · Card ' + selCard.cardNo : selCard.code),
         title: selCard.own ? (placed ? ringName(placed) : t.deckOwn) : gTitle(selCard.code, selCard.groupTitle),
         // Theme cards already carry the ring name as their title — only placed hub cards need the line.
         ringLabel: placed && selCard.hub ? ringName(placed) : '', hasRing: !!placed && !!selCard.hub,
@@ -2576,7 +2578,7 @@ ${this.groundRules()}`;
         fields: popCards.map((c, i) => {
           const v = rec[c.key] || ''; const has = !!v.trim(); const on = c.key === selCard.key;
           return {
-            n: i + 1, label: c.own ? c.label : fLabel(c.key, c.label), value: v,
+            n: i + 1, isBonus: !!c.bonus, label: c.own ? c.label : fLabel(c.key, c.label), value: v,
             readValue: has ? v : t.noAnswer,
             readStyle: `margin:0;font-size:15.5px;line-height:1.7;white-space:pre-wrap;font-family:${recL.font};color:${has ? '#10292d' : '#98a29f'};font-style:${has ? 'normal' : 'italic'}`,
             onChange: e => this.setField(c.key, e.target.value),
@@ -2679,7 +2681,7 @@ ${this.groundRules()}`;
     }));
 
     const groups = (D ? D.SCHEMA : []).map(g => {
-      const ring = rings.find(r => r.code === g.code);
+      const ring = rings.find(r => r.id === g.ring || r.code === g.code);
       return {
         code: g.code, title: gTitle(g.code, g.title), ask: gAsk(g.code, g.ask), color: ring ? ring.color : '#10292d',
         fields: g.fields.map(f => ({
@@ -2799,7 +2801,7 @@ ${this.groundRules()}`;
           // initials come from the artisan's name, not the session title
           ini: firstGraphemes(idOf(p).name || nameOf(p) || '?'),
           bg: ['#F5E4F6', '#E2F2EF', '#FBE8E8', '#F9E8E4', '#E6EEF8', '#FCEFD2'][(nameOf(p) || '').length % 6], ink: ['#5B2A6B', '#1D5B54', '#7E1418', '#8A3A32', '#1E4A7C', '#8A6410'][(nameOf(p) || '').length % 6],
-          prog: (() => { const D = this.DATA; const tot = D ? D.SCHEMA.filter(g => g.deck === 'theme').reduce((n, g) => n + g.fields.length, 0) : 0; return tot ? c.theme + '/' + tot : ''; })(),
+          prog: (() => { const D = this.DATA; const tot = D ? D.SCHEMA.filter(g => g.deck !== 'header').reduce((n, g) => n + g.fields.length, 0) : 0; return tot ? (c.theme + c.reflection + c.story) + '/' + tot : ''; })(),
           open: () => this.setState({ activeId: p.id, orgView: 'board', boardTab: 'board', selectedKey: null }),
           style: `display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:10px;padding:7px 10px;cursor:pointer;min-height:42px;color:#10292d;background:${s.activeId === p.id && s.orgView === 'board' ? '#ffffff' : 'transparent'};font-family:${uiL.font}`
         };
@@ -2946,7 +2948,7 @@ ${this.groundRules()}`;
           name: nameOf(p), sub: [idOf(p).craft, idOf(p).region].filter(Boolean).join(' · ') || p.cluster || '—',
           status, statusStyle: statusStyle(kind), lang: p.lang,
           metrics: [
-            { value: c.theme + c.reflection + c.story, label: t.cardsCaptured },
+            { value: (c.theme + c.reflection + c.story) + '/' + ((this.DATA && this.DATA.SCHEMA.filter(g => g.deck !== 'header').reduce((n, g) => n + g.fields.length, 0)) || ''), label: t.cardsCaptured },
             { value: this.langOf(p.lang).name, label: t.appLang },
             { value: practice, label: t.practiceRuns },
             { value: (p.openedDaysAgo === null || p.openedDaysAgo === undefined) ? t.never : p.openedDaysAgo + 'd', label: t.lastOpened }

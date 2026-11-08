@@ -33,6 +33,10 @@ Instrument Sans (headings and body) and Newsreader (italic accents) from Google 
 
 Design exports arrive as whole files. Strip the injected `data-omelette` lines, take the design, and put the server wiring back wherever the design simulates it (localStorage profiles, `publish()`, `routeLink()`, `hosted()`, the website's mocked pilot forms and code entry, the console's mocked sign-in screens and sample organisation name). The design's `style-hover` attribute is handled in `runtime.js`. Ring keys are stable data: the "Lineage" ring is labelled "Legacy" on screen, but its key stays `lineage` — never migrate stored data for a label change.
 
+## The card deck
+
+`public/karigar-data.js` (from the design) is the only list of questions: SCHEMA has one group per printed card, a `Header` group (name, years in practice) that is not on the board, and `MIGRATE(record)`, which maps answers saved under retired keys onto the current deck. The server reads the deck through `lib/deck.js` (board total 63, progress, a merge-safe MIGRATE) and never lists field keys itself. `scripts/migrate-deck.js` rewrites stored answers and translations onto the deck, backing each profile up first in `deck_migration_backup`. It runs from `scripts/migrate.js` on production deploys and locally only, never on previews, which on some projects share the production database.
+
 ## Translations
 
 Card answers are stored in the language they were recorded in. Translations made by the model are saved on the profile (`artisan_profiles.translations`), and are cleared when the answers change, so a language is only paid for once. The artisan's phone also keeps its own copies.

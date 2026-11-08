@@ -10,4 +10,12 @@ if (!databaseUrl()) {
 const db = getDb();
 await migrate(db, { migrationsFolder: new URL('../db/migrations', import.meta.url).pathname });
 console.log('migrate: schema is up to date');
+// Answer data for the 63-question deck. Production deploys and local runs only: see migrate-deck.js.
+if (!process.env.VERCEL || process.env.VERCEL_ENV === 'production') {
+  const { migrateDeck } = await import('./migrate-deck.js');
+  const r = await migrateDeck(db);
+  console.log(`migrate: deck — ${r.rewritten} of ${r.checked} profiles moved onto the 63-question deck`);
+} else {
+  console.log(`migrate: deck — skipped on a ${process.env.VERCEL_ENV || 'non-production'} build`);
+}
 await db.$client.end();

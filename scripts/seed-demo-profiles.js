@@ -10,7 +10,7 @@
 // These people, their answers and the cultural details in them are invented. Every profile says so
 // in its facilitator session note. Replace them with real sessions before anyone relies on them.
 import { readdir, readFile } from 'node:fs/promises';
-import { ALL_KEYS } from '../public/karigar-data.js';
+import { ALL_KEYS, SCHEMA, MIGRATE } from '../public/karigar-data.js';
 
 const BASE = (process.env.KARIGAR_URL || 'https://karigar-toolkit.vercel.app').replace(/\/+$/, '');
 const { KARIGAR_EMAIL: email, KARIGAR_PASSWORD: password } = process.env;
@@ -47,8 +47,9 @@ for (const d of demos) {
   if (untranslated.length || stray.length) throw new Error(`${d.id}: English does not match: missing ${untranslated}, extra ${stray}`);
   const complete = d.status === 'complete';
   if (complete) {
-    const missing = ALL_KEYS.filter(k => !String(r[k] || '').trim());
-    if (missing.length) throw new Error(`${d.id}: missing answers ${missing}`);
+    // "complete" is the console's own rule: the session reached all three decks
+    const n = deck => SCHEMA.filter(g => g.deck === deck).flatMap(g => g.fields).filter(f => String(r[f.key] || '').trim()).length;
+    if (!(n('theme') >= 8 && n('reflection') >= 4 && n('story') >= 2)) throw new Error(`${d.id}: did not reach all three decks`);
   }
   const { profile } = await call(d.id, 'PUT', {
     // lang is what the answers were recorded in; appLang, when set, is the language the artisan's app opens in

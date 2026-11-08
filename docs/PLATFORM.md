@@ -20,11 +20,13 @@ All three share one record: the artisan's **mandala board**.
 
 ## 2. The mandala board (the shared record)
 
-The board is made of six rings, running from the craft itself out to its future. Each card is a dot on a ring. The cards come in three decks:
+The board is made of six rings, running from the craft itself out to its future. Each question is a dot on its ring. The cards come in three decks:
 
-- **Theme cards** cover Identity, Place, Legacy, Material, Process, Market and Future, and build the identity map of the craft.
+- **Theme cards**: 18 cards, three on each ring (My Craft, Place, Legacy, Material & Tools, Cultural Meaning, Pride & Stake). Each card asks three questions, and two cards carry a fourth, bonus question, so there are 56 theme questions in total (9 per ring, 10 on Material & Tools and Pride & Stake). Together they build the identity map of the craft.
 - **Reflection cards** record what the artisan decided matters after sharing: their strength, their concern, their sharing rules and boundaries, and their hopes for the future. These answers decide how everything else is written.
 - **Small story modules** are concrete incidents, such as a moment that taught them something, a moment that stayed with them, or what outsiders should understand. One scene is worth more than any number of adjectives.
+
+A full session answers 63 questions: 56 theme questions, 4 reflection cards and 3 small story cards.
 
 Facilitators can also **add their own question** to any ring when the session raises something that no card asks.
 
