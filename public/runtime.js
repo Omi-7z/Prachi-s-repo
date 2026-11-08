@@ -183,7 +183,7 @@ async function loadComponent(design) {
   helmet && helmet.remove();
   const tree = [...root.childNodes].map(compile).filter(Boolean);
   const src = doc.querySelector('script[data-dc-script]').textContent
-    .replace(/import\('\.\/(karigar-(?:data|i18n)\.js)'\)/g, (m, file) => `import('${built('/' + file)}')`);
+    .replace(/import\('\.\/(karigar-(?:data|i18n|zines)\.js)'\)/g, (m, file) => `import('${built('/' + file)}')`);
   // eslint-disable-next-line no-new-func
   const Component = new Function('DCLogic', 'React', `${src}\nreturn Component;`)(DCLogic, React);
   return { Component, template: scope => tree.map(t => t(scope)) };
