@@ -915,7 +915,6 @@
                   </div>
                   <button type="button" onClick="{{ zinePrev }}" aria-label="Previous page" class="k-press" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:999px;border:0;background:rgba(255,255,255,.92);color:#10292d;font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)">‹</button>
                   <button type="button" onClick="{{ zineNext }}" aria-label="Next page" class="k-press" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:999px;border:0;background:rgba(255,255,255,.92);color:#10292d;font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)">›</button>
-                  <span style="position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font-size:11.5px;font-weight:600;color:#ffffff;background:rgba(16,41,45,.7);border-radius:999px;padding:4px 10px;pointer-events:none">{{ zu.swipe }}</span>
                 </div>
                 <div style="flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px">
                   <span style="font-size:13px;font-weight:600;color:#5f6b69">{{ zd.pageLabel }}</span>
@@ -2206,7 +2205,7 @@ Reply with a single JSON object and nothing else.`,
   zineGo(k) { const n = Math.max(0, Math.min(7, k)); this.setState({ zinePage: n }); const el = this.zStripEl; if (el) el.scrollTo({ left: n * el.clientWidth, behavior: 'smooth' }); }
 
   segText(id) {
-    if (id && String(id).indexOf('zine-') === 0) { const z = (this.ZINES || []).find(x => x.id === id); return z ? { label: { en: z.audience }, blurb: { en: z.title }, persona: this.zinePersona(z) } : null; }
+    if (id && String(id).indexOf('zine-') === 0) { const z = (this.ZINES || []).find(x => x.id === id); if (!z) return null; const label = {}, blurb = {}; ['en', 'hi', 'gu', 'mr', 'bn', 'ta', 'kn'].forEach(l => { const t = this.zineIn(z, l); label[l] = t.audience; blurb[l] = t.title; }); return { label, blurb, persona: this.zinePersona(z) }; }
     return this.I18N ? this.I18N.SEGMENT_TEXT[id] : null;
   }
 
